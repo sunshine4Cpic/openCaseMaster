@@ -1759,15 +1759,15 @@
 				$(this).removeClass("tree-node-append tree-node-top tree-node-bottom");
 				if (_f2 > top + (_f3 - top) / 2) {
 					if (_f3 - _f2 < 5) {
-						$(this).addClass("tree-node-bottom");
+					    $(this).addClass("tree-node-" + _e7.options.pointType[3]);
 					} else {
-						$(this).addClass("tree-node-append");
+					    $(this).addClass("tree-node-" + _e7.options.pointType[2]);
 					}
 				} else {
 					if (_f2 - top < 5) {
-						$(this).addClass("tree-node-top");
+					    $(this).addClass("tree-node-" + _e7.options.pointType[0]);
 					} else {
-						$(this).addClass("tree-node-append");
+					    $(this).addClass("tree-node-" + _e7.options.pointType[3]);
 					}
 				}
 				if (_e8.onDragOver.call(_e6, this, _ef(_f1)) == false) {
@@ -2927,6 +2927,7 @@
 		checkbox: false,
 		cascadeCheck: true,
 		onlyLeafCheck: false,
+		pointType: ["top", "append", "append", "bottom"],
 		lines: false,
 		dnd: false,
 		data: null,
