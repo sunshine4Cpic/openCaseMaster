@@ -141,7 +141,7 @@
                 url: '/TestCase/projectListInit',
                 lines:true,
                 animate: true,
-                dnd: true,
+                dnd: false,
                 onBeforeExpand: function (node, param) {
                     if ($(this).tree('getParent', node.target))
                         $(this).tree('options').url = "/TestCase/folderExpanded/" + node.id;
