@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f7e83f2ce4fc422a9d8b7937589e7215" Name="Diagram1">
+        <EntityTypeShape EntityType="MasterModel.admin_user" Width="1.5" PointX="5.25" PointY="17" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.M_application" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.M_deviceConfig" Width="1.5" PointX="3" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.M_DevProMapping" Width="1.5" PointX="5.25" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.M_runScene" Width="1.5" PointX="7.5" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.M_runTestCase" Width="1.5" PointX="9.75" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.M_testCase" Width="1.5" PointX="8.75" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.M_testCaseSteps" Width="1.5" PointX="5.25" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.M_testDemand" Width="1.5" PointX="5.25" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.project" Width="1.5" PointX="3" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.project_app" Width="1.5" PointX="8.25" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.project_department" Width="1.5" PointX="0.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.project_executors" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.project_rank" Width="1.5" PointX="0.75" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.project_stage" Width="1.5" PointX="0.75" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.project_type" Width="1.5" PointX="0.75" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasterModel.user_type" Width="1.5" PointX="3" PointY="17.75" IsExpanded="true" />
+        <AssociationConnector Association="MasterModel.FK_admin_user_user_type" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_M_runScene_admin_user" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_project_app_appID" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_M_DevProMapping_M_deviceConfig" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_M_runScene_M_deviceConfig" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_M_DevProMapping_project" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_M_runScene_M_testDemand" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_M_runTestCase_M_runScene" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_M_testCase_baseID" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_M_testCaseSteps_project" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_M_testDemand_M_testDemand" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_M_testDemand_project" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_project_app_PID" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_project_project_Department" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_project_project_executors" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_project_project_rank" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_project_project_stage" ManuallyRouted="false" />
+        <AssociationConnector Association="MasterModel.FK_project_project_type" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
