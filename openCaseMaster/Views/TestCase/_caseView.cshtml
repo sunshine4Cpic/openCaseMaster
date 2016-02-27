@@ -2,39 +2,39 @@
 @using openCaseMaster.helper;
 
 @model M_testCase
+ <input type="hidden" value="@Model.ID" />
 <div class="easyui-panel" style="margin-bottom:5px">
     <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
-       data-options="menu:'#mm',iconCls:'icon-edit'">单选操作</a>
-    <div id="mm" style="width:150px;">
-        <div data-options="iconCls:'icon-folder_classic_add'" onclick="OpenAddNewCase(0);">新增文件夹</div>
-        <div data-options="iconCls:'icon-document_a4_add'" onclick="OpenAddNewCase(1);">新增案例</div>
+       data-options="menu:'#C1',iconCls:'icon-edit'">编辑</a>
+    <div id="C1" style="width:150px;">
+        <div data-options="iconCls:'icon-save'" onclick="caseViewSave();">保存</div>
         <div class="menu-sep"></div>
-        <div data-options="iconCls:'icon-edit'" onclick="OpenEditCase();">修改信息</div>
+        <div data-options="iconCls:'icon-add'">
+            <span>新增步骤</span>
+            <div>
+                <div>上一步</div>
+                <div>下一步</div>
+            </div>
+        </div>
         <div data-options="iconCls:'icon-remove'" onclick="DeleteCase();">删除节点</div>
-        <div class="menu-sep"></div>
-        <div>上传案例</div>
-        <div data-options="iconCls:'icon-reload'">刷新节点</div>
     </div>
-
     <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
-       data-options="menu:'#mm2',iconCls:'icon-ok'">多选操作</a>
-    <div id="mm2" style="width:150px;">
-        <div data-options="iconCls:'icon-folder_classic_add'" onclick="">新增文件夹</div>
-        <div data-options="iconCls:'icon-document_a4_add'" onclick="">新增案例</div>
+       data-options="menu:'#C2',iconCls:'icon-ok'">操作</a>
+    <div id="C2" style="width:150px;">
+        <div data-options="iconCls:'icon-box_add'" onclick="">自定义组件</div>
         <div class="menu-sep"></div>
-        <div data-options="iconCls:'icon-edit'" onclick="">修改信息</div>
-        <div data-options="iconCls:'icon-remove'" onclick="">删除节点</div>
-        <div class="menu-sep"></div>
-        <div>上传案例</div>
+        <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="">执行案例</div>
+        
+     
     </div>
 </div>
 
-<ul id="tt"></ul>
+<ul id="caseViewTree"></ul>
 
 <script type="text/javascript">
     //@@ sourceURL=caseview.js
     var data = @Html.Raw(Model.getCaseTree2Json());
-    $('#tt').tree({
+    $('#caseViewTree').tree({
         data:data,
         dnd:true,
         checkbox:true,
@@ -42,37 +42,46 @@
         animate:true,
         lines:true,
         onLoadSuccess:function(node, data){
-            var nodes = $('#tt').tree("getRoots")
+            var nodes = $('#caseViewTree').tree("getRoots")
             $(nodes).each(function()
             {
-                $($("#tt").tree("getChildren",this.target)).each(function(){
+                $($("#caseViewTree").tree("getChildren",this.target)).each(function(){
                     $(this.target).children().removeClass("tree-checkbox");
                 })
             });
         },
         onBeforeDrag:function(node){
-            if($("#tt").tree("getParent",node.target))
+            if($("#caseViewTree").tree("getParent",node.target))
                 return false;
            
         },
         onDragOver:function(target, source){
-            if($("#tt").tree("getParent",target))
+            if($("#caseViewTree").tree("getParent",target))
                 return false;
-        },
-        onDragOver:function(target, source){
-            if($("#tt").tree("getParent",target))
-                return false;
-        },
-        onBeforeDrop:function(target,source,point){
-            if(point=="append")
-            {
-                return "bottom";
-            }
-
         }
-        
     });
 
+    function caseViewSave()
+    {
+        var nodes= $('#caseViewTree').tree("getRoots");
+        var steps=[];
+        
+        var n;
+        for (n in nodes )
+        {
+            var step = {};
+            var node = nodes[n];
+            var p = {};
+            for (c in node.children)
+            {
+                var child = node.children[c];
+                p[child.Key] = child.Value;
+            }
+
+            step["ParamBinding"] = p;
+            steps.push(step);
+        }
+    }
     
 
     </script>

@@ -6,12 +6,16 @@ using System.Web;
 
 namespace openCaseMaster.ViewModels
 {
+    
     [DataContract]
     public class caseStepModel:treeViewModel
     {
 
         [DataMember]
         public string stepName { get; set; }
+
+        [DataMember]
+        public string desc { get; set; }
 
         [DataMember]
         public new List<caseStepAttrModel> children { get; set; }

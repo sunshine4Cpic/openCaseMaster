@@ -116,3 +116,10 @@
 	background:url('../img/spanner_blue.png') no-repeat center center;
 }
 
+.icon-media_controls_dark_play{
+	background:url('../img/media_controls_dark_play.png') no-repeat center center;
+}
+
+.icon-box_add{
+	background:url('../img/box_add.png') no-repeat center center;
+}

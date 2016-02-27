@@ -52,16 +52,22 @@
                     <div>上传案例</div>
                 </div>
             </div>
-            <div id="caseTreeListDiv" style="overflow:auto;height:auto">
+            <div id="caseTreeListDiv" style="overflow:auto;max-height:600px">
                 <ul id="caseTreeList"></ul>
             </div>
 
         </div>
+        <div style="padding-top:5px"></div>
+        <div id="stepControl" class="easyui-panel" title="测试组件" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-documents',closable:false,
+    collapsible:true,minimizable:false,maximizable:false">
 
 
+            123
+
+        </div>
 
     </div>
-
+    
     <div id="right" class="col-md-8" style="padding:5px">
 
         <div id="casePanel" class="easyui-panel" title="测试案例" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-documents',closable:false,
@@ -126,16 +132,12 @@
 </script>
 
 <div id="dialog" style="overflow:hidden;"></div>
-
-
-
-   
     <script type="text/javascript">
 
     
 
         $(function () {
-            layout();
+  
             $('#caseTreeList').tree({
                 checkbox: true,
                 url: '/TestCase/projectListInit',
@@ -180,14 +182,7 @@
             });
         });
 
-        function layout() {
-            var hh = $(window).height()-document.getElementById("caseTreeListDiv").offsetTop - 80;
-            if (hh > 800) hh = 800;
-            $("#caseTreeListDiv").css("max-height", hh);
-        }
-        
-        $(window).resize(function () { layout() });
-
+      
 
 
         //弹出层
