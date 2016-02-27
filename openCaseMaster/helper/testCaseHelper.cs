@@ -29,6 +29,7 @@ namespace openCaseMaster.helper
                 tmp.text = tmp.stepName + " : " + e.Attribute("desc").Value;
                 tmp.state = "closed";
                 tmp.iconCls = "icon-view_outline_detail";
+                tmp.desc = e.Attribute("desc").Value;
                
                 
 
