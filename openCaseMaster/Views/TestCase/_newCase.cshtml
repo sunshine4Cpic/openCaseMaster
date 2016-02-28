@@ -11,7 +11,7 @@
     markLabel = "备注";
 }
 
-
+@Model.
 <script>
     //@@ sourceURL=cp_list.js
     function ResetForm() {
@@ -37,8 +37,7 @@
                 function (r) {
                     //这里未判断是否正确返回
                     $('#dialog').dialog('close');
-                    var selectNode = $('#caseTreeList').tree("getSelected").target;
-                    $('#caseTreeList').tree("reload", selectNode);//刷新
+                    reloadNode();
                     
                 }
                 );

@@ -12,7 +12,7 @@ namespace openCaseMaster.ViewModels
     {
 
         [DataMember]
-        public string stepName { get; set; }
+        public string name { get; set; }
 
         [DataMember]
         public string desc { get; set; }

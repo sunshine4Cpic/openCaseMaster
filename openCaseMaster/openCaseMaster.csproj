@@ -126,7 +126,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="helper\testCaseHelper.cs" />
+    <Compile Include="Models\Extend_M_testCase.cs" />
     <Compile Include="Models\admin_user.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
@@ -694,8 +694,7 @@
     <Content Include="Views\TestCase\Index.cshtml" />
     <Content Include="Views\TestCase\_newCase.cshtml" />
     <Content Include="Views\TestCase\_EditCase.cshtml" />
-    <Content Include="Views\TestCase\_caseView.cshtml" />
-    <Content Include="Views\TestCase\_editStep.cshtml" />
+    <Content Include="Views\TestCase\_scriptView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -37,7 +37,7 @@
                     <div data-options="iconCls:'icon-remove'" onclick="DeleteCase();">删除节点</div>
                     <div class="menu-sep"></div>
                     <div>上传案例</div>
-                    <div data-options="iconCls:'icon-reload'">刷新节点</div>
+                    <div data-options="iconCls:'icon-reload'" onclick="reloadNode();">刷新节点</div>
                 </div>
 
                 <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
@@ -70,11 +70,11 @@
     
     <div id="right" class="col-md-8" style="padding:5px">
 
-        <div id="casePanel" class="easyui-panel" title="测试案例" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-documents',closable:false,
+        <div id="scriptPanel" class="easyui-panel" title="测试案例" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-documents',closable:false,
     collapsible:true,minimizable:false,maximizable:false">
-           
 
-           
+
+
 
         </div>
 
@@ -173,7 +173,7 @@
                 },*/
                 onDblClick: function (node) {
                     if (node.type == 1)
-                        $('#casePanel').panel('refresh', 'caseView/' + node.id);
+                        $('#scriptPanel').panel('refresh', 'scriptView/' + node.id);
                 },
                 onDragOver: function (target, source) {
                     //('#tt2').tree('getData', target);
@@ -246,6 +246,13 @@
                     //删除
                 }
             });
+        }
+
+
+        function reloadNode() {
+            var selectNode = $('#caseTreeList').tree("getSelected").target;
+            $('#caseTreeList').tree("reload", selectNode);//刷新
+
         }
       
     </script>

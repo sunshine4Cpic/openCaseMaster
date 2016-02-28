@@ -1,11 +1,15 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using openCaseMaster.Models;
 using openCaseMaster.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml;
+using System.Xml.Linq;
 
 
 namespace openCaseMaster.Controllers
@@ -99,7 +103,7 @@ namespace openCaseMaster.Controllers
 
                 var jSetting = new JsonSerializerSettings();
                 jSetting.NullValueHandling = NullValueHandling.Ignore;
-
+                 
                 string json = JsonConvert.SerializeObject(tcl, jSetting);
 
                 return json;
@@ -169,19 +173,32 @@ namespace openCaseMaster.Controllers
         }
 
 
-        public ActionResult caseView(int ID)
+        public ActionResult scriptView(int ID)
         {
             
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
                 M_testCase mtc = QC_DB.M_testCase.First(t => t.ID == ID);
 
-                return PartialView("_caseView", mtc);//未做错误处理
+                return PartialView("_scriptView", mtc);//未做错误处理
 
             }
         }
 
+        [HttpPost]
+        public bool editScript(int ID, string steps)
+        {
+            using (QCTESTEntities QC_DB = new QCTESTEntities())
+            {
+                M_testCase mtc = QC_DB.M_testCase.First(t => t.ID == ID);
+                mtc.editScript(steps);
+                QC_DB.SaveChanges();
+                return true;
+            }
+           
+        }
 
+     
      
      
     }

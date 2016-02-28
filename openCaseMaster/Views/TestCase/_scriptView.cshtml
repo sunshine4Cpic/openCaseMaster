@@ -1,13 +1,14 @@
-﻿@using openCaseMaster.Models;
-@using openCaseMaster.helper;
+﻿
+@using openCaseMaster.Models;
 
 @model M_testCase
- <input type="hidden" value="@Model.ID" />
+           
+ <input id="ID" type="hidden" value="@Model.ID" />
 <div class="easyui-panel" style="margin-bottom:5px">
     <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
        data-options="menu:'#C1',iconCls:'icon-edit'">编辑</a>
     <div id="C1" style="width:150px;">
-        <div data-options="iconCls:'icon-save'" onclick="caseViewSave();">保存</div>
+        <div data-options="iconCls:'icon-save'" onclick="scriptSave();">保存</div>
         <div class="menu-sep"></div>
         <div data-options="iconCls:'icon-add'">
             <span>新增步骤</span>
@@ -24,17 +25,16 @@
         <div data-options="iconCls:'icon-box_add'" onclick="">自定义组件</div>
         <div class="menu-sep"></div>
         <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="">执行案例</div>
-        
-     
+      
     </div>
 </div>
 
-<ul id="caseViewTree"></ul>
+<ul id="scriptTree"></ul>
 
 <script type="text/javascript">
-    //@@ sourceURL=caseview.js
-    var data = @Html.Raw(Model.getCaseTree2Json());
-    $('#caseViewTree').tree({
+    //@@ sourceURL=scriptView.js
+    var data = @Html.Raw(Model.getScript2Json());
+    $('#scriptTree').tree({
         data:data,
         dnd:true,
         checkbox:true,
@@ -42,28 +42,28 @@
         animate:true,
         lines:true,
         onLoadSuccess:function(node, data){
-            var nodes = $('#caseViewTree').tree("getRoots")
+            var nodes = $('#scriptTree').tree("getRoots")
             $(nodes).each(function()
             {
-                $($("#caseViewTree").tree("getChildren",this.target)).each(function(){
+                $($("#scriptTree").tree("getChildren",this.target)).each(function(){
                     $(this.target).children().removeClass("tree-checkbox");
                 })
             });
         },
         onBeforeDrag:function(node){
-            if($("#caseViewTree").tree("getParent",node.target))
+            if($("#scriptTree").tree("getParent",node.target))
                 return false;
            
         },
         onDragOver:function(target, source){
-            if($("#caseViewTree").tree("getParent",target))
+            if($("#scriptTree").tree("getParent",target))
                 return false;
         }
     });
 
-    function caseViewSave()
+    function scriptSave()
     {
-        var nodes= $('#caseViewTree').tree("getRoots");
+        var nodes= $('#scriptTree').tree("getRoots");
         var steps=[];
         
         var n;
@@ -77,10 +77,19 @@
                 var child = node.children[c];
                 p[child.Key] = child.Value;
             }
-
+            step["desc"] = node.desc;
             step["ParamBinding"] = p;
+            step["name"] = node.name;
             steps.push(step);
         }
+      
+        $.post("/TestCase/editScript/"+$('#ID').val(), { steps: JSON.stringify(steps)  }, function (result) {
+            alert(result);
+            if (result == "True") {
+                alert(1);
+            }
+        });
+
     }
     
 

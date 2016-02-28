@@ -12,7 +12,7 @@
 
 
 <script>
-    //@@ sourceURL=cp_list.js
+    //@@ sourceURL=EditCase.js
     function ResetForm() {
         document.getElementById('Name').value = "";
         document.getElementById('mark').value = "";
@@ -32,16 +32,15 @@
 
             $.post("/TestCase/EditCase", e).then(
                 function (r) {
-                    //这里未判断是否正确返回
-                    $('#dialog').dialog('close');
-                    var selectNode = $('#caseTreeList').tree("getSelected").target;
+                    var selectNode = $('#caseTreeList').tree("getSelected");
 
-                    $('#tt').tree('update', {
+                    $('#caseTreeList').tree('update', {
                         target: selectNode.target,
                         text: e.Name
                     });
-
-                    alert(r);
+                    //这里未判断是否正确返回
+                    $('#dialog').dialog('close');
+                    
                 }
                 );
 
