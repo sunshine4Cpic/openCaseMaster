@@ -1,6 +1,0 @@
-bootstrap 这个开发框架 有时间去看一看
-http://www.bootcss.com/
-
-cshtml 使用 razor rendering engine
-aspx 使用 webform engine
-语法不同 
