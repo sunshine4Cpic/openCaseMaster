@@ -13,7 +13,7 @@ namespace openCaseMaster.Controllers
             return View();
         }
 
-        //[Authorize(Roles = "1")]
+        //[Authorize(Roles = "1")]  改动1
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

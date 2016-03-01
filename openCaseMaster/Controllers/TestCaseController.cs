@@ -25,9 +25,9 @@ namespace openCaseMaster.Controllers
         
         public string projectListInit()
         {
-            //此处应该加入权限,后期加
+            //此处应该加入权限,后期加  改动2
             //FormsIdentity id = (FormsIdentity)HttpContext.Current.User.Identity;
-            //FormsAuthenticationTicket ticket = id.Ticket;//cookie
+            //FormsAuthenticationTicket ticket = id.Ticket;//cookie  改动3
 
             using(QCTESTEntities QC_DB = new QCTESTEntities())
             {

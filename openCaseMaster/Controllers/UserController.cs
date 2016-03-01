@@ -12,7 +12,7 @@ namespace openCaseMaster.Controllers
 {
     public class UserController : Controller
     {
-        // GET: User
+        // GET: User 改动4 改动5
         public ActionResult Login(string ReturnUrl)
         {
             ViewBag.returnUrl = ReturnUrl;
@@ -20,7 +20,7 @@ namespace openCaseMaster.Controllers
         }
 
         //
-        // POST: /Account/Login
+        // POST: /Account/Login改动6
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]//对应@Html.AntiForgeryToken()
