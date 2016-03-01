@@ -33,7 +33,7 @@ namespace openCaseMaster.Models
                                checkbox = false
                            };
                 tv.children = atts.ToList();
-                tv.Add(tmp);
+                //tv.Add(tmp);
             }
 
 

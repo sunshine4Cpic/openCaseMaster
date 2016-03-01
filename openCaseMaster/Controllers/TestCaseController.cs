@@ -221,12 +221,12 @@ namespace openCaseMaster.Controllers
                 var ss = from t in QC_DB.caseFramework
                          where t.ID==1
                          select t;
-
+                /*
                 if (type == 1)
                 {
                     string username = HttpContext.Current.User.Identity.Name;
                     ss = ss.Where(t => t.admin_user.Username == username);
-                }
+                }*/
             }
             return null;
 
