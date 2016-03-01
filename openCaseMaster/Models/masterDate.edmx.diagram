@@ -40,6 +40,11 @@
         <AssociationConnector Association="MasterModel.FK_project_project_rank" ManuallyRouted="false" />
         <AssociationConnector Association="MasterModel.FK_project_project_stage" ManuallyRouted="false" />
         <AssociationConnector Association="MasterModel.FK_project_project_type" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MasterModel.caseFramework" Width="1.5" PointX="7.5" PointY="17.5" />
+        <EntityTypeShape EntityType="MasterModel.Framework4Project" Width="1.5" PointX="10.75" PointY="9.125" />
+        <AssociationConnector Association="MasterModel.FK_caseFramework_userID" />
+        <AssociationConnector Association="MasterModel.FK_Framework4Project_FID" />
+        <AssociationConnector Association="MasterModel.FK_Framework4Project_PID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

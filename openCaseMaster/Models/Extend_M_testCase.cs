@@ -14,22 +14,23 @@ namespace openCaseMaster.Models
 {
     public static class Extend_M_testCase
     {
-        public static List<caseStepModel> getScript(this M_testCase mtc)
+        public static List<caseStepTreeModel> getScript(this M_testCase mtc)
         {
             XElement xe = XElement.Parse(mtc.testXML);
 
             var sms = xe.Descendants("Step");
             
+            //改数据时修改了个别Step的大小写,为了OK加了容错,正式环境后期可以去掉这个逻辑
             if(sms.Count()==0)
             {
                 sms = xe.Descendants("step");
             }
 
-            List<caseStepModel> rtn = new List<caseStepModel>();
+            List<caseStepTreeModel> rtn = new List<caseStepTreeModel>();
 
             foreach (var e in sms)
             {
-                caseStepModel tmp = new caseStepModel();
+                caseStepTreeModel tmp = new caseStepTreeModel();
                 tmp.name = e.Attribute("name").Value;
                 tmp.state = "closed";
                 tmp.iconCls = "icon-view_outline_detail";
@@ -55,7 +56,7 @@ namespace openCaseMaster.Models
 
         public static string getScript2Json(this M_testCase mtc)
         {
-            List<caseStepModel> tcl = getScript(mtc);
+            List<caseStepTreeModel> tcl = getScript(mtc);
 
             var jSetting = new JsonSerializerSettings();
             jSetting.NullValueHandling = NullValueHandling.Ignore;

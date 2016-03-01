@@ -211,6 +211,7 @@
     <Compile Include="ViewModels\UserModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\script.sql" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap-treeview.css" />
@@ -699,9 +700,7 @@
     <Content Include="Views\TestCase\_scriptView.cshtml" />
     <Content Include="Views\TestCase\_EditStep.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
@@ -723,7 +722,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>20349</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

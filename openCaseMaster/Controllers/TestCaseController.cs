@@ -67,7 +67,7 @@ namespace openCaseMaster.Controllers
                 var tcl = from t in QC_DB.M_testCase
                           where t.baseID == ID
                           orderby t.type
-                          select new testCaseModel
+                          select new testCaseTreeModel
                           {
                               id = t.ID,
                               text = t.Name,
@@ -95,7 +95,7 @@ namespace openCaseMaster.Controllers
                           where t.projectID == ID
                           && t.baseID == null
                           orderby t.type
-                          select new testCaseModel
+                          select new testCaseTreeModel
                           {
                               id = t.ID,
                               text = t.Name,
@@ -214,18 +214,20 @@ namespace openCaseMaster.Controllers
 
         public string controlTreeList()
         {
-            /*
+            
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
-                var ss = from t in QC_DB.M_testCaseSteps
-                         where t.type == type && t.PID == null
+                //获取所有的admin所属控件
+                var ss = from t in QC_DB.caseFramework
+                         where t.ID==1
                          select t;
+
                 if (type == 1)
                 {
                     string username = HttpContext.Current.User.Identity.Name;
                     ss = ss.Where(t => t.admin_user.Username == username);
                 }
-            }*/
+            }
             return null;
 
         }

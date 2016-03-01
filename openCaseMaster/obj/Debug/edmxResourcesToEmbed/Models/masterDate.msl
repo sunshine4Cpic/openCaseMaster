@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MasterModelStoreContainer" CdmEntityContainer="QCTESTEntities">
+    <EntitySetMapping Name="admin_user">
+      <EntityTypeMapping TypeName="MasterModel.admin_user">
+        <MappingFragment StoreEntitySet="admin_user">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Permission" ColumnName="Permission" />
+          <ScalarProperty Name="GreatDate" ColumnName="GreatDate" />
+          <ScalarProperty Name="LastDate" ColumnName="LastDate" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="M_application">
+      <EntityTypeMapping TypeName="MasterModel.M_application">
+        <MappingFragment StoreEntitySet="M_application">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="mark" ColumnName="mark" />
+          <ScalarProperty Name="runApkName" ColumnName="runApkName" />
+          <ScalarProperty Name="package" ColumnName="package" />
+          <ScalarProperty Name="mainActiviy" ColumnName="mainActiviy" />
+          <ScalarProperty Name="package2" ColumnName="package2" />
+          <ScalarProperty Name="isClear" ColumnName="isClear" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="M_deviceConfig">
+      <EntityTypeMapping TypeName="MasterModel.M_deviceConfig">
+        <MappingFragment StoreEntitySet="M_deviceConfig">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="IP" ColumnName="IP" />
+          <ScalarProperty Name="Port" ColumnName="Port" />
+          <ScalarProperty Name="device" ColumnName="device" />
+          <ScalarProperty Name="mark" ColumnName="mark" />
+          <ScalarProperty Name="img" ColumnName="img" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="Brand" ColumnName="Brand" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="M_DevProMapping">
+      <EntityTypeMapping TypeName="MasterModel.M_DevProMapping">
+        <MappingFragment StoreEntitySet="M_DevProMapping">
+          <ScalarProperty Name="PID" ColumnName="PID" />
+          <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+          <ScalarProperty Name="usable" ColumnName="usable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="M_runScene">
+      <EntityTypeMapping TypeName="MasterModel.M_runScene">
+        <MappingFragment StoreEntitySet="M_runScene">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="mark" ColumnName="mark" />
+          <ScalarProperty Name="creatUser" ColumnName="creatUser" />
+          <ScalarProperty Name="creatDate" ColumnName="creatDate" />
+          <ScalarProperty Name="deviceID" ColumnName="deviceID" />
+          <ScalarProperty Name="DemandID" ColumnName="DemandID" />
+          <ScalarProperty Name="installResult" ColumnName="installResult" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="M_runTestCase">
+      <EntityTypeMapping TypeName="MasterModel.M_runTestCase">
+        <MappingFragment StoreEntitySet="M_runTestCase">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="testXML" ColumnName="testXML" />
+          <ScalarProperty Name="sceneID" ColumnName="sceneID" />
+          <ScalarProperty Name="resultXML" ColumnName="resultXML" />
+          <ScalarProperty Name="state" ColumnName="state" />
+          <ScalarProperty Name="startDate" ColumnName="startDate" />
+          <ScalarProperty Name="endDate" ColumnName="endDate" />
+          <ScalarProperty Name="resultPath" ColumnName="resultPath" />
+          <ScalarProperty Name="mark" ColumnName="mark" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="M_testCase">
+      <EntityTypeMapping TypeName="MasterModel.M_testCase">
+        <MappingFragment StoreEntitySet="M_testCase">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="projectID" ColumnName="projectID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="mark" ColumnName="mark" />
+          <ScalarProperty Name="testXML" ColumnName="testXML" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="baseID" ColumnName="baseID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="M_testCaseSteps">
+      <EntityTypeMapping TypeName="MasterModel.M_testCaseSteps">
+        <MappingFragment StoreEntitySet="M_testCaseSteps">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="stepXML" ColumnName="stepXML" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="userID" ColumnName="userID" />
+          <ScalarProperty Name="mark" ColumnName="mark" />
+          <ScalarProperty Name="paramXML" ColumnName="paramXML" />
+          <ScalarProperty Name="PID" ColumnName="PID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="M_testDemand">
+      <EntityTypeMapping TypeName="MasterModel.M_testDemand">
+        <MappingFragment StoreEntitySet="M_testDemand">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="mark" ColumnName="mark" />
+          <ScalarProperty Name="PID" ColumnName="PID" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="baseID" ColumnName="baseID" />
+          <ScalarProperty Name="isRun" ColumnName="isRun" />
+          <ScalarProperty Name="runDate" ColumnName="runDate" />
+          <ScalarProperty Name="visable" ColumnName="visable" />
+          <ScalarProperty Name="apkName" ColumnName="apkName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="project">
+      <EntityTypeMapping TypeName="MasterModel.project">
+        <MappingFragment StoreEntitySet="project">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Pname" ColumnName="Pname" />
+          <ScalarProperty Name="QCPid" ColumnName="QCPid" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Rank" ColumnName="Rank" />
+          <ScalarProperty Name="Head" ColumnName="Head" />
+          <ScalarProperty Name="Stage" ColumnName="Stage" />
+          <ScalarProperty Name="zidonghua" ColumnName="zidonghua" />
+          <ScalarProperty Name="executor" ColumnName="executor" />
+          <ScalarProperty Name="CXGJ_Report" ColumnName="CXGJ_Report" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="project_app">
+      <EntityTypeMapping TypeName="MasterModel.project_app">
+        <MappingFragment StoreEntitySet="project_app">
+          <ScalarProperty Name="appID" ColumnName="appID" />
+          <ScalarProperty Name="PID" ColumnName="PID" />
+          <ScalarProperty Name="usable" ColumnName="usable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="project_department">
+      <EntityTypeMapping TypeName="MasterModel.project_department">
+        <MappingFragment StoreEntitySet="project_department">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="project_executors">
+      <EntityTypeMapping TypeName="MasterModel.project_executors">
+        <MappingFragment StoreEntitySet="project_executors">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="executor" ColumnName="executor" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="project_rank">
+      <EntityTypeMapping TypeName="MasterModel.project_rank">
+        <MappingFragment StoreEntitySet="project_rank">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Rank" ColumnName="Rank" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="project_stage">
+      <EntityTypeMapping TypeName="MasterModel.project_stage">
+        <MappingFragment StoreEntitySet="project_stage">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Stage" ColumnName="Stage" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="project_type">
+      <EntityTypeMapping TypeName="MasterModel.project_type">
+        <MappingFragment StoreEntitySet="project_type">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="ProjectType" ColumnName="ProjectType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="user_type">
+      <EntityTypeMapping TypeName="MasterModel.user_type">
+        <MappingFragment StoreEntitySet="user_type">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionName="MasterModel.Store.MonthReport" FunctionImportName="MonthReport">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MasterModel.MonthReport_Result">
+          <ScalarProperty Name="Months" ColumnName="Months" />
+          <ScalarProperty Name="Cnt" ColumnName="Cnt" />
+          <ScalarProperty Name="Pname" ColumnName="Pname" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionName="MasterModel.Store.ProjectReport" FunctionImportName="ProjectReport">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MasterModel.ProjectReport_Result">
+          <ScalarProperty Name="PID" ColumnName="PID" />
+          <ScalarProperty Name="caseCnt" ColumnName="caseCnt" />
+          <ScalarProperty Name="testDemand" ColumnName="testDemand" />
+          <ScalarProperty Name="device" ColumnName="device" />
+          <ScalarProperty Name="Pname" ColumnName="Pname" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="M_ContainUserStepCase" FunctionName="MasterModel.Store.M_ContainUserStepCase">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MasterModel.M_ContainUserStepCase_Result">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="projectID" ColumnName="projectID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="mark" ColumnName="mark" />
+          <ScalarProperty Name="testXML" ColumnName="testXML" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="baseID" ColumnName="baseID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="M_runScene_delete" FunctionName="MasterModel.Store.M_runScene_delete" />
+    <FunctionImportMapping FunctionImportName="M_runScene_result" FunctionName="MasterModel.Store.M_runScene_result" />
+    <FunctionImportMapping FunctionImportName="M_runTestCase_FailReset" FunctionName="MasterModel.Store.M_runTestCase_FailReset" />
+    <FunctionImportMapping FunctionImportName="M_testCase_delete" FunctionName="MasterModel.Store.M_testCase_delete" />
+    <FunctionImportMapping FunctionImportName="M_testCase_sort" FunctionName="MasterModel.Store.M_testCase_sort" />
+    <FunctionImportMapping FunctionImportName="M_testDemand_delete" FunctionName="MasterModel.Store.M_testDemand_delete" />
+    <FunctionImportMapping FunctionImportName="M_testDemand_getProject" FunctionName="MasterModel.Store.M_testDemand_getProject" />
+    <FunctionImportMapping FunctionImportName="M_testDemand_result" FunctionName="MasterModel.Store.M_testDemand_result" />
+    <FunctionImportMapping FunctionImportName="M_testDemand_sort" FunctionName="MasterModel.Store.M_testDemand_sort" />
+  </EntityContainerMapping>
+</Mapping>
