@@ -126,8 +126,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\caseFramework.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Extend_caseFramework.cs" />
     <Compile Include="Models\Extend_M_testCase.cs" />
     <Compile Include="Models\admin_user.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Framework4Project.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\masterDate.Context.cs">
@@ -203,10 +210,10 @@
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\caseStepModel.cs" />
+    <Compile Include="ViewModels\caseStepTreeModel.cs" />
     <Compile Include="ViewModels\EditStepModel.cs" />
     <Compile Include="ViewModels\NewCaseModel.cs" />
-    <Compile Include="ViewModels\testCaseModel.cs" />
+    <Compile Include="ViewModels\testCaseTreeModel.cs" />
     <Compile Include="ViewModels\treeViewModel.cs" />
     <Compile Include="ViewModels\UserModel.cs" />
   </ItemGroup>
