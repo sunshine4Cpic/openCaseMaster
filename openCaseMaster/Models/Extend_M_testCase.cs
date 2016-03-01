@@ -17,8 +17,13 @@ namespace openCaseMaster.Models
         public static List<caseStepModel> getScript(this M_testCase mtc)
         {
             XElement xe = XElement.Parse(mtc.testXML);
-            var sms = from t in xe.Descendants("Step")
-                      select t;
+
+            var sms = xe.Descendants("Step");
+            
+            if(sms.Count()==0)
+            {
+                sms = xe.Descendants("step");
+            }
 
             List<caseStepModel> rtn = new List<caseStepModel>();
 
@@ -26,19 +31,15 @@ namespace openCaseMaster.Models
             {
                 caseStepModel tmp = new caseStepModel();
                 tmp.name = e.Attribute("name").Value;
-                tmp.text = tmp.name + " : " + e.Attribute("desc").Value;
                 tmp.state = "closed";
                 tmp.iconCls = "icon-view_outline_detail";
                 tmp.desc = e.Attribute("desc").Value;
-               
-                
 
                 var atts = from t in e.Elements()
                            select new caseStepAttrModel
                            {
                                Key = t.Attribute("name").Value,
                                Value = t.Attribute("value").Value,
-                               text = t.Attribute("name").Value + " : <span style='color:blue'>" + t.Attribute("value").Value+"</span>",
                                state = "open",
                                iconCls = "icon-spanner_blue",
                                checkbox = false
@@ -54,7 +55,6 @@ namespace openCaseMaster.Models
 
         public static string getScript2Json(this M_testCase mtc)
         {
-
             List<caseStepModel> tcl = getScript(mtc);
 
             var jSetting = new JsonSerializerSettings();
@@ -84,7 +84,7 @@ namespace openCaseMaster.Models
             
             foreach (var j in ja.Children<JObject>())
             {
-                XElement step = new XElement("step");
+                XElement step = new XElement("Step");
                 step.SetAttributeValue("name", j["name"]);
                 step.SetAttributeValue("desc", j["desc"]);
 
@@ -106,5 +106,20 @@ namespace openCaseMaster.Models
 
         }
 
+
+
+
+        public static void addNewScrpit(this M_testCase mtc)
+        {
+           
+            string caseString = "<TestCase desc=\"" + mtc.Name + "\" ><Step name=\"R_InitStep\" desc=\"打开程序\">" +
+                                "<ParamBinding name=\"waitTime\" value=\"\" /></Step></TestCase>";
+
+            mtc.testXML = caseString;
+
+
+        }
+
     }
+
 }

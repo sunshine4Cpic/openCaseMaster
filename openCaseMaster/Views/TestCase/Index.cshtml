@@ -1,5 +1,6 @@
 ﻿@Styles.Render("~/Content/easyui")
 @Scripts.Render("~/bundles/easyui")
+
 <link rel="stylesheet" type="text/css" href="/Content/themes/icon.css">
 
 
@@ -27,8 +28,8 @@
     collapsible:true,minimizable:false,maximizable:false">
 
             <div class="easyui-panel" style="margin-bottom:5px">
-                <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
-                   data-options="menu:'#mm',iconCls:'icon-edit'">单选操作</a>
+                <a href="javascript:void(0)" id="mb" class="easyui-splitbutton" style="width:100px"
+                   data-options="menu:'#mm',iconCls:'icon-edit',duration:200">单选操作</a>
                 <div id="mm" style="width:150px;">
                     <div data-options="iconCls:'icon-folder_classic_add'" onclick="OpenAddNewCase(0);">新增文件夹</div>
                     <div data-options="iconCls:'icon-document_a4_add'" onclick="OpenAddNewCase(1);">新增案例</div>
@@ -40,7 +41,7 @@
                     <div data-options="iconCls:'icon-reload'" onclick="reloadNode();">刷新节点</div>
                 </div>
 
-                <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
+                <a href="javascript:void(0)" id="mb" class="easyui-splitbutton" style="width:100px"
                    data-options="menu:'#mm2',iconCls:'icon-ok'">多选操作</a>
                 <div id="mm2" style="width:150px;">
                     <div data-options="iconCls:'icon-folder_classic_add'" onclick="">新增文件夹</div>
@@ -62,7 +63,7 @@
     collapsible:true,minimizable:false,maximizable:false">
 
 
-            123
+            <ul id="controlTreeList"></ul>
 
         </div>
 
@@ -82,54 +83,6 @@
 
 
 </div>
-
-<style type="text/css">
-    .drag-item {
-        list-style-type: none;
-        display: block;
-        padding: 5px;
-        border: 1px solid #ccc;
-        margin: 2px;
-        width: 300px;
-        background: #fafafa;
-        color: #444;
-    }
-
-    .indicator {
-        position: absolute;
-        font-size: 9px;
-        width: 10px;
-        height: 10px;
-        display: none;
-        color: red;
-    }
-</style>
-
-<script>
-    $(function () {
-        var indicator = $('<div class="indicator">>></div>').appendTo('body');
-        $('.drag-item').draggable({
-            revert: true,
-            deltaX: 0,
-            deltaY: 0
-        }).droppable({
-            onDragOver: function (e, source) {
-                indicator.css({
-                    display: 'block',
-                    left: $(this).offset().left - 10,
-                    top: $(this).offset().top + $(this).outerHeight() - 5
-                });
-            },
-            onDragLeave: function (e, source) {
-                indicator.hide();
-            },
-            onDrop: function (e, source) {
-                $(source).insertAfter(this);
-                indicator.hide();
-            }
-        });
-    });
-</script>
 
 <div id="dialog" style="overflow:hidden;"></div>
     <script type="text/javascript">
@@ -180,8 +133,13 @@
                     return false;
                 }
             });
+            $('#controlTreeList').tree({
+                url: '/TestCase/controlTreeList'
+            });
+           
         });
 
+   
       
 
 
@@ -229,9 +187,13 @@
         }
 
         function DeleteCase() {
-            $.messager.confirm('Message', '确认删除?', function (r) {
+
+            var node = $("#caseTreeList").tree("getSelected");
+
+            var msg = ' <span style=\'color:blue\'>' + node.text + '</span>';
+            $.messager.confirm('Message', '确认删除:' + msg + '?', function (r) {
                 if (r) {
-                    var node = $("#caseTreeList").tree("getSelected");
+                    
                     if (typeof (node.id) == "undefined") {
                         $.messager.alert('Error', '不能删除项目!', "warning");
                         return;
@@ -239,8 +201,16 @@
              
                     $.post("/TestCase/DeleteCase", { ID: node.id }, function (result) {
                         if (result == "True") {
-                            var node = $("#caseTreeList").tree("getSelected");
-                            $("#caseTreeList").tree("remove", node.target);
+                            var node = $("#caseTreeList").tree("getSelected").target;
+                            var nodeParent = $("#caseTreeList").tree("getParent", node);
+                          
+                            if (nodeParent.children.length <= 1)
+                                $('#caseTreeList').tree("reload", nodeParent.target);//刷新
+                            else
+                                $("#caseTreeList").tree("remove", node);
+                            
+                            
+                            
                         }
                     });
                     //删除

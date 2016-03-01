@@ -24,9 +24,7 @@ namespace openCaseMaster.ViewModels
 
     public class caseStepAttrModel : treeViewModel
     {
-        [DataMember]
-        public bool checkbox { get; set; }
-
+        
         [DataMember]
         public string Key { get; set; }
         [DataMember]

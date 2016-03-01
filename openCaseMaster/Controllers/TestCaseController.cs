@@ -22,6 +22,7 @@ namespace openCaseMaster.Controllers
             return View();
         }
 
+
         
         public string projectListInit()
         {
@@ -51,6 +52,7 @@ namespace openCaseMaster.Controllers
                 string json = JsonConvert.SerializeObject(tcl, jSetting);
 
                 return json;
+
             }
             
         }
@@ -120,7 +122,9 @@ namespace openCaseMaster.Controllers
             if (int.TryParse(PID, out tempInt))
                 v.projectID = tempInt;
             v.type = type;
-            v.Name = "默认值";
+            string defultName = type == 0 ? "新建文件夹" : "新建案例";
+
+            v.Name = defultName;
             return PartialView("_newCase", v);
         }
 
@@ -129,6 +133,7 @@ namespace openCaseMaster.Controllers
         {
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
+                newTC.addNewScrpit();
                 QC_DB.M_testCase.Add(newTC);
                 QC_DB.SaveChanges();
                 return newTC.ID;
@@ -181,7 +186,6 @@ namespace openCaseMaster.Controllers
                 M_testCase mtc = QC_DB.M_testCase.First(t => t.ID == ID);
 
                 return PartialView("_scriptView", mtc);//未做错误处理
-
             }
         }
 
@@ -198,7 +202,33 @@ namespace openCaseMaster.Controllers
            
         }
 
-     
+        public ActionResult EditStep(EditStepModel obj)
+        {
+            obj.initDetailed();
+            
+            return PartialView("_EditStep", obj);//未做错误处理
+
+        }
+
+
+
+        public string controlTreeList()
+        {
+            /*
+            using (QCTESTEntities QC_DB = new QCTESTEntities())
+            {
+                var ss = from t in QC_DB.M_testCaseSteps
+                         where t.type == type && t.PID == null
+                         select t;
+                if (type == 1)
+                {
+                    string username = HttpContext.Current.User.Identity.Name;
+                    ss = ss.Where(t => t.admin_user.Username == username);
+                }
+            }*/
+            return null;
+
+        }
      
      
     }

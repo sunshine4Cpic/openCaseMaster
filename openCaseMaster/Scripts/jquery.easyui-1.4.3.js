@@ -2901,7 +2901,7 @@
 							_1c8 = true;
 						}
 					}
-					if (opts.checkbox) {
+					if (opts.checkbox && item.checkbox !== false) {//孙建平添加节点属性checkbox
 						if ((!opts.onlyLeafCheck) || _1c8) {
 							cc.push("<span class=\"tree-checkbox tree-checkbox0\"></span>");
 						}

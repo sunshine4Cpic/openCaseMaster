@@ -38,6 +38,12 @@ namespace openCaseMaster.ViewModels
         public string iconCls { get; set; }
 
         [DataMember]
+        /// <summary>
+        /// 显示checkbox
+        /// </summary>
+        public Boolean? checkbox { get; set; }
+
+        [DataMember]
         public List<treeViewModel> children { get; set; }
 
 

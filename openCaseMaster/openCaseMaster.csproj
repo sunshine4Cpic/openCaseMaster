@@ -204,6 +204,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\caseStepModel.cs" />
+    <Compile Include="ViewModels\EditStepModel.cs" />
     <Compile Include="ViewModels\NewCaseModel.cs" />
     <Compile Include="ViewModels\testCaseModel.cs" />
     <Compile Include="ViewModels\treeViewModel.cs" />
@@ -646,6 +647,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\json.js" />
     <Content Include="Scripts\locale\easyui-lang-af.js" />
     <Content Include="Scripts\locale\easyui-lang-am.js" />
     <Content Include="Scripts\locale\easyui-lang-ar.js" />
@@ -695,6 +697,7 @@
     <Content Include="Views\TestCase\_newCase.cshtml" />
     <Content Include="Views\TestCase\_EditCase.cshtml" />
     <Content Include="Views\TestCase\_scriptView.cshtml" />
+    <Content Include="Views\TestCase\_EditStep.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
