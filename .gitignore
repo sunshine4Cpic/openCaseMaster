@@ -7,3 +7,4 @@
 *.dll
 fonts/*
 openCaseMaster/obj/*
+openCaseMaster/Views/*
