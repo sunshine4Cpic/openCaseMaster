@@ -219,16 +219,25 @@ namespace openCaseMaster.Controllers
             {
                 //获取所有的admin所属控件
                 var ss = from t in QC_DB.caseFramework
-                         where t.ID==1
+                         where t.userID==1
                          select t;
-                /*
-                if (type == 1)
+
+                List<treeViewModel> data = new List<treeViewModel>();
+                foreach(var s in ss)
                 {
-                    string username = HttpContext.Current.User.Identity.Name;
-                    ss = ss.Where(t => t.admin_user.Username == username);
-                }*/
+                    var treeNode = s.getControlJson4Tree();
+                    data.Add(treeNode);
+                }
+
+                var jSetting = new JsonSerializerSettings();
+                jSetting.NullValueHandling = NullValueHandling.Ignore;
+
+                string json = JsonConvert.SerializeObject(data, jSetting);
+
+                return json;
+              
             }
-            return null;
+           
 
         }
      

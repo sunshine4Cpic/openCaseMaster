@@ -159,13 +159,23 @@ namespace openCaseMaster.ViewModels
 
     public class EditStepPB
     {
+        /// <summary>
+        /// 参数名
+        /// </summary>
         public string name { get; set; }
+        /// <summary>
+        /// 默认值
+        /// </summary>
         public string value { get; set; }
 
+        /// <summary>
+        /// 备注
+        /// </summary>
         public string desc { get; set; }
 
-        public string title { get { return "<B>" + name + "</B> : <br />" + desc; } }
-
+        /// <summary>
+        /// 就是list.....
+        /// </summary>
         public string data { get; set; }
 
     }
