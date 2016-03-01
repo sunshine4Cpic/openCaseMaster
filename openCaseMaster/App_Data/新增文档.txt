@@ -1,6 +1,8 @@
-bootstrap Õâ¸ö¿ª·¢¿ò¼Ü ÓĞÊ±¼äÈ¥¿´Ò»¿´
+bootstrap è¿™ä¸ªå¼€å‘æ¡†æ¶ æœ‰æ—¶é—´å»çœ‹ä¸€çœ‹
 http://www.bootcss.com/
 
-cshtml Ê¹ÓÃ razor rendering engine
-aspx Ê¹ÓÃ webform engine
-Óï·¨²»Í¬ 
+cshtml ä½¿ç”¨ razor rendering engine
+aspx ä½¿ç”¨ webform engine
+è¯­æ³•ä¸åŒ 
+
+dddd
