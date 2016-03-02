@@ -42,7 +42,7 @@
                 </div>
 
                 <a href="javascript:void(0)" id="mb" class="easyui-splitbutton" style="width:100px"
-                   data-options="menu:'#mm2',iconCls:'icon-ok'">多选操作</a>
+                   data-options="menu:'#mm2',iconCls:'icon-ok',duration:200">多选操作</a>
                 <div id="mm2" style="width:150px;">
                     <div data-options="iconCls:'icon-folder_classic_add'" onclick="">新增文件夹</div>
                     <div data-options="iconCls:'icon-document_a4_add'" onclick="">新增案例</div>
@@ -62,15 +62,25 @@
         <div id="stepControl" class="easyui-panel" title="测试组件" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-documents',closable:false,
     collapsible:true,minimizable:false,maximizable:false">
 
-
-            <ul id="controlTreeList"></ul>
+            <div class="easyui-tabs" style="width:100%;">
+                <div title="基础组件" style="padding:10px">
+                    <ul id="controlTreeListF"></ul>
+                </div>
+                <div title="项目组件">
+                    <ul id="controlTreeListP"></ul>
+                </div>
+                <div title="你的组件">
+                    <ul id="controlTreeListU"></ul>
+                </div>
+            </div>
+            
 
         </div>
 
     </div>
     
     <div id="right" class="col-md-8" style="padding:5px">
-
+        
         <div id="scriptPanel" class="easyui-panel" title="测试案例" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-documents',closable:false,
     collapsible:true,minimizable:false,maximizable:false">
 
@@ -121,6 +131,7 @@
                     
                     
                 },*/
+                
                 onDblClick: function (node) {
                     if (node.type == 1)
                         $('#scriptPanel').panel('refresh', 'scriptView/' + node.id);
@@ -129,10 +140,6 @@
                     //('#tt2').tree('getData', target);
                     return false;
                 }
-            });
-            $('#controlTreeList').tree({
-                url: '/TestCase/controlTreeList',
-                
             });
            
         });

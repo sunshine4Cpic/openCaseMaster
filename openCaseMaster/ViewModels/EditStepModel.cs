@@ -13,6 +13,7 @@ namespace openCaseMaster.ViewModels
         public EditStepModel()
         {
             ParamBinding = new List<EditStepPB>();
+            FID = 1;//默认从robotium脚本查询step信息
         }
         
 
@@ -20,14 +21,24 @@ namespace openCaseMaster.ViewModels
 
         public string desc { get; set; }
 
+        /// <summary>
+        /// 框架ID
+        /// </summary>
+        public int FID { get; set; }
+
+        /// <summary>
+        /// 项目ID
+        /// </summary>
+        public int PID { get; set; }
+
         public List<EditStepPB> ParamBinding { get; set; }
 
         /// <summary>
-        /// 初始化详情
+        /// 初始化步骤详情
         /// </summary>
         public void initDetailed()
         {
-            var StepPb = getAutoParamBinding(name);
+            var StepPb = StepParamBinding();
 
             foreach (var pb in StepPb)
             {
@@ -44,7 +55,12 @@ namespace openCaseMaster.ViewModels
             ParamBinding = StepPb;//重置参数
         }
 
-        private XElement getStepXml(string name)
+        /// <summary>
+        /// 获取step的原始参数列表(从用户组件和基础组件中查找)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private XElement autoStepParamBinding(string name,int FID)
         {
             if (stepType(name) == 1)
             {
@@ -59,16 +75,61 @@ namespace openCaseMaster.ViewModels
             }
             else
             {
-                return getAtomStep(name);
 
+                return getFarmeworkStep(name, FID);
             }
 
         }
 
-        private List<EditStepPB> getAutoParamBinding(string name)
-        {
-            var StepXml = getStepXml(name);
 
+        /// <summary>
+        /// 获取step的原始参数列表(从用户 基础组件 和项目中查找)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private XElement autoStepParamBinding(string name,int FID,int PID)
+        {
+            var xe = autoStepParamBinding(name,FID);
+            if (xe == null)//从项目组件中查找
+            { 
+                QCTESTEntities QC_DB = new QCTESTEntities();
+                var fkp = QC_DB.Framework4Project.FirstOrDefault(t => t.FID == FID && t.PID == PID);
+                if (fkp != null)
+                {
+                    var steps = XElement.Parse(fkp.controlXML);
+                    var step = steps.Descendants("Step").FirstOrDefault(t => t.Attribute("name").Value == name);
+                    if (step != null)
+                    {
+                        XElement PB = new XElement("ParamBinding");
+                        PB.SetAttributeValue("name", "是否启用");
+                        PB.SetAttributeValue("value", "true");
+                        PB.SetAttributeValue("list", "启用:true,不启用:false");
+
+
+                        step.Add(PB);
+                        return step;
+                    }
+                }
+                 
+            }
+            return xe;
+        }
+
+      
+
+
+        /// <summary>
+        /// 获得当前step的可编辑属性
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+
+        private List<EditStepPB> StepParamBinding()
+        {
+            var StepXml = autoStepParamBinding(name,this.FID,this.PID);
+            
+
+            //合并属性
             List<EditStepPB> pbs = new List<EditStepPB>();
 
             foreach (var pbx in StepXml.Descendants("ParamBinding"))
@@ -93,7 +154,7 @@ namespace openCaseMaster.ViewModels
         }
 
         /// <summary>
-        /// 后期要删的方法
+        /// 讲step中的的list属性专程前台可读的json属性(前期设计失误产物)
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
@@ -116,16 +177,20 @@ namespace openCaseMaster.ViewModels
         }
 
         /// <summary>
-        /// 获得原子组件xml
+        /// 获得基础组件xml
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        private XElement getAtomStep(string name)
+        private XElement getFarmeworkStep(string name, int FID)
         {
             QCTESTEntities QC_DB = new QCTESTEntities();
-            M_testCaseSteps step = (from t in QC_DB.M_testCaseSteps
-                                    where t.type != 1 && t.name == name
-                                    select t).FirstOrDefault();
+
+            var cf = QC_DB.caseFramework.First(t => t.ID == FID);
+            XElement xe = XElement.Parse(cf.controlXML);
+
+           
+            var step = xe.Descendants("Step").FirstOrDefault(t => t.Attribute("name").Value == name);
+
             if (step != null)
             {
                 XElement PB = new XElement("ParamBinding");
@@ -133,9 +198,9 @@ namespace openCaseMaster.ViewModels
                 PB.SetAttributeValue("value", "true");
                 PB.SetAttributeValue("list", "启用:true,不启用:false");
 
-                var stepXML = XElement.Parse(step.stepXML);
-                stepXML.Add(PB);
-                return stepXML;
+              
+                step.Add(PB);
+                return step;
             }
 
             return null;

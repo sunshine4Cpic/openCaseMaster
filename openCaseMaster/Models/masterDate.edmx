@@ -72,11 +72,6 @@
           <Property Name="DeviceID" Type="int" Nullable="false" />
           <Property Name="usable" Type="bit" Nullable="false" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6013: 表/视图“QCTEST.dbo.M_Months”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
-        <EntityType Name="M_Months">
-          <Property Name="Month" Type="nchar" MaxLength="10" />
-        </EntityType>-->
         <EntityType Name="M_runScene">
           <Key>
             <PropertyRef Name="ID" />
@@ -116,6 +111,7 @@
           <Property Name="testXML" Type="xml" />
           <Property Name="type" Type="int" />
           <Property Name="baseID" Type="int" />
+          <Property Name="FID" Type="int" />
         </EntityType>
         <EntityType Name="M_testCaseSteps">
           <Key>
@@ -352,6 +348,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_M_testCase_FID">
+          <End Role="caseFramework" Type="Self.caseFramework" Multiplicity="0..1" />
+          <End Role="M_testCase" Type="Self.M_testCase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caseFramework">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_testCase">
+              <PropertyRef Name="FID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_M_testCaseSteps_project">
           <End Role="project" Type="Self.project" Multiplicity="0..1" />
           <End Role="M_testCaseSteps" Type="Self.M_testCaseSteps" Multiplicity="*" />
@@ -492,6 +500,10 @@
         <Function Name="M_testCase_delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="p_1" Type="int" Mode="In" />
         </Function>
+        <Function Name="M_testCase_getProject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="p_1" Type="int" Mode="In" />
+          <Parameter Name="Out1" Type="int" Mode="InOut" />
+        </Function>
         <Function Name="M_testCase_sort" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="p_1" Type="int" Mode="In" />
           <Parameter Name="p_2" Type="int" Mode="In" />
@@ -605,6 +617,10 @@
           <AssociationSet Name="FK_M_testCase_baseID" Association="Self.FK_M_testCase_baseID">
             <End Role="M_testCase" EntitySet="M_testCase" />
             <End Role="M_testCase1" EntitySet="M_testCase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_testCase_FID" Association="Self.FK_M_testCase_FID">
+            <End Role="caseFramework" EntitySet="caseFramework" />
+            <End Role="M_testCase" EntitySet="M_testCase" />
           </AssociationSet>
           <AssociationSet Name="FK_M_testCaseSteps_project" Association="Self.FK_M_testCaseSteps_project">
             <End Role="project" EntitySet="project" />
@@ -766,6 +782,8 @@
           <Property Name="baseID" Type="Int32" />
           <NavigationProperty Name="M_testCase1" Relationship="Self.FK_M_testCase_baseID" FromRole="M_testCase" ToRole="M_testCase1" />
           <NavigationProperty Name="M_testCase2" Relationship="Self.FK_M_testCase_baseID" FromRole="M_testCase1" ToRole="M_testCase" />
+          <Property Name="FID" Type="Int32" />
+          <NavigationProperty Name="caseFramework" Relationship="MasterModel.FK_M_testCase_FID" FromRole="M_testCase" ToRole="caseFramework" />
         </EntityType>
         <EntityType Name="M_testCaseSteps">
           <Key>
@@ -1263,6 +1281,14 @@
             <End Role="project" EntitySet="project" />
             <End Role="Framework4Project" EntitySet="Framework4Project" />
           </AssociationSet>
+          <AssociationSet Name="FK_M_testCase_FID" Association="MasterModel.FK_M_testCase_FID">
+            <End Role="caseFramework" EntitySet="caseFramework" />
+            <End Role="M_testCase" EntitySet="M_testCase" />
+          </AssociationSet>
+          <FunctionImport Name="M_testCase_getProject">
+            <Parameter Name="p_1" Mode="In" Type="Int32" />
+            <Parameter Name="Out1" Mode="InOut" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="M_ContainUserStepCase_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -1283,6 +1309,7 @@
           <Property Name="controlXML" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_caseFramework_userID" FromRole="caseFramework" ToRole="admin_user" />
           <NavigationProperty Name="Framework4Project" Relationship="MasterModel.FK_Framework4Project_FID" FromRole="caseFramework" ToRole="Framework4Project" />
+          <NavigationProperty Name="M_testCase" Relationship="MasterModel.FK_M_testCase_FID" FromRole="caseFramework" ToRole="M_testCase" />
         </EntityType>
         <EntityType Name="Framework4Project">
           <Key>
@@ -1328,6 +1355,18 @@
             </Principal>
             <Dependent Role="Framework4Project">
               <PropertyRef Name="PID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_testCase_FID">
+          <End Type="MasterModel.caseFramework" Role="caseFramework" Multiplicity="0..1" />
+          <End Type="MasterModel.M_testCase" Role="M_testCase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caseFramework">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_testCase">
+              <PropertyRef Name="FID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1422,6 +1461,7 @@
           <EntitySetMapping Name="M_testCase">
             <EntityTypeMapping TypeName="MasterModel.M_testCase">
               <MappingFragment StoreEntitySet="M_testCase">
+                <ScalarProperty Name="FID" ColumnName="FID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="projectID" ColumnName="projectID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1598,6 +1638,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="M_testCase_getProject" FunctionName="MasterModel.Store.M_testCase_getProject" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

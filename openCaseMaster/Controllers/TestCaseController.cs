@@ -180,15 +180,16 @@ namespace openCaseMaster.Controllers
 
         public ActionResult scriptView(int ID)
         {
-            
-            using (QCTESTEntities QC_DB = new QCTESTEntities())
-            {
-                M_testCase mtc = QC_DB.M_testCase.First(t => t.ID == ID);
 
-                return PartialView("_scriptView", mtc);//未做错误处理
-            }
+            scriptViewModel tvm = new scriptViewModel(ID);
+
+            return PartialView("_scriptView", tvm);//未做错误处理
+
         }
 
+        /// <summary>
+        /// 编辑脚本
+        /// </summary>
         [HttpPost]
         public bool editScript(int ID, string steps)
         {
@@ -206,24 +207,26 @@ namespace openCaseMaster.Controllers
         {
             obj.initDetailed();
             
-            return PartialView("_EditStep", obj);//未做错误处理
+            return PartialView("_EditStep", obj);
 
         }
 
 
 
-        public string controlTreeList()
+
+
+        public string controlTreeListP(int ID)
         {
-            
+
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
-                //获取所有的admin所属控件
+                //获取所属的控件
                 var ss = from t in QC_DB.caseFramework
-                         where t.userID==1
+                         where t.ID == ID
                          select t;
 
                 List<treeViewModel> data = new List<treeViewModel>();
-                foreach(var s in ss)
+                foreach (var s in ss)
                 {
                     var treeNode = s.getControlJson4Tree();
                     data.Add(treeNode);
@@ -235,12 +238,14 @@ namespace openCaseMaster.Controllers
                 string json = JsonConvert.SerializeObject(data, jSetting);
 
                 return json;
-              
+
             }
-           
+
 
         }
-     
+
+
+        
      
     }
 }

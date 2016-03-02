@@ -168,5 +168,14 @@ namespace openCaseMaster.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("M_testDemand_sort", p_1Parameter, p_2Parameter);
         }
+    
+        public virtual int M_testCase_getProject(Nullable<int> p_1, ObjectParameter out1)
+        {
+            var p_1Parameter = p_1.HasValue ?
+                new ObjectParameter("p_1", p_1) :
+                new ObjectParameter("p_1", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("M_testCase_getProject", p_1Parameter, out1);
+        }
     }
 }
