@@ -1,4 +1,5 @@
-﻿using System;
+﻿using openCaseMaster.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
@@ -14,6 +15,14 @@ namespace openCaseMaster
     {
         protected void Application_Start()
         {
+            using (QCTESTEntities QC_DB = new QCTESTEntities())
+            {
+                List<caseFramework> ss = (from t in QC_DB.caseFramework
+                                         where t.userID == 1
+                                         select t).ToList();
+                Application["Framework"] = ss;
+            }
+            
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

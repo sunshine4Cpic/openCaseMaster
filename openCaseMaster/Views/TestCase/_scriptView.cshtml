@@ -23,8 +23,12 @@
     <div id="C2" style="width:150px;">
         <div data-options="iconCls:'icon-box_add'" onclick="">自定义组件</div>
         <div class="menu-sep"></div>
-        <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="">执行案例</div>
+        <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="debug()"> 调试案例</div>
         <div data-options="iconCls:'icon-undo'" onclick="refreshScrpt($(scriptID).val())">撤销未保存的操作</div>
+    </div>
+
+    <div style="float:right" class="l-btn-text">
+       @Model.scriptName ( @Model.Fname )
     </div>
 </div>
 
@@ -148,7 +152,7 @@
                 }
 
                 $("#scriptModal").load('EditStep',pd,function() {
-                    //combox 和 bootstrap 样式统一
+                    //easyUI-combox 和 bootstrap 样式统一
                     $.parser.parse($(".modal-body"));
                     $(".modal-body  .combo").each(function () {
                         $(this).css('width', '100%');
@@ -166,6 +170,18 @@
 
 
         function scriptSave()
+        {
+            var steps = getSteps();
+
+            $.post("/TestCase/editScript/"+$('#scriptID').val(), { steps: JSON.stringify(steps)  }, function (result) {
+                if (result == "True") {
+                    $.messager.alert('Messager', '脚本保存成功!', "info");
+                }
+            }).error(function() { alert("error"); });
+
+        }
+
+        function getSteps()
         {
             var nodes= $('#scriptTree').tree("getRoots");
             var steps=[];
@@ -187,12 +203,7 @@
                 steps.push(step);
             }
 
-            $.post("/TestCase/editScript/"+$('#scriptID').val(), { steps: JSON.stringify(steps)  }, function (result) {
-                if (result == "True") {
-                    $.messager.alert('Messager', '脚本保存成功!', "info");
-                }
-            }).error(function() { alert("error"); });
-
+            return steps
         }
 
         function DeleteStep()
@@ -217,4 +228,18 @@
             });
         }
 
+        function debug()
+        {
+            var steps = getSteps();
+            $.post("/TestCase/debug/"+$('#scriptID').val(), { steps: JSON.stringify(steps)  }, function (result) {
+                if (result == "True") {
+                    
+                    //开始检查参数
+                }
+            }).error(function() { alert("error"); });
+
+            $.post("debug",{caseData:{"K1":"V1","K2":"V2"}},function(result){
+                alter(1);
+            });
+        }
     </script>

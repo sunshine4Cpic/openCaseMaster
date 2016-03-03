@@ -37,20 +37,16 @@
                     <div data-options="iconCls:'icon-edit'" onclick="OpenEditCase();">修改信息</div>
                     <div data-options="iconCls:'icon-remove'" onclick="DeleteCase();">删除节点</div>
                     <div class="menu-sep"></div>
-                    <div>上传案例</div>
+                    <div>上传案例(coding)</div>
                     <div data-options="iconCls:'icon-reload'" onclick="reloadNode();">刷新节点</div>
                 </div>
 
                 <a href="javascript:void(0)" id="mb" class="easyui-splitbutton" style="width:100px"
                    data-options="menu:'#mm2',iconCls:'icon-ok',duration:200">多选操作</a>
                 <div id="mm2" style="width:150px;">
-                    <div data-options="iconCls:'icon-folder_classic_add'" onclick="">新增文件夹</div>
-                    <div data-options="iconCls:'icon-document_a4_add'" onclick="">新增案例</div>
+                    <div data-options="iconCls:'icon-remove'" onclick="">批量删除(coding)</div>
                     <div class="menu-sep"></div>
-                    <div data-options="iconCls:'icon-edit'" onclick="">修改信息</div>
-                    <div data-options="iconCls:'icon-remove'" onclick="">删除节点</div>
-                    <div class="menu-sep"></div>
-                    <div>上传案例</div>
+                    <div data-options="iconCls:'icon-print'" onclick="">生成场景模版</div>
                 </div>
             </div>
             <div id="caseTreeListDiv" style="overflow:auto;max-height:600px">
@@ -120,18 +116,15 @@
                     }
                     return s;
                 },
-                /*onLoadSuccess: function (node, data) {
-                   
-                    //为每个节点增加desc描述
-                    $(".tree-node").each(function (i) {
-                        //这里的this是dom对象,$(this)为jquery对象
-                        var tn = $('#caseTreeList').tree('getNode', this);
-                        $(this).attr("title", tn.text);
-                    })
-                    
-                    
-                },*/
-                
+                onLoadSuccess: function (node) {
+                    var children = $(this).tree('getChildren', node.target);
+                    //console.info(children);
+                    for (var i = 0; i < children.length; i++) {
+                        $(this).tree('check', children[i].target);
+                        //}
+                    }
+
+                },
                 onDblClick: function (node) {
                     if (node.type == 1)
                         $('#scriptPanel').panel('refresh', 'scriptView/' + node.id);
@@ -161,8 +154,8 @@
             var url = "/TestCase/AddNew?id=" + node.id + "&PID=" + node.PID + "&type=" + type;
             $('#dialog').dialog({
                 title: 'Creat New',
-                width: 400,
-                height: 200,
+                width: 500,
+               
                 closed: false,
                 cache: false,
                 href: url,
@@ -181,8 +174,7 @@
             var url = "/TestCase/EditCase/" + node.id;
             $('#dialog').dialog({
                 title: 'Edit Info',
-                width: 400,
-                height: 200,
+                width: 500,
                 closed: false,
                 cache: false,
                 href: url,

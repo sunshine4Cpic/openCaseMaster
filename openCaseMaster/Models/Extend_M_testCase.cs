@@ -61,13 +61,18 @@ namespace openCaseMaster.Models
         public static void addNewScrpit(this M_testCase mtc)
         {
            
-            string caseString = "<TestCase desc=\"" + mtc.Name + "\" ><Step name=\"R_InitStep\" desc=\"打开程序\">" +
+            string caseString = "<TestCase desc=\"" + mtc.Name + "\" ><Step name=\"R_InitStep\" desc=\"这是一个初始步骤\">" +
                                 "<ParamBinding name=\"waitTime\" value=\"\" /></Step></TestCase>";
 
             mtc.testXML = caseString;
 
 
         }
+
+
+        
+
+        
 
     }
 

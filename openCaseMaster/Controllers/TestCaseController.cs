@@ -12,10 +12,15 @@ using System.Xml;
 using System.Xml.Linq;
 
 
+
 namespace openCaseMaster.Controllers
 {
     public class TestCaseController : Controller
     {
+
+        public static List<caseFramework> cfl;
+
+
         // GET: TestCase
         public ActionResult Index()
         {
@@ -115,8 +120,18 @@ namespace openCaseMaster.Controllers
         [HttpGet]
         public ActionResult AddNew(string id, string PID, int type)
         {
+            ViewData["AddNew"] = true;
+
+            if (type == 1)//案例添加框架
+            {
+                var fmks = System.Web.HttpContext.Current.Application["Framework"] as List<caseFramework>;
+
+
+                var query = fmks.Select(c => new { c.ID, c.workName });
+                ViewData["SelectListItem"] = new SelectList(query.AsEnumerable(), "ID", "workName");
+            }
             int tempInt;
-            NewCaseModel v = new NewCaseModel();
+            M_testCase v = new M_testCase();
             if (int.TryParse(id, out tempInt))
                 v.baseID = tempInt;
             if (int.TryParse(PID, out tempInt))
@@ -125,7 +140,7 @@ namespace openCaseMaster.Controllers
             string defultName = type == 0 ? "新建文件夹" : "新建案例";
 
             v.Name = defultName;
-            return PartialView("_newCase", v);
+            return PartialView("_EditCase", v);
         }
 
         [HttpPost]
@@ -146,6 +161,17 @@ namespace openCaseMaster.Controllers
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
                 M_testCase mt = QC_DB.M_testCase.First(t => t.ID == ID);
+
+                var fmks = System.Web.HttpContext.Current.Application["Framework"] as List<caseFramework>;
+                var items = fmks
+                .Select(c => new {
+                        Value = c.ID.ToString(),
+                        Text = c.workName
+                    });
+
+                ViewData["SelectListItem"] = new SelectList(items.AsEnumerable(), "Value", "Text", mt.FID);
+
+               
                 return PartialView("_EditCase", mt);//未做错误处理
             }
         }
@@ -158,6 +184,7 @@ namespace openCaseMaster.Controllers
                 M_testCase mtc = QC_DB.M_testCase.FirstOrDefault(t => t.ID == sub.ID);
                 mtc.Name = sub.Name;
                 mtc.mark = sub.mark;
+                mtc.FID = sub.FID;
                 QC_DB.SaveChanges();
                 return true;
             }
@@ -245,7 +272,34 @@ namespace openCaseMaster.Controllers
         }
 
 
-        
+        [HttpPost]
+        public ActionResult debug(int id, string steps)
+        {
+
+            using (QCTESTEntities QC_DB = new QCTESTEntities())
+            {
+                M_testCase mtc = QC_DB.M_testCase.First(t => t.ID == id);
+                mtc.editScript(steps);
+                QC_DB.SaveChanges();//先保存
+
+                XElement xe = XElement.Parse(mtc.testXML);
+                var pbs = xe.ParamDictionary();
+
+                if (pbs.Count>0)
+                {
+                    return PartialView("_EditStep", obj);
+                    //有参数
+                }else
+                {
+                    //没有参数
+                    return null;
+                }
+
+                
+            }
+
+        }
+
      
     }
 }
