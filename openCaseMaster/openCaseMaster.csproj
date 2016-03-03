@@ -225,13 +225,12 @@
     </Compile>
     <Compile Include="Models\XElementHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\caseStepTreeModel.cs" />
-    <Compile Include="ViewModels\EditStepModel.cs" />
-    <Compile Include="ViewModels\NewCaseModel.cs" />
-    <Compile Include="ViewModels\scriptViewModel.cs" />
-    <Compile Include="ViewModels\testCaseTreeModel.cs" />
+    <Compile Include="ViewModels\TestCase\caseStepTreeModel.cs" />
+    <Compile Include="ViewModels\TestCase\EditStepModel.cs" />
+    <Compile Include="ViewModels\TestCase\scriptViewModel.cs" />
+    <Compile Include="ViewModels\TestCase\testCaseTreeModel.cs" />
     <Compile Include="ViewModels\treeViewModel.cs" />
-    <Compile Include="ViewModels\UserModel.cs" />
+    <Compile Include="ViewModels\User\UserModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\script.sql" />

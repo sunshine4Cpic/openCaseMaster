@@ -287,7 +287,7 @@ namespace openCaseMaster.Controllers
 
                 if (pbs.Count>0)
                 {
-                    return PartialView("_EditStep", obj);
+                    return PartialView("_EditStep", null);
                     //有参数
                 }else
                 {
