@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using openCaseMaster.Models;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,9 @@ namespace openCaseMaster.ViewModels
 
         public string Fname { get; set; }
 
+        /// <summary>
+        /// 脚本ID
+        /// </summary>
         public int ID { get; set; }
 
         public string scriptName { get; set; }
@@ -30,6 +34,8 @@ namespace openCaseMaster.ViewModels
         public string PJson { get; set; }
 
         public string FJson { get; set; }
+
+        public string UJson { get; set; }
 
 
 
@@ -85,7 +91,10 @@ namespace openCaseMaster.ViewModels
             return json;
 
         }
-
+        /// <summary>
+        /// 初始化脚本model
+        /// </summary>
+        /// <param name="ID">脚本ID</param>
         public scriptViewModel(int ID)
         {
             using (QCTESTEntities QC_DB = new QCTESTEntities())
@@ -150,9 +159,36 @@ namespace openCaseMaster.ViewModels
 
                 this.PJson = JsonConvert.SerializeObject(Pdata, jSetting);
 
+
+
+
+
+                //获取Ujson  用户组件
+
+
+                int userID = userHelper.getUserID();
+
+                var Ups = from t in QC_DB.M_testCaseSteps
+                          where t.userID == userID
+                          select t;
+                if (FID != null)
+                    Ups = Ups.Where(t => t.FID == this.FID);
+
+                var usts = from t in Ups
+                           select new caseStepTreeModel
+                           {
+                               text = t.name,
+                               id = t.ID,
+                               name = "userstep_" + t.ID,
+                               desc = t.name
+                           };
+                this.UJson = JsonConvert.SerializeObject(usts, jSetting);
+
             }
 
         }
+
+        
 
     }
 }

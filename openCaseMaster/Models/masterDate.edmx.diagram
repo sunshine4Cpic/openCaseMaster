@@ -46,6 +46,7 @@
         <AssociationConnector Association="MasterModel.FK_Framework4Project_FID" />
         <AssociationConnector Association="MasterModel.FK_Framework4Project_PID" />
         <AssociationConnector Association="MasterModel.FK_M_testCase_FID" />
+        <AssociationConnector Association="MasterModel.FK_M_testCaseSteps_FID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

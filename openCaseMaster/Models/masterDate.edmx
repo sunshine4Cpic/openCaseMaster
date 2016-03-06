@@ -125,6 +125,7 @@
           <Property Name="mark" Type="nvarchar" MaxLength="50" />
           <Property Name="paramXML" Type="xml" />
           <Property Name="PID" Type="int" />
+          <Property Name="FID" Type="int" />
         </EntityType>
         <EntityType Name="M_testDemand">
           <Key>
@@ -356,6 +357,18 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="M_testCase">
+              <PropertyRef Name="FID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_testCaseSteps_FID">
+          <End Role="caseFramework" Type="Self.caseFramework" Multiplicity="0..1" />
+          <End Role="M_testCaseSteps" Type="Self.M_testCaseSteps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caseFramework">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_testCaseSteps">
               <PropertyRef Name="FID" />
             </Dependent>
           </ReferentialConstraint>
@@ -622,6 +635,10 @@
             <End Role="caseFramework" EntitySet="caseFramework" />
             <End Role="M_testCase" EntitySet="M_testCase" />
           </AssociationSet>
+          <AssociationSet Name="FK_M_testCaseSteps_FID" Association="Self.FK_M_testCaseSteps_FID">
+            <End Role="caseFramework" EntitySet="caseFramework" />
+            <End Role="M_testCaseSteps" EntitySet="M_testCaseSteps" />
+          </AssociationSet>
           <AssociationSet Name="FK_M_testCaseSteps_project" Association="Self.FK_M_testCaseSteps_project">
             <End Role="project" EntitySet="project" />
             <End Role="M_testCaseSteps" EntitySet="M_testCaseSteps" />
@@ -798,6 +815,8 @@
           <Property Name="paramXML" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PID" Type="Int32" />
           <NavigationProperty Name="project" Relationship="Self.FK_M_testCaseSteps_project" FromRole="M_testCaseSteps" ToRole="project" />
+          <Property Name="FID" Type="Int32" />
+          <NavigationProperty Name="caseFramework" Relationship="MasterModel.FK_M_testCaseSteps_FID" FromRole="M_testCaseSteps" ToRole="caseFramework" />
         </EntityType>
         <EntityType Name="M_testDemand">
           <Key>
@@ -1289,6 +1308,10 @@
             <Parameter Name="p_1" Mode="In" Type="Int32" />
             <Parameter Name="Out1" Mode="InOut" Type="Int32" />
           </FunctionImport>
+          <AssociationSet Name="FK_M_testCaseSteps_FID" Association="MasterModel.FK_M_testCaseSteps_FID">
+            <End Role="caseFramework" EntitySet="caseFramework" />
+            <End Role="M_testCaseSteps" EntitySet="M_testCaseSteps" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="M_ContainUserStepCase_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -1310,6 +1333,7 @@
           <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_caseFramework_userID" FromRole="caseFramework" ToRole="admin_user" />
           <NavigationProperty Name="Framework4Project" Relationship="MasterModel.FK_Framework4Project_FID" FromRole="caseFramework" ToRole="Framework4Project" />
           <NavigationProperty Name="M_testCase" Relationship="MasterModel.FK_M_testCase_FID" FromRole="caseFramework" ToRole="M_testCase" />
+          <NavigationProperty Name="M_testCaseSteps" Relationship="MasterModel.FK_M_testCaseSteps_FID" FromRole="caseFramework" ToRole="M_testCaseSteps" />
         </EntityType>
         <EntityType Name="Framework4Project">
           <Key>
@@ -1366,6 +1390,18 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="M_testCase">
+              <PropertyRef Name="FID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_testCaseSteps_FID">
+          <End Type="MasterModel.caseFramework" Role="caseFramework" Multiplicity="0..1" />
+          <End Type="MasterModel.M_testCaseSteps" Role="M_testCaseSteps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caseFramework">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_testCaseSteps">
               <PropertyRef Name="FID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1475,6 +1511,7 @@
           <EntitySetMapping Name="M_testCaseSteps">
             <EntityTypeMapping TypeName="MasterModel.M_testCaseSteps">
               <MappingFragment StoreEntitySet="M_testCaseSteps">
+                <ScalarProperty Name="FID" ColumnName="FID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="stepXML" ColumnName="stepXML" />

@@ -55,66 +55,9 @@ namespace openCaseMaster.ViewModels
             ParamBinding = StepPb;//重置参数
         }
 
-        /// <summary>
-        /// 获取step的原始参数列表(从用户组件和基础组件中查找)
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        private XElement autoStepParamBinding(string name,int FID)
-        {
-            if (stepType(name) == 1)
-            {
-                int stepID = Convert.ToInt32(name.Substring(9));
-                //这里是用户控件初始化
-                QCTESTEntities QC_DB = new QCTESTEntities();
-                M_testCaseSteps mtcs = QC_DB.M_testCaseSteps.Where(t => t.ID == stepID).First();
+       
 
-                //mtcs.paramXML.SetAttributeValue("name", name);
-                return XElement.Parse(mtcs.paramXML);
-
-            }
-            else
-            {
-
-                return getFarmeworkStep(name, FID);
-            }
-
-        }
-
-
-        /// <summary>
-        /// 获取step的原始参数列表(从用户 基础组件 和项目中查找)
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        private XElement autoStepParamBinding(string name,int FID,int PID)
-        {
-            var xe = autoStepParamBinding(name,FID);
-            if (xe == null)//从项目组件中查找
-            { 
-                QCTESTEntities QC_DB = new QCTESTEntities();
-                var fkp = QC_DB.Framework4Project.FirstOrDefault(t => t.FID == FID && t.PID == PID);
-                if (fkp != null)
-                {
-                    var steps = XElement.Parse(fkp.controlXML);
-                    var step = steps.Descendants("Step").FirstOrDefault(t => t.Attribute("name").Value == name);
-                    if (step != null)
-                    {
-                        XElement PB = new XElement("ParamBinding");
-                        PB.SetAttributeValue("name", "是否启用");
-                        PB.SetAttributeValue("value", "true");
-                        PB.SetAttributeValue("list", "启用:true,不启用:false");
-
-
-                        step.Add(PB);
-                        return step;
-                    }
-                }
-                 
-            }
-            return xe;
-        }
-
+        
       
 
 
@@ -126,7 +69,7 @@ namespace openCaseMaster.ViewModels
 
         private List<EditStepPB> StepParamBinding()
         {
-            var StepXml = autoStepParamBinding(name,this.FID,this.PID);
+            var StepXml = testCaseHelper.autoStepParamBinding(name, this.FID, this.PID);
             
 
             //合并属性
@@ -139,8 +82,10 @@ namespace openCaseMaster.ViewModels
                 if (pbx.Attribute("value") != null)
                     pb.value = pbx.Attribute("value").Value;
 
-                if (pbx.Attribute("desc") != null)
-                    pb.desc = pbx.Attribute("desc").Value;
+                if (pbx.Attribute("desc") == null)
+                    pb.desc = pb.name ;
+                else
+                    pb.desc = pb.name + " : " + pbx.Attribute("desc").Value;
 
                 if (pbx.Attribute("list") != null)
                 {
@@ -176,48 +121,12 @@ namespace openCaseMaster.ViewModels
             return sb.ToString();
         }
 
-        /// <summary>
-        /// 获得基础组件xml
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        private XElement getFarmeworkStep(string name, int FID)
-        {
-            QCTESTEntities QC_DB = new QCTESTEntities();
-
-            var cf = QC_DB.caseFramework.First(t => t.ID == FID);
-            XElement xe = XElement.Parse(cf.controlXML);
-
-           
-            var step = xe.Descendants("Step").FirstOrDefault(t => t.Attribute("name").Value == name);
-
-            if (step != null)
-            {
-                XElement PB = new XElement("ParamBinding");
-                PB.SetAttributeValue("name", "是否启用");
-                PB.SetAttributeValue("value", "true");
-                PB.SetAttributeValue("list", "启用:true,不启用:false");
-
-              
-                step.Add(PB);
-                return step;
-            }
-
-            return null;
-            
-        }
+    
+  
 
 
 
-        private int stepType(string name)
-        {
-            if (name.IndexOf("userstep_", StringComparison.CurrentCultureIgnoreCase) == 0)
-            {
-                return 1;
-            }
-
-            return 0;
-        }
+      
 
     }
 

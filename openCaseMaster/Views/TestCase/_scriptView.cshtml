@@ -1,5 +1,4 @@
-﻿
-@using openCaseMaster.ViewModels;
+﻿@using openCaseMaster.ViewModels;
 
 @model scriptViewModel
            
@@ -47,6 +46,7 @@
         var scriptTreeData = @Html.Raw(Model.TreeJson);
         var FData = @Html.Raw(Model.FJson);
         var PData = @Html.Raw(Model.PJson);
+        var UData = @Html.Raw(Model.UJson);
 
         $('#scriptTree').tree({
             data:scriptTreeData,
@@ -73,7 +73,7 @@
                         before: target,
                         data: {
                             name: source.name,
-                            desc:'xxxxxxxxxxxxx',
+                            desc:source.desc+'***new step***',
                             iconCls:'icon-view_outline_detail'
                         }
                     });
@@ -134,6 +134,29 @@
         });
 
 
+        $('#controlTreeListU').tree({
+            data:UData,
+            animate: true,
+            dnd: true,
+            formatter: function (node) {
+                if (node.text == undefined)
+                    return node.name;
+                else
+                    return node.text;
+            },
+            onDragOver: function (target, source) {
+                return false;
+            },
+            onBeforeDrag: function (node) {
+                if (node.children !== undefined)
+                    return false;
+                else
+                    node["newStep"] = true;
+            },
+
+        });
+
+
         function editStepClick(node)
         {
             if(node===null) return;
@@ -144,13 +167,14 @@
                 pd["desc"] = node.desc;
                 pd["name"] = node.name;
                 pd["FID"] = $("#FID").val();
+                pd["PID"] = $("#PID").val();
                 for (n in node.children)
                 {
                     var nd = node.children[n];
                     pd["ParamBinding["+n+"].name"] = nd.Key;
                     pd["ParamBinding["+n+"].value"] = nd.Value;
                 }
-
+                $('#scriptModal').empty();
                 $("#scriptModal").load('EditStep',pd,function() {
                     //easyUI-combox 和 bootstrap 样式统一
                     $.parser.parse($(".modal-body"));
@@ -230,16 +254,36 @@
 
         function debug()
         {
-            var steps = getSteps();
-            $.post("/TestCase/debug/"+$('#scriptID').val(), { steps: JSON.stringify(steps)  }, function (result) {
-                if (result == "True") {
-                    
-                    //开始检查参数
-                }
-            }).error(function() { alert("error"); });
 
-            $.post("debug",{caseData:{"K1":"V1","K2":"V2"}},function(result){
-                alter(1);
+            $.messager.confirm('Message', '调试案例会自动保存,是否继续?', function (r) {
+                if (r) {
+                    var steps = getSteps();
+                    var id = $('#scriptID').val();
+                    $.post("/TestCase/debugSave/"+id, { steps: JSON.stringify(steps)  }, function (result) {
+                        if (result == "") {//没有参数
+                            debugSubmit(id,"null");
+                        }else
+                        {
+                            var sm = $("#scriptModal");
+                            sm.empty();
+                            sm.html(result);
+                            $(function () { $(".modal-body [data-toggle='tooltip']").tooltip(); });
+                            sm.modal();
+                        }
+                    }).error(function() { alert("error"); });
+                }
+                });
+           
+        }
+
+        function debugSubmit(id,Param)
+        {
+            $.post("runScrpt/"+id,{"Param":Param},function(result){//获取执行脚本
+                $.post("http://localhost:8500/testM/",result,function(result){
+                    $.messager.alert('Messager', '脚本开始执行!', "info");
+                }).error(function() {
+                    $.messager.alert('Error', '调用本机出错啦!', "error");
+                });
             });
         }
     </script>

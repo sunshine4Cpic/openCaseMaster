@@ -6,8 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -15,6 +17,7 @@ using System.Xml.Linq;
 
 namespace openCaseMaster.Controllers
 {
+    [Authorize(Roles="user")]
     public class TestCaseController : Controller
     {
 
@@ -23,7 +26,7 @@ namespace openCaseMaster.Controllers
 
         // GET: TestCase
         public ActionResult Index()
-        {
+        {   
             return View();
         }
 
@@ -35,21 +38,26 @@ namespace openCaseMaster.Controllers
             //FormsIdentity id = (FormsIdentity)HttpContext.Current.User.Identity;
             //FormsAuthenticationTicket ticket = id.Ticket;//cookie
 
+            
+            
+         
             using(QCTESTEntities QC_DB = new QCTESTEntities())
             {
-                var ps = from t in QC_DB.project
+                var tcl = from t in QC_DB.project
                          select new
                          {
                              PID = t.ID,
-                             text = t.Pname
+                             text = t.Pname,
+                             state = "closed"
                          };
-                var tcl = from t in ps.ToList()
-                          select new
-                          {
-                              PID = t.PID,
-                              text = t.text,
-                              state = "closed"
-                          };
+
+             if(!User.IsInRole("admin"))
+             {
+                 string[] pp = userHelper.getUserPermission().Split(',');
+                 tcl = tcl.Where(t => pp.Contains(t.PID.ToString()));
+             }
+
+
 
                 var jSetting = new JsonSerializerSettings();
                 jSetting.NullValueHandling = NullValueHandling.Ignore;
@@ -273,7 +281,7 @@ namespace openCaseMaster.Controllers
 
 
         [HttpPost]
-        public ActionResult debug(int id, string steps)
+        public ActionResult debugSave(int id, string steps)
         {
 
             using (QCTESTEntities QC_DB = new QCTESTEntities())
@@ -287,7 +295,7 @@ namespace openCaseMaster.Controllers
 
                 if (pbs.Count>0)
                 {
-                    return PartialView("_EditStep", null);
+                    return PartialView("_DebugParam", pbs);
                     //有参数
                 }else
                 {
@@ -299,6 +307,29 @@ namespace openCaseMaster.Controllers
             }
 
         }
+
+
+        [HttpPost]
+        public XElement runScrpt(int id, Dictionary<string, string> Param)
+        {
+            //要传Param 要传null post时候 指定Param 参数为 其他值就可以 比如 param:"123"
+            /*
+            var tmpParam = Param;
+            if(System.Web.HttpContext.Current.Request.Form.Count==0)
+            {
+                tmpParam = null;
+            }*/
+            using (QCTESTEntities QC_DB = new QCTESTEntities())
+            {
+                M_testCase mtc = QC_DB.M_testCase.First(t => t.ID == id);
+                var xe = mtc.getRunScript(Param);
+                return xe;
+            }
+            
+
+        }
+
+
 
      
     }

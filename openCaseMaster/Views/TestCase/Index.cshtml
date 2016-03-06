@@ -1,6 +1,7 @@
-﻿@Styles.Render("~/Content/easyui")
-@Scripts.Render("~/bundles/easyui")
-
+﻿@section Scripts {
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/bundles/easyui")
+}
 <link rel="stylesheet" type="text/css" href="/Content/themes/icon.css">
 
 
@@ -19,12 +20,10 @@
 </style>
 
 
-
-
 <div class="row">
     <div id="left" class="col-md-4" style="padding:5px">
 
-        <div class="easyui-panel" title="测试案例" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-filter',closable:false,
+        <div class="easyui-panel" title="测试案例列表" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-filter',closable:false,
     collapsible:true,minimizable:false,maximizable:false">
 
             <div class="easyui-panel" style="margin-bottom:5px">
@@ -45,6 +44,7 @@
                    data-options="menu:'#mm2',iconCls:'icon-ok',duration:200">多选操作</a>
                 <div id="mm2" style="width:150px;">
                     <div data-options="iconCls:'icon-remove'" onclick="">批量删除(coding)</div>
+                    <div data-options="iconCls:'icon-document_small_download'" onclick="">下载案例(coding)</div>
                     <div class="menu-sep"></div>
                     <div data-options="iconCls:'icon-print'" onclick="">生成场景模版</div>
                 </div>
@@ -55,7 +55,7 @@
 
         </div>
         <div style="padding-top:5px"></div>
-        <div id="stepControl" class="easyui-panel" title="测试组件" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-documents',closable:false,
+        <div id="stepControl" class="easyui-panel" title="测试组件" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-view_outline_detail',closable:false,
     collapsible:true,minimizable:false,maximizable:false">
 
             <div class="easyui-tabs" style="width:100%;">
@@ -69,7 +69,7 @@
                     <ul id="controlTreeListU"></ul>
                 </div>
             </div>
-            
+
 
         </div>
 
@@ -77,7 +77,7 @@
     
     <div id="right" class="col-md-8" style="padding:5px">
         
-        <div id="scriptPanel" class="easyui-panel" title="测试案例" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-documents',closable:false,
+        <div id="scriptPanel" class="easyui-panel" title="编辑案例" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-documents',closable:false,
     collapsible:true,minimizable:false,maximizable:false">
 
         </div>
@@ -89,8 +89,6 @@
 
 <div id="dialog" style="overflow:hidden;"></div>
     <script type="text/javascript">
-
-    
 
         $(function () {
   
@@ -117,11 +115,12 @@
                     return s;
                 },
                 onLoadSuccess: function (node) {
-                    var children = $(this).tree('getChildren', node.target);
-                    //console.info(children);
-                    for (var i = 0; i < children.length; i++) {
-                        $(this).tree('check', children[i].target);
-                        //}
+                    if (node && node.checked) {
+                        var children = $(this).tree('getChildren', node.target);
+                        //console.info(children);
+                        for (var i = 0; i < children.length; i++) {
+                            $(this).tree('check', children[i].target);
+                        }
                     }
 
                 },

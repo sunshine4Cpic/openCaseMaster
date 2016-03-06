@@ -1,4 +1,5 @@
-﻿using openCaseMaster.Models;
+﻿using Newtonsoft.Json.Linq;
+using openCaseMaster.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace openCaseMaster
     {
         protected void Application_Start()
         {
+            //先用Application保存,以后用缓存代替
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
                 List<caseFramework> ss = (from t in QC_DB.caseFramework
@@ -33,8 +35,7 @@ namespace openCaseMaster
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {
 
-
-
+           
             if (HttpContext.Current.User != null)
             {
                 if (HttpContext.Current.User.Identity.IsAuthenticated)
@@ -45,10 +46,24 @@ namespace openCaseMaster
                         FormsAuthenticationTicket ticket = id.Ticket;//cookie
                         
                         string userData = ticket.UserData;
-                        //string userData = "1";//调试用超级管理员
-                        string[] roles = userData.Split(',');
-                        //重建HttpContext.Current.User，加入用户拥有的角色数组 
-                        HttpContext.Current.User = new GenericPrincipal(id, roles);
+
+
+                        try
+                        {
+                            JObject userJ = JObject.Parse(userData);
+
+                            string[] roles = userJ["Roles"].ToString().Split(',');
+                            //重建HttpContext.Current.User，加入用户拥有的角色数组 
+                            HttpContext.Current.User = new GenericPrincipal(id, roles);
+                          
+                        }
+                        catch 
+                        {
+                            //处理个毛线,以后重写,使用 MVC自带的权限控制
+                          
+                        } 
+                      
+                        
                     }
                 }
             }

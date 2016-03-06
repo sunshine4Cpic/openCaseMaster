@@ -1,4 +1,5 @@
-﻿using openCaseMaster.Models;
+﻿using Newtonsoft.Json.Linq;
+using openCaseMaster.Models;
 using openCaseMaster.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,9 @@ namespace openCaseMaster.Controllers
         // GET: User
         public ActionResult Login(string ReturnUrl)
         {
+            //Request.IsAjaxRequest();
+            //headh中 X-Requested-With:XMLHttpRequest
+            //ajax 调用时反悔错误信息(coding)
             ViewBag.returnUrl = ReturnUrl;
             return View();
         }
@@ -36,9 +40,25 @@ namespace openCaseMaster.Controllers
                 (t => t.Username == model.UserName && t.Password == model.Password).FirstOrDefault();
             if (loginUser == null)
             {
-                ModelState.AddModelError("", "无效的登录尝试。");
+                ModelState.AddModelError("", "用户名或密码错误。");
                 return View(model);
             }
+            string userRole = "user";
+            //设置权限组
+            switch (loginUser.Type)
+            {
+                case 1:
+                    userRole += ",admin";
+                    break;
+                default:
+                    break;
+            }
+
+            JObject userJ = new JObject();
+            userJ["ID"] = loginUser.ID;
+            userJ["Roles"] = userRole;
+            userJ["Permission"] = loginUser.Permission;
+   
 
             //创建身份验证票据 
             FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1,
@@ -46,7 +66,7 @@ namespace openCaseMaster.Controllers
                                            DateTime.Now,
                                            DateTime.Now.AddHours(2),
                                            false,
-                                           "admin",//用户组暂不处理
+                                           userJ.ToString(),//用户组暂不处理
                                            //loginUser.Type.ToString(),//用户所属的角色字符串 
                                            FormsAuthentication.FormsCookiePath);
             //加密身份验证票据 
@@ -63,6 +83,10 @@ namespace openCaseMaster.Controllers
             //把准备好的cookie加入到响应流中 
             Response.Cookies.Add(cookie);
 
+
+           
+
+          
 
             return RedirectToLocal(ReturnUrl);
 
@@ -86,6 +110,7 @@ namespace openCaseMaster.Controllers
         /// </summary>
         /// <param name="returnUrl"></param>
         /// <returns></returns>
+        [NonAction] 
         private ActionResult RedirectToLocal(string ReturnUrl)
         {
             if (Url.IsLocalUrl(ReturnUrl))
@@ -94,6 +119,9 @@ namespace openCaseMaster.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
-       
+
+
+
+        
     }
 }
