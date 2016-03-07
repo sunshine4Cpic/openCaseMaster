@@ -9,6 +9,9 @@ namespace openCaseMaster.ViewModels
     [DataContract]
     public class treeViewModel
     {
+        
+
+        
         /// <summary>
         /// 节点的 id，它对于加载远程数据很重要。
         /// </summary>
@@ -44,6 +47,10 @@ namespace openCaseMaster.ViewModels
         [DataMember]
         public Boolean? checkbox { get; set; }
 
+        [DataMember]
+        public Dictionary<string, string> attributes;
+        
+        
 
         [DataMember]
         public List<treeViewModel> children { get; set; }

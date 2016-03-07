@@ -22,11 +22,14 @@ namespace openCaseMaster.Models
             root.children = new List<treeViewModel>();
             foreach (var e in sms)
             {
-                caseStepTreeModel tv = new caseStepTreeModel();
+                scriptStepTreeModel tv = new scriptStepTreeModel();
 
-
+                tv.FID = cf.FID;
+                tv.PID = cf.PID;
                 tv.state = "open";
                 tv.name = e.Attribute("name").Value;//name肯定有把....
+
+                tv.iconCls = "icon-view_outline_detail";
 
                 if (e.Attribute("desc") != null)
                     tv.desc = e.Attribute("desc").Value;

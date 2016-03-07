@@ -69,7 +69,7 @@ namespace openCaseMaster.ViewModels
 
         private List<EditStepPB> StepParamBinding()
         {
-            var StepXml = testCaseHelper.autoStepParamBinding(name, this.FID, this.PID);
+            var StepXml = testCaseHelper.autoStepParam(name, this.FID, this.PID);
             
 
             //合并属性

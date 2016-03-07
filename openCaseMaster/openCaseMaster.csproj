@@ -47,9 +47,29 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OOXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -142,6 +162,7 @@
     <Compile Include="Models\caseFramework.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ExcelHelper.cs" />
     <Compile Include="Models\Extend_caseFramework.cs" />
     <Compile Include="Models\Extend_Framework4Project.cs" />
     <Compile Include="Models\Extend_M_testCase.cs" />
@@ -228,10 +249,11 @@
     </Compile>
     <Compile Include="Models\XElementHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\TestCase\caseStepTreeModel.cs" />
+    <Compile Include="ViewModels\TestCase\scriptStepTreeModel.cs" />
     <Compile Include="ViewModels\TestCase\EditStepModel.cs" />
     <Compile Include="ViewModels\TestCase\scriptViewModel.cs" />
     <Compile Include="ViewModels\TestCase\testCaseTreeModel.cs" />
+    <Compile Include="ViewModels\TestCase\userStepViewModel.cs" />
     <Compile Include="ViewModels\treeViewModel.cs" />
     <Compile Include="ViewModels\User\UserModel.cs" />
   </ItemGroup>
@@ -724,6 +746,8 @@
     <Content Include="Views\TestCase\_scriptView.cshtml" />
     <Content Include="Views\TestCase\_EditStep.cshtml" />
     <Content Include="Views\TestCase\_DebugParam.cshtml" />
+    <Content Include="Views\TestCase\_CreateUserControl.cshtml" />
+    <Content Include="Views\Shared\_ModalError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\test\" />

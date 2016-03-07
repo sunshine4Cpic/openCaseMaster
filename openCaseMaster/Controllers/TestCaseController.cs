@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NPOI.HSSF.UserModel;
 using openCaseMaster.Models;
 using openCaseMaster.ViewModels;
 using System;
@@ -246,6 +247,27 @@ namespace openCaseMaster.Controllers
 
         }
 
+        /// <summary>
+        /// 获取添加到scriptView中的step步骤的 json(new)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string getStep(string name,int? FID,int? PID)
+        {
+         
+            scriptStepTreeModel xe = testCaseHelper.autoStepParam(name, FID, PID).getScriptStep();
+
+            xe.desc += "***new***";
+
+            var jSetting = new JsonSerializerSettings();
+            jSetting.NullValueHandling = NullValueHandling.Ignore;
+
+            string json = JsonConvert.SerializeObject(xe, jSetting);
+            return json;
+            
+
+        }
+
 
 
 
@@ -310,6 +332,55 @@ namespace openCaseMaster.Controllers
 
 
         [HttpPost]
+        public ActionResult CreateUserControl( string steps)
+        {
+            XElement xe = testCaseHelper.json2StepList(steps);
+
+            int userCount = xe.Descendants("Step")
+                            .Where(t => t.Attribute("name").Value.IndexOf("userstep_", StringComparison.CurrentCultureIgnoreCase) == 0)
+                            .Count();
+            if (userCount > 0) return PartialView("~/Views/Shared/_ModalError.cshtml", "不能选择用户组件构建组件"); 
+
+            var pms = xe.ParamDictionary();
+
+            return PartialView("_CreateUserControl", pms);
+            
+            
+        }
+
+        [HttpPost]
+        public Boolean saveUserControl(string name, int PID, int FID, string steps, Dictionary<string, string> Param)
+        {
+            XElement stepXML = testCaseHelper.json2StepList(steps);
+
+            M_testCaseSteps nmtc = new M_testCaseSteps();
+            nmtc.PID = PID;
+            nmtc.FID = FID;
+            nmtc.userID = userHelper.getUserID();
+            nmtc.name = name;
+            nmtc.stepXML = stepXML.ToString();
+
+            XElement paramXml = new XElement("Step");
+            foreach(var p in Param)
+            {
+                XElement PB = new XElement("ParamBinding");
+                PB.SetAttributeValue("name", p.Key);
+                PB.SetAttributeValue("value", p.Value);
+                paramXml.Add(PB);
+            }
+            nmtc.paramXML = paramXml.ToString();
+
+            QCTESTEntities qctest = new QCTESTEntities();
+            qctest.M_testCaseSteps.Add(nmtc);
+            qctest.SaveChanges();
+            return true;
+
+        }
+
+        
+
+
+        [HttpPost]
         public XElement runScrpt(int id, Dictionary<string, string> Param)
         {
             //要传Param 要传null post时候 指定Param 参数为 其他值就可以 比如 param:"123"
@@ -330,7 +401,32 @@ namespace openCaseMaster.Controllers
         }
 
 
+        [HttpPost]
+        public ActionResult createScene(List<int> ids)
+        {
+            MemoryStream stm = testCaseHelper.getSceneExcelMS(ids);
+            Response.Clear();
+            Response.ContentType = "application/vnd.ms-excel";
 
+
+            //通知浏览器下载文件而不是打开
+            Response.AddHeader("Content-Disposition", "attachment;  filename=" + "场景模板.xls");
+
+            byte[] ZipBuffer = new byte[stm.Length - 1];
+            ZipBuffer = stm.GetBuffer();
+
+            Response.OutputStream.Write(ZipBuffer, 0, Convert.ToInt32(ZipBuffer.Length));
+            Response.End();
+            return new EmptyResult();
+
+        }
+
+
+        
+       
+        
+
+        
      
     }
 }

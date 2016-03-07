@@ -1,5 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Xml.Linq;
@@ -17,7 +22,7 @@ namespace openCaseMaster.Models
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static XElement autoStepParam(string name, int FID)
+        public static XElement autoStepParam(string name, int? FID)
         {
             if (isUserStep(name))
             {
@@ -26,11 +31,47 @@ namespace openCaseMaster.Models
             }
             else
             {
-
-                return getFarmeworkStep(name, FID);
+                if (FID == null) return null;
+                return getFarmeworkStep(name, FID.Value);
             }
 
         }
+
+        /// <summary>
+        /// 获取step的原始参数列表(从用户 基础组件 和项目中查找)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static XElement autoStepParam(string name, int? FID, int? PID)
+        {
+            var xe = autoStepParam(name, FID);
+
+            if (xe == null && PID != null)//从项目组件中查找
+            {
+                QCTESTEntities QC_DB = new QCTESTEntities();
+                var fkp = QC_DB.Framework4Project.FirstOrDefault(t => t.FID == FID && t.PID == PID);
+                if (fkp != null)
+                {
+                    var steps = XElement.Parse(fkp.controlXML);
+                    var step = steps.Descendants("Step").FirstOrDefault(t => t.Attribute("name").Value == name);
+                    if (step != null)
+                    {
+                        XElement PB = new XElement("ParamBinding");
+                        PB.SetAttributeValue("name", "是否启用");
+                        PB.SetAttributeValue("value", "true");
+                        PB.SetAttributeValue("list", "启用:true,不启用:false");
+
+
+                        step.Add(PB);
+                        return step;
+                    }
+                }
+
+            }
+            return xe;
+        }
+
+
 
         /// <summary>
         /// 通过stepName获得StepXml(非属性节点,而是真实的)
@@ -62,9 +103,13 @@ namespace openCaseMaster.Models
             //这里是用户控件初始化
             QCTESTEntities QC_DB = new QCTESTEntities();
             M_testCaseSteps mtcs = QC_DB.M_testCaseSteps.Where(t => t.ID == stepID).First();
+            var xe = XElement.Parse(mtcs.paramXML);
+
+            xe.SetAttributeValue("name", "userstep_" + mtcs.ID);
+            xe.SetAttributeValue("desc", mtcs.name);
 
             //mtcs.paramXML.SetAttributeValue("name", name);
-            return XElement.Parse(mtcs.paramXML);
+            return xe;
 
 
 
@@ -72,38 +117,45 @@ namespace openCaseMaster.Models
 
 
         /// <summary>
-        /// 获取step的原始参数列表(从用户 基础组件 和项目中查找)
+        /// 返回 step 节点的 xml
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static XElement autoStepParamBinding(string name, int FID, int PID)
+        /// <param name="steps">json数据 只有steps</param>
+        public static XElement json2StepList(string jsons)
         {
-            var xe = autoStepParam(name, FID);
-            if (xe == null)//从项目组件中查找
+
+            XElement caseXml = new XElement("Steps");
+            //caseXml.Nodes().Remove();
+
+
+            JArray ja = (JArray)JsonConvert.DeserializeObject(jsons);
+
+            foreach (var j in ja.Children<JObject>())
             {
-                QCTESTEntities QC_DB = new QCTESTEntities();
-                var fkp = QC_DB.Framework4Project.FirstOrDefault(t => t.FID == FID && t.PID == PID);
-                if (fkp != null)
+                XElement step = new XElement("Step");
+                step.SetAttributeValue("name", j["name"]);
+                step.SetAttributeValue("desc", j["desc"]);
+
+                var pbs = j["ParamBinding"].Children<JProperty>();
+                foreach (var pb in pbs)
                 {
-                    var steps = XElement.Parse(fkp.controlXML);
-                    var step = steps.Descendants("Step").FirstOrDefault(t => t.Attribute("name").Value == name);
-                    if (step != null)
-                    {
-                        XElement PB = new XElement("ParamBinding");
-                        PB.SetAttributeValue("name", "是否启用");
-                        PB.SetAttributeValue("value", "true");
-                        PB.SetAttributeValue("list", "启用:true,不启用:false");
-
-
-                        step.Add(PB);
-                        return step;
-                    }
+                    XElement ParamBinding = new XElement("ParamBinding");
+                    ParamBinding.SetAttributeValue("name", pb.Name);
+                    ParamBinding.SetAttributeValue("value", pb.Value);
+                    step.Add(ParamBinding);
                 }
 
+                caseXml.Add(step);
+
             }
-            return xe;
+
+            return caseXml;
+          
+
+
         }
 
+
+        
 
 
         /// <summary>
@@ -152,5 +204,53 @@ namespace openCaseMaster.Models
 
             return false;
         }
+
+        
+        /// <summary>
+        /// 获得场景Excel
+        /// </summary>
+        /// <param name="_tnc"></param>
+        /// <returns></returns>
+        public static MemoryStream getSceneExcelMS(List<int> ids)
+        {
+           
+            HSSFWorkbook hssfworkbook = ExcelHelper.InitializeWorkbook();
+
+            ISheet config = hssfworkbook.CreateSheet("配置表");
+
+            IRow row = config.CreateRow(0);
+            ICell cell0 = row.CreateCell(0);
+            cell0.SetCellValue("案例名");
+
+            ICell cell1 = row.CreateCell(1);
+            cell1.SetCellValue("案例ID");
+
+            ICell cell2 = row.CreateCell(2);
+            cell2.SetCellValue("参数数量");
+
+            config.SetColumnWidth(0, 30 * 256);
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+            foreach (int id in ids)
+            {
+                
+                M_testCase mtc = (from t in QC_DB.M_testCase
+                                  where t.ID == id
+                                  select t).FirstOrDefault();
+                if (mtc == null) continue;
+                var pdl = XElement.Parse(mtc.testXML).ParamDictionary();
+                ExcelHelper.creatCaseSheet(hssfworkbook, pdl, mtc.ID.ToString(), mtc.Name);
+
+                //name要做处理?
+                ExcelHelper.creatConfigRow(config, mtc.Name, mtc.ID.ToString(), pdl.Count);
+            }
+
+            MemoryStream ms = new MemoryStream();
+            hssfworkbook.Write(ms);
+           
+            return ms;
+        }
+        
+
     }
 }

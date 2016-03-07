@@ -46,10 +46,10 @@
                     <div data-options="iconCls:'icon-remove'" onclick="">批量删除(coding)</div>
                     <div data-options="iconCls:'icon-document_small_download'" onclick="">下载案例(coding)</div>
                     <div class="menu-sep"></div>
-                    <div data-options="iconCls:'icon-print'" onclick="">生成场景模版</div>
+                    <div data-options="iconCls:'icon-print'" onclick="createScene()">生成场景模版</div>
                 </div>
             </div>
-            <div id="caseTreeListDiv" style="overflow:auto;max-height:600px">
+            <div id="caseTreeListDiv" style="overflow:auto;max-height:500px">
                 <ul id="caseTreeList"></ul>
             </div>
 
@@ -91,7 +91,10 @@
     <script type="text/javascript">
 
         $(function () {
-  
+            $.messager.progress({
+                title: '请稍后',
+                msg: '案例数据加载中...'
+            });
             $('#caseTreeList').tree({
                 checkbox: true,
                 url: '/TestCase/projectListInit',
@@ -122,6 +125,7 @@
                             $(this).tree('check', children[i].target);
                         }
                     }
+                    $.messager.progress('close');
 
                 },
                 onDblClick: function (node) {
@@ -220,6 +224,49 @@
             $('#caseTreeList').tree("reload", selectNode);//刷新
 
         }
+
+
+        function createScene() {
+            var CheckedNode = $('#caseTreeList').tree("getChecked")
+            var cnt = CheckedNode.length;
+            var caseID = [];
+            for (var i = 0; i < cnt; i++) {
+                if (CheckedNode[i].type == 1)
+                    caseID.push(CheckedNode[i].id);
+            }
+
+     
+              
+            var data = { ids: caseID };
+
+            $.download('/TestCase/createScene', data, 'post');
+
+
+            /*
+            var inputs = '<input type="hidden" name="ids" value="' + caseID.toString() + '" />';
+
+            jQuery('<form action="/TestCase/createScene" method="post">' + inputs + '</form>')
+                .appendTo('body').submit().remove();
+                */
+            /*
+            $.post("/TestCase/createScene", { ids: caseID }, function (result) {
+
+            });*/
+        }
+        
+        jQuery.download = function (url, data, method) {    // 获得url和data
+            if (url && data) {
+                // data 是 string 或者 array/object
+                data = typeof data == 'string' ? data : unescape(jQuery.param(data));    // 把参数组装成 form的  input
+                var inputs = '';
+                jQuery.each(data.split('&'), function () {
+                    var pair = this.split('=');
+                    inputs += '<input type="hidden" name="' + pair[0] + '" value="' + pair[1] + '" />';
+                });        // request发送请求
+                jQuery('<form action="' + url + '" method="' + (method || 'post') + '">' + inputs + '</form>')
+                .appendTo('body').submit().remove();
+            };
+        };
       
     </script>
 

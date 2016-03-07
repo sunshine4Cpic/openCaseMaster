@@ -8,7 +8,7 @@ namespace openCaseMaster.ViewModels
 {
     
     [DataContract]
-    public class caseStepTreeModel:treeViewModel
+    public class scriptStepTreeModel:treeViewModel
     {
         /// <summary>
         /// step名
@@ -17,17 +17,29 @@ namespace openCaseMaster.ViewModels
         public string name { get; set; }
 
         /// <summary>
+        /// 框架ID
+        /// </summary>
+        [DataMember]
+        public int? FID { get; set; }
+
+        /// <summary>
+        /// 项目ID
+        /// </summary>
+        [DataMember]
+        public int? PID { get; set; }
+
+        /// <summary>
         /// 备注
         /// </summary>
         [DataMember]
         public string desc { get; set; }
 
         [DataMember]
-        public new List<caseStepAttrModel> children { get; set; }
+        public new List<scriptStepAttrModel> children { get; set; }
 
     }
 
-    public class caseStepAttrModel : treeViewModel
+    public class scriptStepAttrModel : treeViewModel
     {
         
         [DataMember]

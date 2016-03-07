@@ -81,10 +81,13 @@
         });
 
         
-
+        var Childrens = $('#scriptTree').tree("getChildren", selectNode.target);
         
        
-        
+        $(Childrens).each(function () {
+            $('#scriptTree').tree("remove", this.target);
+        })
+
         chData = [];
         $(".modal-body input[name]").each(function () {
             var p = {};

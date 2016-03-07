@@ -11,7 +11,7 @@ namespace openCaseMaster.Models
     public static class Extend_caseFramework
     {
         /// <summary>
-        /// 返回给前台tree的数据
+        /// 框架xml转换成前台显示的treeStep
         /// </summary>
         /// <param name="cf"></param>
         /// <returns></returns>
@@ -29,11 +29,13 @@ namespace openCaseMaster.Models
             root.children = new List<treeViewModel>();
             foreach (var e in sms)
             {
-                caseStepTreeModel tv = new caseStepTreeModel();
-               
-              
+                scriptStepTreeModel tv = new scriptStepTreeModel();
+
+                tv.FID = cf.ID;
+                //tv.PID = null;
                 tv.state = "open";
                 tv.name = e.Attribute("name").Value;//name肯定有把....
+                tv.iconCls = "icon-view_outline_detail";
                 
                 if (e.Attribute("desc")!=null)
                     tv.desc = e.Attribute("desc").Value;

@@ -38,59 +38,6 @@ namespace openCaseMaster.ViewModels
         public string UJson { get; set; }
 
 
-
-        private  List<caseStepTreeModel> getScript(M_testCase mtc)
-        {
-            XElement xe = XElement.Parse(mtc.testXML);
-
-            var sms = xe.Descendants("Step");
-
-            //改数据时修改了个别Step的大小写,为了OK加了容错,正式环境后期可以去掉这个逻辑
-            if (sms.Count() == 0)
-            {
-                sms = xe.Descendants("step");
-            }
-
-            List<caseStepTreeModel> rtn = new List<caseStepTreeModel>();
-
-            foreach (var e in sms)
-            {
-                caseStepTreeModel tmp = new caseStepTreeModel();
-                tmp.name = e.Attribute("name").Value;
-                tmp.state = "closed";
-                tmp.iconCls = "icon-view_outline_detail";
-                tmp.desc = e.Attribute("desc").Value;
-
-                var atts = from t in e.Elements()
-                           select new caseStepAttrModel
-                           {
-                               Key = t.Attribute("name").Value,
-                               Value = t.Attribute("value").Value,
-                               state = "open",
-                               iconCls = "icon-spanner_blue",
-                               checkbox = false
-                           };
-                tmp.children = atts.ToList();
-                rtn.Add(tmp);
-            }
-
-            return rtn;
-
-
-        }
-
-        private  string getScript2Json(M_testCase mtc)
-        {
-            List<caseStepTreeModel> tcl = getScript(mtc);
-
-            var jSetting = new JsonSerializerSettings();
-            jSetting.NullValueHandling = NullValueHandling.Ignore;
-
-            string json = JsonConvert.SerializeObject(tcl, jSetting);
-
-            return json;
-
-        }
         /// <summary>
         /// 初始化脚本model
         /// </summary>
@@ -175,18 +122,60 @@ namespace openCaseMaster.ViewModels
                     Ups = Ups.Where(t => t.FID == this.FID);
 
                 var usts = from t in Ups
-                           select new caseStepTreeModel
+                           select new scriptStepTreeModel
                            {
                                text = t.name,
                                id = t.ID,
                                name = "userstep_" + t.ID,
-                               desc = t.name
+                               desc = t.name,
+                               iconCls = "icon-view_outline_detail"
                            };
                 this.UJson = JsonConvert.SerializeObject(usts, jSetting);
 
             }
 
         }
+
+
+
+        private List<scriptStepTreeModel> getScript(M_testCase mtc)
+        {
+            XElement xe = XElement.Parse(mtc.testXML);
+
+            var sms = xe.Descendants("Step");
+
+            /*
+            //改数据时修改了个别Step的大小写,为了OK加了容错,正式环境后期可以去掉这个逻辑
+            if (sms.Count() == 0)
+            {
+                sms = xe.Descendants("step");
+            }*/
+
+            List<scriptStepTreeModel> rtn = new List<scriptStepTreeModel>();
+
+            foreach (var e in sms)
+            {
+                rtn.Add(e.getScriptStep());
+            }
+
+            return rtn;
+
+
+        }
+
+        private  string getScript2Json(M_testCase mtc)
+        {
+            List<scriptStepTreeModel> tcl = getScript(mtc);
+
+            var jSetting = new JsonSerializerSettings();
+            jSetting.NullValueHandling = NullValueHandling.Ignore;
+
+            string json = JsonConvert.SerializeObject(tcl, jSetting);
+
+            return json;
+
+        }
+        
 
         
 

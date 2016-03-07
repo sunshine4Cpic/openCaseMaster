@@ -1,9 +1,11 @@
-﻿using System;
+﻿using openCaseMaster.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace openCaseMaster.Models
 {
@@ -21,7 +23,8 @@ namespace openCaseMaster.Models
             //获得定义的变量
             foreach (XElement xe in xel)
             {
-                string value = xe.Attribute("value").Value;
+                string value = (string)xe.Attribute("value");
+                if (value == null) continue;//一般没有null 的 ....这个判断比飞舞
                 Regex reg = new Regex("{.*?}");
                 MatchCollection matches = reg.Matches(value); // 在字符串中匹配
                 foreach (Match match in matches)
@@ -142,6 +145,89 @@ namespace openCaseMaster.Models
                 _xe.AddBeforeSelf(s);
             }
             _xe.Remove();
+
+
+        }
+
+
+
+        public static XElement getRunScript(this XElement testCase, Dictionary<string, string> param)
+        {
+
+            testCase.setParam(param);
+
+            var Steps = from ele in testCase.Descendants("Step")
+                        where ele.Attribute("name").Value.IndexOf("userstep_") == 0
+                        select ele;
+
+            //此处为递归 ,在用户编辑时如果限定用户组件不递归就没问题
+            while (Steps.Count() > 0)
+            {
+                XElement Step = Steps.First();
+                string stepName = Step.Attribute("name").Value;
+                XElement LX = testCaseHelper.getUserStepParam(stepName);//获得用户控件的原参数表
+
+
+                XElementHelper.Merger(LX, Step);//整合参数到原参数表中
+
+                XElement StepXml = testCaseHelper.getUserStepRealXml(stepName);//获得用户控件真实步骤xml
+                StepXml.setParam(LX);//替换其中参数
+
+                /*这时候StepXml就是没有参数的组件xml了**/
+
+                XElementHelper.changeStep(Step, StepXml);//替换组件
+            }
+
+            //去除不启用的节点
+            var pbs = testCase.XPathSelectElements("//Step/ParamBinding[@name='是否启用' and @value='false']/..");
+
+            foreach (var pb in pbs)
+            {
+                pb.Remove();
+            }
+
+            return testCase;
+
+        }
+
+
+
+        /// <summary>
+        /// 返回给scriptTree使用的step数据
+        /// </summary>
+        /// <param name="xe"></param>
+        /// <returns></returns>
+        public static scriptStepTreeModel getScriptStep(this XElement xe)
+        {
+            /*
+            //改数据时修改了个别Step的大小写,为了OK加了容错,正式环境后期可以去掉这个逻辑
+            if (sms.Count() == 0)
+            {
+                sms = xe.Descendants("step");
+            }*/
+
+            scriptStepTreeModel tmp = new scriptStepTreeModel();
+
+
+            tmp.name = (string)xe.Attribute("name");
+            tmp.state = "closed";
+            tmp.iconCls = "icon-view_outline_detail";
+            tmp.desc = (string)xe.Attribute("desc");
+
+            var atts = from t in xe.Elements()
+                       select new scriptStepAttrModel
+                       {
+                           Key = (string)t.Attribute("name"),
+                           Value = t.Attribute("value") == null ? "" : t.Attribute("value").Value,
+                           state = "open",
+                           iconCls = "icon-spanner_blue",
+                           checkbox = false
+                       };
+            tmp.children = atts.ToList();
+
+
+
+            return tmp;
 
 
         }

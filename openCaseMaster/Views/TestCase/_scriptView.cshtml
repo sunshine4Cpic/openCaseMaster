@@ -20,7 +20,7 @@
     <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
        data-options="menu:'#C2',iconCls:'icon-tip',duration:400">操作</a>
     <div id="C2" style="width:150px;">
-        <div data-options="iconCls:'icon-box_add'" onclick="">自定义组件</div>
+        <div data-options="iconCls:'icon-box_add'" onclick="creatUserControl()">自定义组件</div>
         <div class="menu-sep"></div>
         <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="debug()"> 调试案例</div>
         <div data-options="iconCls:'icon-undo'" onclick="refreshScrpt($(scriptID).val())">撤销未保存的操作</div>
@@ -66,17 +66,30 @@
                     return false;
 
             },
-            onBeforeDrop: function (target, source) {
+            onBeforeDrop: function (target, source,point) {
                 if(source.newStep)
                 {
-                    $('#scriptTree').tree('insert', {
-                        before: target,
-                        data: {
-                            name: source.name,
-                            desc:source.desc+'***new step***',
-                            iconCls:'icon-view_outline_detail'
+                    
+                    $.post("/TestCase/getStep/", { name: source.name,FID:source.FID,PID:source.PID  }, function (result) {
+
+                        var job = JSON.parse(result);
+                        
+                        if(point=="top")
+                        {
+                            $('#scriptTree').tree('insert', {
+                                before: target,
+                                data: JSON.parse(result)
+                            });
+                        }else
+                        {
+                            $('#scriptTree').tree('insert', {
+                                after: target,
+                                data: JSON.parse(result)
+                            });
                         }
-                    });
+
+                    }).error(function() { alert("error"); });
+                   
                     return false;
                 }
             },
@@ -86,7 +99,7 @@
             },
             onDblClick: function (node) {
                 editStepClick(node);
-            },
+            }
         });
 
         $('#controlTreeListF').tree({
@@ -107,7 +120,7 @@
                     return false;
                 else
                     node["newStep"] = true;
-            },
+            }
 
         });
 
@@ -129,7 +142,7 @@
                     return false;
                 else
                     node["newStep"] = true;
-            },
+            }
 
         });
 
@@ -152,6 +165,19 @@
                     return false;
                 else
                     node["newStep"] = true;
+            },
+            onDblClick: function (node) {
+                if (node.children !== undefined)
+                    return false;
+                else
+                {
+                    $.messager.confirm('Message', '确认编辑你的组件:' + node.desc + '?', function (r) {
+                        if (r) {
+                            //$('#scriptPanel').panel('refresh', 'userStepView/' + node.id);
+                        }
+                    });
+                   
+                }
             },
 
         });
@@ -195,7 +221,8 @@
 
         function scriptSave()
         {
-            var steps = getSteps();
+            var nodes= $('#scriptTree').tree("getRoots");
+            var steps = getSteps(nodes);
 
             $.post("/TestCase/editScript/"+$('#scriptID').val(), { steps: JSON.stringify(steps)  }, function (result) {
                 if (result == "True") {
@@ -205,9 +232,8 @@
 
         }
 
-        function getSteps()
+        function getSteps(nodes)
         {
-            var nodes= $('#scriptTree').tree("getRoots");
             var steps=[];
 
             var n;
@@ -257,7 +283,8 @@
 
             $.messager.confirm('Message', '调试案例会自动保存,是否继续?', function (r) {
                 if (r) {
-                    var steps = getSteps();
+                    var nodes= $('#scriptTree').tree("getRoots");
+                    var steps = getSteps(nodes);
                     var id = $('#scriptID').val();
                     $.post("/TestCase/debugSave/"+id, { steps: JSON.stringify(steps)  }, function (result) {
                         if (result == "") {//没有参数
@@ -285,5 +312,24 @@
                     $.messager.alert('Error', '调用本机出错啦!', "error");
                 });
             });
+        }
+
+        function creatUserControl()
+        {
+            var nodes = $('#scriptTree').tree('getChecked');
+
+            var steps = getSteps(nodes);
+
+            $.post("/TestCase/CreateUserControl", { steps: JSON.stringify(steps)  }, function (result) {
+                    var sm = $("#scriptModal");
+                    sm.empty();
+                    sm.html(result);
+                   
+                    sm.modal();
+            }).error(function() { alert("error"); });
+
+
+
+          
         }
     </script>
