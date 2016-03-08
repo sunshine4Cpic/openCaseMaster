@@ -1,0 +1,41 @@
+﻿@using openCaseMaster.ViewModels;
+
+@model scriptViewModel
+
+<input id="scriptID" type="hidden" value="@Model.ID" />
+
+<input id="FID" type="hidden" value="@Model.FID" />
+
+
+<input id="PID" type="hidden" value="@Model.PID" />
+<div class="easyui-panel" style="margin-bottom:5px">
+    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
+       data-options="menu:'#C1',iconCls:'icon-edit',duration:400">编辑</a>
+    <div id="C1" style="width:150px;">
+        <div data-options="iconCls:'icon-save'" onclick="scriptSave();">保存</div>
+        <div class="menu-sep"></div>
+        <div data-options="iconCls:'icon-edit'" onclick="editStepClick($('#scriptTree').tree('getSelected'));">编辑步骤</div>
+        <div data-options="iconCls:'icon-remove'" onclick="DeleteStep();">删除步骤</div>
+    </div>
+    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
+       data-options="menu:'#C2',iconCls:'icon-tip',duration:400">操作</a>
+    <div id="C2" style="width:150px;">
+        <div data-options="iconCls:'icon-box_add'" onclick="creatUserControl()">自定义组件</div>
+        <div class="menu-sep"></div>
+        <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="debug()"> 调试案例</div>
+        <div data-options="iconCls:'icon-undo'" onclick="refreshScrpt($(scriptID).val())">撤销未保存的操作</div>
+    </div>
+
+    <div style="float:right" class="l-btn-text">
+        @Model.scriptName ( @Model.Fname )
+    </div>
+</div>
+
+<ul id="scriptTree"></ul>
+
+
+
+<!-- Modal -->
+<!-- 模态框（Modal） -->
+<div class="modal fade" data-backdrop="static" id="scriptModal" tabindex="-1" role="dialog">
+</div>

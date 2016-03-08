@@ -154,8 +154,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TestCaseController.cs" />
-    <Compile Include="Controllers\testController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\userStepControlController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -243,6 +243,7 @@
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\testCaseHelper.cs" />
+    <Compile Include="Models\treeHelper.cs" />
     <Compile Include="Models\userHelper.cs" />
     <Compile Include="Models\user_type.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
@@ -255,6 +256,9 @@
     <Compile Include="ViewModels\TestCase\testCaseTreeModel.cs" />
     <Compile Include="ViewModels\TestCase\userStepViewModel.cs" />
     <Compile Include="ViewModels\treeViewModel.cs" />
+    <Compile Include="ViewModels\userControl\controlNode.cs" />
+    <Compile Include="ViewModels\userControl\controlViewModel.cs" />
+    <Compile Include="ViewModels\userControl\frameTreeNode.cs" />
     <Compile Include="ViewModels\User\UserModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -279,7 +283,9 @@
     <Content Include="Content\img\arrow_state_blue_right.png" />
     <Content Include="Content\img\badge_cancel_online.png" />
     <Content Include="Content\img\badge_save_outline.png" />
+    <Content Include="Content\img\box.png" />
     <Content Include="Content\img\box_add.png" />
+    <Content Include="Content\img\box_edit.png" />
     <Content Include="Content\img\cd.JPG" />
     <Content Include="Content\img\clock.png" />
     <Content Include="Content\img\clock_add.png" />
@@ -355,6 +361,9 @@
     <Content Include="Content\img\right.png" />
     <Content Include="Content\img\sign_cacel.png" />
     <Content Include="Content\img\spanner_blue.png" />
+    <Content Include="Content\img\star_boxed_empty.png" />
+    <Content Include="Content\img\star_boxed_full.png" />
+    <Content Include="Content\img\star_empty.png" />
     <Content Include="Content\img\tag.png" />
     <Content Include="Content\img\tag_edit.png" />
     <Content Include="Content\img\ticket.png" />
@@ -695,7 +704,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\json.js" />
+    <Content Include="Scripts\caseEdit.js" />
     <Content Include="Scripts\locale\easyui-lang-af.js" />
     <Content Include="Scripts\locale\easyui-lang-am.js" />
     <Content Include="Scripts\locale\easyui-lang-ar.js" />
@@ -748,9 +757,11 @@
     <Content Include="Views\TestCase\_DebugParam.cshtml" />
     <Content Include="Views\TestCase\_CreateUserControl.cshtml" />
     <Content Include="Views\Shared\_ModalError.cshtml" />
+    <Content Include="Views\userStepControl\Index.cshtml" />
+    <Content Include="Views\userStepControl\_controlView.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\test\" />
+    <Folder Include="Models\EasyTree\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

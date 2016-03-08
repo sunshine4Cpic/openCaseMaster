@@ -1,0 +1,104 @@
+﻿@section Scripts {
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/bundles/easyui")
+<link rel="stylesheet" type="text/css" href="/Content/themes/icon.css">
+}
+
+
+
+
+<div class="row">
+    <div id="left" class="col-md-4" style="padding:5px">
+
+        <div class="easyui-panel" title="你的组件仓库" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-box',closable:false,
+    collapsible:true,minimizable:false,maximizable:false">
+
+            <div style="overflow:auto;max-height:500px">
+                <ul id="userControlTreeList"></ul>
+            </div>
+
+        </div>
+        <div style="padding-top:5px"></div>
+        <div id="stepControl" class="easyui-panel" title="测试组件" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-view_outline_detail',closable:false,
+    collapsible:true,minimizable:false,maximizable:false">
+
+            <div class="easyui-tabs" style="width:100%;">
+                <div title="基础组件" style="padding:10px">
+                    <ul id="controlTreeListF"></ul>
+                </div>
+                <div title="项目组件">
+                    <ul id="controlTreeListP"></ul>
+                </div>
+                
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div id="right" class="col-md-8" style="padding:5px">
+
+        <div id="controlViewPanel" class="easyui-panel" title="编辑组件" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-box_edit',closable:false,
+    collapsible:true,minimizable:false,maximizable:false">
+
+        </div>
+
+    </div>
+
+
+</div>
+
+<div id="dialog" style="overflow:hidden;"></div>
+<script type="text/javascript">
+
+    $(function () {
+        $.messager.progress({
+            title: '请稍后',
+            msg: '案例数据加载中...'
+        });
+
+        $.post("/userStepControl/myControlInit", function (result) {
+            $('#userControlTreeList').tree({
+                checkbox: true,
+                data: jQuery.parseJSON(result),
+                lines: false,
+                animate: true,
+                dnd: false,
+                onLoadSuccess: function (node) {
+                    $.messager.progress('close');
+
+                },
+                onDblClick: function (node) {
+                    if (node.id)
+                    {
+                        $('#controlViewPanel').panel('refresh', 'myControlView/' + node.id);
+
+                        //controlTreeListF_init(node.FID);
+                    }
+                        
+                },
+            });
+        });
+
+    });
+
+    
+    function controlTreeListF_init(id)
+    {
+        $.post("getFrameControl/"+id, function (result) {
+            $('#controlTreeListF').tree({
+                checkbox: false,
+                data: jQuery.parseJSON(result),
+                lines: false,
+                animate: true,
+                dnd: false
+                
+            });
+
+        });
+    }
+
+
+</script>
+

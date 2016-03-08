@@ -128,3 +128,26 @@
 	background:url('../img/document_small_download.png') no-repeat center center;
 }
 
+.icon-box{
+	background:url('../img/box.png') no-repeat center center;
+}
+
+.icon-box_edit{
+	background:url('../img/box_edit.png') no-repeat center center;
+}
+
+.icon-star_boxed_full{
+	background:url('../img/star_boxed_full.png') no-repeat center center;
+}
+
+.icon-star_boxed_empty{
+	background:url('../img/star_boxed_empty.png') no-repeat center center;
+}
+
+
+.icon-star_empty{
+	background:url('../img/star_empty.png') no-repeat center center;
+}
+
+
+

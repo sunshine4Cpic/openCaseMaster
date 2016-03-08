@@ -34,7 +34,7 @@ namespace openCaseMaster
             bundles.Add(new StyleBundle("~/Content/easyui").Include(
                       "~/Content/themes/bootstrap/easyui.css"));
 
-            
+            BundleTable.EnableOptimizations = false;//不启用压缩
 
         }
     }
