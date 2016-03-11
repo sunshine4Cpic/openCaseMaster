@@ -54,8 +54,8 @@ namespace openCaseMaster.Controllers
 
              if(!User.IsInRole("admin"))
              {
-                 string[] pp = userHelper.getUserPermission().Split(',');
-                 tcl = tcl.Where(t => pp.Contains(t.PID.ToString()));
+                 int[] pp = userHelper.getUserPermission();
+                 tcl = tcl.Where(t => pp.Contains(t.PID));
              }
 
 
@@ -257,7 +257,7 @@ namespace openCaseMaster.Controllers
          
             scriptStepTreeModel xe = testCaseHelper.autoStepParam(name, FID, PID).getScriptStep();
 
-            xe.desc += "***new***";
+            xe.desc = "XXX new step XXX";
 
             var jSetting = new JsonSerializerSettings();
             jSetting.NullValueHandling = NullValueHandling.Ignore;
@@ -332,7 +332,7 @@ namespace openCaseMaster.Controllers
 
 
         [HttpPost]
-        public ActionResult CreateUserControl( string steps)
+        public ActionResult CreateUserControl(string steps)
         {
             XElement xe = testCaseHelper.json2StepList(steps);
 
@@ -349,8 +349,10 @@ namespace openCaseMaster.Controllers
         }
 
         [HttpPost]
-        public Boolean saveUserControl(string name, int PID, int FID, string steps, Dictionary<string, string> Param)
+        public Boolean saveUserControl(string name, int PID, int FID, string steps, string Param)
         {
+
+            JObject ParamO = JObject.Parse(Param);
             XElement stepXML = testCaseHelper.json2StepList(steps);
 
             M_testCaseSteps nmtc = new M_testCaseSteps();
@@ -361,7 +363,7 @@ namespace openCaseMaster.Controllers
             nmtc.stepXML = stepXML.ToString();
 
             XElement paramXml = new XElement("Step");
-            foreach(var p in Param)
+            foreach (var p in ParamO)
             {
                 XElement PB = new XElement("ParamBinding");
                 PB.SetAttributeValue("name", p.Key);

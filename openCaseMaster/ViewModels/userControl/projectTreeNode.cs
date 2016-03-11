@@ -6,19 +6,16 @@ using System.Web;
 
 namespace openCaseMaster.ViewModels
 {
-    public class frameTreeNode : treeViewModel
+    public class projectTreeNode : treeViewModel
     {
 
-        public frameTreeNode()
+        public projectTreeNode()
         {
             state = "closed";
-            iconCls = "icon-star_boxed_full";
             children = new List<treeViewModel>();
         }
-        //框架ID
-        [DataMember]
-        public int FID { get; set; }
-
         
+        [DataMember]
+        public int PID { get; set; }
     }
 }

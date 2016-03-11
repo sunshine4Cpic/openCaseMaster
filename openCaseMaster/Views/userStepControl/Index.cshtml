@@ -1,6 +1,7 @@
 ﻿@section Scripts {
     @Styles.Render("~/Content/easyui")
     @Scripts.Render("~/bundles/easyui")
+<script src="~/Scripts/caseEdit.js"></script>
 <link rel="stylesheet" type="text/css" href="/Content/themes/icon.css">
 }
 
@@ -26,7 +27,7 @@
                 <div title="基础组件" style="padding:10px">
                     <ul id="controlTreeListF"></ul>
                 </div>
-                <div title="项目组件">
+                <div title="项目专属组件">
                     <ul id="controlTreeListP"></ul>
                 </div>
                 
@@ -52,15 +53,10 @@
 <div id="dialog" style="overflow:hidden;"></div>
 <script type="text/javascript">
 
-    $(function () {
-        $.messager.progress({
-            title: '请稍后',
-            msg: '案例数据加载中...'
-        });
-
+    $(function () { 
+        $.messager.progress({ title: '请稍后', msg: '案例数据加载中...' });
         $.post("/userStepControl/myControlInit", function (result) {
             $('#userControlTreeList').tree({
-                checkbox: true,
                 data: jQuery.parseJSON(result),
                 lines: false,
                 animate: true,
@@ -72,12 +68,29 @@
                 onDblClick: function (node) {
                     if (node.id)
                     {
+                        $.messager.progress({
+                            title: '请稍后',
+                            msg: '案例数据加载中...'
+                        });
                         $('#controlViewPanel').panel('refresh', 'myControlView/' + node.id);
 
-                        //controlTreeListF_init(node.FID);
+                        controlTreeListF_init(node.FID);
+                        controlTreeListP_init(node.PID, node.FID);
                     }
                         
                 },
+                formatter: function (node) {
+                    var s;
+                    if (node.text == undefined)
+                        s = node.name + "(" + node.desc + ")";
+                    else
+                        s = node.text;
+
+                    if (node.children) {
+                        s += ' <span style=\'color:blue\'>(' + node.children.length + ')</span>';
+                    }
+                    return s;
+                }
             });
         });
 
@@ -86,19 +99,62 @@
     
     function controlTreeListF_init(id)
     {
-        $.post("getFrameControl/"+id, function (result) {
+        $.post("getFrameControl/" + id, function (result) {
             $('#controlTreeListF').tree({
-                checkbox: false,
                 data: jQuery.parseJSON(result),
-                lines: false,
                 animate: true,
-                dnd: false
+                dnd: true,
+                formatter: function (node) {
+                    if (node.text == undefined)
+                        return node.name + "(" + node.desc + ")";
+                    else
+                        return node.text;
+                },
+                onDragOver: function (target, source) {
+                    return false;
+                },
+                onBeforeDrag: function (node) {
+                    if (node.children !== undefined)
+                        return false;
+                    else
+                        node["newStep"] = true;
+                }
                 
             });
 
         });
     }
 
+
+    function controlTreeListP_init(PID,FID) {
+        $.post("getProjectControl", { "PID": PID, "FID": FID }, function (result) {
+            $.messager.progress('close');
+
+            $('#controlTreeListP').tree({
+                data: jQuery.parseJSON(result),
+                animate: true,
+                dnd: true,
+                formatter: function (node) {
+                    if (node.text == undefined)
+                        return node.name + "(" + node.desc + ")";
+                    else
+                        return node.text;
+                },
+                onDragOver: function (target, source) {
+                    return false;
+                },
+                onBeforeDrag: function (node) {
+                    if (node.children !== undefined)
+                        return false;
+                    else
+                        node["newStep"] = true;
+                }
+
+            });
+
+        });
+
+    }
 
 </script>
 

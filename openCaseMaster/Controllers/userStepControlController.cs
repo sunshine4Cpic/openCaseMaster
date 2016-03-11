@@ -6,9 +6,12 @@ using System.Web;
 using System.Web.Mvc;
 using openCaseMaster.ViewModels;
 using Newtonsoft.Json;
+using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace openCaseMaster.Controllers
 {
+    [Authorize(Roles = "user")]
     public class userStepControlController : Controller
     {
         // GET: userStepControl
@@ -20,75 +23,111 @@ namespace openCaseMaster.Controllers
         [HttpPost]
         public string myControlInit()
         {
-            int userID = userHelper.getUserID();
-            //string Permission =  userHelper.getUserPermission();
-
-            using (QCTESTEntities QC_DB = new QCTESTEntities())
-            {
-                var myControls = (from t in QC_DB.M_testCaseSteps
-                                where t.userID==userID
-                                orderby t.caseFramework.ID
-                                select t).ToList();
-
-                List<frameTreeNode> rootNodes = new List<frameTreeNode>();
-
-                var frames = from t in QC_DB.caseFramework
-                             where t.userID == 1
-                             select t;
-
-                foreach(var f in frames)
-                {
-                    frameTreeNode tmp = new frameTreeNode();
-                    tmp.FID = f.ID;
-                    tmp.text = f.workName;
-                    tmp.iconCls = "icon-star_boxed_empty";
-                    
-                    rootNodes.Add(tmp);
-                }
-
-              
-                foreach (var c in myControls)
-                {
-                    controlNode controlNode = new controlNode();
-                    controlNode.id = c.ID;
-                    controlNode.text = c.name;
-                    controlNode.FID = c.FID.Value;
-
-                    foreach (var r in rootNodes)
-                    {
-                        if(r.FID==c.FID)
-                        {
-                            r.children.Add(controlNode);
-                            r.iconCls = "icon-star_boxed_full";
-                           
-                        }
-                    }
-                }
-             
-
-
-                var jSetting = new JsonSerializerSettings();
-                jSetting.NullValueHandling = NullValueHandling.Ignore;
-
-                string json = JsonConvert.SerializeObject(rootNodes, jSetting);
-
-                return json;
-
-            }
+            return treeHelper.getUserControl();
         
         }
 
 
         public ActionResult myControlView(int id)
         {
-            controlViewModel v = new controlViewModel();
+
+            controlViewModel v = new controlViewModel(id);
             return PartialView("_controlView", v);
+
         }
 
 
         public string getFrameControl(int id)
         {
             return treeHelper.getFrameControl(id);
+
+        }
+
+
+        public string getProjectControl(int? PID, int FID)
+        {
+            if (PID == null)
+                return "{}";
+            else
+                return treeHelper.getProjectControl(PID.Value, FID);
+
+        }
+
+
+        public ActionResult EditName(int id)
+        {
+            QCTESTEntities qx = new QCTESTEntities();
+            var mtc =  qx.M_testCaseSteps.First(t => t.ID == id);
+
+            return PartialView("_EditName", mtc);
+
+        }
+
+        [HttpPost]
+        public bool saveEditName(int id,string name,string mark)
+        {
+            QCTESTEntities qx = new QCTESTEntities();
+            var mtc = qx.M_testCaseSteps.First(t => t.ID == id);
+
+            mtc.name = name;
+            mtc.mark = mark;
+
+            qx.SaveChanges();
+
+            return true;
+        }
+
+        [HttpPost]
+        public ActionResult controlSaveClick(int id, string steps)
+        {
+            QCTESTEntities qx = new QCTESTEntities();
+
+            var mtc = qx.M_testCaseSteps.First(t => t.ID == id);
+
+            XElement xe = testCaseHelper.json2StepList(steps);
+
+            mtc.stepXML = xe.ToString(); 
+
+
+
+            return PartialView("_controlParam", mtc);
+           
+           
+
+        }
+
+
+        [HttpPost]
+        public Boolean controlSave(int id,string name, string steps, string Param)
+        {
+
+            QCTESTEntities qctest = new QCTESTEntities();
+            var nmtc = qctest.M_testCaseSteps.First(t => t.ID == id);
+
+
+            JObject ParamO = JObject.Parse(Param);
+            XElement stepXML = testCaseHelper.json2StepList(steps);
+
+           
+         
+            //nmtc.userID = userHelper.getUserID();
+            nmtc.name = name;
+            nmtc.stepXML = stepXML.ToString();
+
+            XElement paramXml = new XElement("Step");
+            foreach (var p in ParamO)
+            {
+                XElement PB = new XElement("ParamBinding");
+                PB.SetAttributeValue("name", p.Key);
+                PB.SetAttributeValue("value", p.Value);
+                paramXml.Add(PB);
+            }
+            nmtc.paramXML = paramXml.ToString();
+
+            qctest.SaveChanges();
+            return true;
+
+
 
         }
         

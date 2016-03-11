@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
 
 namespace openCaseMaster.ViewModels
@@ -9,9 +10,20 @@ namespace openCaseMaster.ViewModels
     {
         public controlNode()
         {
-            iconCls = "icon-star_empty";
+            iconCls = "icon-view_outline_detail";
+           
             state = "open";
         }
-        public int FID { get; set; }
+        [DataMember]
+        public int? FID { get; set; }
+
+        [DataMember]
+        public int? PID { get; set; }
+
+        [DataMember]
+        public string name { get; set; }
+
+        [DataMember]
+        public string desc { get; set; }
     }
 }

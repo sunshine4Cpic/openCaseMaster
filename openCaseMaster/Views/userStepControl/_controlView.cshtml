@@ -1,33 +1,30 @@
 ﻿@using openCaseMaster.ViewModels;
 
-@model scriptViewModel
+@model controlViewModel
 
-<input id="scriptID" type="hidden" value="@Model.ID" />
+<input id="controlID" type="hidden" value="@Model.userStep.ID" />
 
-<input id="FID" type="hidden" value="@Model.FID" />
+<input id="FID" type="hidden" value="@Model.userStep.FID" />
 
-
-<input id="PID" type="hidden" value="@Model.PID" />
 <div class="easyui-panel" style="margin-bottom:5px">
     <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
        data-options="menu:'#C1',iconCls:'icon-edit',duration:400">编辑</a>
     <div id="C1" style="width:150px;">
-        <div data-options="iconCls:'icon-save'" onclick="scriptSave();">保存</div>
+        <div data-options="iconCls:'icon-save'" onclick="controlSaveClick();">保存</div>
         <div class="menu-sep"></div>
-        <div data-options="iconCls:'icon-edit'" onclick="editStepClick($('#scriptTree').tree('getSelected'));">编辑步骤</div>
+        <div data-options="iconCls:'icon-edit'" onclick="EditNameClick()">改名</div>
         <div data-options="iconCls:'icon-remove'" onclick="DeleteStep();">删除步骤</div>
     </div>
     <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
        data-options="menu:'#C2',iconCls:'icon-tip',duration:400">操作</a>
     <div id="C2" style="width:150px;">
-        <div data-options="iconCls:'icon-box_add'" onclick="creatUserControl()">自定义组件</div>
-        <div class="menu-sep"></div>
-        <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="debug()"> 调试案例</div>
-        <div data-options="iconCls:'icon-undo'" onclick="refreshScrpt($(scriptID).val())">撤销未保存的操作</div>
+        <div  >????</div>
+       
+        
     </div>
 
     <div style="float:right" class="l-btn-text">
-        @Model.scriptName ( @Model.Fname )
+        @Model.userStep.name ( @Model.userStep.caseFramework.workName)
     </div>
 </div>
 
@@ -39,3 +36,139 @@
 <!-- 模态框（Modal） -->
 <div class="modal fade" data-backdrop="static" id="scriptModal" tabindex="-1" role="dialog">
 </div>
+
+<script type="text/javascript">
+    //@@ sourceURL=scriptView.js
+    var controlData = @Html.Raw(Model.viewJson);
+   
+
+    $('#scriptTree').tree({
+        data:controlData,
+        dnd:true,
+        checkbox:true,
+        pointType:["top","top","bottom","bottom"],
+        animate:true,
+        formatter:function(node){
+            if(node.Key==undefined)
+                return  node.name +" : "+node.desc;
+            else
+                return  node.Key +" : <span style='color:blue'>"+node.Value+"</span>";
+        },
+        onBeforeDrag:function(node){
+            if($("#scriptTree").tree("getParent",node.target))
+                return false;
+
+        },
+        onBeforeDrop: function (target, source,point) {
+            if(source.newStep)
+            {
+                    
+                $.post("/TestCase/getStep/", { name: source.name,FID:source.FID,PID:source.PID  }, function (result) {
+
+                    var job = JSON.parse(result);
+                        
+                    if(point=="top")
+                    {
+                        $('#scriptTree').tree('insert', {
+                            before: target,
+                            data: JSON.parse(result)
+                        });
+                    }else
+                    {
+                        $('#scriptTree').tree('insert', {
+                            after: target,
+                            data: JSON.parse(result)
+                        });
+                    }
+
+                }).error(function() { alert("error"); });
+                   
+                return false;
+            }
+        },
+        onDragOver:function(target, source){
+            if($("#scriptTree").tree("getParent",target))
+                return false;
+        },
+        onDblClick: function (node) {
+           
+            editStepClick(node);
+        }
+    });
+    function editStepClick(node)
+    {
+        if(node===null) return;
+
+        if(!$("#scriptTree").tree("getParent",node.target))
+        {
+            $.messager.progress({ title: '请稍后', msg: '案例数据加载中...' });
+            var pd={};
+            pd["desc"] = node.desc;
+            pd["name"] = node.name;
+            pd["FID"] = $("#FID").val();
+            //pd["PID"] = $("#PID").val();
+            for (n in node.children)
+            {
+                var nd = node.children[n];
+                pd["ParamBinding["+n+"].name"] = nd.Key;
+                pd["ParamBinding["+n+"].value"] = nd.Value;
+            }
+            $('#scriptModal').empty();
+            $("#scriptModal").load('/TestCase/EditStep',pd,function() {
+                //easyUI-combox 和 bootstrap 样式统一
+                $.parser.parse($(".modal-body"));
+                $(".modal-body  .combo").each(function () {
+                    $(this).css('width', '100%');
+                    $(this).children("input").css('width', '100%');
+                    //$(this).children("input").addClass("form-control");
+
+                });
+                $(function () { $(".modal-body [data-toggle='tooltip']").tooltip(); });
+                $.messager.progress('close');
+                $('#scriptModal').modal();
+            });
+
+
+        }
+    }
+
+    function DeleteStep()
+    {
+        var node= $('#scriptTree').tree("getSelected");
+        if(node)
+        {
+            var msg = ' <span style=\'color:blue\'>' + node.desc + '</span>';
+            $.messager.confirm('Message', '确认删除步骤:' + msg + '?', function (r) {
+                if (r) {
+                    $('#scriptTree').tree("remove",node.target);
+                }
+            });
+        }
+    }
+
+    function EditNameClick()
+    {
+        var id = $("#controlID").val();
+        $('#scriptModal').empty();
+        $("#scriptModal").load('/userStepControl/EditName/'+id,function() {
+
+            $('#scriptModal').modal();
+        });
+    }
+
+
+    function controlSaveClick()
+    {
+        $.messager.progress({ title: '请稍后', msg: '提交中...' });
+        var id = $("#controlID").val();
+
+        var nodes= $('#scriptTree').tree("getRoots");
+        var steps = getSteps(nodes);
+
+        $("#scriptModal").load('/userStepControl/controlSaveClick/'+id,{"steps": JSON.stringify(steps),},function() {
+            $.messager.progress('close');
+            $('#scriptModal').modal();
+        });
+    }
+
+    </script>

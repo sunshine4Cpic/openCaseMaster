@@ -17,7 +17,7 @@ namespace openCaseMaster.ViewModels
 
         public int PID { get; set; }
 
-        public int? FID { get; set; }
+        public int FID { get; set; }
 
         public string Fname { get; set; }
 
@@ -49,7 +49,7 @@ namespace openCaseMaster.ViewModels
                 this.ID = ID;
                 var mtc = QC_DB.M_testCase.First(t => t.ID == ID);
                 this.TreeJson = getScript2Json(mtc);
-                this.FID = mtc.FID;
+                this.FID = mtc.FID.Value;
                 this.scriptName = mtc.Name;
                 this.Fname = mtc.caseFramework.workName;
                 var PP = new ObjectParameter("Out1", DbType.Int32);
@@ -66,7 +66,7 @@ namespace openCaseMaster.ViewModels
 
 
                 //获取Ujson  用户组件
-                this.UJson = treeHelper.getUserControl(FID);
+                this.UJson = treeHelper.getUserControl(FID,PID);
 
                 
 
@@ -75,35 +75,11 @@ namespace openCaseMaster.ViewModels
         }
 
 
-
-        private List<scriptStepTreeModel> getScript(M_testCase mtc)
+        private  string getScript2Json(M_testCase mtc)
         {
             XElement xe = XElement.Parse(mtc.testXML);
 
-            var sms = xe.Descendants("Step");
-
-            /*
-            //改数据时修改了个别Step的大小写,为了OK加了容错,正式环境后期可以去掉这个逻辑
-            if (sms.Count() == 0)
-            {
-                sms = xe.Descendants("step");
-            }*/
-
-            List<scriptStepTreeModel> rtn = new List<scriptStepTreeModel>();
-
-            foreach (var e in sms)
-            {
-                rtn.Add(e.getScriptStep());
-            }
-
-            return rtn;
-
-
-        }
-
-        private  string getScript2Json(M_testCase mtc)
-        {
-            List<scriptStepTreeModel> tcl = getScript(mtc);
+            List<scriptStepTreeModel> tcl = xe.getScriptTreeList();
 
             var jSetting = new JsonSerializerSettings();
             jSetting.NullValueHandling = NullValueHandling.Ignore;

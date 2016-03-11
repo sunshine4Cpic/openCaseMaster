@@ -1,6 +1,7 @@
 ﻿@section Scripts {
     @Styles.Render("~/Content/easyui")
     @Scripts.Render("~/bundles/easyui")
+<script src="~/Scripts/caseEdit.js"></script>
 <link rel="stylesheet" type="text/css" href="/Content/themes/icon.css">
 <style type="text/css">
     #zlight-nav {
@@ -65,7 +66,7 @@
                 <div title="基础组件" style="padding:10px">
                     <ul id="controlTreeListF"></ul>
                 </div>
-                <div title="项目组件">
+                <div title="项目专属组件">
                     <ul id="controlTreeListP"></ul>
                 </div>
                 <div title="你的组件">
@@ -90,7 +91,7 @@
 
 </div>
 
-<div id="dialog" style="overflow:hidden;"></div>
+<div id="dialog" style="padding: 10px 60px 10px;overflow:hidden;"></div>
     <script type="text/javascript">
 
         $(function () {
@@ -160,7 +161,7 @@
             var url = "/TestCase/AddNew?id=" + node.id + "&PID=" + node.PID + "&type=" + type;
             $('#dialog').dialog({
                 title: 'Creat New',
-                width: 500,
+                width: 400,
                
                 closed: false,
                 cache: false,

@@ -259,6 +259,7 @@
     <Compile Include="ViewModels\userControl\controlNode.cs" />
     <Compile Include="ViewModels\userControl\controlViewModel.cs" />
     <Compile Include="ViewModels\userControl\frameTreeNode.cs" />
+    <Compile Include="ViewModels\userControl\projectTreeNode.cs" />
     <Compile Include="ViewModels\User\UserModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -322,6 +323,8 @@
     <Content Include="Content\img\header-bg.gif" />
     <Content Include="Content\img\heart.png" />
     <Content Include="Content\img\heart_add.png" />
+    <Content Include="Content\img\home_green.png" />
+    <Content Include="Content\img\home_grey.png" />
     <Content Include="Content\img\icon_drop.gif" />
     <Content Include="Content\img\icon_edit.gif" />
     <Content Include="Content\img\icon_priv.gif" />
@@ -759,10 +762,10 @@
     <Content Include="Views\Shared\_ModalError.cshtml" />
     <Content Include="Views\userStepControl\Index.cshtml" />
     <Content Include="Views\userStepControl\_controlView.cshtml" />
+    <Content Include="Views\userStepControl\_EditName.cshtml" />
+    <Content Include="Views\userStepControl\_controlParam.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\EasyTree\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />

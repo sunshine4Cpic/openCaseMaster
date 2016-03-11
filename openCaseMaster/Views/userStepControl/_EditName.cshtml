@@ -1,0 +1,68 @@
+﻿@using openCaseMaster.Models
+@model M_testCaseSteps
+
+
+
+
+
+<form class="bs-example bs-example-form" role="form">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <div class="input-group input-group-lg" style="margin:auto">
+                    <h3>修改组件信息</h3>
+                </div>
+            </div>
+            <div class="modal-body" style="padding:10px 100px 10px 100px;">
+
+
+
+                <div class="input-group" style="width:100%">
+                    <span class="input-group-addon" style="width:80px">组件名</span>
+                    <input type="text" id="Name" name="Name" value="@Model.name" class="easyui-validatebox form-control input-sm"
+                           data-options="required:true,validType:'length[1,50]',missingMessage:'不能为空'" />
+                </div>
+                <br>
+
+
+                <div class="input-group" style="width:100%">
+                    <span class="input-group-addon" style="width:80px">备注</span>
+                    <input class="form-control input-sm" type="text" id="mark" name="mark" value="@Model.mark" />
+
+                </div>
+
+
+
+
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    取消
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveContorlName()">
+                    执行
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</form>
+
+<script>
+    function saveContorlName() {
+        var id = $("#controlID").val();
+        var name = $(".modal-body #Name").val();
+        var mark = $(".modal-body #mark").val();
+
+        $.post("saveEditName/" + id, { "id": id, "name": name, "mark": mark }, function (result) {//获取执行脚本
+            if(result)
+                $.messager.alert('Messager', '保存成功!', "info");
+        });
+    }
+</script>
