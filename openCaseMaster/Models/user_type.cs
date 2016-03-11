@@ -12,10 +12,10 @@ namespace openCaseMaster.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class user_type
+    public partial class userstep_type
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public user_type()
+        public userstep_type()
         {
             this.admin_user = new HashSet<admin_user>();
         }

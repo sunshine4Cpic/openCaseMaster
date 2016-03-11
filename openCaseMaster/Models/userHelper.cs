@@ -27,14 +27,19 @@ namespace openCaseMaster.Models
         /// <summary>
         /// 获得项目权限
         /// </summary>
-        public static string getUserPermission()
+        public static int[] getUserPermission()
         {
+
+
 
             FormsIdentity id = (FormsIdentity)HttpContext.Current.User.Identity;
             var userData = id.Ticket.UserData;//cookie
 
             JObject userJ = JObject.Parse(userData);
-            return userJ["Permission"].ToString().TrimEnd(',');
+            string[] PP = userJ["Permission"].ToString().TrimEnd(',').Split(',');
+
+
+            return Array.ConvertAll<string, int>(PP, s => int.Parse(s));
         }
     }
 }

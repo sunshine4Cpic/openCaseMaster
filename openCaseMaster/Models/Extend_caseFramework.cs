@@ -18,15 +18,16 @@ namespace openCaseMaster.Models
         public static treeViewModel getControlJson4Tree(this caseFramework cf)
         {
             XElement xe = XElement.Parse(cf.controlXML);
-           
 
-            var root = new treeViewModel();
+
+            var root = new frameTreeNode();
             root.text = cf.workName;
-            root.id = cf.ID;
             root.state = "open";
+            root.FID = cf.ID;
+
+            root.children = new List<treeViewModel>();
            
             var sms = xe.Descendants("Step");
-            root.children = new List<treeViewModel>();
             foreach (var e in sms)
             {
                 scriptStepTreeModel tv = new scriptStepTreeModel();

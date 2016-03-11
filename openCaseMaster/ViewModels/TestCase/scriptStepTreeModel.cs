@@ -34,8 +34,7 @@ namespace openCaseMaster.ViewModels
         [DataMember]
         public string desc { get; set; }
 
-        [DataMember]
-        public new List<scriptStepAttrModel> children { get; set; }
+        
 
     }
 

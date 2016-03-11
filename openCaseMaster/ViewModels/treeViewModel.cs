@@ -10,7 +10,6 @@ namespace openCaseMaster.ViewModels
     public class treeViewModel
     {
         
-
         
         /// <summary>
         /// 节点的 id，它对于加载远程数据很重要。

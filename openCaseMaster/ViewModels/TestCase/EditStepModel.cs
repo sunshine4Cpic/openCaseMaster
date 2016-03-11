@@ -71,9 +71,12 @@ namespace openCaseMaster.ViewModels
         {
             var StepXml = testCaseHelper.autoStepParam(name, this.FID, this.PID);
             
+            
 
             //合并属性
             List<EditStepPB> pbs = new List<EditStepPB>();
+
+            if (StepXml == null) return pbs;
 
             foreach (var pbx in StepXml.Descendants("ParamBinding"))
             {

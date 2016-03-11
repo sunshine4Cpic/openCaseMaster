@@ -43,7 +43,7 @@ namespace openCaseMaster.Models
         public virtual DbSet<project_rank> project_rank { get; set; }
         public virtual DbSet<project_stage> project_stage { get; set; }
         public virtual DbSet<project_type> project_type { get; set; }
-        public virtual DbSet<user_type> user_type { get; set; }
+        public virtual DbSet<userstep_type> userstep_type { get; set; }
         public virtual DbSet<caseFramework> caseFramework { get; set; }
         public virtual DbSet<Framework4Project> Framework4Project { get; set; }
     

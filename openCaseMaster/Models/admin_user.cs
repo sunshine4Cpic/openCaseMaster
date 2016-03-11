@@ -31,7 +31,7 @@ namespace openCaseMaster.Models
         public Nullable<System.DateTime> LastDate { get; set; }
         public Nullable<int> Type { get; set; }
     
-        public virtual user_type user_type { get; set; }
+        public virtual userstep_type userstep_type { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_runScene> M_runScene { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

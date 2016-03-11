@@ -178,6 +178,16 @@ namespace openCaseMaster.Models
                 XElementHelper.changeStep(Step, StepXml);//替换组件
             }
 
+            //替换project节点
+            var pSteps = from ele in testCase.Descendants("Step")
+                        where ele.Attribute("name").Value.IndexOf("prostep_") == 0
+                        select ele;
+            foreach (var step in pSteps)
+            {
+                changeProjectStep2Run(step);
+            }
+
+
             //去除不启用的节点
             var pbs = testCase.XPathSelectElements("//Step/ParamBinding[@name='是否启用' and @value='false']/..");
 
@@ -190,6 +200,25 @@ namespace openCaseMaster.Models
 
         }
 
+
+        /// <summary>
+        /// 执行前转换项目组件(后期使用catch)
+        /// </summary>
+        /// <param name="name"></param>
+        private static void changeProjectStep2Run(XElement step)
+        {
+            int id = Convert.ToInt32(step.Attribute("name").Value.Substring(8));
+
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+            Framework4Project mtcs = QC_DB.Framework4Project.FirstOrDefault(t => t.ID == id);
+            if (mtcs == null) return;
+
+            var xe = XElement.Parse(mtcs.controlXML);
+
+            step.SetAttributeValue("name", xe.Attribute("name").Value);
+
+        }
 
 
         /// <summary>
@@ -223,7 +252,9 @@ namespace openCaseMaster.Models
                            iconCls = "icon-spanner_blue",
                            checkbox = false
                        };
-            tmp.children = atts.ToList();
+
+            tmp.children = new List<treeViewModel>();
+            tmp.children.AddRange(atts.ToList());
 
 
 
@@ -231,6 +262,38 @@ namespace openCaseMaster.Models
 
 
         }
+
+
+        /// <summary>
+        /// 获得scriptTree的全部step数据
+        /// </summary>
+        /// <param name="xe"></param>
+        /// <returns></returns>
+        public static List<scriptStepTreeModel> getScriptTreeList(this XElement xe)
+        {
+          
+
+            var sms = xe.Descendants("Step");
+
+            /*
+            //改数据时修改了个别Step的大小写,为了OK加了容错,正式环境后期可以去掉这个逻辑
+            if (sms.Count() == 0)
+            {
+                sms = xe.Descendants("step");
+            }*/
+
+            List<scriptStepTreeModel> rtn = new List<scriptStepTreeModel>();
+
+            foreach (var e in sms)
+            {
+                rtn.Add(e.getScriptStep());
+            }
+
+            return rtn;
+
+
+        }
+
 
     }
 }

@@ -51,8 +51,6 @@
                         target: selectNode,
                         text: e.Name
                     });
-                    
-                    
                 }
                 );
 
@@ -96,45 +94,41 @@
 
 <input type="hidden" id="EditCaseID" name="ID" value="@Model.ID" />
 <br />
-<div class="form-horizontal">
-    <div class="form-group">
-        <label class="col-md-4 control-label">@nameLabel</label>
-        <div class="col-md-8">
 
-            <input type="text" id="Name" name="Name" value="@Model.Name" class="easyui-validatebox form-control input-sm"
-                   data-options="required:true,validType:'length[1,50]',missingMessage:'不能为空'" />
-        </div>
+<form class="bs-example bs-example-form" role="form">
+    <div class="input-group" style="width:100%">
+        <span class="input-group-addon" style="width:80px">@nameLabel</span>
+        <input type="text" id="Name" name="Name" value="@Model.Name" class="easyui-validatebox form-control input-sm"
+               data-options="required:true,validType:'length[1,50]',missingMessage:'不能为空'" />
     </div>
+    <br>
 
-    <div class="form-group">
-        <label class="col-md-4 control-label">@markLabel</label>
-        <div class="col-md-8">
-            <input class="form-control input-sm" type="text" id="mark" name="mark" value="@Model.mark" />
 
-        </div>
+    <div class="input-group" style="width:100%">
+        <span class="input-group-addon" style="width:80px">@markLabel</span>
+        <input class="form-control input-sm" type="text" id="mark" name="mark" value="@Model.mark" />
+
     </div>
+    <br>
     @{
-        if (Model.type == 1 )
+        if (Model.type == 1)
         {
-            <div class="form-group">
-                <label class="col-md-4 control-label">workspace</label>
-                <div class="col-md-8">
-                 
-
-                    @Html.DropDownList("EditFID", ViewData["SelectListItem"] as SelectList, new { id = "EditFID", @class = "form-control input-sm" })
-
-                </div>
+            <div class="input-group" style="width:100%">
+                <span class="input-group-addon" style="width:80px">案例类型</span>
+                @Html.DropDownList("EditFID", ViewData["SelectListItem"] as SelectList, new { id = "EditFID", @class = "form-control input-sm" })
             </div>
+            <br>
         }
     }
-    
-    <div class="form-group">
-        <div class="col-md-offset-4 col-md-8">
-            <input type="button" name="BtnSubmit" value="提交" onclick="@submitFun" />
 
-            <input type="button" name="BtnReset" value="重置" onclick="ResetForm();" />
-        </div>
+
+    <div class="input-group" style="width:100%;text-align:center">
+       
+        <input type="button" name="BtnSubmit" class="btn btn-default" value="提交" onclick="@submitFun" style="margin-right:100px" />
+        <input type="button" name="BtnReset" class="btn btn-default" value="重置" onclick="ResetForm();" />
+        
     </div>
-    
-    </div>
+
+</form>
+
 

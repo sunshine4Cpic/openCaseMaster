@@ -24,17 +24,18 @@ namespace openCaseMaster.Models
         /// <returns></returns>
         public static XElement autoStepParam(string name, int? FID)
         {
-            if (isUserStep(name))
+
+            switch (checkStepType(name))
             {
-                return getUserStepParam(name);
+                case stepType.user:
+                    return getUserStepParam(name);
+                case stepType.project:
+                    return getProjectStepParam(name);
+                default:
+                    if (FID == null) return null;
+                    return getFarmeworkStep(name, FID.Value);
 
             }
-            else
-            {
-                if (FID == null) return null;
-                return getFarmeworkStep(name, FID.Value);
-            }
-
         }
 
         /// <summary>
@@ -45,29 +46,6 @@ namespace openCaseMaster.Models
         public static XElement autoStepParam(string name, int? FID, int? PID)
         {
             var xe = autoStepParam(name, FID);
-
-            if (xe == null && PID != null)//从项目组件中查找
-            {
-                QCTESTEntities QC_DB = new QCTESTEntities();
-                var fkp = QC_DB.Framework4Project.FirstOrDefault(t => t.FID == FID && t.PID == PID);
-                if (fkp != null)
-                {
-                    var steps = XElement.Parse(fkp.controlXML);
-                    var step = steps.Descendants("Step").FirstOrDefault(t => t.Attribute("name").Value == name);
-                    if (step != null)
-                    {
-                        XElement PB = new XElement("ParamBinding");
-                        PB.SetAttributeValue("name", "是否启用");
-                        PB.SetAttributeValue("value", "true");
-                        PB.SetAttributeValue("list", "启用:true,不启用:false");
-
-
-                        step.Add(PB);
-                        return step;
-                    }
-                }
-
-            }
             return xe;
         }
 
@@ -114,6 +92,34 @@ namespace openCaseMaster.Models
 
 
         }
+
+
+        /// <summary>
+        /// 获取projectStep的参数列表
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static XElement getProjectStepParam(string name)
+        {
+
+            int stepID = Convert.ToInt32(name.Substring(8));
+            //这里是用户控件初始化
+            QCTESTEntities QC_DB = new QCTESTEntities();
+            Framework4Project mtcs = QC_DB.Framework4Project.Where(t => t.ID == stepID).First();
+            var xe = XElement.Parse(mtcs.controlXML);
+
+            xe.SetAttributeValue("name", "prostep_" + mtcs.ID);
+  
+
+            //mtcs.paramXML.SetAttributeValue("name", name);
+            return xe;
+
+
+
+        }
+
+
+      
 
 
         /// <summary>
@@ -195,15 +201,18 @@ namespace openCaseMaster.Models
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Boolean isUserStep(string name)
+        public static stepType checkStepType(string name)
         {
             if (name.IndexOf("userstep_", StringComparison.CurrentCultureIgnoreCase) == 0)
             {
-                return true;
+                return stepType.user;
             }
-
-            return false;
+            else if (name.IndexOf("prostep_", StringComparison.CurrentCultureIgnoreCase) == 0)
+                return stepType.project;
+            return stepType.frame;
         }
+
+        
 
         
         /// <summary>
@@ -253,4 +262,12 @@ namespace openCaseMaster.Models
         
 
     }
+
+
+    public enum stepType
+    {
+        frame = 0,
+        user = 1,
+        project = 2,
+    };
 }

@@ -23,7 +23,7 @@
         <div data-options="iconCls:'icon-box_add'" onclick="creatUserControl()">自定义组件</div>
         <div class="menu-sep"></div>
         <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="debug()"> 调试案例</div>
-        <div data-options="iconCls:'icon-undo'" onclick="refreshScrpt($(scriptID).val())">撤销未保存的操作</div>
+        <div data-options="iconCls:'icon-reload'" onclick="refreshScrpt($(scriptID).val())">撤销未保存的操作</div>
     </div>
 
     <div style="float:right" class="l-btn-text">
@@ -54,7 +54,6 @@
             checkbox:true,
             pointType:["top","top","bottom","bottom"],
             animate:true,
-            lines:true,
             formatter:function(node){
                 if(node.Key==undefined)
                     return  node.name +" : "+node.desc;
@@ -98,6 +97,7 @@
                     return false;
             },
             onDblClick: function (node) {
+                
                 editStepClick(node);
             }
         });
@@ -153,7 +153,7 @@
             dnd: true,
             formatter: function (node) {
                 if (node.text == undefined)
-                    return node.name;
+                    return node.name + "(" + node.desc + ")";
                 else
                     return node.text;
             },
@@ -189,6 +189,7 @@
 
             if(!$("#scriptTree").tree("getParent",node.target))
             {
+                $.messager.progress({ title: '请稍后', msg: '案例数据加载中...' });
                 var pd={};
                 pd["desc"] = node.desc;
                 pd["name"] = node.name;
@@ -211,6 +212,7 @@
 
                     });
                     $(function () { $(".modal-body [data-toggle='tooltip']").tooltip(); });
+                    $.messager.progress('close');
                     $('#scriptModal').modal();
                 });
 
@@ -232,29 +234,6 @@
 
         }
 
-        function getSteps(nodes)
-        {
-            var steps=[];
-
-            var n;
-            for (n in nodes )
-            {
-                var step = {};
-                var node = nodes[n];
-                var p = {};
-                for (c in node.children)
-                {
-                    var child = node.children[c];
-                    p[child.Key] = child.Value;
-                }
-                step["desc"] = node.desc;
-                step["ParamBinding"] = p;
-                step["name"] = node.name;
-                steps.push(step);
-            }
-
-            return steps
-        }
 
         function DeleteStep()
         {

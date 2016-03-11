@@ -2,7 +2,9 @@
 
 <div class="modal-dialog">
     <div class="modal-content">
+        
         <div class="modal-header">
+            
             <button type="button" class="close"
                     data-dismiss="modal" aria-hidden="true">
                 &times;
@@ -29,7 +31,7 @@
                     </div>
                 }
             }
-            <div class="alert alert-info">自定义组件可以设置参数默认值。</div>
+            
 
 
         </div>
@@ -42,10 +44,16 @@
                 创建组件
             </button>
         </div>
+       
+        <div class="alert alert-info" style="text-align:center">
+            自定义组件可以设置参数默认值。
+        </div>
+     
     </div><!-- /.modal-content -->
 </div><!-- /.modal -->
 
 <script>
+    //@@ sourceURL=createUserControl.js
     $(function () {
         //设置text需要验证
         $('#Name').validatebox();
@@ -73,7 +81,7 @@
         $('#scriptModal').modal("hide");
 
         $.post("/TestCase/saveUserControl",
-            { "name": name, "FID": FID, "PID": PID, "steps": JSON.stringify(steps), "Param": Param },
+            { "name": name, "FID": FID, "PID": PID, "steps": JSON.stringify(steps), "Param": JSON.stringify(Param) },
             function (result) {
                 if (result == "True") {
                     $.messager.alert('Messager', '用户自定义组件创建成功!', "info");
