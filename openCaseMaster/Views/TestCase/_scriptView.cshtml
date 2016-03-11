@@ -285,7 +285,7 @@
         function debugSubmit(id,Param)
         {
             $.post("runScrpt/"+id,{"Param":Param},function(result){//获取执行脚本
-                $.post("http://localhost:8500/testM/",result,function(result){
+                $.post("http://localhost:8500/testM/?runType=Debug",result,function(result){
                     $.messager.alert('Messager', '脚本开始执行!', "info");
                 }).error(function() {
                     $.messager.alert('Error', '调用本机出错啦!', "error");
