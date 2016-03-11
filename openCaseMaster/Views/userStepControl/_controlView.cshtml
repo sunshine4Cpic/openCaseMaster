@@ -18,7 +18,9 @@
     <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
        data-options="menu:'#C2',iconCls:'icon-tip',duration:400">操作</a>
     <div id="C2" style="width:150px;">
-        <div  >????</div>
+        <div data-options="iconCls:'icon-search'" onclick="viewControlUse()">查看相关案例</div>
+        <div class="menu-sep"></div>
+        <div data-options="iconCls:'icon-clear'" onclick="deleteControl()">删除组件</div>
        
         
     </div>
@@ -42,10 +44,11 @@
     var controlData = @Html.Raw(Model.viewJson);
    
 
+    
+
     $('#scriptTree').tree({
         data:controlData,
         dnd:true,
-        checkbox:true,
         pointType:["top","top","bottom","bottom"],
         animate:true,
         formatter:function(node){
@@ -170,5 +173,42 @@
             $('#scriptModal').modal();
         });
     }
+
+
+
+    function deleteControl()
+    {
+        var id = $("#controlID").val();
+
+        $.messager.confirm('Message', '确认删除该组件?', function (r) {
+            if (r) {
+                $.post("delete", { "id": id}, function (result) {
+                    if (result == "True") {
+                        $.messager.alert('Messager', '删除组件成功', "info");
+                        initMyControl();
+                        $("#controlViewPanel").empty();
+                    }else
+                    {
+                        $.messager.alert('删除组件失败!', result, "error");
+                    }
+                });
+            }
+        });
+    }
+
+    function viewControlUse()
+    {
+        var id = $("#controlID").val();
+
+        $.get("viewUse/"+id, function(result){
+            if(result=="null")
+                $.messager.alert('Messager', '<b>没有关联案例</b>', "info");
+            else
+                $.messager.alert('Messager', '<b>关联案例:</b><br>'+result);
+        });
+
+    }
+
+    
 
     </script>

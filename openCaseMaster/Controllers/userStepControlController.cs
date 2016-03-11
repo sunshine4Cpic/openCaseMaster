@@ -130,8 +130,58 @@ namespace openCaseMaster.Controllers
 
 
         }
-        
 
+
+        [HttpPost]
+        public string delete(int id)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            if (QC_DB.M_ContainUserStepCase(id).Count() > 0)
+            {
+                return "组件已经被引用,无法删除";
+            }
+            var nmtc = QC_DB.M_testCaseSteps.First(t => t.ID == id);
+
+            var userID = userHelper.getUserID();
+            if (nmtc.userID == userID)
+            {
+                QC_DB.M_testCaseSteps.Remove(nmtc);
+                QC_DB.SaveChanges();
+                return "True";
+            }else
+            {
+                return "您无法删除其他人创建的组件";
+            }
+           
+        }
+
+        public string viewUse(int id)
+        {
+
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+            var aaa = (from t in QC_DB.M_ContainUserStepCase(id)
+                       select new
+                       {
+                           name = t.Name,
+                           ID = t.ID
+                       }).Take(20).ToList();
+            string msg = "";
+
+            if (aaa.Count() == 0)
+            {
+                return "null";
+            }
+
+            foreach (var a in aaa)
+            {
+                msg += a.name + "<br>";
+            }
+
+            return msg;
+
+        }
 
     }
 }

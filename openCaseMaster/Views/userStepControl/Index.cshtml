@@ -53,7 +53,7 @@
 <div id="dialog" style="overflow:hidden;"></div>
 <script type="text/javascript">
 
-    $(function () { 
+    function initMyControl () { 
         $.messager.progress({ title: '请稍后', msg: '案例数据加载中...' });
         $.post("/userStepControl/myControlInit", function (result) {
             $('#userControlTreeList').tree({
@@ -65,7 +65,7 @@
                     $.messager.progress('close');
 
                 },
-                onDblClick: function (node) {
+                onClick: function (node) {
                     if (node.id)
                     {
                         $.messager.progress({
@@ -94,8 +94,8 @@
             });
         });
 
-    });
-
+    }
+    $(initMyControl());
     
     function controlTreeListF_init(id)
     {
