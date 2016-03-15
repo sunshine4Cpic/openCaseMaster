@@ -1,0 +1,125 @@
+﻿@using openCaseMaster.ViewModels
+@model DemandViewModel
+
+<input id="DemandID" type="hidden" value="@Model.ID" />
+
+    <table id="DemandTable" class="easyui-datagrid" title="@Model.name" 
+       data-options="rownumbers:true,singleSelect:true,data:JsonData,toolbar:toolbar,iconCls:'icon-application_windows',collapsible:true,showFooter:true">
+    <thead data-options="frozen:true">
+        <tr>
+            <th data-options="field:'name',width:120,formatter:fm">场景</th>
+            <th data-options="field:'DeviceName',width:150,formatter:fm">执行设备</th>
+        </tr>
+    </thead>
+
+    <thead>
+        <tr>
+            <th data-options="field:'TotalCase',width:50,align:'center'">总数</th>
+            <th data-options="field:'sucess',width:50,align:'center'">成功</th>
+            <th data-options="field:'error',width:50,align:'center'">失败</th>
+            <th data-options="field:'noRun',width:50,align:'center'">未执行</th>
+            <th data-options="field:'SuccessRatio',width:50,align:'center'">成功率</th>
+            <th data-options="field:'Untreated',width:50,align:'center'">未处理</th>
+            <th data-options="field:'installResult',width:106,formatter:fm">安装结果</th>
+        </tr>
+    </thead>
+</table>
+<div class="modal fade" data-backdrop="static" id="scriptModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close" style="position: absolute; top: 0px; right: 0px; z-index: 1;"
+                    data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <div class="modal-body" style="padding:0px;">
+                <div id="uploader">
+                    <p>
+                        你的浏览器没有Flash支持，请安装最新的Flash！
+                    </p>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script type="text/javascript">
+    //@@ sourceURL=DemandView.js
+    var toolbar = [{
+        text: '执行',
+        iconCls: 'icon-media_controls_dark_play',
+        handler: run
+    }, {
+        text: '暂停',
+        iconCls: 'icon-media_controls_dark_stop',
+        handler: stop
+    },{
+        text: '重置',
+        iconCls: 'icon-reload',
+        handler: Reset
+    }, '-', {
+        text: '添加',
+        iconCls: 'icon-movie_grey_add',
+        handler: showUploader
+    },{
+        text: '删除',
+        iconCls: 'icon-movie_grey_dark_del',
+        handler: function () { alert('save') }
+    }];
+
+    var JsonData = @Html.Raw(Model.getScenesJsonData);
+
+
+    var fm = function (value, row, index) {
+        if (typeof(value) != "undefined")
+            return '<div title="' + value + '" class="easyui-tooltip">' + value + '</div>';
+    }
+
+    function run()
+    {
+        var id = $("#DemandID").val();
+        $.post("runDemand", { "id": id }, function (result) {
+            $.messager.alert('Messager', result, "info");
+
+        }).error(function() { alert("error"); });
+    }
+
+    function stop()
+    {
+        var id = $("#DemandID").val();
+        $.post("stopDemand", { "id": id }, function (result) {
+            $.messager.alert('Messager', result, "info");
+
+        }).error(function() { alert("error"); });
+    }
+
+    function Reset()
+    {
+        $.messager.confirm('Message', '确认重置错误的案例吗?', function (r) {
+            if (r)
+            {
+                var id = $("#DemandID").val();
+                $.post("DemandErrorReset", { "id": id }, function (result) {
+                    $.messager.alert('Messager', result, "info");
+                }).error(function() { alert("error"); });
+            }
+        });
+    }
+
+    $("#uploader").plupload({
+        runtimes: 'gears,html5,flash',
+        url: "asdads", // 服务端上传路径
+        max_file_size: '10mb', // 文件上传最大限制。
+        chunk_size: '2mb', // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可。
+        unique_names: false, // 上传的文件名是否唯一
+        //// 是否生成缩略图（仅对图片文件有效）
+        //resize: { width: 320, height: 240, quality: 90 },
+        ////  这个数组是选择器，就是上传文件时限制的上传文件类型
+        filters: [{ title: "Excel文档", extensions: "xls" }],
+        dragdrop:false
+    });
+
+    function showUploader() {
+        $('#scriptModal').modal();
+    }
+
+</script>

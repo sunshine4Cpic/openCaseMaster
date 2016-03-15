@@ -46,9 +46,7 @@ namespace openCaseMaster.ViewModels
         [DataMember]
         public Boolean? checkbox { get; set; }
 
-        [DataMember]
-        public Dictionary<string, string> attributes;
-        
+       
         
 
         [DataMember]

@@ -1,0 +1,98 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+@Styles.Render("~/Content/uploader")
+@Scripts.Render("~/bundles/uploader")
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/bundles/easyui")
+
+
+<style type="text/css">
+    input[type="image"] {
+        padding:2px;
+    }
+</style>
+ 
+}
+
+
+<div class="row">
+    <div id="left" class="col-md-4" style="padding:5px">
+
+        <div class="easyui-panel" title="测试执行" style="display: block; max-height:600px; width: 100%; padding:5px;" data-options="iconCls:'icon-filter',closable:false,
+    collapsible:true,minimizable:false,maximizable:false">
+
+            <div class="easyui-panel" style="margin-bottom:5px">
+                <input type="image" title="新增文件夹" src="~/Content/img/folder_classic_add.png">
+                <input type="image" title="添加测试计划" src="~/Content/img/clock_add.png">
+                <input type="image" title="修改信息" src="~/Content/img/contact_blue_edit.png">
+                <input type="image" title="删除" src="~/Content/img/contact_blue_remove.png">
+            </div>
+            
+                <ul id="runCaseTreeList"></ul>
+        </div>
+        
+
+    </div>
+
+    <div id="right" class="col-md-8" style="padding:5px">
+
+        <div id="viewPanel" class="easyui-panel" style="border:none;width:100%">
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script type="text/javascript">
+
+    $(function () {
+       
+        $('#runCaseTreeList').tree({
+            url: '/TestCase/projectListInit',
+            lines: true,
+            animate: true,
+            dnd: false,
+            onBeforeExpand: function (node, param) {
+                if (!node.hasOwnProperty('PID')) {
+                    if (node.type == 0)
+                        $(this).tree('options').url = "/RunCase/folderExpanded/" + node.DemandID;
+                    else
+                        $(this).tree('options').url = "/RunCase/DemandScene/" + node.DemandID;
+                }
+                else
+                    $(this).tree('options').url = "/RunCase/getFileByProject/" + node.PID;
+                //param.myattr = 'test';    // or change request parameter
+            },
+            onDblClick: function (node) {
+                if (node.hasOwnProperty('id'))
+                    $('#scriptPanel').panel('refresh', 'SceneView/' + node.DemandID);
+            },
+            onDragOver: function (target, source) {
+                //('#tt2').tree('getData', target);
+                return false;
+            },
+            onClick: function (node) {
+                if (node.id) {
+                    $('#viewPanel').panel('setTitle', '测试场景');
+                    $('#viewPanel').panel("header").find(".panel-icon").removeClass().addClass("panel-icon icon-movie_grey");
+                  
+                    
+                } else if (node.type == 1)
+                {
+                    $('#viewPanel').panel('setTitle', node.text);
+                    $('#viewPanel').panel("header").find(".panel-icon").removeClass().addClass("panel-icon icon-application_windows");
+                    $('#viewPanel').panel('refresh', 'DemandView/' + node.DemandID);
+                }
+
+            },
+        });
+
+    });
+</script>
+

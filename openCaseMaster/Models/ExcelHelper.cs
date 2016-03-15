@@ -115,11 +115,9 @@ namespace openCaseMaster.Models
         }
 
 
-        
-
-
-
-
-       
+        public static void creatScene(Stream stm, int id, string p)
+        {
+            
+        }
     }
 }

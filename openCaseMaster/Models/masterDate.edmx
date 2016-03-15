@@ -202,18 +202,18 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProjectType" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="userstep_type">
+        <EntityType Name="user_type">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Type" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <Association Name="FK_admin_userstep_userstep_type">
-          <End Role="userstep_type" Type="Self.userstep_type" Multiplicity="0..1" />
+        <Association Name="FK_admin_user_user_type">
+          <End Role="user_type" Type="Self.user_type" Multiplicity="0..1" />
           <End Role="admin_user" Type="Self.admin_user" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="userstep_type">
+            <Principal Role="user_type">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="admin_user">
@@ -586,9 +586,9 @@
           <EntitySet Name="project_rank" EntityType="Self.project_rank" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project_stage" EntityType="Self.project_stage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project_type" EntityType="Self.project_type" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="userstep_type" EntityType="Self.userstep_type" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_admin_userstep_userstep_type" Association="Self.FK_admin_userstep_userstep_type">
-            <End Role="userstep_type" EntitySet="userstep_type" />
+          <EntitySet Name="user_type" EntityType="Self.user_type" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_admin_user_user_type" Association="Self.FK_admin_user_user_type">
+            <End Role="user_type" EntitySet="user_type" />
             <End Role="admin_user" EntitySet="admin_user" />
           </AssociationSet>
           <AssociationSet Name="FK_caseFramework_userID" Association="Self.FK_caseFramework_userID">
@@ -709,9 +709,9 @@
           <Property Name="GreatDate" Type="DateTime" Precision="3" />
           <Property Name="LastDate" Type="DateTime" Precision="3" />
           <Property Name="Type" Type="Int32" />
-          <NavigationProperty Name="userstep_type" Relationship="Self.FK_admin_userstep_userstep_type" FromRole="admin_user" ToRole="userstep_type" />
           <NavigationProperty Name="M_runScene" Relationship="Self.FK_M_runScene_admin_user" FromRole="admin_user" ToRole="M_runScene" />
           <NavigationProperty Name="caseFramework" Relationship="MasterModel.FK_caseFramework_userID" FromRole="admin_user" ToRole="caseFramework" />
+          <NavigationProperty Name="user_type" Relationship="MasterModel.FK_admin_user_user_type" FromRole="admin_user" ToRole="user_type" />
         </EntityType>
         <EntityType Name="M_application">
           <Key>
@@ -914,26 +914,6 @@
           <Property Name="ProjectType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="project" Relationship="Self.FK_project_project_type" FromRole="project_type" ToRole="project" />
         </EntityType>
-        <EntityType Name="userstep_type">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="admin_user" Relationship="Self.FK_admin_userstep_userstep_type" FromRole="userstep_type" ToRole="admin_user" />
-        </EntityType>
-        <Association Name="FK_admin_userstep_userstep_type">
-          <End Role="userstep_type" Type="Self.userstep_type" Multiplicity="0..1" />
-          <End Role="admin_user" Type="Self.admin_user" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="userstep_type">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="admin_user">
-              <PropertyRef Name="Type" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_M_runScene_admin_user">
           <End Role="admin_user" Type="Self.admin_user" Multiplicity="0..1" />
           <End Role="M_runScene" Type="Self.M_runScene" Multiplicity="*" />
@@ -1163,11 +1143,6 @@
           <EntitySet Name="project_rank" EntityType="Self.project_rank" />
           <EntitySet Name="project_stage" EntityType="Self.project_stage" />
           <EntitySet Name="project_type" EntityType="Self.project_type" />
-          <EntitySet Name="userstep_type" EntityType="Self.userstep_type" />
-          <AssociationSet Name="FK_admin_userstep_userstep_type" Association="Self.FK_admin_userstep_userstep_type">
-            <End Role="userstep_type" EntitySet="userstep_type" />
-            <End Role="admin_user" EntitySet="admin_user" />
-          </AssociationSet>
           <AssociationSet Name="FK_M_runScene_admin_user" Association="Self.FK_M_runScene_admin_user">
             <End Role="admin_user" EntitySet="admin_user" />
             <End Role="M_runScene" EntitySet="M_runScene" />
@@ -1312,6 +1287,11 @@
             <End Role="caseFramework" EntitySet="caseFramework" />
             <End Role="M_testCaseSteps" EntitySet="M_testCaseSteps" />
           </AssociationSet>
+          <EntitySet Name="user_type" EntityType="MasterModel.user_type" />
+          <AssociationSet Name="FK_admin_user_user_type" Association="MasterModel.FK_admin_user_user_type">
+            <End Role="user_type" EntitySet="user_type" />
+            <End Role="admin_user" EntitySet="admin_user" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="M_ContainUserStepCase_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -1403,6 +1383,26 @@
             </Principal>
             <Dependent Role="M_testCaseSteps">
               <PropertyRef Name="FID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="user_type">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_admin_user_user_type" FromRole="user_type" ToRole="admin_user" />
+        </EntityType>
+        <Association Name="FK_admin_user_user_type">
+          <End Type="MasterModel.user_type" Role="user_type" Multiplicity="0..1" />
+          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user_type">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="admin_user">
+              <PropertyRef Name="Type" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1605,14 +1605,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="userstep_type">
-            <EntityTypeMapping TypeName="MasterModel.userstep_type">
-              <MappingFragment StoreEntitySet="userstep_type">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionName="MasterModel.Store.MonthReport" FunctionImportName="MonthReport">
             <ResultMapping>
               <ComplexTypeMapping TypeName="MasterModel.MonthReport_Result">
@@ -1676,6 +1668,14 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="M_testCase_getProject" FunctionName="MasterModel.Store.M_testCase_getProject" />
+          <EntitySetMapping Name="user_type">
+            <EntityTypeMapping TypeName="MasterModel.user_type">
+              <MappingFragment StoreEntitySet="user_type">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

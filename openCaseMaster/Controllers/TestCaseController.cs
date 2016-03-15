@@ -35,9 +35,7 @@ namespace openCaseMaster.Controllers
         
         public string projectListInit()
         {
-            //此处应该加入权限,后期加
-            //FormsIdentity id = (FormsIdentity)HttpContext.Current.User.Identity;
-            //FormsAuthenticationTicket ticket = id.Ticket;//cookie
+            
 
             
             
@@ -271,7 +269,7 @@ namespace openCaseMaster.Controllers
 
 
 
-
+        
         public string controlTreeListP(int ID)
         {
 
