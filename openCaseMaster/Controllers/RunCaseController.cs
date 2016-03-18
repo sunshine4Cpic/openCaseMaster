@@ -4,6 +4,7 @@ using openCaseMaster.Models;
 using openCaseMaster.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Web;
@@ -35,7 +36,8 @@ namespace openCaseMaster.Controllers
                               iconCls = t.type == 0 ? null : "icon-application_windows",
                               DemandID = t.ID,
                               text = t.name,
-                              state = "closed",
+                              //state = "close",
+                              state = t.type == 0 ? "closed" : "open",
                               type = t.type == null ? 0 : t.type.Value
                           };
 
@@ -61,7 +63,8 @@ namespace openCaseMaster.Controllers
                           {
                               DemandID = t.ID,
                               text = t.name,
-                              state = "closed",
+                              //state = "closed",//在tree里显示场景
+                              state = t.type == 0 ? "closed" : "open",
                               iconCls = t.type == 0 ? null : "icon-application_windows",
                               type = t.type == null ? 0 : t.type.Value
                           };
@@ -81,9 +84,10 @@ namespace openCaseMaster.Controllers
             {
                 var tcl = from t in QC_DB.M_runScene
                           where t.DemandID==ID
-                          select new treeViewModel
+                          select new testSceneTree
                           {
                               id = t.ID,
+                              DemandID = t.DemandID,
                               text = t.name,
                               state = "open",
                               iconCls = "icon-movie_grey"
@@ -100,6 +104,7 @@ namespace openCaseMaster.Controllers
 
         public ActionResult DemandView(int ID)
         {
+           
             DemandViewModel dv = new DemandViewModel(ID);
             return PartialView("_DemandView", dv);
         }
@@ -173,6 +178,92 @@ namespace openCaseMaster.Controllers
             return "共重置" + num + "条案例.";
 
         }
-        
+
+
+        [HttpPost]
+        public Boolean deleteScene(int id)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+            var rs = QC_DB.M_runScene.First(t => t.ID == id);
+            QC_DB.M_runScene.Remove(rs);
+            QC_DB.SaveChanges();
+            return true;
+        }
+
+        [HttpPost]
+        public void changeDevice(int id, int? DeviceID)
+        {
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            var sc = QC_DB.M_runScene.First(t => t.ID == id);
+            sc.deviceID = DeviceID;
+            QC_DB.SaveChanges();
+        }
+
+
+
+        public ActionResult SceneView(int ID)
+        {
+
+            SceneViewModel dv = new SceneViewModel(ID);
+            return PartialView("_SceneView", dv);
+        }
+
+        public string SceneCaseData(int id, int page,int rows)
+        {
+
+
+            SceneCaseDataModel scd = new SceneCaseDataModel(id, page, rows);
+
+            string json = JsonConvert.SerializeObject(scd);
+
+            return json;
+
+        }
+
+        [HttpPost]
+        public string CaseErrorReset(int ID)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+            var pj = QC_DB.M_runTestCase.FirstOrDefault(t => t.ID == ID);
+            pj.state = null;
+            pj.startDate = null;
+            pj.endDate = null;
+            pj.resultPath = null;
+            pj.resultXML = null;
+            QC_DB.SaveChanges();
+
+            CaseDataModel cd = new CaseDataModel(pj);
+            string json = JsonConvert.SerializeObject(cd);
+
+            return json;
+        }
+
+
+        [HttpPost]
+        public string userCompleted(int ID,string mark)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            var pj = QC_DB.M_runTestCase.FirstOrDefault(t => t.ID == ID);
+            pj.state = 2;
+            pj.mark = mark;
+            QC_DB.SaveChanges();
+            CaseDataModel cd = new CaseDataModel(pj);
+
+            string json = JsonConvert.SerializeObject(cd);
+
+            return json;
+        }
+
+
+        public ActionResult caseRecord()
+        {
+            return View();
+        }
+
+
+       
     }
 }

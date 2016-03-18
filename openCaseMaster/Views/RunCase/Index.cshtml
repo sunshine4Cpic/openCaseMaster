@@ -13,6 +13,10 @@
     input[type="image"] {
         padding:2px;
     }
+
+    #DemandPanel input{
+        color:#000000;
+    }
 </style>
  
 }
@@ -39,7 +43,12 @@
 
     <div id="right" class="col-md-8" style="padding:5px">
 
-        <div id="viewPanel" class="easyui-panel" style="border:none;width:100%">
+        <div id="DemandPanel" class="easyui-panel" style="border:none;width:100%">
+
+        </div>
+        <div style="padding:5px"></div>
+    
+        <div id="ScenePanel" class="easyui-panel"  style="border:none;width:100%">
 
         </div>
 
@@ -62,37 +71,38 @@
                 if (!node.hasOwnProperty('PID')) {
                     if (node.type == 0)
                         $(this).tree('options').url = "/RunCase/folderExpanded/" + node.DemandID;
-                    else
-                        $(this).tree('options').url = "/RunCase/DemandScene/" + node.DemandID;
+                    //else //Tree不再显示场景,此逻辑暂不生效
+                        //$(this).tree('options').url = "/RunCase/DemandScene/" + node.DemandID;
                 }
                 else
                     $(this).tree('options').url = "/RunCase/getFileByProject/" + node.PID;
                 //param.myattr = 'test';    // or change request parameter
             },
-            onDblClick: function (node) {
-                if (node.hasOwnProperty('id'))
-                    $('#scriptPanel').panel('refresh', 'SceneView/' + node.DemandID);
-            },
-            onDragOver: function (target, source) {
-                //('#tt2').tree('getData', target);
-                return false;
-            },
             onClick: function (node) {
-                if (node.id) {
-                    $('#viewPanel').panel('setTitle', '测试场景');
-                    $('#viewPanel').panel("header").find(".panel-icon").removeClass().addClass("panel-icon icon-movie_grey");
-                  
-                    
+                
+                if (node.id) {//Tree不再显示场景,此逻辑暂不生效
+                    refreshScene(node.id,node.DemandID);
                 } else if (node.type == 1)
                 {
-                    $('#viewPanel').panel('setTitle', node.text);
-                    $('#viewPanel').panel("header").find(".panel-icon").removeClass().addClass("panel-icon icon-application_windows");
-                    $('#viewPanel').panel('refresh', 'DemandView/' + node.DemandID);
+                    refreshDemand(node.DemandID);
                 }
 
             },
         });
 
     });
+
+    function refreshDemand(DemandID) {
+        document.getElementById("ScenePanel").style.display = "none";
+        $('#DemandPanel').panel('refresh', 'DemandView/' + DemandID);
+        document.getElementById("DemandPanel").style.display = "block";
+    }
+
+    function refreshScene(ID) {
+        $('#ScenePanel').panel('refresh', 'SceneView/' + ID);
+        document.getElementById("ScenePanel").style.display = "block";
+    }
+
+   
 </script>
 

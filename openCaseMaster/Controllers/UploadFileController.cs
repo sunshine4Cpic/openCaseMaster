@@ -12,153 +12,107 @@ namespace openCaseMaster.Controllers
     [Authorize(Roles = "user")]
     public class UploadFileController : Controller
     {
-        
+
         [HttpPost]
         public void uploadScene(int id)
         {
 
-            if (Request.Files.Count > 0)
+            var stm = FileToStream();
+            if (stm != null)
             {
-                Stream stm = null;
-                string name = Request["name"];
-                try
-                {
+                string originalName = Request["originalName"];
+                ExcelHelper.creatScene(stm, id, originalName.Remove(originalName.LastIndexOf(".")));
 
-                    for (int j = 0; j < Request.Files.Count; j++)
-                    {
-
-                        var uploadFile = Request.Files[j];
-                        int offset = Convert.ToInt32(Request["chunk"]); //当前分块
-                        int total = Convert.ToInt32(Request["chunks"]);//总的分块数量
-
-                        //文件没有分块
-                        if (total == 1)
-                        {
-
-                            if (uploadFile.ContentLength > 0)
-                            {
-                                #region 注释
-                                /**** 写文件
-                                if (!Directory.Exists(updir))
-                                {
-                                    Directory.CreateDirectory(updir);
-                                }
-                              //  string fileId = DateTime.Now.ToString("yyyyMMddHHmmssfff") + uploadFile.FileName.Substring(uploadFile.FileName.LastIndexOf("."));
-                                uploadFile.SaveAs(string.Format("{0}\\{1}", updir, name));
-                                 * ***/
-
-                                //System.IO.Stream MyStream;
-                                //int FileLen;
-                                //FileLen = uploadFile.ContentLength;
-                                // 读取文件的 byte[]    
-                                //byte[] bytes = new byte[FileLen];
-                                //MyStream = 
-                                //MyStream.Read(bytes, 0, FileLen);
-                                #endregion 注释
-                                stm = uploadFile.InputStream;
-
-                            }
-                        }
-                        else
-                        {
-
-                            //文件 分成多块上传
-                            string fullname = WriteTempFile(uploadFile, offset, name);
-                            if (total - offset == 1)
-                            {
-                                //如果是最后一个分块文件 ，则把文件从临时文件夹中移到上传文件 夹中
-
-                                stm = FileToStream(fullname);
-
-                                //删除文件
-                                System.IO.FileInfo fi = new System.IO.FileInfo(fullname);
-                                fi.Delete();
-
-                                #region 注释
-                                /*保存文件
-                                if (!Directory.Exists(updir))
-                                {
-                                    Directory.CreateDirectory(updir);
-                                }
-                                string oldFullName = string.Format("{0}\\{1}", updir, name);
-                                FileInfo oldFi = new FileInfo(oldFullName);
-                                if (oldFi.Exists)
-                                {
-                                    //文件名存在则删除旧文件 
-                                    oldFi.Delete();
-                                }
-                                fi.MoveTo(oldFullName);
-                                 */
-                                #endregion 注释
-                            }
-
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Response.Write("Message" + ex.ToString());
-                    Response.StatusCode = 500;
-                }
-
-                try
-                {
-                    if (stm != null)
-                    {
-                        /*
-                        string type = Request.QueryString["type"];
-                        if (type == "case")
-                        {
-                            StreamReader sr = new StreamReader(stm);
-                            XElement tp = XElement.Parse(sr.ReadToEnd());
-                            //开始写入数据库
-                            string pid = Request.QueryString["pid"];
-                            string id = Request.QueryString["id"];
-
-                            QCTESTEntities QC_DB = new QCTESTEntities();
-
-                            M_testCase mtc = new M_testCase();
-                            mtc.type = 1;
-                            mtc.testXML = tp.ToString();
-
-                            if (pid!=null)
-                                mtc.projectID = Convert.ToInt32(pid);
-                            if (id != null)
-                                mtc.baseID = Convert.ToInt32(id);
-                            //mtc.Name = name.Remove(name.LastIndexOf("."));
-                            mtc.Name = tp.Attribute("desc").Value;
-                            QC_DB.M_testCase.Add(mtc);
-                            QC_DB.SaveChanges();
-                        }
-                        else if (type == "scene")
-                        {
-                            int id = Convert.ToInt32(Request.QueryString["id"]);
-                            //场景
-                            ExcelHelper.creatScene(stm, id, name.Remove(name.LastIndexOf(".")));
-                        }*/
-                      
-                        //场景
-                        ExcelHelper.creatScene(stm, id, name.Remove(name.LastIndexOf(".")));
-
-                    }
-
-
-
-                }
-                catch (Exception ex)
-                {
-                    Response.Write("Message" + ex.ToString());
-                    Response.StatusCode = 500;
-                }
             }
+
+
+        }
+
+        /// <summary>
+        /// 上传apk
+        /// </summary>
+        /// <param name="id">测试任务ID</param>
+        [HttpPost]
+        public string uploadApk(int id)
+        {
+            string originalName = "";
+            var stm = FileToStream();
+
+            if (stm != null)
+            {
+                string guid = System.Guid.NewGuid().ToString("N");
+
+                originalName = guid+"_"+Request["originalName"];
+                string filename = Server.MapPath("~/apkInstall/") + originalName;
+
+                StreamWriter sw = new StreamWriter(filename);
+                stm.CopyTo(sw.BaseStream);
+                sw.Flush();
+                sw.Close();
+
+
+                QCTESTEntities QC_DB = new QCTESTEntities();
+
+                var Mtd = QC_DB.M_testDemand.Where(t => t.ID == id).First();
+                Mtd.apkName = originalName;
+                QC_DB.SaveChanges();
+            }
+
+            return originalName;
         }
 
 
+        private Stream FileToStream()
+        {
+            if (Request.Files.Count <= 0) return null;
 
-        /// <summary> 
-        /// 从文件读取 Stream 
-        /// </summary> 
-        public Stream FileToStream(string fileName)
+            Stream stm = null;
+            string name = Request["name"];
+            for (int j = 0; j < Request.Files.Count; j++)
+            {
+
+                var uploadFile = Request.Files[j];
+                int offset = Convert.ToInt32(Request["chunk"]); //当前分块
+                int total = Convert.ToInt32(Request["chunks"]);//总的分块数量
+
+                //文件没有分块
+                if (total == 1)
+                {
+
+                    if (uploadFile.ContentLength > 0)
+                    {
+                        stm = uploadFile.InputStream;
+                    }
+                }
+                else
+                {
+
+                    //文件 分成多块上传
+                    string fullname = WriteTempFile(uploadFile, offset, name);
+                    if (total - offset == 1)
+                    {
+                        //如果是最后一个分块文件 ，则把文件从临时文件夹中移到上传文件 夹中
+
+                        stm = FileToStream(fullname);
+
+                        //删除文件,此处可合并
+                        System.IO.FileInfo fi = new System.IO.FileInfo(fullname);
+                        fi.Delete();
+                    }
+
+                }
+            }
+            
+            return stm;
+
+        }
+
+        /// <summary>
+        /// 返回上传成功的文件流
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        private Stream FileToStream(string fileName)
         {
             // 打开文件 
             FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -173,7 +127,7 @@ namespace openCaseMaster.Controllers
 
 
 
-
+        
         /// <summary>
         /// 保存临时文件 
         /// </summary>
@@ -183,7 +137,7 @@ namespace openCaseMaster.Controllers
         private string WriteTempFile(HttpPostedFileBase uploadFile, int chunk, string name)
         {
             // string fileId = DateTime.Now.ToString("yyyyMMddHHmmssfff") + uploadFile.FileName.Substring(uploadFile.FileName.LastIndexOf("."));
-            string tempDir = Server.MapPath("uploadTmp");
+            string tempDir = Server.MapPath("/uploadTmp");
             
 
             string fullName = string.Format("{0}\\{1}.part", tempDir, name);
@@ -195,7 +149,7 @@ namespace openCaseMaster.Controllers
                 if (System.IO.File.Exists(fullName))
                 {
                     FileInfo fi = new FileInfo(fullName);
-                    if ((DateTime.Now - fi.LastWriteTime).Ticks / 10000000 < 600)//600秒
+                    if ((DateTime.Now - fi.LastWriteTime).Ticks / 10000000 < 300)//300秒
                     {
                         throw new Exception("已经存在缓存文件");
                     }

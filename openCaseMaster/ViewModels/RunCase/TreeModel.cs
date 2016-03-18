@@ -15,4 +15,14 @@ namespace openCaseMaster.ViewModels
         [DataMember]
         public int type { get; set; }
     }
+
+    [DataContract]
+    public class testSceneTree : treeViewModel
+    {
+        [DataMember]
+        public int? DemandID { get; set; }
+
+        [DataMember]
+        public int type { get; set; }
+    }
 }

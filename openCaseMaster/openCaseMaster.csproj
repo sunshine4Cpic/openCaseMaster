@@ -256,6 +256,8 @@
     </Compile>
     <Compile Include="Models\XElementHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\RunCase\SceneCaseDataModel.cs" />
+    <Compile Include="ViewModels\RunCase\SceneViewModel.cs" />
     <Compile Include="ViewModels\RunCase\DemandViewModel.cs" />
     <Compile Include="ViewModels\RunCase\TreeModel.cs" />
     <Compile Include="ViewModels\TestCase\scriptStepTreeModel.cs" />
@@ -789,7 +791,21 @@
     <Content Include="Scripts\plupload\i18n\uk_UA.js" />
     <Content Include="Scripts\plupload\i18n\zh_CN.js" />
     <Content Include="Scripts\plupload\i18n\zh_TW.js" />
+    <Content Include="Scripts\plupload\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Scripts\plupload\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Scripts\plupload\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Scripts\plupload\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Scripts\plupload\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Scripts\plupload\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Scripts\plupload\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Scripts\plupload\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Scripts\plupload\images\ui-icons_222222_256x240.png" />
+    <Content Include="Scripts\plupload\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Scripts\plupload\images\ui-icons_454545_256x240.png" />
+    <Content Include="Scripts\plupload\images\ui-icons_888888_256x240.png" />
+    <Content Include="Scripts\plupload\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Scripts\plupload\jquery-ui.css" />
+    <Content Include="Scripts\plupload\jquery-ui.js" />
     <Content Include="Scripts\plupload\jquery-ui.min.js" />
     <Content Include="Scripts\plupload\jquery.plupload.queue\css\jquery.plupload.queue.css" />
     <Content Include="Scripts\plupload\jquery.plupload.queue\img\backgrounds.gif" />
@@ -848,8 +864,11 @@
     <Content Include="Views\userStepControl\_controlParam.cshtml" />
     <Content Include="Views\RunCase\Index.cshtml" />
     <Content Include="Views\RunCase\_DemandView.cshtml" />
+    <Content Include="Views\RunCase\_SceneView.cshtml" />
+    <Content Include="Views\RunCase\caseRecord.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="apkInstall\" />
     <Folder Include="uploadTmp\" />
     <Folder Include="Views\UploadFile\" />
   </ItemGroup>

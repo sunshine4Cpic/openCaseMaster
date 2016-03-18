@@ -47,7 +47,7 @@ namespace openCaseMaster
             ScriptBundle uploader = new ScriptBundle("~/bundles/uploader");
             uploader.Orderer = new AsIsBundleOrderer();
             uploader.Include(
-                "~/Scripts/plupload/jquery-ui.min.js",
+                "~/Scripts/plupload/jquery-ui.js",
                     "~/Scripts/plupload/plupload.full.min.js",
                     "~/Scripts/plupload/jquery.ui.plupload/jquery.ui.plupload.js",
                     "~/Scripts/plupload/i18n/zh_CN.js"

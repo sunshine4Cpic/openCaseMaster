@@ -34,7 +34,11 @@ namespace openCaseMaster.ViewModels
                 ds.ID = r.ID;
                 ds.name = r.name;
                 ds.installResult = r.installResult;
-                ds.DeviceName = r.M_deviceConfig.mark;
+                if (r.deviceID != null)
+                {
+                    ds.DeviceID = r.deviceID;
+                    ds.DeviceName = r.M_deviceConfig.mark;
+                }
 
                 var TotalCase = new ObjectParameter("Out1", DbType.Int32);
                 var sucess = new ObjectParameter("Out2", DbType.Int32);
@@ -53,6 +57,8 @@ namespace openCaseMaster.ViewModels
                 Scenes.Add(ds);
             }
 
+            DeviceListData = getDeviceListJson(this.ID);
+
         }
         public int ID { get; set; }
 
@@ -62,17 +68,16 @@ namespace openCaseMaster.ViewModels
 
         public List<DemandSceneModel> Scenes { get; set; }
 
-        public string getScenesJsonData
+        public string DeviceListData { get; set; }
+        
+
+        public string ScenesJsonData
         {
             get
             {
-
-
                 string rows = JsonConvert.SerializeObject(this.Scenes);
                
 
-
-    
                 DemandSceneModel ds = new DemandSceneModel();
                 foreach (var s in Scenes)
                 {
@@ -94,6 +99,41 @@ namespace openCaseMaster.ViewModels
             }
         }
 
+
+
+        /// <summary>
+        /// 项目可选设备
+        /// </summary>
+        /// <param name="DemandID"></param>
+        /// <returns></returns>
+        private string getDeviceListJson(int DemandID)
+        {
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+
+            var PP = new ObjectParameter("Out1", DbType.Int32);
+
+
+
+            QC_DB.M_testDemand_getProject(DemandID, PP);//获得属于哪个项目
+
+            int PID = Convert.ToInt32(PP.Value);
+
+            var ll = from t in QC_DB.M_DevProMapping
+                     where t.PID == PID && t.usable == true
+                     select new
+                     {
+                         DeviceID = t.DeviceID,
+                         DeviceName = t.M_deviceConfig.mark
+                     };
+
+
+            string json = JsonConvert.SerializeObject(ll);
+
+            return json;
+        }
+
     }
 
 
@@ -110,6 +150,11 @@ namespace openCaseMaster.ViewModels
         /// 设备名
         /// </summary>
         public string DeviceName { get; set; }
+
+        /// <summary>
+        /// 设备名
+        /// </summary>
+        public int? DeviceID { get; set; }
 
 
         /// <summary>

@@ -1,0 +1,106 @@
+﻿@using openCaseMaster.ViewModels
+@model SceneViewModel
+
+<input id="SceneID" type="hidden" value="@Model.ID" />
+
+ <table id="SceneTable" class="easyui-datagrid" title="@Model.name"
+       data-options="rownumbers:true,singleSelect:true,url:'SceneCaseData/@Model.ID',method:'get', pageSize: 10,
+        iconCls:'icon-movie_grey',collapsible:true,pagination:true,toolbar:'#SceneTool'">
+    <thead>
+			<tr>
+				<th data-options="field:'name',width:180">案例名</th>
+				<th data-options="field:'state',width:80,align:'center'">状态</th>
+				<th data-options="field:'result',width:80,align:'center'">执行结果</th>
+				<th data-options="field:'flow',width:120,align:'center'">流量消耗</th>
+				<th data-options="field:'runDate',width:260,align:'center'">执行时间</th>
+			</tr>
+		</thead>
+
+    
+    </table>
+
+<div id="SceneTool" style="padding:5px;height:auto">
+    <a class="easyui-linkbutton" href="#" title="查看详细记录" data-options="plain:true,iconCls:'icon-search'" onclick="viewRecord()"></a>
+   <a class="easyui-linkbutton" href="#" title="重新执行" data-options="plain:true,iconCls:'icon-reload'" onclick="ResetCase()"></a>
+    <a class="easyui-linkbutton" href="#" title="手工确认" data-options="plain:true,iconCls:'icon-contact_blue_edit'" onclick="$('#SceneModal').modal();"></a>
+</div>
+
+<div class="modal fade" data-backdrop="static" id="SceneModal" tabindex="-1" role="dialog">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close"
+                    data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <div class="input-group input-group-sm" style="margin:auto">
+                <h4>手工确认</h4>
+</div>
+        </div>
+        <div class="modal-body" style="padding:20px">
+            
+            <div class="input-group">
+         <span class="input-group-addon">备注</span>
+         <textarea id="userMark" class="form-control" style="width:100%;max-width: initial;height:150px;" ></textarea>
+      </div>
+               
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default"
+                    data-dismiss="modal">
+                取消
+            </button>
+            <button type="button" class="btn btn-primary" onclick="userCompleted()">
+                确认
+            </button>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+</div>
+
+<script type="text/javascript">
+    //@@ sourceURL=SceneView.js
+
+    function viewRecord() {
+
+    }
+
+    function ResetCase() {
+        var row = $('#SceneTable').datagrid('getSelected');
+        if (row == null) return;
+
+        var rowIndex = $('#SceneTable').datagrid('getRowIndex', row);
+        $.messager.confirm('Message', '确认重置该案例吗?', function (r) {
+            if (r) {
+                $.post("CaseErrorReset", { "id": row.ID }, function (result) {
+                    $('#SceneTable').datagrid('updateRow', {
+                        index: rowIndex,
+                        row: $.parseJSON(result)
+                    });
+                    
+                }).error(function () { alert("error"); });
+            }
+        });
+    }
+
+    function userCompleted() {
+        var row = $('#SceneTable').datagrid('getSelected');
+        if (row == null) return;
+    
+        var mark = document.getElementById("userMark").value;
+        var rowIndex = $('#SceneTable').datagrid('getRowIndex', row);
+
+        $.post("userCompleted/" + row.ID, { "mark": mark }, function (result) {
+           
+
+            $('#SceneTable').datagrid('updateRow', {
+                index: rowIndex,
+                row: $.parseJSON(result)
+            });
+            document.getElementById("userMark").value = "";
+            $('#SceneModal').modal("hide");
+
+        }).error(function () { alert("error"); });
+    }
+
+</script>

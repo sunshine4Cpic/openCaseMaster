@@ -154,7 +154,30 @@ namespace openCaseMaster.Models
         public static XElement getRunScript(this XElement testCase, Dictionary<string, string> param)
         {
 
-            testCase.setParam(param);
+            testCase.setParam(param);//先把参数填好
+
+            testCase.userStepChannge();
+            testCase.proStepChannge();
+
+            //去除不启用的节点
+            var pbs = testCase.XPathSelectElements("//Step/ParamBinding[@name='是否启用' and @value='false']/..");
+
+            foreach (var pb in pbs)
+            {
+                pb.Remove();
+            }
+
+            return testCase;
+
+        }
+
+       
+
+
+        private static void userStepChannge(this XElement testCase)
+        {
+
+          
 
             var Steps = from ele in testCase.Descendants("Step")
                         where ele.Attribute("name").Value.IndexOf("userstep_") == 0
@@ -180,8 +203,8 @@ namespace openCaseMaster.Models
 
             //替换project节点
             var pSteps = from ele in testCase.Descendants("Step")
-                        where ele.Attribute("name").Value.IndexOf("prostep_") == 0
-                        select ele;
+                         where ele.Attribute("name").Value.IndexOf("prostep_") == 0
+                         select ele;
             foreach (var step in pSteps)
             {
                 changeProjectStep2Run(step);
@@ -195,11 +218,21 @@ namespace openCaseMaster.Models
             {
                 pb.Remove();
             }
-
-            return testCase;
-
         }
 
+
+        private static void proStepChannge(this XElement testCase)
+        {
+
+            //替换project节点
+            var pSteps = from ele in testCase.Descendants("Step")
+                         where ele.Attribute("name").Value.IndexOf("prostep_") == 0
+                         select ele;
+            foreach (var step in pSteps)
+            {
+                changeProjectStep2Run(step);
+            }
+        }
 
         /// <summary>
         /// 执行前转换项目组件(后期使用catch)

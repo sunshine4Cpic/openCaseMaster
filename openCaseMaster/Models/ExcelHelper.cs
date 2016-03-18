@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Xml.Linq;
 
 namespace openCaseMaster.Models
 {
@@ -115,9 +116,130 @@ namespace openCaseMaster.Models
         }
 
 
-        public static void creatScene(Stream stm, int id, string p)
+        public static void creatScene(Stream MS, int DemandID, string name)
         {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            M_runScene mrs = new M_runScene();
+            mrs.DemandID = DemandID;
+            mrs.name = name;
+            mrs.creatDate = DateTime.Now;
+            QC_DB.M_runScene.Add(mrs);
+
             
+
+            HSSFWorkbook hssfworkbook = new HSSFWorkbook(MS);
+
+
+            HSSFFormulaEvaluator eva = new HSSFFormulaEvaluator(hssfworkbook);
+            //eva.EvaluateInCell(cell);//取结果不取公式
+            eva.EvaluateAll();//取结果不取公式
+
+            ISheet sheet = hssfworkbook.GetSheetAt(0);
+
+            System.Collections.IEnumerator rows = sheet.GetRowEnumerator();
+            rows.MoveNext();
+
+
+
+            while (rows.MoveNext())
+            {
+                IRow row = (IRow)rows.Current;
+                string sheetName = row.GetCell(1).ToString();
+                if (sheetName == null || sheetName.Trim() == "") break;
+
+                ISheet caseSheet = hssfworkbook.GetSheet(sheetName);
+
+                insertRunCase(QC_DB,caseSheet, mrs.ID);
+
+            }
+
+            QC_DB.SaveChanges();
+        }
+
+        /// <summary>
+        /// 创建执行案例
+        /// </summary>
+        /// <param name="sheet">sheet页</param>
+        /// <param name="sceneID">场景ID</param>
+        private static void insertRunCase(QCTESTEntities QC_DB, ISheet sheet, int sceneID)
+        {
+
+
+
+            int ID = Convert.ToInt32(sheet.SheetName);
+
+            M_testCase mtc = QC_DB.M_testCase.Where(t => t.ID == ID).FirstOrDefault();
+            if (mtc == null) return;
+
+
+
+            System.Collections.IEnumerator rows = sheet.GetRowEnumerator();
+            //读取下一行 
+            rows.MoveNext();//如果没有要处理下
+            IRow headRow = (IRow)rows.Current;
+          
+
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            List<string> keys = new List<string>();
+
+            //首先获得参数列表
+            for (int i = 1; i < headRow.LastCellNum; i++)
+            {
+                ICell cell = headRow.GetCell(i);
+                if (cell == null || cell.ToString() == "") break;//有空数据直接退出
+                string key = cell.ToString();
+                data.Add(key, "");
+                keys.Add(key);
+               
+            }
+
+            //逐行转化案例
+            while (rows.MoveNext())
+            {
+                 
+                IRow row = (IRow)rows.Current;
+                if (row.GetCell(0) == null || row.GetCell(0).StringCellValue.Trim() == "") break;//案例名字没有退出
+
+                string caseName = row.GetCell(0).StringCellValue;
+                if (caseName.Length > 50)
+                    caseName = caseName.Substring(0, 50);
+                XElement cloneXML = XElement.Parse(mtc.testXML);
+                cloneXML.SetAttributeValue("name", caseName);//name
+              
+                for (int i = 1; i < keys.Count; i++)
+                {
+                    ICell cell = row.GetCell(i);
+                    string value = "";
+                    if (cell != null)
+                    {
+                        //cell = eva.EvaluateInCell(cell);
+                        cell.SetCellType(CellType.String);
+                        value = cell.StringCellValue;
+                    }
+                    data[keys[i]] = value;
+                }
+
+
+
+
+               
+                
+                //获得最终案例
+                cloneXML.getRunScript(data);
+
+                //放入数据库
+
+                M_runTestCase mrtc = new M_runTestCase();
+                mrtc.sceneID = sceneID;
+                mrtc.testXML = cloneXML.ToString();
+                mrtc.name = caseName;
+                QC_DB.M_runTestCase.Add(mrtc);
+              
+            }
+
+
         }
     }
 }
