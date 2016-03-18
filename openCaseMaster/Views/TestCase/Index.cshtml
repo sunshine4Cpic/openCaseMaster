@@ -1,21 +1,24 @@
-﻿@Styles.Render("~/Content/easyui")
-@Scripts.Render("~/bundles/easyui")
-<link rel="stylesheet" type="text/css" href="/Content/themes/icon.css">
-
-
+﻿@section Scripts {
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/bundles/easyui")
+<script src="~/Scripts/caseEdit.js"></script>
 <style type="text/css">
-     #zlight-nav{
+    #zlight-nav {
         padding-top: 5px;
     }
-    #zlight-nav input{
-        padding-left: 3px;
-       padding-right: 3px;
-    }
-    #right .panel
-    {
-        margin-bottom:5px;
+
+        #zlight-nav input {
+            padding-left: 3px;
+            padding-right: 3px;
+        }
+
+    #right .panel {
+        margin-bottom: 5px;
     }
 </style>
+}
+
+
 
 
 
@@ -23,12 +26,12 @@
 <div class="row">
     <div id="left" class="col-md-4" style="padding:5px">
 
-        <div class="easyui-panel" title="测试案例" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-filter',closable:false,
+        <div class="easyui-panel" title="测试案例列表" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-filter',closable:false,
     collapsible:true,minimizable:false,maximizable:false">
 
             <div class="easyui-panel" style="margin-bottom:5px">
-                <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
-                   data-options="menu:'#mm',iconCls:'icon-edit'">单选操作</a>
+                <a href="javascript:void(0)" id="mb" class="easyui-splitbutton" style="width:100px"
+                   data-options="menu:'#mm',iconCls:'icon-edit',duration:200">单选操作</a>
                 <div id="mm" style="width:150px;">
                     <div data-options="iconCls:'icon-folder_classic_add'" onclick="OpenAddNewCase(0);">新增文件夹</div>
                     <div data-options="iconCls:'icon-document_a4_add'" onclick="OpenAddNewCase(1);">新增案例</div>
@@ -36,39 +39,49 @@
                     <div data-options="iconCls:'icon-edit'" onclick="OpenEditCase();">修改信息</div>
                     <div data-options="iconCls:'icon-remove'" onclick="DeleteCase();">删除节点</div>
                     <div class="menu-sep"></div>
-                    <div>上传案例</div>
-                    <div data-options="iconCls:'icon-reload'">刷新节点</div>
+                    <div>上传案例(coding)</div>
+                    <div data-options="iconCls:'icon-reload'" onclick="reloadNode();">刷新节点</div>
                 </div>
 
-                <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
-                   data-options="menu:'#mm2',iconCls:'icon-ok'">多选操作</a>
+                <a href="javascript:void(0)" id="mb" class="easyui-splitbutton" style="width:100px"
+                   data-options="menu:'#mm2',iconCls:'icon-ok',duration:200">多选操作</a>
                 <div id="mm2" style="width:150px;">
-                    <div data-options="iconCls:'icon-folder_classic_add'" onclick="">新增文件夹</div>
-                    <div data-options="iconCls:'icon-document_a4_add'" onclick="">新增案例</div>
+                    <div data-options="iconCls:'icon-remove'" onclick="">批量删除(coding)</div>
+                    <div data-options="iconCls:'icon-document_small_download'" onclick="">下载案例(coding)</div>
                     <div class="menu-sep"></div>
-                    <div data-options="iconCls:'icon-edit'" onclick="">修改信息</div>
-                    <div data-options="iconCls:'icon-remove'" onclick="">删除节点</div>
-                    <div class="menu-sep"></div>
-                    <div>上传案例</div>
+                    <div data-options="iconCls:'icon-print'" onclick="createScene()">生成场景模版</div>
                 </div>
             </div>
-            <div id="caseTreeListDiv" style="overflow:auto;height:auto">
+            <div id="caseTreeListDiv" style="overflow:auto;max-height:500px">
                 <ul id="caseTreeList"></ul>
             </div>
 
         </div>
+        <div style="padding-top:5px"></div>
+        <div id="stepControl" class="easyui-panel" title="测试组件" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-view_outline_detail',closable:false,
+    collapsible:true,minimizable:false,maximizable:false">
+
+            <div class="easyui-tabs" style="width:100%;">
+                <div title="基础组件" style="padding:10px">
+                    <ul id="controlTreeListF"></ul>
+                </div>
+                <div title="项目专属组件">
+                    <ul id="controlTreeListP"></ul>
+                </div>
+                <div title="你的组件">
+                    <ul id="controlTreeListU"></ul>
+                </div>
+            </div>
 
 
+        </div>
 
     </div>
-
+    
     <div id="right" class="col-md-8" style="padding:5px">
-
-        <div id="casePanel" class="easyui-panel" title="测试案例" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-documents',closable:false,
+        
+        <div id="scriptPanel" class="easyui-panel" title="编辑案例" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-documents',closable:false,
     collapsible:true,minimizable:false,maximizable:false">
-           
-
-           
 
         </div>
 
@@ -77,65 +90,14 @@
 
 </div>
 
-<style type="text/css">
-    .drag-item {
-        list-style-type: none;
-        display: block;
-        padding: 5px;
-        border: 1px solid #ccc;
-        margin: 2px;
-        width: 300px;
-        background: #fafafa;
-        color: #444;
-    }
-
-    .indicator {
-        position: absolute;
-        font-size: 9px;
-        width: 10px;
-        height: 10px;
-        display: none;
-        color: red;
-    }
-</style>
-
-<script>
-    $(function () {
-        var indicator = $('<div class="indicator">>></div>').appendTo('body');
-        $('.drag-item').draggable({
-            revert: true,
-            deltaX: 0,
-            deltaY: 0
-        }).droppable({
-            onDragOver: function (e, source) {
-                indicator.css({
-                    display: 'block',
-                    left: $(this).offset().left - 10,
-                    top: $(this).offset().top + $(this).outerHeight() - 5
-                });
-            },
-            onDragLeave: function (e, source) {
-                indicator.hide();
-            },
-            onDrop: function (e, source) {
-                $(source).insertAfter(this);
-                indicator.hide();
-            }
-        });
-    });
-</script>
-
-<div id="dialog" style="overflow:hidden;"></div>
-
-
-
-   
+<div id="dialog" style="padding: 10px 60px 10px;overflow:hidden;"></div>
     <script type="text/javascript">
 
-    
-
         $(function () {
-            layout();
+            $.messager.progress({
+                title: '请稍后',
+                msg: '案例数据加载中...'
+            });
             $('#caseTreeList').tree({
                 checkbox: true,
                 url: '/TestCase/projectListInit',
@@ -158,36 +120,31 @@
                     }
                     return s;
                 },
-                /*onLoadSuccess: function (node, data) {
-                   
-                    //为每个节点增加desc描述
-                    $(".tree-node").each(function (i) {
-                        //这里的this是dom对象,$(this)为jquery对象
-                        var tn = $('#caseTreeList').tree('getNode', this);
-                        $(this).attr("title", tn.text);
-                    })
-                    
-                    
-                },*/
+                onLoadSuccess: function (node) {
+                    if (node && node.checked) {
+                        var children = $(this).tree('getChildren', node.target);
+                        //console.info(children);
+                        for (var i = 0; i < children.length; i++) {
+                            $(this).tree('check', children[i].target);
+                        }
+                    }
+                    $.messager.progress('close');
+
+                },
                 onDblClick: function (node) {
                     if (node.type == 1)
-                        $('#casePanel').panel('refresh', 'caseView/' + node.id);
+                        $('#scriptPanel').panel('refresh', 'scriptView/' + node.id);
                 },
                 onDragOver: function (target, source) {
                     //('#tt2').tree('getData', target);
                     return false;
                 }
             });
+           
         });
 
-        function layout() {
-            var hh = $(window).height()-document.getElementById("caseTreeListDiv").offsetTop - 80;
-            if (hh > 800) hh = 800;
-            $("#caseTreeListDiv").css("max-height", hh);
-        }
-        
-        $(window).resize(function () { layout() });
-
+   
+      
 
 
         //弹出层
@@ -204,7 +161,7 @@
             $('#dialog').dialog({
                 title: 'Creat New',
                 width: 400,
-                height: 200,
+               
                 closed: false,
                 cache: false,
                 href: url,
@@ -223,8 +180,7 @@
             var url = "/TestCase/EditCase/" + node.id;
             $('#dialog').dialog({
                 title: 'Edit Info',
-                width: 400,
-                height: 200,
+                width: 500,
                 closed: false,
                 cache: false,
                 href: url,
@@ -234,9 +190,13 @@
         }
 
         function DeleteCase() {
-            $.messager.confirm('Message', '确认删除?', function (r) {
+
+            var node = $("#caseTreeList").tree("getSelected");
+
+            var msg = ' <span style=\'color:blue\'>' + node.text + '</span>';
+            $.messager.confirm('Message', '确认删除:' + msg + '?', function (r) {
                 if (r) {
-                    var node = $("#caseTreeList").tree("getSelected");
+                    
                     if (typeof (node.id) == "undefined") {
                         $.messager.alert('Error', '不能删除项目!', "warning");
                         return;
@@ -244,14 +204,72 @@
              
                     $.post("/TestCase/DeleteCase", { ID: node.id }, function (result) {
                         if (result == "True") {
-                            var node = $("#caseTreeList").tree("getSelected");
-                            $("#caseTreeList").tree("remove", node.target);
+                            var node = $("#caseTreeList").tree("getSelected").target;
+                            var nodeParent = $("#caseTreeList").tree("getParent", node);
+                          
+                            if (nodeParent.children.length <= 1)
+                                $('#caseTreeList').tree("reload", nodeParent.target);//刷新
+                            else
+                                $("#caseTreeList").tree("remove", node);
+                            
+                            
+                            
                         }
                     });
                     //删除
                 }
             });
         }
+
+
+        function reloadNode() {
+            var selectNode = $('#caseTreeList').tree("getSelected").target;
+            $('#caseTreeList').tree("reload", selectNode);//刷新
+
+        }
+
+
+        function createScene() {
+            var CheckedNode = $('#caseTreeList').tree("getChecked")
+            var cnt = CheckedNode.length;
+            var caseID = [];
+            for (var i = 0; i < cnt; i++) {
+                if (CheckedNode[i].type == 1)
+                    caseID.push(CheckedNode[i].id);
+            }
+
+     
+              
+            var data = { ids: caseID };
+
+            $.download('/TestCase/createScene', data, 'post');
+
+
+            /*
+            var inputs = '<input type="hidden" name="ids" value="' + caseID.toString() + '" />';
+
+            jQuery('<form action="/TestCase/createScene" method="post">' + inputs + '</form>')
+                .appendTo('body').submit().remove();
+                */
+            /*
+            $.post("/TestCase/createScene", { ids: caseID }, function (result) {
+
+            });*/
+        }
+        
+        jQuery.download = function (url, data, method) {    // 获得url和data
+            if (url && data) {
+                // data 是 string 或者 array/object
+                data = typeof data == 'string' ? data : unescape(jQuery.param(data));    // 把参数组装成 form的  input
+                var inputs = '';
+                jQuery.each(data.split('&'), function () {
+                    var pair = this.split('=');
+                    inputs += '<input type="hidden" name="' + pair[0] + '" value="' + pair[1] + '" />';
+                });        // request发送请求
+                jQuery('<form action="' + url + '" method="' + (method || 'post') + '">' + inputs + '</form>')
+                .appendTo('body').submit().remove();
+            };
+        };
       
     </script>
 

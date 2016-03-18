@@ -22,7 +22,9 @@ namespace openCaseMaster.Models
         public string mark { get; set; }
         public string paramXML { get; set; }
         public Nullable<int> PID { get; set; }
+        public Nullable<int> FID { get; set; }
     
         public virtual project project { get; set; }
+        public virtual caseFramework caseFramework { get; set; }
     }
 }

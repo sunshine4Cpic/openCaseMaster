@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MasterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MasterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="admin_user">
           <Key>
             <PropertyRef Name="ID" />
@@ -18,6 +18,24 @@
           <Property Name="GreatDate" Type="datetime" />
           <Property Name="LastDate" Type="datetime" />
           <Property Name="Type" Type="int" />
+        </EntityType>
+        <EntityType Name="caseFramework">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="workName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="userID" Type="int" Nullable="false" />
+          <Property Name="controlXML" Type="xml" />
+        </EntityType>
+        <EntityType Name="Framework4Project">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PID" Type="int" Nullable="false" />
+          <Property Name="FID" Type="int" Nullable="false" />
+          <Property Name="controlXML" Type="xml" />
         </EntityType>
         <EntityType Name="M_application">
           <Key>
@@ -54,11 +72,6 @@
           <Property Name="DeviceID" Type="int" Nullable="false" />
           <Property Name="usable" Type="bit" Nullable="false" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6013: 表/视图“QCTEST.dbo.M_Months”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
-        <EntityType Name="M_Months">
-          <Property Name="Month" Type="nchar" MaxLength="10" />
-        </EntityType>-->
         <EntityType Name="M_runScene">
           <Key>
             <PropertyRef Name="ID" />
@@ -98,6 +111,7 @@
           <Property Name="testXML" Type="xml" />
           <Property Name="type" Type="int" />
           <Property Name="baseID" Type="int" />
+          <Property Name="FID" Type="int" />
         </EntityType>
         <EntityType Name="M_testCaseSteps">
           <Key>
@@ -111,6 +125,7 @@
           <Property Name="mark" Type="nvarchar" MaxLength="50" />
           <Property Name="paramXML" Type="xml" />
           <Property Name="PID" Type="int" />
+          <Property Name="FID" Type="int" />
         </EntityType>
         <EntityType Name="M_testDemand">
           <Key>
@@ -194,22 +209,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Type" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6013: 表/视图“QCTEST.dbo.M_testDemand_rootid”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
-        <EntityType Name="M_testDemand_rootid">
-          <Property Name="ID" Type="int" />
-          <Property Name="name" Type="nvarchar" MaxLength="50" />
-          <Property Name="mark" Type="nvarchar" MaxLength="100" />
-          <Property Name="PID" Type="int" />
-          <Property Name="type" Type="int" />
-          <Property Name="baseID" Type="int" />
-          <Property Name="isRun" Type="bit" />
-          <Property Name="runDate" Type="datetime" />
-          <Property Name="visable" Type="bit" />
-          <Property Name="apkName" Type="nvarchar" MaxLength="100" />
-          <Property Name="rootid" Type="int" />
-          <Property Name="rootpid" Type="int" />
-        </EntityType>-->
         <Association Name="FK_admin_user_user_type">
           <End Role="user_type" Type="Self.user_type" Multiplicity="0..1" />
           <End Role="admin_user" Type="Self.admin_user" Multiplicity="*" />
@@ -219,6 +218,42 @@
             </Principal>
             <Dependent Role="admin_user">
               <PropertyRef Name="Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_caseFramework_userID">
+          <End Role="admin_user" Type="Self.admin_user" Multiplicity="1" />
+          <End Role="caseFramework" Type="Self.caseFramework" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin_user">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="caseFramework">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Framework4Project_FID">
+          <End Role="caseFramework" Type="Self.caseFramework" Multiplicity="1" />
+          <End Role="Framework4Project" Type="Self.Framework4Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caseFramework">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Framework4Project">
+              <PropertyRef Name="FID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Framework4Project_PID">
+          <End Role="project" Type="Self.project" Multiplicity="1" />
+          <End Role="Framework4Project" Type="Self.Framework4Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Framework4Project">
+              <PropertyRef Name="PID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -311,6 +346,30 @@
             </Principal>
             <Dependent Role="M_testCase1">
               <PropertyRef Name="baseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_testCase_FID">
+          <End Role="caseFramework" Type="Self.caseFramework" Multiplicity="0..1" />
+          <End Role="M_testCase" Type="Self.M_testCase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caseFramework">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_testCase">
+              <PropertyRef Name="FID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_testCaseSteps_FID">
+          <End Role="caseFramework" Type="Self.caseFramework" Multiplicity="0..1" />
+          <End Role="M_testCaseSteps" Type="Self.M_testCaseSteps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caseFramework">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_testCaseSteps">
+              <PropertyRef Name="FID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -454,6 +513,10 @@
         <Function Name="M_testCase_delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="p_1" Type="int" Mode="In" />
         </Function>
+        <Function Name="M_testCase_getProject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="p_1" Type="int" Mode="In" />
+          <Parameter Name="Out1" Type="int" Mode="InOut" />
+        </Function>
         <Function Name="M_testCase_sort" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="p_1" Type="int" Mode="In" />
           <Parameter Name="p_2" Type="int" Mode="In" />
@@ -506,6 +569,8 @@
         </Function>
         <EntityContainer Name="MasterModelStoreContainer">
           <EntitySet Name="admin_user" EntityType="Self.admin_user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="caseFramework" EntityType="Self.caseFramework" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Framework4Project" EntityType="Self.Framework4Project" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_application" EntityType="Self.M_application" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_deviceConfig" EntityType="Self.M_deviceConfig" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_DevProMapping" EntityType="Self.M_DevProMapping" Schema="dbo" store:Type="Tables" />
@@ -525,6 +590,18 @@
           <AssociationSet Name="FK_admin_user_user_type" Association="Self.FK_admin_user_user_type">
             <End Role="user_type" EntitySet="user_type" />
             <End Role="admin_user" EntitySet="admin_user" />
+          </AssociationSet>
+          <AssociationSet Name="FK_caseFramework_userID" Association="Self.FK_caseFramework_userID">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="caseFramework" EntitySet="caseFramework" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Framework4Project_FID" Association="Self.FK_Framework4Project_FID">
+            <End Role="caseFramework" EntitySet="caseFramework" />
+            <End Role="Framework4Project" EntitySet="Framework4Project" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Framework4Project_PID" Association="Self.FK_Framework4Project_PID">
+            <End Role="project" EntitySet="project" />
+            <End Role="Framework4Project" EntitySet="Framework4Project" />
           </AssociationSet>
           <AssociationSet Name="FK_M_DevProMapping_M_deviceConfig" Association="Self.FK_M_DevProMapping_M_deviceConfig">
             <End Role="M_deviceConfig" EntitySet="M_deviceConfig" />
@@ -553,6 +630,14 @@
           <AssociationSet Name="FK_M_testCase_baseID" Association="Self.FK_M_testCase_baseID">
             <End Role="M_testCase" EntitySet="M_testCase" />
             <End Role="M_testCase1" EntitySet="M_testCase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_testCase_FID" Association="Self.FK_M_testCase_FID">
+            <End Role="caseFramework" EntitySet="caseFramework" />
+            <End Role="M_testCase" EntitySet="M_testCase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_testCaseSteps_FID" Association="Self.FK_M_testCaseSteps_FID">
+            <End Role="caseFramework" EntitySet="caseFramework" />
+            <End Role="M_testCaseSteps" EntitySet="M_testCaseSteps" />
           </AssociationSet>
           <AssociationSet Name="FK_M_testCaseSteps_project" Association="Self.FK_M_testCaseSteps_project">
             <End Role="project" EntitySet="project" />
@@ -595,8 +680,7 @@
             <End Role="project" EntitySet="project" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MasterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -625,8 +709,9 @@
           <Property Name="GreatDate" Type="DateTime" Precision="3" />
           <Property Name="LastDate" Type="DateTime" Precision="3" />
           <Property Name="Type" Type="Int32" />
-          <NavigationProperty Name="user_type" Relationship="Self.FK_admin_user_user_type" FromRole="admin_user" ToRole="user_type" />
           <NavigationProperty Name="M_runScene" Relationship="Self.FK_M_runScene_admin_user" FromRole="admin_user" ToRole="M_runScene" />
+          <NavigationProperty Name="caseFramework" Relationship="MasterModel.FK_caseFramework_userID" FromRole="admin_user" ToRole="caseFramework" />
+          <NavigationProperty Name="user_type" Relationship="MasterModel.FK_admin_user_user_type" FromRole="admin_user" ToRole="user_type" />
         </EntityType>
         <EntityType Name="M_application">
           <Key>
@@ -714,6 +799,8 @@
           <Property Name="baseID" Type="Int32" />
           <NavigationProperty Name="M_testCase1" Relationship="Self.FK_M_testCase_baseID" FromRole="M_testCase" ToRole="M_testCase1" />
           <NavigationProperty Name="M_testCase2" Relationship="Self.FK_M_testCase_baseID" FromRole="M_testCase1" ToRole="M_testCase" />
+          <Property Name="FID" Type="Int32" />
+          <NavigationProperty Name="caseFramework" Relationship="MasterModel.FK_M_testCase_FID" FromRole="M_testCase" ToRole="caseFramework" />
         </EntityType>
         <EntityType Name="M_testCaseSteps">
           <Key>
@@ -728,6 +815,8 @@
           <Property Name="paramXML" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PID" Type="Int32" />
           <NavigationProperty Name="project" Relationship="Self.FK_M_testCaseSteps_project" FromRole="M_testCaseSteps" ToRole="project" />
+          <Property Name="FID" Type="Int32" />
+          <NavigationProperty Name="caseFramework" Relationship="MasterModel.FK_M_testCaseSteps_FID" FromRole="M_testCaseSteps" ToRole="caseFramework" />
         </EntityType>
         <EntityType Name="M_testDemand">
           <Key>
@@ -772,6 +861,7 @@
           <NavigationProperty Name="project_rank" Relationship="Self.FK_project_project_rank" FromRole="project" ToRole="project_rank" />
           <NavigationProperty Name="project_stage" Relationship="Self.FK_project_project_stage" FromRole="project" ToRole="project_stage" />
           <NavigationProperty Name="project_type" Relationship="Self.FK_project_project_type" FromRole="project" ToRole="project_type" />
+          <NavigationProperty Name="Framework4Project" Relationship="MasterModel.FK_Framework4Project_PID" FromRole="project" ToRole="Framework4Project" />
         </EntityType>
         <EntityType Name="project_app">
           <Key>
@@ -824,26 +914,6 @@
           <Property Name="ProjectType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="project" Relationship="Self.FK_project_project_type" FromRole="project_type" ToRole="project" />
         </EntityType>
-        <EntityType Name="user_type">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="admin_user" Relationship="Self.FK_admin_user_user_type" FromRole="user_type" ToRole="admin_user" />
-        </EntityType>
-        <Association Name="FK_admin_user_user_type">
-          <End Role="user_type" Type="Self.user_type" Multiplicity="0..1" />
-          <End Role="admin_user" Type="Self.admin_user" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user_type">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="admin_user">
-              <PropertyRef Name="Type" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_M_runScene_admin_user">
           <End Role="admin_user" Type="Self.admin_user" Multiplicity="0..1" />
           <End Role="M_runScene" Type="Self.M_runScene" Multiplicity="*" />
@@ -1073,11 +1143,6 @@
           <EntitySet Name="project_rank" EntityType="Self.project_rank" />
           <EntitySet Name="project_stage" EntityType="Self.project_stage" />
           <EntitySet Name="project_type" EntityType="Self.project_type" />
-          <EntitySet Name="user_type" EntityType="Self.user_type" />
-          <AssociationSet Name="FK_admin_user_user_type" Association="Self.FK_admin_user_user_type">
-            <End Role="user_type" EntitySet="user_type" />
-            <End Role="admin_user" EntitySet="admin_user" />
-          </AssociationSet>
           <AssociationSet Name="FK_M_runScene_admin_user" Association="Self.FK_M_runScene_admin_user">
             <End Role="admin_user" EntitySet="admin_user" />
             <End Role="M_runScene" EntitySet="M_runScene" />
@@ -1151,13 +1216,13 @@
             <Parameter Name="ID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ProjectReport" IsComposable="true" ReturnType="Collection(MasterModel.ProjectReport_Result)">
-            <Parameter Name="startDate" Mode="In" Type="DateTime" />
+          <Parameter Name="startDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="M_ContainUserStepCase" ReturnType="Collection(MasterModel.M_ContainUserStepCase_Result)">
-            <Parameter Name="p_1" Mode="In" Type="Int32" />
+          <Parameter Name="p_1" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="M_runScene_delete">
-            <Parameter Name="p_1" Mode="In" Type="Int32" />
+          <Parameter Name="p_1" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="M_runScene_result">
             <Parameter Name="p_1" Mode="In" Type="Int32" />
@@ -1168,17 +1233,17 @@
             <Parameter Name="Out5" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="M_runTestCase_FailReset">
-            <Parameter Name="p_1" Mode="In" Type="Int32" />
+          <Parameter Name="p_1" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="M_testCase_delete">
-            <Parameter Name="p_1" Mode="In" Type="Int32" />
+          <Parameter Name="p_1" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="M_testCase_sort">
             <Parameter Name="p_1" Mode="In" Type="Int32" />
             <Parameter Name="p_2" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="M_testDemand_delete">
-            <Parameter Name="p_1" Mode="In" Type="Int32" />
+          <Parameter Name="p_1" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="M_testDemand_getProject">
             <Parameter Name="p_1" Mode="In" Type="Int32" />
@@ -1196,6 +1261,37 @@
             <Parameter Name="p_1" Mode="In" Type="Int32" />
             <Parameter Name="p_2" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="caseFramework" EntityType="MasterModel.caseFramework" />
+          <EntitySet Name="Framework4Project" EntityType="MasterModel.Framework4Project" />
+          <AssociationSet Name="FK_caseFramework_userID" Association="MasterModel.FK_caseFramework_userID">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="caseFramework" EntitySet="caseFramework" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Framework4Project_FID" Association="MasterModel.FK_Framework4Project_FID">
+            <End Role="caseFramework" EntitySet="caseFramework" />
+            <End Role="Framework4Project" EntitySet="Framework4Project" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Framework4Project_PID" Association="MasterModel.FK_Framework4Project_PID">
+            <End Role="project" EntitySet="project" />
+            <End Role="Framework4Project" EntitySet="Framework4Project" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_testCase_FID" Association="MasterModel.FK_M_testCase_FID">
+            <End Role="caseFramework" EntitySet="caseFramework" />
+            <End Role="M_testCase" EntitySet="M_testCase" />
+          </AssociationSet>
+          <FunctionImport Name="M_testCase_getProject">
+            <Parameter Name="p_1" Mode="In" Type="Int32" />
+            <Parameter Name="Out1" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <AssociationSet Name="FK_M_testCaseSteps_FID" Association="MasterModel.FK_M_testCaseSteps_FID">
+            <End Role="caseFramework" EntitySet="caseFramework" />
+            <End Role="M_testCaseSteps" EntitySet="M_testCaseSteps" />
+          </AssociationSet>
+          <EntitySet Name="user_type" EntityType="MasterModel.user_type" />
+          <AssociationSet Name="FK_admin_user_user_type" Association="MasterModel.FK_admin_user_user_type">
+            <End Role="user_type" EntitySet="user_type" />
+            <End Role="admin_user" EntitySet="admin_user" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="M_ContainUserStepCase_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -1206,6 +1302,110 @@
           <Property Type="Int32" Name="type" Nullable="true" />
           <Property Type="Int32" Name="baseID" Nullable="true" />
         </ComplexType>
+        <EntityType Name="caseFramework">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="workName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="userID" Type="Int32" Nullable="false" />
+          <Property Name="controlXML" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_caseFramework_userID" FromRole="caseFramework" ToRole="admin_user" />
+          <NavigationProperty Name="Framework4Project" Relationship="MasterModel.FK_Framework4Project_FID" FromRole="caseFramework" ToRole="Framework4Project" />
+          <NavigationProperty Name="M_testCase" Relationship="MasterModel.FK_M_testCase_FID" FromRole="caseFramework" ToRole="M_testCase" />
+          <NavigationProperty Name="M_testCaseSteps" Relationship="MasterModel.FK_M_testCaseSteps_FID" FromRole="caseFramework" ToRole="M_testCaseSteps" />
+        </EntityType>
+        <EntityType Name="Framework4Project">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PID" Type="Int32" Nullable="false" />
+          <Property Name="FID" Type="Int32" Nullable="false" />
+          <Property Name="controlXML" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="caseFramework" Relationship="MasterModel.FK_Framework4Project_FID" FromRole="Framework4Project" ToRole="caseFramework" />
+          <NavigationProperty Name="project" Relationship="MasterModel.FK_Framework4Project_PID" FromRole="Framework4Project" ToRole="project" />
+        </EntityType>
+        <Association Name="FK_caseFramework_userID">
+          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="1" />
+          <End Type="MasterModel.caseFramework" Role="caseFramework" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin_user">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="caseFramework">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Framework4Project_FID">
+          <End Type="MasterModel.caseFramework" Role="caseFramework" Multiplicity="1" />
+          <End Type="MasterModel.Framework4Project" Role="Framework4Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caseFramework">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Framework4Project">
+              <PropertyRef Name="FID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Framework4Project_PID">
+          <End Type="MasterModel.project" Role="project" Multiplicity="1" />
+          <End Type="MasterModel.Framework4Project" Role="Framework4Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Framework4Project">
+              <PropertyRef Name="PID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_testCase_FID">
+          <End Type="MasterModel.caseFramework" Role="caseFramework" Multiplicity="0..1" />
+          <End Type="MasterModel.M_testCase" Role="M_testCase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caseFramework">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_testCase">
+              <PropertyRef Name="FID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_testCaseSteps_FID">
+          <End Type="MasterModel.caseFramework" Role="caseFramework" Multiplicity="0..1" />
+          <End Type="MasterModel.M_testCaseSteps" Role="M_testCaseSteps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caseFramework">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_testCaseSteps">
+              <PropertyRef Name="FID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="user_type">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_admin_user_user_type" FromRole="user_type" ToRole="admin_user" />
+        </EntityType>
+        <Association Name="FK_admin_user_user_type">
+          <End Type="MasterModel.user_type" Role="user_type" Multiplicity="0..1" />
+          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user_type">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="admin_user">
+              <PropertyRef Name="Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1297,6 +1497,7 @@
           <EntitySetMapping Name="M_testCase">
             <EntityTypeMapping TypeName="MasterModel.M_testCase">
               <MappingFragment StoreEntitySet="M_testCase">
+                <ScalarProperty Name="FID" ColumnName="FID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="projectID" ColumnName="projectID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1310,6 +1511,7 @@
           <EntitySetMapping Name="M_testCaseSteps">
             <EntityTypeMapping TypeName="MasterModel.M_testCaseSteps">
               <MappingFragment StoreEntitySet="M_testCaseSteps">
+                <ScalarProperty Name="FID" ColumnName="FID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="stepXML" ColumnName="stepXML" />
@@ -1403,14 +1605,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="user_type">
-            <EntityTypeMapping TypeName="MasterModel.user_type">
-              <MappingFragment StoreEntitySet="user_type">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionName="MasterModel.Store.MonthReport" FunctionImportName="MonthReport">
             <ResultMapping>
               <ComplexTypeMapping TypeName="MasterModel.MonthReport_Result">
@@ -1453,6 +1647,35 @@
           <FunctionImportMapping FunctionImportName="M_testDemand_getProject" FunctionName="MasterModel.Store.M_testDemand_getProject" />
           <FunctionImportMapping FunctionImportName="M_testDemand_result" FunctionName="MasterModel.Store.M_testDemand_result" />
           <FunctionImportMapping FunctionImportName="M_testDemand_sort" FunctionName="MasterModel.Store.M_testDemand_sort" />
+          <EntitySetMapping Name="caseFramework">
+            <EntityTypeMapping TypeName="MasterModel.caseFramework">
+              <MappingFragment StoreEntitySet="caseFramework">
+                <ScalarProperty Name="controlXML" ColumnName="controlXML" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="workName" ColumnName="workName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Framework4Project">
+            <EntityTypeMapping TypeName="MasterModel.Framework4Project">
+              <MappingFragment StoreEntitySet="Framework4Project">
+                <ScalarProperty Name="controlXML" ColumnName="controlXML" />
+                <ScalarProperty Name="FID" ColumnName="FID" />
+                <ScalarProperty Name="PID" ColumnName="PID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="M_testCase_getProject" FunctionName="MasterModel.Store.M_testCase_getProject" />
+          <EntitySetMapping Name="user_type">
+            <EntityTypeMapping TypeName="MasterModel.user_type">
+              <MappingFragment StoreEntitySet="user_type">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

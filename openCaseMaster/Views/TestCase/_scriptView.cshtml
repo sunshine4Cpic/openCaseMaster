@@ -1,0 +1,314 @@
+﻿@using openCaseMaster.ViewModels;
+
+@model scriptViewModel
+           
+ <input id="scriptID" type="hidden" value="@Model.ID" />
+
+<input id="FID" type="hidden" value="@Model.FID" />
+
+
+<input id="PID" type="hidden" value="@Model.PID" />
+<div class="easyui-panel" style="margin-bottom:5px">
+    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
+       data-options="menu:'#C1',iconCls:'icon-edit',duration:400">编辑</a>
+    <div id="C1" style="width:150px;">
+        <div data-options="iconCls:'icon-save'" onclick="scriptSave();">保存</div>
+        <div class="menu-sep"></div>
+        <div data-options="iconCls:'icon-edit'" onclick="editStepClick($('#scriptTree').tree('getSelected'));">编辑步骤</div>
+        <div data-options="iconCls:'icon-remove'" onclick="DeleteStep();">删除步骤</div>
+    </div>
+    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
+       data-options="menu:'#C2',iconCls:'icon-tip',duration:400">操作</a>
+    <div id="C2" style="width:150px;">
+        <div data-options="iconCls:'icon-box_add'" onclick="creatUserControl()">自定义组件</div>
+        <div class="menu-sep"></div>
+        <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="debug()"> 调试案例</div>
+        <div data-options="iconCls:'icon-reload'" onclick="refreshScrpt($(scriptID).val())">撤销未保存的操作</div>
+    </div>
+
+    <div style="float:right" class="l-btn-text">
+       @Model.scriptName ( @Model.Fname )
+    </div>
+</div>
+
+<ul id="scriptTree"></ul>
+
+
+
+<!-- Modal -->
+<!-- 模态框（Modal） -->
+<div class="modal fade" data-backdrop="static" id="scriptModal" tabindex="-1" role="dialog">
+
+</div>
+
+    <script type="text/javascript">
+    //@@ sourceURL=scriptView.js
+        var scriptTreeData = @Html.Raw(Model.TreeJson);
+        var FData = @Html.Raw(Model.FJson);
+        var PData = @Html.Raw(Model.PJson);
+        var UData = @Html.Raw(Model.UJson);
+
+        $('#scriptTree').tree({
+            data:scriptTreeData,
+            dnd:true,
+            checkbox:true,
+            pointType:["top","top","bottom","bottom"],
+            animate:true,
+            formatter:function(node){
+                if(node.Key==undefined)
+                    return  node.name +" : "+node.desc;
+                else
+                    return  node.Key +" : <span style='color:blue'>"+node.Value+"</span>";
+            },
+            onBeforeDrag:function(node){
+                if($("#scriptTree").tree("getParent",node.target))
+                    return false;
+
+            },
+            onBeforeDrop: function (target, source,point) {
+                if(source.newStep)
+                {
+                    
+                    $.post("/TestCase/getStep/", { name: source.name,FID:source.FID,PID:source.PID  }, function (result) {
+
+                        var job = JSON.parse(result);
+                        
+                        if(point=="top")
+                        {
+                            $('#scriptTree').tree('insert', {
+                                before: target,
+                                data: JSON.parse(result)
+                            });
+                        }else
+                        {
+                            $('#scriptTree').tree('insert', {
+                                after: target,
+                                data: JSON.parse(result)
+                            });
+                        }
+
+                    }).error(function() { alert("error"); });
+                   
+                    return false;
+                }
+            },
+            onDragOver:function(target, source){
+                if($("#scriptTree").tree("getParent",target))
+                    return false;
+            },
+            onDblClick: function (node) {
+                
+                editStepClick(node);
+            }
+        });
+
+        $('#controlTreeListF').tree({
+            data:FData,
+            animate: true,
+            dnd: true,
+            formatter: function (node) {
+                if (node.text == undefined)
+                    return node.name + "(" + node.desc + ")";
+                else
+                    return node.text;
+            },
+            onDragOver: function (target, source) {
+                return false;
+            },
+            onBeforeDrag: function (node) {
+                if (node.children !== undefined)
+                    return false;
+                else
+                    node["newStep"] = true;
+            }
+
+        });
+
+        $('#controlTreeListP').tree({
+            data:PData,
+            animate: true,
+            dnd: true,
+            formatter: function (node) {
+                if (node.text == undefined)
+                    return node.name + "(" + node.desc + ")";
+                else
+                    return node.text;
+            },
+            onDragOver: function (target, source) {
+                return false;
+            },
+            onBeforeDrag: function (node) {
+                if (node.children !== undefined)
+                    return false;
+                else
+                    node["newStep"] = true;
+            }
+
+        });
+
+
+        $('#controlTreeListU').tree({
+            data:UData,
+            animate: true,
+            dnd: true,
+            formatter: function (node) {
+                if (node.text == undefined)
+                    return node.name + "(" + node.desc + ")";
+                else
+                    return node.text;
+            },
+            onDragOver: function (target, source) {
+                return false;
+            },
+            onBeforeDrag: function (node) {
+                if (node.children !== undefined)
+                    return false;
+                else
+                    node["newStep"] = true;
+            },
+            onDblClick: function (node) {
+                if (node.children !== undefined)
+                    return false;
+                else
+                {
+                    $.messager.confirm('Message', '确认编辑你的组件:' + node.desc + '?', function (r) {
+                        if (r) {
+                            //$('#scriptPanel').panel('refresh', 'userStepView/' + node.id);
+                        }
+                    });
+                   
+                }
+            },
+
+        });
+
+
+        function editStepClick(node)
+        {
+            if(node===null) return;
+
+            if(!$("#scriptTree").tree("getParent",node.target))
+            {
+                $.messager.progress({ title: '请稍后', msg: '案例数据加载中...' });
+                var pd={};
+                pd["desc"] = node.desc;
+                pd["name"] = node.name;
+                pd["FID"] = $("#FID").val();
+                pd["PID"] = $("#PID").val();
+                for (n in node.children)
+                {
+                    var nd = node.children[n];
+                    pd["ParamBinding["+n+"].name"] = nd.Key;
+                    pd["ParamBinding["+n+"].value"] = nd.Value;
+                }
+                $('#scriptModal').empty();
+                $("#scriptModal").load('EditStep',pd,function() {
+                    //easyUI-combox 和 bootstrap 样式统一
+                    $.parser.parse($(".modal-body"));
+                    $(".modal-body  .combo").each(function () {
+                        $(this).css('width', '100%');
+                        $(this).children("input").css('width', '100%');
+                        //$(this).children("input").addClass("form-control");
+
+                    });
+                    $(function () { $(".modal-body [data-toggle='tooltip']").tooltip(); });
+                    $.messager.progress('close');
+                    $('#scriptModal').modal();
+                });
+
+
+            }
+        }
+
+
+        function scriptSave()
+        {
+            var nodes= $('#scriptTree').tree("getRoots");
+            var steps = getSteps(nodes);
+
+            $.post("/TestCase/editScript/"+$('#scriptID').val(), { steps: JSON.stringify(steps)  }, function (result) {
+                if (result == "True") {
+                    $.messager.alert('Messager', '脚本保存成功!', "info");
+                }
+            }).error(function() { alert("error"); });
+
+        }
+
+
+        function DeleteStep()
+        {
+            var node= $('#scriptTree').tree("getSelected");
+            if(node)
+            {
+                var msg = ' <span style=\'color:blue\'>' + node.desc + '</span>';
+                $.messager.confirm('Message', '确认删除步骤:' + msg + '?', function (r) {
+                    if (r) {
+                        $('#scriptTree').tree("remove",node.target);
+                    }
+                });
+            }
+        }
+
+        function refreshScrpt(ID)
+        {
+            $.messager.confirm('Message', '确认撤销所有案例编辑操作吗?', function (r) {
+                if (r)
+                    $('#scriptPanel').panel('refresh', 'scriptView/' + ID);
+            });
+        }
+
+        function debug()
+        {
+
+            $.messager.confirm('Message', '调试案例会自动保存,是否继续?', function (r) {
+                if (r) {
+                    var nodes= $('#scriptTree').tree("getRoots");
+                    var steps = getSteps(nodes);
+                    var id = $('#scriptID').val();
+                    $.post("/TestCase/debugSave/"+id, { steps: JSON.stringify(steps)  }, function (result) {
+                        if (result == "") {//没有参数
+                            debugSubmit(id,"null");
+                        }else
+                        {
+                            var sm = $("#scriptModal");
+                            sm.empty();
+                            sm.html(result);
+                            $(function () { $(".modal-body [data-toggle='tooltip']").tooltip(); });
+                            sm.modal();
+                        }
+                    }).error(function() { alert("error"); });
+                }
+                });
+           
+        }
+
+        function debugSubmit(id,Param)
+        {
+            $.post("runScrpt/"+id,{"Param":Param},function(result){//获取执行脚本
+                $.post("http://localhost:8500/testM/?runType=Debug",result,function(result){
+                    $.messager.alert('Messager', '脚本开始执行!', "info");
+                }).error(function() {
+                    $.messager.alert('Error', '调用本机出错啦!', "error");
+                });
+            });
+        }
+
+        function creatUserControl()
+        {
+            var nodes = $('#scriptTree').tree('getChecked');
+
+            var steps = getSteps(nodes);
+
+            $.post("/TestCase/CreateUserControl", { steps: JSON.stringify(steps)  }, function (result) {
+                    var sm = $("#scriptModal");
+                    sm.empty();
+                    sm.html(result);
+                   
+                    sm.modal();
+            }).error(function() { alert("error"); });
+
+
+
+          
+        }
+    </script>

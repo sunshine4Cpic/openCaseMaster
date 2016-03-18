@@ -2,29 +2,39 @@
 @model M_testCase
 
 @{
-    string nameLabel, markLabel;
+    string nameLabel, markLabel,submitFun;
     if (Model.type == 0)
     { nameLabel = "文件夹"; }
     else
     { nameLabel = "案例"; }
     markLabel = "备注";
+
+    if (Convert.ToBoolean(ViewData["AddNew"]))
+    {
+        submitFun = "EditCase_New();";
+    }
+    else
+    {
+        submitFun = "EditCase_Edit();";
+    }
 }
 
 
 <script>
-    //@@ sourceURL=cp_list.js
+    //@@ sourceURL=EditCase.js
     function ResetForm() {
         document.getElementById('Name').value = "";
         document.getElementById('mark').value = "";
     }
 
-    function Save() {
+    function EditCase_Edit() {
 
             var e =
                 {
-                    ID: $('#ID').val(),
+                    ID: $('#EditCaseID').val(),
                     Name: $('#Name').val(),
-                    mark: $('#mark').val()
+                    mark: $('#mark').val(),
+                    FID: $('#EditFID').val()
                 };
             if (e.Name.trim().length == 0)
                 return;
@@ -34,54 +44,91 @@
                 function (r) {
                     //这里未判断是否正确返回
                     $('#dialog').dialog('close');
+
                     var selectNode = $('#caseTreeList').tree("getSelected").target;
 
-                    $('#tt').tree('update', {
-                        target: selectNode.target,
+                    $('#caseTreeList').tree('update', {
+                        target: selectNode,
                         text: e.Name
                     });
-
-                    alert(r);
                 }
                 );
 
     }
 
+    function EditCase_New() {
+
+        var e =
+            {
+                projectID: $('#projectID').val(),
+                baseID: $('#baseID').val(),
+                Name: $('#Name').val(),
+                mark: $('#mark').val(),
+                type: $('#type').val(),
+                FID: $('#EditFID').val()
+            };
+        if (e.Name.trim().length == 0)
+            return;
+
+
+        $.post("/TestCase/AddNew", e).then(
+            function (r) {
+                //这里未判断是否正确返回
+                $('#dialog').dialog('close');
+                reloadNode();
+
+            }
+            );
+
+    }
 
     $(function () {
         //设置text需要验证
-        $('input[type=text]').validatebox();
+        $('#Name').validatebox();
     })
-
 </script>
+<input type="hidden" id="projectID" name="projectID" value="@Model.projectID" />
+<input type="hidden" id="baseID" name="baseID" value="@Model.baseID" />
 
+<input type="hidden" id="type" name="type" value="@Model.type" />
 
-<input type="hidden" id="ID" name="ID" value="@Model.ID" />
+<input type="hidden" id="EditCaseID" name="ID" value="@Model.ID" />
 <br />
-<div class="form-horizontal">
-    <div class="form-group">
-        <label class="col-md-4 control-label">@nameLabel</label>
-        <div class="col-md-8">
 
-            <input type="text" id="Name" name="Name" value="@Model.Name" class="easyui-validatebox"
-                   data-options="required:true,validType:'length[1,50]',missingMessage:'不能为空'" />
-        </div>
+<form class="bs-example bs-example-form" role="form">
+    <div class="input-group" style="width:100%">
+        <span class="input-group-addon" style="width:80px">@nameLabel</span>
+        <input type="text" id="Name" name="Name" value="@Model.Name" class="easyui-validatebox form-control input-sm"
+               data-options="required:true,validType:'length[1,50]',missingMessage:'不能为空'" />
+    </div>
+    <br>
+
+
+    <div class="input-group" style="width:100%">
+        <span class="input-group-addon" style="width:80px">@markLabel</span>
+        <input class="form-control input-sm" type="text" id="mark" name="mark" value="@Model.mark" />
+
+    </div>
+    <br>
+    @{
+        if (Model.type == 1)
+        {
+            <div class="input-group" style="width:100%">
+                <span class="input-group-addon" style="width:80px">案例类型</span>
+                @Html.DropDownList("EditFID", ViewData["SelectListItem"] as SelectList, new { id = "EditFID", @class = "form-control input-sm" })
+            </div>
+            <br>
+        }
+    }
+
+
+    <div class="input-group" style="width:100%;text-align:center">
+       
+        <input type="button" name="BtnSubmit" class="btn btn-default" value="提交" onclick="@submitFun" style="margin-right:100px" />
+        <input type="button" name="BtnReset" class="btn btn-default" value="重置" onclick="ResetForm();" />
+        
     </div>
 
-    <div class="form-group">
-        <label class="col-md-4 control-label">@markLabel</label>
-        <div class="col-md-8">
-            <input type="text" id="mark" name="mark" value="@Model.mark" />
+</form>
 
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-4 col-md-8">
-            <input type="button" name="BtnSubmit" value="提交" onclick="Save();" />
-
-            <input type="button" name="BtnReset" value="重置" onclick="ResetForm();" />
-        </div>
-    </div>
-
-</div>
 

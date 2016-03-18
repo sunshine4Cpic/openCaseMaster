@@ -1,0 +1,323 @@
+﻿@using openCaseMaster.ViewModels
+@model DemandViewModel
+
+@{
+    string apkDisplay = "none";
+    if (Model.apkName != null)
+    {
+        apkDisplay = "block";
+    }
+}
+
+<input id="DemandID" type="hidden" value="@Model.ID" />
+
+    <table id="DemandTable" class="easyui-datagrid" title="@Model.name"
+       data-options="rownumbers:true,singleSelect:true,data:JsonData,toolbar:'#tb',iconCls:'icon-application_windows',
+           collapsible:true,showFooter:true,onClickCell:onClickCell,onDblClickRow:onDblClickRow,onSelect:onSelect">
+    <thead data-options="frozen:true">
+        <tr>
+            <th data-options="field:'name',width:120,formatter:fm">场景名</th>
+        </tr>
+    </thead>
+
+    <thead>
+        <tr>
+            <th data-options="field:'DeviceID',width:160,formatter:function(value,row){
+							return row.DeviceName;
+						},editor:{
+							type:'combobox',
+							options:{
+								valueField:'DeviceID',
+								textField:'DeviceName',
+                                editable:false,
+								data: DeviceList
+							}}">执行设备</th>
+                <th data-options="field:'TotalCase',width:50,align:'center'">总数</th>
+                <th data-options="field:'sucess',width:50,align:'center'">成功</th>
+                
+                <th data-options="field:'noRun',width:50,align:'center'">未执行</th>
+            <th data-options="field:'error',width:80,align:'center',formatter:function(value,row){
+							return (row.error -row.Untreated)+'/'+row.error;
+						}">已处理/失败</th>
+                <th data-options="field:'SuccessRatio',width:60,align:'center'">成功率</th>
+                <th data-options="field:'installResult',width:167,formatter:fm">安装结果</th>
+            </tr>
+        </thead>
+    </table>
+
+<div id="tb" style="padding:5px;height:auto">
+    <a href="#" class="easyui-menubutton" data-options="menu:'#mm1',iconCls:'icon-media_controls_dark_play'">运行</a>
+    
+    <a href="#" class="easyui-menubutton" data-options="menu:'#mm2',iconCls:'icon-movie_grey'">场景编辑</a>
+
+  <div id="apkDiv" style="display:@apkDisplay;">
+      <a id="apkUrl" href="/apkInstall/@Model.apkName" title="执行前安装apk">
+          <span style="padding:5px; " class="glyphicon glyphicon-cloud"></span> <span id="apkName">@Model.apkName</span>
+        </a>
+  </div>
+</div>
+
+<div id="mm1" style="width:150px;position:absolute;">
+    <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="run()">开始执行</div>
+    <div data-options="iconCls:'icon-media_controls_dark_stop'" onclick="stop()">暂停任务</div>
+    <div data-options="iconCls:'icon-reload'" onclick="Reset()">重置失败案例</div>
+    <div class="menu-sep"></div>
+    <div data-options="iconCls:'icon-document_small_upload'" id="apkUpload" >上传apk</div>
+</div>
+
+<div id="mm2" style="width:150px;">
+    <div data-options="iconCls:'icon-movie_grey_add'" onclick="showUploader()">添加场景</div>
+    <div data-options="iconCls:'icon-movie_grey_dark_del'" onclick="deleteScene()">删除场景</div>
+    
+</div>
+
+
+<div class="modal fade" data-backdrop="static" id="DemandModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close" style="position: absolute; top: 0px; right: 0px; z-index: 1;" 
+                    data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <div class="modal-body" style="padding:0px;">
+                <div id="uploader">
+                    <p>
+                        你的浏览器没有Flash支持，请安装最新的Flash！
+                    </p>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script type="text/javascript">
+    //@@ sourceURL=DemandView.js
+  
+    var JsonData = @Html.Raw(Model.ScenesJsonData);
+
+
+    var DeviceList = @Html.Raw(Model.DeviceListData);
+
+    var fm = function (value, row, index) {
+        if (typeof(value) != "undefined")
+            return '<div title="' + value + '" class="easyui-tooltip">' + value + '</div>';
+    }
+
+    var editIndex = undefined;
+    function endEditing(){
+        if (editIndex == undefined){return true}
+        if ($('#DemandTable').datagrid('validateRow', editIndex)){
+            //实时保存
+            var ed = $('#DemandTable').datagrid('getEditor', {index:editIndex,field:'DeviceID'});
+            var DeviceName = $(ed.target).combobox('getText');
+            var DeviceID = $(ed.target).combobox('getValue')
+            var row = $('#DemandTable').datagrid('getRows')[editIndex];
+
+            var ret = false;
+            
+            if(row['DeviceID']==DeviceID)
+            {
+                $('#DemandTable').datagrid('endEdit', editIndex);
+                editIndex = undefined;
+                return true;
+            }
+
+            $.messager.progress({title: '请稍后',msg: '提交更改中...'});
+            $.ajax({
+                type : "post",
+                url : "changeDevice/"+row.ID,
+                data : {"DeviceID":DeviceID} ,
+                async : false,
+                success : function(data){
+                    row['DeviceName'] = DeviceName;
+                    row['DeviceID'] = DeviceID;
+                    $('#DemandTable').datagrid('endEdit', editIndex);
+                    editIndex = undefined;
+                    ret=true;
+                } ,
+                error: function(e) {
+                    $.messager.alert('Error', '修改失败!', "error");
+                }
+            });
+            $.messager.progress('close');
+            return ret;
+        } else {
+            return false;
+        }
+    }
+
+    function onClickCell(index, field){
+
+        if(  endEditing()&&field=='DeviceID')
+        {
+            editIndex = index;
+            $(this).datagrid('selectRow', index)
+                .datagrid('beginEdit', index);
+        }
+    }
+
+    function onDblClickRow(rowIndex,rowData){
+        refreshScene(rowData.ID)
+    }
+    function onSelect(rowIndex,rowData)
+    {
+        var tmpID = $('#ScenePanel #SceneID').val();
+        if(rowData.ID !=tmpID)
+            document.getElementById("ScenePanel").style.display = "none";
+    }
+
+
+
+   
+
+    function run()
+    {
+        $.messager.progress({title: '请稍后',msg: '提交中...'});
+        var id = $("#DemandID").val();
+        $.post("runDemand", { "id": id }, function (result) {
+            $.messager.progress('close');
+            $.messager.alert('Messager', result, "info");
+
+        }).error(function() {$.messager.progress('close'); alert("error"); });
+    }
+
+    function stop()
+    {
+        $.messager.progress({title: '请稍后',msg: '提交中...'});
+        var id = $("#DemandID").val();
+        $.post("stopDemand", { "id": id }, function (result) {
+            $.messager.progress('close');
+            $.messager.alert('Messager', result, "info");
+
+        }).error(function() {$.messager.progress('close'); alert("error"); });
+    }
+
+    function Reset()
+    {
+        $.messager.confirm('Message', '确认重置错误的案例吗?', function (r) {
+            if (r)
+            {
+                var id = $("#DemandID").val();
+                $.post("DemandErrorReset", { "id": id }, function (result) {
+                    $.messager.alert('Messager', result, "info");
+                    var id = $("#DemandID").val();
+                    refreshDemand(id);
+                }).error(function() { alert("error"); });
+            }
+        });
+    }
+
+    $("#uploader").plupload({
+        runtimes: 'gears,html5,flash',
+        url: "/UploadFile/uploadScene/@Model.ID", // 服务端上传路径
+        max_file_size: '10mb', // 文件上传最大限制。
+        chunk_size: '3mb', // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可。
+        unique_names: true, // 上传的文件名是否唯一
+        //// 是否生成缩略图（仅对图片文件有效）
+        //resize: { width: 320, height: 240, quality: 90 },
+        ////  这个数组是选择器，就是上传文件时限制的上传文件类型
+        filters: [{ title: "Excel文档", extensions: "xls" }],
+        dragdrop:false,
+        unique_names:true
+    });
+
+    var uploader = $("#uploader").plupload("getUploader");
+    uploader.bind('BeforeUpload',function(up,file){
+        up.setOption("multipart_params",{"originalName":file.name});
+    });
+
+
+    function showUploader() {
+        $('#DemandModal').modal();
+    }
+
+    function deleteScene() {
+
+        var row = $('#DemandTable').datagrid('getSelected');
+        if(row==null)
+        {
+            $.messager.alert('Messager', '请选选择场景!', "warning");return;
+        }
+
+        var msg = ' <span style=\'color:blue\'>' + row.name + '</span>';
+
+        $.messager.confirm('Message', '确认删除场景:'+msg+"?", function (r) {
+            if (r)
+            {
+                var id = row.ID;
+                $.post("deleteScene", { "id": id }, function (result) {
+                    var index = $('#DemandTable').datagrid('getRowIndex',row);
+                    $('#DemandTable').datagrid('deleteRow',index);
+                }).error(function() { alert("error"); });
+            }
+        });
+    }
+
+    
+
+
+    $(function() {  
+
+
+        $('#DemandModal').on('hidden.bs.modal', function () {
+            var id = $("#DemandID").val();
+            refreshDemand(id);
+        })
+
+
+        //实例化一个plupload上传对象
+        var uploaderApk = new plupload.Uploader({
+            browse_button: 'apkUpload', //触发文件选择对话框的按钮，为那个元素id
+            runtimes: 'html5',
+            url: '/UploadFile/uploadApk/@Model.ID', // 服务端上传路径
+            max_file_size: '100mb', // 文件上传最大限制。
+            chunk_size: '3mb', // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可。
+            unique_names: true, // 上传的文件名是否唯一
+            //// 是否生成缩略图（仅对图片文件有效）
+            //resize: { width: 320, height: 240, quality: 90 },
+            ////  这个数组是选择器，就是上传文件时限制的上传文件类型
+            filters: [{ title: "apk", extensions: "apk" }
+            ],
+            multi_selection: false
+
+        });
+
+        //在实例对象上调用init()方法进行初始化
+        uploaderApk.init();
+
+
+
+
+        //绑定各种事件，并在事件监听函数中做你想做的事
+        uploaderApk.bind('FileUploaded', function (up, file, result) {
+            $.messager.progress('bar').progressbar("setValue",100);
+
+            document.getElementById("apkDiv").style.display="block";
+            document.getElementById("apkName").innerHTML = result.response;
+            document.getElementById("apkUrl").href="/apkInstall/"+result.response;
+
+            setTimeout(function(){
+                $.messager.progress('close');
+            },500)
+        });
+
+        uploaderApk.bind('UploadProgress',function(uploader,file){
+            $.messager.progress('bar').progressbar("setValue",parseInt(file.loaded/file.size*100));
+        });
+
+        uploaderApk.bind('BeforeUpload',function(up,file){
+            up.setOption("multipart_params",{"originalName":file.name});
+        });
+
+        //绑定各种事件，并在事件监听函数中做你想做的事
+        uploaderApk.bind('FilesAdded', function (uploader, files) {
+            $.messager.progress({title: '请稍后',msg: '上传apk中...',interval:0});
+            uploader.start();
+
+        });
+
+    
+
+    }); 
+
+</script>

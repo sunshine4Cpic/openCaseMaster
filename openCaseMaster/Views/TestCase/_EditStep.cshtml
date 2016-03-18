@@ -1,0 +1,115 @@
+﻿@using openCaseMaster.ViewModels;
+@model EditStepModel
+
+
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close"
+                    data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <div class="input-group input-group-lg" style="padding:5px 100px 5px 100px;">
+                <span class="input-group-addon">步骤描述</span>
+                <input id="stepNameEdit" value="@Model.desc" type="text" class="form-control" placeholder="@Model.name">
+            </div>
+        </div>
+        <div class="modal-body" style="padding:10px 100px 10px 100px;">
+
+  @{
+      foreach (var att in Model.ParamBinding)
+      {
+          if (att.data == null)
+          {
+            <div class="input-group" style="margin-bottom:5px">
+                <span class="input-group-addon" data-toggle="tooltip" data-html="true" title="@att.desc">
+                    <a href="#">
+                        <span class="glyphicon glyphicon-tags"></span>
+                    </a>
+                </span>
+                <input value="@att.value" name="@att.name" style="height:30px;" class="form-control" placeholder="@att.name" />
+
+            </div>
+          }
+          else
+          {
+    <div class="input-group" style="margin-bottom:5px">
+        <span class="input-group-addon" data-toggle="tooltip" data-html="true" title="@att.desc">
+            <a href="#">
+                <span class="glyphicon glyphicon-tags"></span>
+            </a>
+        </span>
+        <input style="height:30px;" value="@att.value" name="@att.name" class="easyui-combobox" data-options="prompt:'@att.name',panelHeight:'auto',valueField: 'value',textField: 'label',data: @att.data " />
+        </div>
+  }
+  
+      }
+}
+            
+
+           
+    </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default"
+                    data-dismiss="modal">
+                取消
+            </button>
+            <button type="button" class="btn btn-primary" onclick="saveStep()">
+                修改
+            </button>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+
+
+<script>
+
+    //@@ sourceURL=EditStep.js
+    
+
+    function saveStep()
+    {
+        
+        var selectNode = $('#scriptTree').tree("getSelected");
+        var descTmp = $('#stepNameEdit').val();
+      
+
+        $('#scriptTree').tree('update', {
+            target: selectNode.target,
+            desc: descTmp
+        });
+
+        
+        var Childrens = $('#scriptTree').tree("getChildren", selectNode.target);
+        
+       
+        $(Childrens).each(function () {
+            $('#scriptTree').tree("remove", this.target);
+        })
+
+        chData = [];
+        $(".modal-body input[name]").each(function () {
+            var p = {};
+            p["Key"] = this.name;
+            p["Value"] = this.value;
+            p["state"]="open";
+            p["iconCls"]="icon-spanner_blue";
+            p["checkbox"]=false;
+            chData.push(p);
+            
+        })
+
+        $('#scriptTree').tree('append', {
+            parent: selectNode.target,
+            data: chData
+        });
+       
+        $('#scriptModal').modal("hide");
+    }
+    
+</script>
+       
+
+        
+

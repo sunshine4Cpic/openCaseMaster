@@ -525,10 +525,8 @@
   border-radius: 5px 5px 5px 5px;
 }
 .textbox .textbox-text {
-  font-size: 12px;
   border: 0;
   margin: 0;
-  padding: 4px;
   white-space: normal;
   vertical-align: top;
   outline-style: none;
@@ -541,7 +539,8 @@
   white-space: pre-wrap;
 }
 .textbox .textbox-prompt {
-  font-size: 12px;
+  font-size: 14px;
+  padding: 6px 12px;
   color: #aaa;
 }
 .textbox .textbox-button,
@@ -629,6 +628,8 @@
   border-style: solid;
   overflow: hidden;
   vertical-align: middle;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 .combo .combo-text {
   font-size: 12px;

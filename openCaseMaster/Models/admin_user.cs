@@ -18,6 +18,7 @@ namespace openCaseMaster.Models
         public admin_user()
         {
             this.M_runScene = new HashSet<M_runScene>();
+            this.caseFramework = new HashSet<caseFramework>();
         }
     
         public int ID { get; set; }
@@ -30,8 +31,10 @@ namespace openCaseMaster.Models
         public Nullable<System.DateTime> LastDate { get; set; }
         public Nullable<int> Type { get; set; }
     
-        public virtual user_type user_type { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_runScene> M_runScene { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<caseFramework> caseFramework { get; set; }
+        public virtual user_type user_type { get; set; }
     }
 }

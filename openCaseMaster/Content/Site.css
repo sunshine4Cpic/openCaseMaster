@@ -22,3 +22,9 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.modal input {
+    max-width: none;
+}
+
+

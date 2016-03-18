@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Collections.Generic;
+using System.Web;
 using System.Web.Optimization;
 
 namespace openCaseMaster
@@ -32,10 +33,40 @@ namespace openCaseMaster
                       "~/Scripts/jquery.easyui-1.4.3.js"));
 
             bundles.Add(new StyleBundle("~/Content/easyui").Include(
-                      "~/Content/themes/bootstrap/easyui.css"));
+                      "~/Content/themes/bootstrap/easyui.css", "~/Content/themes/icon.css"));
 
-            
 
+
+
+
+            bundles.Add(new StyleBundle("~/Content/uploader").Include(
+                      "~/Scripts/plupload/jquery.ui.plupload/css/jquery.ui.plupload.css", "~/Scripts/plupload/jquery-ui.css"));
+
+
+
+            ScriptBundle uploader = new ScriptBundle("~/bundles/uploader");
+            uploader.Orderer = new AsIsBundleOrderer();
+            uploader.Include(
+                "~/Scripts/plupload/jquery-ui.js",
+                    "~/Scripts/plupload/plupload.full.min.js",
+                    "~/Scripts/plupload/jquery.ui.plupload/jquery.ui.plupload.js",
+                    "~/Scripts/plupload/i18n/zh_CN.js"
+                );
+            bundles.Add(uploader);
+
+
+
+            BundleTable.EnableOptimizations = false;//不启用压缩
+        }
+    }
+    /// <summary>
+    /// 文件顺序加载
+    /// </summary>
+    internal class AsIsBundleOrderer : IBundleOrderer
+    {
+        public virtual IEnumerable<BundleFile> OrderFiles(BundleContext context, IEnumerable<BundleFile> files)
+        {
+            return files;
         }
     }
 }

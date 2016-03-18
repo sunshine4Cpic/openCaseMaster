@@ -21,6 +21,7 @@ namespace openCaseMaster.Models
             this.M_testCaseSteps = new HashSet<M_testCaseSteps>();
             this.M_testDemand = new HashSet<M_testDemand>();
             this.project_app = new HashSet<project_app>();
+            this.Framework4Project = new HashSet<Framework4Project>();
         }
     
         public int ID { get; set; }
@@ -48,5 +49,7 @@ namespace openCaseMaster.Models
         public virtual project_rank project_rank { get; set; }
         public virtual project_stage project_stage { get; set; }
         public virtual project_type project_type { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Framework4Project> Framework4Project { get; set; }
     }
 }

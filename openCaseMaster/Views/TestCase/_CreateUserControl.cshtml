@@ -1,0 +1,92 @@
+﻿@model Dictionary<string, string>
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        
+        <div class="modal-header">
+            
+            <button type="button" class="close"
+                    data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <div class="input-group input-group-lg" style="margin:auto">
+                <input type="text" id="Name" name="Name" value="" class="easyui-validatebox form-control input-sm"
+                       data-options="required:true,validType:'length[1,50]',missingMessage:'不能为空'" placeholder="组件名" />
+            </div>
+        </div>
+        <div class="modal-body" style="padding:10px 100px 10px 100px;">
+            
+            @{
+                foreach (var att in Model)
+                {
+
+                    <div class="input-group" style="margin-bottom:5px">
+                        <span class="input-group-addon" data-toggle="tooltip" data-html="true" title="@att.Key">
+                            <a href="#">
+                                <span class="glyphicon glyphicon-cog"></span>
+                            </a>
+                        </span>
+                        <input value="@att.Value" name="@att.Key" style="height:30px;" class="form-control" placeholder="@att.Key" />
+
+                    </div>
+                }
+            }
+            
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default"
+                    data-dismiss="modal">
+                取消
+            </button>
+            <button type="button" class="btn btn-primary" onclick="saveUserControl()">
+                创建组件
+            </button>
+        </div>
+       
+        <div class="alert alert-info" style="text-align:center">
+            自定义组件可以设置参数默认值。
+        </div>
+     
+    </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+
+<script>
+    //@@ sourceURL=createUserControl.js
+    $(function () {
+        //设置text需要验证
+        $('#Name').validatebox();
+    })
+
+    function saveUserControl() {
+
+        var nodes = $('#scriptTree').tree('getChecked');
+
+        var steps = getSteps(nodes);
+
+        var Param = {};
+        $(".modal-body input[name]").each(function () {
+            Param[this.name] = this.value;
+        })
+
+        var name = $("#Name").val();
+        if (name.trim().length == 0)
+            return;
+
+        var FID = $("#FID").val();
+
+        var PID = $("#PID").val();
+
+        $('#scriptModal').modal("hide");
+
+        $.post("/TestCase/saveUserControl",
+            { "name": name, "FID": FID, "PID": PID, "steps": JSON.stringify(steps), "Param": JSON.stringify(Param) },
+            function (result) {
+                if (result == "True") {
+                    $.messager.alert('Messager', '用户自定义组件创建成功!', "info");
+                }
+        }).error(function () { alert("error"); });
+
+    }
+</script>

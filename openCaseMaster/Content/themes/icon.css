@@ -116,3 +116,73 @@
 	background:url('../img/spanner_blue.png') no-repeat center center;
 }
 
+.icon-media_controls_dark_play{
+	background:url('../img/media_controls_dark_play.png') no-repeat center center;
+}
+
+.icon-media_controls_dark_stop{
+	background:url('../img/media_controls_dark_stop.png') no-repeat center center;
+}
+
+.icon-box_add{
+	background:url('../img/box_add.png') no-repeat center center;
+}
+
+.icon-document_small_download{
+	background:url('../img/document_small_download.png') no-repeat center center;
+}
+
+.icon-box{
+	background:url('../img/box.png') no-repeat center center;
+}
+
+.icon-box_edit{
+	background:url('../img/box_edit.png') no-repeat center center;
+}
+
+.icon-star_boxed_full{
+	background:url('../img/star_boxed_full.png') no-repeat center center;
+}
+
+.icon-star_boxed_empty{
+	background:url('../img/star_boxed_empty.png') no-repeat center center;
+}
+
+
+.icon-star_empty{
+	background:url('../img/star_empty.png') no-repeat center center;
+}
+
+
+.icon-home_grey{
+	background:url('../img/home_grey.png') no-repeat center center;
+}
+
+.icon-home_green{
+	background:url('../img/home_green.png') no-repeat center center;
+}
+
+.icon-application_windows{
+	background:url('../img/application_windows.png') no-repeat center center;
+}
+
+.icon-movie_grey{
+	background:url('../img/movie_grey.png') no-repeat center center;
+}
+
+
+.icon-movie_grey_add{
+	background:url('../img/movie_grey_add.png') no-repeat center center;
+}
+
+.icon-movie_grey_dark_del{
+	background:url('../img/movie_grey_dark_del.png') no-repeat center center;
+}
+
+.icon-document_small_upload{
+	background:url('../img/document_small_upload.png') no-repeat center center;
+}
+
+.icon-contact_blue_edit{
+	background:url('../img/contact_blue_edit.png') no-repeat center center;
+}

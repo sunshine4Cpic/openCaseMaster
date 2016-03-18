@@ -43,6 +43,8 @@ namespace openCaseMaster.Models
         public virtual DbSet<project_rank> project_rank { get; set; }
         public virtual DbSet<project_stage> project_stage { get; set; }
         public virtual DbSet<project_type> project_type { get; set; }
+        public virtual DbSet<caseFramework> caseFramework { get; set; }
+        public virtual DbSet<Framework4Project> Framework4Project { get; set; }
         public virtual DbSet<user_type> user_type { get; set; }
     
         [DbFunction("QCTESTEntities", "MonthReport")]
@@ -165,6 +167,15 @@ namespace openCaseMaster.Models
                 new ObjectParameter("p_2", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("M_testDemand_sort", p_1Parameter, p_2Parameter);
+        }
+    
+        public virtual int M_testCase_getProject(Nullable<int> p_1, ObjectParameter out1)
+        {
+            var p_1Parameter = p_1.HasValue ?
+                new ObjectParameter("p_1", p_1) :
+                new ObjectParameter("p_1", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("M_testCase_getProject", p_1Parameter, out1);
         }
     }
 }
