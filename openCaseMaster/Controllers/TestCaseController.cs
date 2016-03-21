@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using ICSharpCode.SharpZipLib.Checksums;
+using ICSharpCode.SharpZipLib.Zip;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NPOI.HSSF.UserModel;
 using openCaseMaster.Models;
@@ -36,10 +38,6 @@ namespace openCaseMaster.Controllers
         public string projectListInit()
         {
             
-
-            
-            
-         
             using(QCTESTEntities QC_DB = new QCTESTEntities())
             {
                 var tcl = from t in QC_DB.project
@@ -402,31 +400,92 @@ namespace openCaseMaster.Controllers
 
 
         [HttpPost]
-        public ActionResult createScene(List<int> ids)
+        public void createScene(List<int> ids)
         {
+            if (ids == null) return;
             MemoryStream stm = testCaseHelper.getSceneExcelMS(ids);
+
+            DownLoad(stm, "场景模板.xls", "vnd.ms-excel");
+           
+
+        }
+
+        [HttpPost]
+        public void downloadCase(List<int> ids)
+        {
+            if (ids == null) return;
+            MemoryStream MyStream = new MemoryStream();
+            ZipOutputStream zipedStream = new ZipOutputStream(MyStream);
+            zipedStream.SetLevel(6);
+            zipedStream.IsStreamOwner = false;
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            var cs = from t in QC_DB.M_testCase
+                     where ids.Contains(t.ID)
+                     select t;
+
+
+            foreach (var c in cs)
+            {
+                creatCaseStream(c, zipedStream);
+            }
+            zipedStream.Finish();
+            zipedStream.Close();
+            DownLoad(MyStream, "案例.zip", "x - zip - compressed");
+        }
+
+
+        [NonAction]
+        private void creatCaseStream(M_testCase mtc, ZipOutputStream zipedStream)
+        {
+           
+            if (mtc == null) return;
+
+            byte[] buffer;
+            if (mtc.testXML != null)
+            {
+                XElement xe = XElement.Parse(mtc.testXML);
+                xe.SetAttributeValue("id", mtc.ID);
+                xe.SetAttributeValue("FID", mtc.FID);
+                buffer = System.Text.Encoding.UTF8.GetBytes(xe.ToString());
+            }
+            else
+            {
+                buffer = System.Text.Encoding.UTF8.GetBytes("");
+            }
+
+            ZipEntry entry = new ZipEntry(mtc.Name + "_" + mtc.ID + ".xml");//案例名
+            entry.Size = buffer.Length;
+            Crc32 crc = new Crc32();
+            crc.Reset();
+            crc.Update(buffer);
+
+            entry.Crc = crc.Value;
+            zipedStream.PutNextEntry(entry);
+            zipedStream.Write(buffer, 0, buffer.Length);
+        }
+
+        //流方式下载
+        [NonAction]
+        private void DownLoad(MemoryStream stm, string FileName, string ContentType)
+        {
+
+
             Response.Clear();
-            Response.ContentType = "application/vnd.ms-excel";
+            Response.ContentType = "application/" + ContentType;
 
 
             //通知浏览器下载文件而不是打开
-            Response.AddHeader("Content-Disposition", "attachment;  filename=" + "场景模板.xls");
+            Response.AddHeader("Content-Disposition", "attachment;  filename=" + FileName);
 
             byte[] ZipBuffer = new byte[stm.Length - 1];
             ZipBuffer = stm.GetBuffer();
 
             Response.OutputStream.Write(ZipBuffer, 0, Convert.ToInt32(ZipBuffer.Length));
             Response.End();
-            return new EmptyResult();
 
         }
-
-
-        
-        
-        
-
-        
      
     }
 }

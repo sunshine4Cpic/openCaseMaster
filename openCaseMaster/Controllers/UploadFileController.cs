@@ -28,6 +28,39 @@ namespace openCaseMaster.Controllers
 
         }
 
+        [HttpPost]
+        public void uploadCase(int? baseID, int? PID)
+        {
+
+            var stm = FileToStream();
+            if (stm != null)
+            {
+                StreamReader sr = new StreamReader(stm);
+                XElement tp = XElement.Parse(sr.ReadToEnd());
+                //开始写入数据库
+
+
+                QCTESTEntities QC_DB = new QCTESTEntities();
+
+                M_testCase mtc = new M_testCase();
+                mtc.type = 1;
+                mtc.testXML = tp.ToString();
+                if (PID == null)
+                    mtc.baseID = Convert.ToInt32(baseID);
+                else
+                    mtc.projectID = Convert.ToInt32(PID);
+       
+                //mtc.Name = name.Remove(name.LastIndexOf("."));
+                mtc.Name = tp.Attribute("desc").Value;
+                mtc.FID = Convert.ToInt32(tp.Attribute("FID").Value);
+                QC_DB.M_testCase.Add(mtc);
+                QC_DB.SaveChanges();
+
+            }
+
+
+        }
+
         /// <summary>
         /// 上传apk
         /// </summary>
@@ -76,7 +109,7 @@ namespace openCaseMaster.Controllers
                 int total = Convert.ToInt32(Request["chunks"]);//总的分块数量
 
                 //文件没有分块
-                if (total == 1)
+                if (total <= 1)
                 {
 
                     if (uploadFile.ContentLength > 0)

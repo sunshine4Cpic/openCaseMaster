@@ -24,6 +24,7 @@ namespace openCaseMaster.ViewModels
 
             name = dm.name;
             apkName = dm.apkName;
+            isRun = dm.isRun;
 
             var rc = dm.M_runScene.ToList();
 
@@ -69,6 +70,8 @@ namespace openCaseMaster.ViewModels
         public List<DemandSceneModel> Scenes { get; set; }
 
         public string DeviceListData { get; set; }
+
+        public Boolean? isRun { get; set; }
         
 
         public string ScenesJsonData

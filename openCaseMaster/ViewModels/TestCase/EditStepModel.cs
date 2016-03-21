@@ -1,4 +1,5 @@
-﻿using openCaseMaster.Models;
+﻿using Newtonsoft.Json;
+using openCaseMaster.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,7 +87,7 @@ namespace openCaseMaster.ViewModels
                     pb.value = pbx.Attribute("value").Value;
 
                 if (pbx.Attribute("desc") == null)
-                    pb.desc = pb.name ;
+                    pb.desc = pb.name;
                 else
                     pb.desc = pb.name + " : " + pbx.Attribute("desc").Value;
 
@@ -94,7 +95,38 @@ namespace openCaseMaster.ViewModels
                 {
                     pb.data = list2data(pbx.Attribute("list").Value);
                 }
-                    
+                else if (pb.name == "applicationID")  //打开应用的ID,修改?
+                {
+                    QCTESTEntities QC_DB = new QCTESTEntities();
+
+                    if (userHelper.isAdmin())
+                    {
+                        var app = from t in QC_DB.M_application
+                                  select new
+                                  {
+                                      label = t.name,
+                                      value = t.ID
+                                  };
+
+                        pb.data = JsonConvert.SerializeObject(app);
+                    }
+                    else
+                    {
+                        var pjs = userHelper.getUserPermission();
+
+                        var app = from t in QC_DB.project_app
+                                  where t.usable && pjs.Contains(t.PID)
+                                  select new
+                                  {
+                                      label = t.M_application.name,
+                                      value = t.M_application.ID
+                                  };
+
+                        pb.data = JsonConvert.SerializeObject(app);
+                    }
+
+                }
+
                 pbs.Add(pb);
             }
 

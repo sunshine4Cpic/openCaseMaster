@@ -20,9 +20,9 @@
     </table>
 
 <div id="SceneTool" style="padding:5px;height:auto">
-    <a class="easyui-linkbutton" href="#" title="查看详细记录" data-options="plain:true,iconCls:'icon-search'" onclick="viewRecord()"></a>
-   <a class="easyui-linkbutton" href="#" title="重新执行" data-options="plain:true,iconCls:'icon-reload'" onclick="ResetCase()"></a>
-    <a class="easyui-linkbutton" href="#" title="手工确认" data-options="plain:true,iconCls:'icon-contact_blue_edit'" onclick="$('#SceneModal').modal();"></a>
+    <a class="easyui-linkbutton" href="javascript:void(0);"  title="查看详细记录" data-options="plain:true,iconCls:'icon-search'" onclick="viewRecord()"></a>
+   <a class="easyui-linkbutton" href="javascript:void(0);"  title="重新执行" data-options="plain:true,iconCls:'icon-reload'" onclick="ResetCase()"></a>
+    <a class="easyui-linkbutton" href="javascript:void(0);"  title="手工确认" data-options="plain:true,iconCls:'icon-contact_blue_edit'" onclick="$('#SceneModal').modal();"></a>
 </div>
 
 <div class="modal fade" data-backdrop="static" id="SceneModal" tabindex="-1" role="dialog">
@@ -41,7 +41,7 @@
             
             <div class="input-group">
          <span class="input-group-addon">备注</span>
-         <textarea id="userMark" class="form-control" style="width:100%;max-width: initial;height:150px;" ></textarea>
+         <textarea id="userMark" class="form-control" style="width:100%;max-width: initial;height:150px; " ></textarea>
       </div>
                
         </div>
@@ -57,12 +57,42 @@
     </div><!-- /.modal-content -->
 </div><!-- /.modal -->
 </div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="caseModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         
+           
+           <div id="Record"></div>
+        
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+</div>
 
 <script type="text/javascript">
     //@@ sourceURL=SceneView.js
 
-    function viewRecord() {
+    
 
+    function viewRecord() 
+    {
+        $('#caseModal').on('shown.bs.modal', function () {
+            $.parser.parse('#Record');
+        })
+
+        var row = $('#SceneTable').datagrid('getSelected');
+        if (row == null) return;
+        var ID = row.ID;
+        var url = "/RunCase/caseRecord/" + ID;
+
+        $('#Record').empty();
+        $('#Record').load(url, function () {
+            //$.parser.parse('#Record');
+            $('#caseModal').modal();
+        });
+      
+       
     }
 
     function ResetCase() {

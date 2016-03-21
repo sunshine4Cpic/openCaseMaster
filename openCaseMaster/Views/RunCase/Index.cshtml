@@ -29,10 +29,10 @@
     collapsible:true,minimizable:false,maximizable:false">
 
             <div class="easyui-panel" style="margin-bottom:5px">
-                <input type="image" title="新增文件夹" src="~/Content/img/folder_classic_add.png">
-                <input type="image" title="添加测试计划" src="~/Content/img/clock_add.png">
-                <input type="image" title="修改信息" src="~/Content/img/contact_blue_edit.png">
-                <input type="image" title="删除" src="~/Content/img/contact_blue_remove.png">
+                <input type="image" title="新增文件夹" src="~/Content/img/folder_classic_add.png" onclick="ClickAddNew(0);">
+                <input type="image" title="添加测试计划" src="~/Content/img/clock_add.png" onclick="ClickAddNew(1);">
+                <input type="image" title="修改信息" src="~/Content/img/contact_blue_edit.png" onclick="ClickEdit()">
+                <input type="image" title="删除" src="~/Content/img/contact_blue_remove.png" onclick="DeleteDemand()">
             </div>
             
                 <ul id="runCaseTreeList"></ul>
@@ -58,6 +58,7 @@
 </div>
 
 
+<div id="dialog" style="padding: 10px 60px 10px;overflow:hidden;"></div>
 <script type="text/javascript">
 
     $(function () {
@@ -90,6 +91,8 @@
             },
         });
 
+      
+
     });
 
     function refreshDemand(DemandID) {
@@ -103,6 +106,81 @@
         document.getElementById("ScenePanel").style.display = "block";
     }
 
+    //弹出层
+    function ClickAddNew(type) {
+        var node = $("#runCaseTreeList").tree("getSelected");
+        if (node.type == 1) {
+            var ParentNode = $("#runCaseTreeList").tree("getParent", node.target);
+            $("#runCaseTreeList").tree("select", ParentNode.target);
+            node = $("#runCaseTreeList").tree("getSelected");
+        }
+
+
+        var url = "/RunCase/AddNew?baseID=" + node.DemandID + "&PID=" + node.PID + "&type=" + type;
+        $('#dialog').dialog({
+            title: 'Creat New',
+            width: 400,
+            closed: false,
+            cache: false,
+            href: url,
+            modal: true
+        });
+
+    }
+
+    function ClickEdit() {
+        var node = $("#runCaseTreeList").tree("getSelected");
+        if (typeof (node.DemandID) == "undefined") {
+            $.messager.alert('Error', '不能修改项目信息!', "warning");
+            return;
+        }
+        var url = "/RunCase/EditDemand/" + node.DemandID;
+        $('#dialog').dialog({
+            title: 'Edit Info',
+            width: 400,
+            closed: false,
+            cache: false,
+            href: url,
+            modal: true
+        });
+
+    }
+
+    function DeleteDemand() {
+
+        var node = $("#runCaseTreeList").tree("getSelected");
+
+        var msg = ' <span style=\'color:blue\'>' + node.text + '</span>';
+        $.messager.confirm('Message', '确认删除:' + msg + '?', function (r) {
+            if (r) {
+                if (typeof (node.DemandID) == "undefined") {
+                    $.messager.alert('Error', '不能删除项目!', "warning");
+                    return;
+                }
+
+
+                $.post("/RunCase/DeleteDemand", { ID: node.DemandID }, function (result) {
+                    if (result == "True") {
+                        var node = $("#runCaseTreeList").tree("getSelected").target;
+                        var nodeParent = $("#runCaseTreeList").tree("getParent", node);
+
+                        if (nodeParent.children.length <= 1)//删除最后会使文件夹失效所以 使用 reload
+                            $('#runCaseTreeList').tree("reload", nodeParent.target);//刷新
+                        else
+                            $("#runCaseTreeList").tree("remove", node);
+                    } else
+                        $.messager.alert('Error', result, "error");
+
+                });
+                //删除
+            }
+        });
+    }
    
+    function reloadNode() {
+        var selectNode = $('#runCaseTreeList').tree("getSelected").target;
+        $('#runCaseTreeList').tree("reload", selectNode);//刷新
+
+    }
 </script>
 

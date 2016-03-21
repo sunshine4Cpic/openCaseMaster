@@ -166,6 +166,21 @@
 	background:url('../img/application_windows.png') no-repeat center center;
 }
 
+
+.icon-application_windows_okay{
+	background:url('../img/application_windows_okay.png') no-repeat center center;
+}
+
+.icon-application_windows_right{
+	background:url('../img/application_windows_right.png') no-repeat center center;
+}
+
+.icon-application_windows_edit{
+	background:url('../img/application_windows_edit.png') no-repeat center center;
+}
+
+
+
 .icon-movie_grey{
 	background:url('../img/movie_grey.png') no-repeat center center;
 }
@@ -186,3 +201,5 @@
 .icon-contact_blue_edit{
 	background:url('../img/contact_blue_edit.png') no-repeat center center;
 }
+
+

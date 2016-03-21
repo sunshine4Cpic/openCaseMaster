@@ -1,0 +1,48 @@
+﻿
+
+@using openCaseMaster.ViewModels
+@model caseRecordModel
+
+
+    <div class="easyui-accordion" data-options="multiple:true" >
+       @foreach (var s in Model.xrs)
+       {
+
+           string options;
+           string resultState;
+           switch (s.ResultStatic)
+           {
+               case "1":
+                   options = "data-options=\"iconCls:'icon-ok'\"";
+                   resultState = "<span style='color: #0000FF'>成功</span>";
+                   break;
+               case null:
+                   options = "";
+                   resultState = "未执行";
+                   break;
+               default:
+                   options = "data-options=\"iconCls:'icon-no'\"";
+                   resultState = "<span style='color: #FF0000'>失败</span>";
+                   break;
+           }
+
+        <div title="@s.desc" @Html.Raw(options) style="padding:10px;">
+            <div class="col-md-4" style="text-align:center">
+                <div style="max-width:260px;margin:0 auto;">
+                   @if(s.Photo != null)
+                   {
+                    <img src="@s.Photo" style="width:100%; height:100%; " />
+                   }
+                </div>
+            </div>
+            <div class="col-md-8">
+                <p><b>步骤：</b> @s.name <a href="#"><img src="~/Content/themes/icons/help.png" title='@Html.Raw(s.stepX)' /></a></p>
+                <p><b>状态：</b>@Html.Raw(resultState)</p>
+                <p><b>详情：</b></p>
+                <p style="word-break:break-all;">@s.ResultMsg</p>
+            </div>
+        </div>
+       }
+
+		
+	</div>
