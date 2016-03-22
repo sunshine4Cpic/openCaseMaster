@@ -208,9 +208,9 @@ namespace openCaseMaster.Models
                 XElement cloneXML = XElement.Parse(mtc.testXML);
                 cloneXML.SetAttributeValue("name", caseName);//name
               
-                for (int i = 1; i < keys.Count; i++)
+                for (int i = 0; i < keys.Count; i++)
                 {
-                    ICell cell = row.GetCell(i);
+                    ICell cell = row.GetCell(i+1);
                     string value = "";
                     if (cell != null)
                     {

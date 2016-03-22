@@ -41,7 +41,7 @@
 
 </div>
 
-<input id="runParam" type="hidden" value="" />
+
 
     <script type="text/javascript">
     //@@ sourceURL=scriptView.js
@@ -108,7 +108,6 @@
                         return false;
                 },
                 onDblClick: function (node) {
-                
                     editStepClick(node);
                 }
             });
@@ -202,37 +201,42 @@
         {
             if(node===null) return;
 
-            if(!$("#scriptTree").tree("getParent",node.target))
+            if(node.Key)
             {
-                $.messager.progress({ title: '请稍后', msg: '案例数据加载中...' });
-                var pd={};
-                pd["desc"] = node.desc;
-                pd["name"] = node.name;
-                pd["FID"] = $("#FID").val();
-                pd["PID"] = $("#PID").val();
-                for (n in node.children)
-                {
-                    var nd = node.children[n];
-                    pd["ParamBinding["+n+"].name"] = nd.Key;
-                    pd["ParamBinding["+n+"].value"] = nd.Value;
-                }
-                $('#scriptModal').empty();
-                $("#scriptModal").load('EditStep',pd,function() {
-                    //easyUI-combox 和 bootstrap 样式统一
-                    $.parser.parse($(".modal-body"));
-                    $(".modal-body  .combo").each(function () {
-                        $(this).css('width', '100%');
-                        $(this).children("input").css('width', '100%');
-                        //$(this).children("input").addClass("form-control");
-
-                    });
-                    $(function () { $(".modal-body [data-toggle='tooltip']").tooltip(); });
-                    $.messager.progress('close');
-                    $('#scriptModal').modal();
-                });
-
-
+                node =$("#scriptTree").tree("getParent",node.target);
+                $("#scriptTree").tree("select", node.target);
             }
+
+            
+            $.messager.progress({ title: '请稍后', msg: '案例数据加载中...' });
+            var pd={};
+            pd["desc"] = node.desc;
+            pd["name"] = node.name;
+            pd["FID"] = $("#FID").val();
+            pd["PID"] = $("#PID").val();
+            for (n in node.children)
+            {
+                var nd = node.children[n];
+                pd["ParamBinding["+n+"].name"] = nd.Key;
+                pd["ParamBinding["+n+"].value"] = nd.Value;
+            }
+            $('#scriptModal').empty();
+            $("#scriptModal").load('EditStep',pd,function() {
+                //easyUI-combox 和 bootstrap 样式统一
+                $.parser.parse($(".modal-body"));
+                $(".modal-body  .combo").each(function () {
+                    $(this).css('width', '100%');
+                    $(this).children("input").css('width', '100%');
+                    //$(this).children("input").addClass("form-control");
+
+                });
+                $(function () { $(".modal-body [data-toggle='tooltip']").tooltip(); });
+                $.messager.progress('close');
+                $('#scriptModal').modal();
+            });
+
+
+            
         }
 
 
