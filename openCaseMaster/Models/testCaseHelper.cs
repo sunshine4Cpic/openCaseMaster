@@ -109,7 +109,18 @@ namespace openCaseMaster.Models
             var xe = XElement.Parse(mtcs.controlXML);
 
             xe.SetAttributeValue("name", "prostep_" + mtcs.ID);
-  
+
+
+
+            XElement PB = new XElement("ParamBinding");
+            PB.SetAttributeValue("name", "是否启用");
+            PB.SetAttributeValue("value", "true");
+            PB.SetAttributeValue("list", "启用:true,不启用:false");
+
+
+            xe.Add(PB);
+
+
 
             //mtcs.paramXML.SetAttributeValue("name", name);
             return xe;

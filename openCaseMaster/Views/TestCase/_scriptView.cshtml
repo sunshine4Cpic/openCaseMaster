@@ -23,7 +23,7 @@
         <div data-options="iconCls:'icon-box_add'" onclick="creatUserControl()">自定义组件</div>
         <div class="menu-sep"></div>
         <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="debug()"> 调试案例</div>
-        <div data-options="iconCls:'icon-reload'" onclick="refreshScrpt($(scriptID).val())">撤销未保存的操作</div>
+        <div data-options="iconCls:'icon-reload'" onclick="refreshScrpt()">撤销未保存的操作</div>
     </div>
 
     <div style="float:right" class="l-btn-text">
@@ -41,6 +41,8 @@
 
 </div>
 
+<input id="runParam" type="hidden" value="" />
+
     <script type="text/javascript">
     //@@ sourceURL=scriptView.js
         var scriptTreeData = @Html.Raw(Model.TreeJson);
@@ -48,59 +50,72 @@
         var PData = @Html.Raw(Model.PJson);
         var UData = @Html.Raw(Model.UJson);
 
-        $('#scriptTree').tree({
-            data:scriptTreeData,
-            dnd:true,
-            checkbox:true,
-            pointType:["top","top","bottom","bottom"],
-            animate:true,
-            formatter:function(node){
-                if(node.Key==undefined)
-                    return  node.name +" : "+node.desc;
-                else
-                    return  node.Key +" : <span style='color:blue'>"+node.Value+"</span>";
-            },
-            onBeforeDrag:function(node){
-                if($("#scriptTree").tree("getParent",node.target))
-                    return false;
+       
 
-            },
-            onBeforeDrop: function (target, source,point) {
-                if(source.newStep)
-                {
-                    
-                    $.post("/TestCase/getStep/", { name: source.name,FID:source.FID,PID:source.PID  }, function (result) {
-
-                        var job = JSON.parse(result);
-                        
-                        if(point=="top")
-                        {
-                            $('#scriptTree').tree('insert', {
-                                before: target,
-                                data: JSON.parse(result)
-                            });
-                        }else
-                        {
-                            $('#scriptTree').tree('insert', {
-                                after: target,
-                                data: JSON.parse(result)
-                            });
-                        }
-
-                    }).error(function() { alert("error"); });
-                   
-                    return false;
-                }
-            },
-            onDragOver:function(target, source){
-                if($("#scriptTree").tree("getParent",target))
-                    return false;
-            },
-            onDblClick: function (node) {
-                
-                editStepClick(node);
+        function scriptTreeInit(TreeData)
+        {
+      
+            if (typeof TreeData === 'string') {
+                TreeData = $.parseJSON(TreeData);
             }
-        });
+
+            $('#scriptTree').tree({
+                data:TreeData,
+                dnd:true,
+                checkbox:true,
+                pointType:["top","top","bottom","bottom"],
+                animate:true,
+                formatter:function(node){
+                    if(node.Key==undefined)
+                        return  node.name +" : "+node.desc;
+                    else
+                        return  node.Key +" : <span style='color:blue'>"+node.Value+"</span>";
+                },
+                onBeforeDrag:function(node){
+                    if($("#scriptTree").tree("getParent",node.target))
+                        return false;
+
+                },
+                onBeforeDrop: function (target, source,point) {
+                    if(source.newStep)
+                    {
+                    
+                        $.post("/TestCase/getStep/", { name: source.name,FID:source.FID,PID:source.PID  }, function (result) {
+
+                            var job = JSON.parse(result);
+                        
+                            if(point=="top")
+                            {
+                                $('#scriptTree').tree('insert', {
+                                    before: target,
+                                    data: JSON.parse(result)
+                                });
+                            }else
+                            {
+                                $('#scriptTree').tree('insert', {
+                                    after: target,
+                                    data: JSON.parse(result)
+                                });
+                            }
+
+                        }).error(function() { alert("error"); });
+                   
+                        return false;
+                    }
+                },
+                onDragOver:function(target, source){
+                    if($("#scriptTree").tree("getParent",target))
+                        return false;
+                },
+                onDblClick: function (node) {
+                
+                    editStepClick(node);
+                }
+            });
+               
+        }
+
+        scriptTreeInit(scriptTreeData);
 
         $('#controlTreeListF').tree({
             data:FData,
@@ -249,11 +264,18 @@
             }
         }
 
-        function refreshScrpt(ID)
+        function refreshScrpt()
         {
             $.messager.confirm('Message', '确认撤销所有案例编辑操作吗?', function (r) {
-                if (r)
-                    $('#scriptPanel').panel('refresh', 'scriptView/' + ID);
+                if (r){
+                    var ID = document.getElementById("scriptID").value;
+
+                    $.get("scriptData/"+ID, function(result){
+                        scriptTreeInit(result);
+                    });
+                    //$('#scriptPanel').panel('refresh', 'scriptView/' + ID);
+                }
+                    
             });
         }
 
@@ -265,14 +287,15 @@
                     var nodes= $('#scriptTree').tree("getRoots");
                     var steps = getSteps(nodes);
                     var id = $('#scriptID').val();
-                    $.post("/TestCase/debugSave/"+id, { steps: JSON.stringify(steps)  }, function (result) {
+                    var param = $('#runParam').val();
+                    $.post("/TestCase/debugSave/"+id, { steps: JSON.stringify(steps),param:param  }, function (result) {
                         if (result == "") {//没有参数
                             debugSubmit(id,"null");
                         }else
                         {
                             var sm = $("#scriptModal");
                             sm.empty();
-                            sm.html(result);
+                            sm.html(result); 
                             $(function () { $(".modal-body [data-toggle='tooltip']").tooltip(); });
                             sm.modal();
                         }

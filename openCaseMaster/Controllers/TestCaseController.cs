@@ -219,6 +219,21 @@ namespace openCaseMaster.Controllers
 
         }
 
+
+        /// <summary>
+        /// tree节点
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        public string scriptData(int ID)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            var mtc = QC_DB.M_testCase.First(t => t.ID == ID);
+
+            return scriptViewModel.getScript2Json(mtc);
+        }
+
         /// <summary>
         /// 编辑脚本
         /// </summary>
@@ -299,7 +314,7 @@ namespace openCaseMaster.Controllers
 
 
         [HttpPost]
-        public ActionResult debugSave(int id, string steps)
+        public ActionResult debugSave(int id, string steps, string Param)
         {
 
             using (QCTESTEntities QC_DB = new QCTESTEntities())
@@ -308,8 +323,10 @@ namespace openCaseMaster.Controllers
                 mtc.editScript(steps);
                 QC_DB.SaveChanges();//先保存
 
+
+                
                 XElement xe = XElement.Parse(mtc.testXML);
-                var pbs = xe.ParamDictionary();
+                var pbs = xe.ParamDictionary(Param);
 
                 if (pbs.Count>0)
                 {
@@ -325,7 +342,25 @@ namespace openCaseMaster.Controllers
             }
 
         }
+        [HttpPost]
+        public XElement runScrpt(int id, Dictionary<string, string> Param)
+        {
+            //要传Param 要传null post时候 指定Param 参数为 其他值就可以 比如 param:"123"
+            /*
+            var tmpParam = Param;
+            if(System.Web.HttpContext.Current.Request.Form.Count==0)
+            {
+                tmpParam = null;
+            }*/
+            using (QCTESTEntities QC_DB = new QCTESTEntities())
+            {
+                M_testCase mtc = QC_DB.M_testCase.First(t => t.ID == id);
+                var xe = mtc.getRunScript(Param);
+                return xe;
+            }
 
+
+        }
 
         [HttpPost]
         public ActionResult CreateUserControl(string steps)
@@ -378,25 +413,7 @@ namespace openCaseMaster.Controllers
         
 
 
-        [HttpPost]
-        public XElement runScrpt(int id, Dictionary<string, string> Param)
-        {
-            //要传Param 要传null post时候 指定Param 参数为 其他值就可以 比如 param:"123"
-            /*
-            var tmpParam = Param;
-            if(System.Web.HttpContext.Current.Request.Form.Count==0)
-            {
-                tmpParam = null;
-            }*/
-            using (QCTESTEntities QC_DB = new QCTESTEntities())
-            {
-                M_testCase mtc = QC_DB.M_testCase.First(t => t.ID == id);
-                var xe = mtc.getRunScript(Param);
-                return xe;
-            }
-            
-
-        }
+        
 
 
         [HttpPost]
