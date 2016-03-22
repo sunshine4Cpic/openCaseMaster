@@ -165,6 +165,7 @@
 
             $('#UpLoadModal').on('hidden.bs.modal', function () {
                 $("#uploader").plupload("destroy");
+                reloadNode();
             })
            
         });
