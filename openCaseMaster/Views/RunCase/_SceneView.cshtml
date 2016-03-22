@@ -5,7 +5,7 @@
 
  <table id="SceneTable" class="easyui-datagrid" title="@Model.name"
        data-options="rownumbers:true,singleSelect:true,url:'SceneCaseData/@Model.ID',method:'get', pageSize: 10,
-        iconCls:'icon-movie_grey',collapsible:true,pagination:true,toolbar:'#SceneTool'">
+        iconCls:'icon-movie_grey',collapsible:true,pagination:true,toolbar:'#SceneTool',onDblClickRow:viewRecord">
     <thead>
 			<tr>
 				<th data-options="field:'name',width:180">案例名</th>
