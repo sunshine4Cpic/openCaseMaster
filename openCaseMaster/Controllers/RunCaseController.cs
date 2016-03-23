@@ -162,7 +162,7 @@ namespace openCaseMaster.Controllers
             }
             QC_DB.SaveChanges();
 
-            return "测试任务已停止";
+            return "True";
            
         }
 

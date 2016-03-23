@@ -223,18 +223,29 @@
         var id = $("#DemandID").val();
         $.post("stopDemand", { "id": id }, function (result) {
             $.messager.progress('close');
-            //节点图标改动
-            var node = $('#runCaseTreeList').tree('find', id);
-            if(node)
+
+            if(result=="True")
             {
-                $('#runCaseTreeList').tree('update', {
-                    target: node.target,
-                    iconCls: 'icon-application_windows'
-                })
+                //节点图标改动
+                var node = $('#runCaseTreeList').tree('find', id);
+                if(node)
+                {
+                    $('#runCaseTreeList').tree('update', {
+                        target: node.target,
+                        iconCls: 'icon-application_windows'
+                    })
+                }
+                $.messager.alert('Messager', "任务已停止!", "info");
+                refreshDemand(id);
+            }else
+            {
+                $.messager.alert('Messager', result, "error");
             }
             
-            $.messager.alert('Messager', result, "info");
-            refreshDemand(id);
+            
+            
+           
+            
 
         }).error(function() {$.messager.progress('close'); alert("error"); });
     }
