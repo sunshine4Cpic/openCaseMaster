@@ -28,7 +28,7 @@
 <div class="row">
     <div id="left" class="col-md-4" style="padding:5px">
 
-        <div class="easyui-panel" title="测试案例列表" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-filter',closable:false,
+        <div id="caseListPanel" class="easyui-panel" title="测试案例列表" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-filter',closable:false,
     collapsible:true,minimizable:false,maximizable:false">
 
             <div class="easyui-panel" style="margin-bottom:5px">
@@ -163,6 +163,13 @@
                 onDragOver: function (target, source) {
                     //('#tt2').tree('getData', target);
                     return false;
+                },
+                onDblClick: function (node) {
+                    if (node.type == 0 || node.PID)
+                        $.messager.confirm('Message', '确认重新刷新节点数据?', function (r) {
+                            if (r)
+                                $('#caseTreeList').tree("reload", node.target);//刷新
+                        });
                 }
             });
 
@@ -208,6 +215,26 @@
                 up.setOption("multipart_params", { "originalName": file.name });
             });
             $('#UpLoadModal').modal();
+        }
+
+        //展开check的节点
+        function expandCheck()
+        {
+            var checkNodes = $("#caseTreeList").tree("getChecked");
+            var expandFlag = false;
+
+            for (var i = 0; i < checkNodes.length; i++)
+            {
+                if (checkNodes[i].state == "closed") {
+                    $("#caseTreeList").tree("expandAll", checkNodes[i].target);
+                    expandFlag = true;
+                }
+                
+            }
+
+
+            if (expandFlag)
+                expandCheck();
         }
 
 

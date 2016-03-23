@@ -89,7 +89,7 @@ namespace openCaseMaster.ViewModels
                 if (pbx.Attribute("desc") == null)
                     pb.desc = pb.name;
                 else
-                    pb.desc = pb.name + " : " + pbx.Attribute("desc").Value;
+                    pb.desc = pbx.Attribute("desc").Value;
 
                 if (pbx.Attribute("list") != null)
                 {

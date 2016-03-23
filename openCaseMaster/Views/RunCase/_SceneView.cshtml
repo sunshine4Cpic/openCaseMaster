@@ -8,9 +8,9 @@
         iconCls:'icon-movie_grey',collapsible:true,pagination:true,toolbar:'#SceneTool',onDblClickRow:viewRecord">
     <thead>
 			<tr>
-				<th data-options="field:'name',width:180">案例名</th>
+				<th data-options="field:'name',width:180,formatter:formatName">案例名</th>
 				<th data-options="field:'state',width:80,align:'center'">状态</th>
-				<th data-options="field:'result',width:80,align:'center'">执行结果</th>
+				<th data-options="field:'result',width:80,align:'center',formatter:formatResult">执行结果</th>
 				<th data-options="field:'flow',width:120,align:'center'">流量消耗</th>
 				<th data-options="field:'runDate',width:260,align:'center'">执行时间</th>
 			</tr>
@@ -73,7 +73,28 @@
 <script type="text/javascript">
     //@@ sourceURL=SceneView.js
 
-    
+    function formatName(value, row) {
+        return '<div title="' + row.ID + '" class="easyui-tooltip">' + row.name + '</div>';
+    }
+
+    function formatResult(value, row) {
+        if (value == null) return "";
+        var color = "#FF0000";
+        switch(value)
+        {
+            
+            case "成功":
+                color = "#32CD32";
+                break;
+            case "确认":
+                color = "#0000FF";
+                break;
+            default:
+                break;
+        }
+
+        return "<font color='" + color + "'>" + value + "</font>";
+    }
 
     function viewRecord() 
     {

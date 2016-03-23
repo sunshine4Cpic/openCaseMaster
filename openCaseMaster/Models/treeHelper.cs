@@ -123,9 +123,7 @@ namespace openCaseMaster.Models
         {
             int userID = userHelper.getUserID();
 
-            int[] Permission = userHelper.getUserPermission();
             
-
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
                 //我的组件
@@ -144,6 +142,7 @@ namespace openCaseMaster.Models
                 }
                 else
                 {
+                    int[] Permission = userHelper.getUserPermission();
                     pjs = (from t in QC_DB.project
                            where Permission.Contains(t.ID)
                            select t).ToList();

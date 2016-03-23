@@ -80,15 +80,23 @@
                 //param.myattr = 'test';    // or change request parameter
             },
             onClick: function (node) {
-                
+                /*
                 if (node.id) {//Tree不再显示场景,此逻辑暂不生效
                     refreshScene(node.id,node.DemandID);
-                } else if (node.type == 1)
+                } else */
+                if (node.type == 1)
                 {
                     refreshDemand(node.DemandID);
                 }
 
             },
+            onDblClick: function (node) {
+                if (node.type == 0 || node.PID)
+                    $.messager.confirm('Message', '确认重新刷新节点数据?', function (r) {
+                        if (r)
+                            $('#runCaseTreeList').tree("reload", node.target);//刷新
+                    });
+            }
         });
 
       

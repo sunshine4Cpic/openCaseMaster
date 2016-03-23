@@ -33,9 +33,10 @@ namespace openCaseMaster.Models
             var userData = id.Ticket.UserData;//cookie
 
             JObject userJ = JObject.Parse(userData);
+
             string[] PP = userJ["Permission"].ToString().TrimEnd(',').Split(',');
 
-            return Array.ConvertAll<string, int>(PP, s => int.Parse(s));
+            return Array.ConvertAll<string, int>(PP, s => string.IsNullOrEmpty(s) ? 0 : int.Parse(s));
         }
 
         public static bool isAdmin()

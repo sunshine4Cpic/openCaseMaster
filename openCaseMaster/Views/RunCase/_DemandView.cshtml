@@ -3,17 +3,24 @@
 
 @{
     string apkDisplay = "none";
+    string iconCls = "icon-application_windows";
+    string onClickCellFun = "onClickCell";
     if (Model.apkName != null)
     {
         apkDisplay = "block";
+    }
+    if (Model.isRun ==true)
+    {
+        onClickCellFun = "onClickCell2";
+        iconCls = "icon-application_windows_right";
     }
 }
 
 <input id="DemandID" type="hidden" value="@Model.ID" />
 
     <table id="DemandTable" class="easyui-datagrid" title="@Model.name"
-       data-options="rownumbers:true,singleSelect:true,data:JsonData,toolbar:'#tb',iconCls:'icon-application_windows',
-           collapsible:true,showFooter:true,onClickCell:onClickCell,onDblClickRow:onDblClickRow,onSelect:onSelect">
+       data-options="rownumbers:true,singleSelect:true,data:JsonData,toolbar:'#tb',iconCls:'@iconCls',
+           collapsible:true,showFooter:true,onClickCell:@onClickCellFun">
     <thead data-options="frozen:true">
         <tr>
             <th data-options="field:'name',width:160,formatter:fm">场景名</th>
@@ -39,7 +46,9 @@
             <th data-options="field:'error',width:80,align:'center',formatter:function(value,row){
 							return (row.error -row.Untreated)+'/'+row.error;
 						}">已处理/失败</th>
-                <th data-options="field:'SuccessRatio',width:60,align:'center'">成功率</th>
+                <th data-options="field:'SuccessRatio',width:60,align:'center',formatter:function(value, row){
+                    return (row.SuccessRatio*100).toFixed(2)+'%';
+                    }">成功率</th>
                 <th data-options="field:'installResult',width:137,formatter:fm">安装结果</th>
             </tr>
         </thead>
@@ -49,12 +58,15 @@
     <a href="#" class="easyui-menubutton" data-options="menu:'#mm1',iconCls:'icon-media_controls_dark_play'">运行</a>
     @if(Model.isRun!=true)
     { 
+       
     <a href="#" class="easyui-menubutton" data-options="menu:'#mm2',iconCls:'icon-movie_grey'">场景编辑</a>
-    <div id="mm2" style="width:150px;">
+    <div id="mm2" style="width:150px;position:absolute;">
         <div data-options="iconCls:'icon-movie_grey_add'" onclick="showUploader()">添加场景</div>
         <div data-options="iconCls:'icon-movie_grey_dark_del'" onclick="deleteScene()">删除场景</div>
-
+        <div class="menu-sep"></div>
+        <div data-options="iconCls:'icon-document_small_upload'" id="apkUpload" >上传apk</div>
     </div>
+           
     }
   <div id="apkDiv" style="display:@apkDisplay;">
       <a id="apkUrl" href="/apkInstall/@Model.apkName" title="执行前安装apk">
@@ -67,8 +79,6 @@
     <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="run()">开始执行</div>
     <div data-options="iconCls:'icon-media_controls_dark_stop'" onclick="stop()">暂停任务</div>
     <div data-options="iconCls:'icon-reload'" onclick="Reset()">重置失败案例</div>
-    <div class="menu-sep"></div>
-    <div data-options="iconCls:'icon-document_small_upload'" id="apkUpload" >上传apk</div>
 </div>
 
 
@@ -149,27 +159,31 @@
     }
 
     function onClickCell(index, field){
+        if(!endEditing()) return;
 
-        if(  endEditing()&&field=='DeviceID')
+        if(field=='DeviceID')
         {
             editIndex = index;
             $(this).datagrid('selectRow', index)
                 .datagrid('beginEdit', index);
+        }else
+        {
+            var row_old = $('#DemandTable').datagrid('getSelected');
+            $('#DemandTable').datagrid('selectRow', index);
+            var row = $('#DemandTable').datagrid('getSelected');
+            if(row_old!=row)
+                refreshScene(row.ID);
         }
     }
 
-    function onDblClickRow(rowIndex,rowData){
-        refreshScene(rowData.ID)
+    //不可编辑
+    function onClickCell2(index, field){
+        var row_old = $('#DemandTable').datagrid('getSelected');
+        $('#DemandTable').datagrid('selectRow', index);
+        var row = $('#DemandTable').datagrid('getSelected');
+        if(row_old!=row)
+            refreshScene(row.ID);
     }
-    function onSelect(rowIndex,rowData)
-    {
-        var tmpID = $('#ScenePanel #SceneID').val();
-        if(rowData.ID !=tmpID)
-            document.getElementById("ScenePanel").style.display = "none";
-    }
-
-
-
    
 
     function run()
@@ -178,7 +192,27 @@
         var id = $("#DemandID").val();
         $.post("runDemand", { "id": id }, function (result) {
             $.messager.progress('close');
-            $.messager.alert('Messager', result, "info");
+
+            document.getElementById("mm2").disabled="none";
+
+            //节点图标改动
+            var node = $('#runCaseTreeList').tree('find', id);
+            if(node)
+            {
+                $('#runCaseTreeList').tree('update', {
+                    target: node.target,
+                    iconCls: 'icon-application_windows_right'
+                })
+            }
+          
+
+            if(result=="True")
+            {
+                $.messager.alert('Messager', "开始执行", "info");
+            }
+            else
+                $.messager.alert('Messager', result, "info");
+            refreshDemand(id);
 
         }).error(function() {$.messager.progress('close'); alert("error"); });
     }
@@ -189,7 +223,18 @@
         var id = $("#DemandID").val();
         $.post("stopDemand", { "id": id }, function (result) {
             $.messager.progress('close');
+            //节点图标改动
+            var node = $('#runCaseTreeList').tree('find', id);
+            if(node)
+            {
+                $('#runCaseTreeList').tree('update', {
+                    target: node.target,
+                    iconCls: 'icon-application_windows'
+                })
+            }
+            
             $.messager.alert('Messager', result, "info");
+            refreshDemand(id);
 
         }).error(function() {$.messager.progress('close'); alert("error"); });
     }

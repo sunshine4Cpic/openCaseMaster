@@ -27,7 +27,7 @@
     </div>
 
     <div style="float:right" class="l-btn-text">
-       @Model.scriptName ( @Model.Fname )
+       ( @Model.Fname )
     </div>
 </div>
 
@@ -45,16 +45,16 @@
 
     <script type="text/javascript">
     //@@ sourceURL=scriptView.js
-        var scriptTreeData = @Html.Raw(Model.TreeJson);
-        var FData = @Html.Raw(Model.FJson);
-        var PData = @Html.Raw(Model.PJson);
-        var UData = @Html.Raw(Model.UJson);
+    var scriptTreeData = @Html.Raw(Model.TreeJson);
+    var FData = @Html.Raw(Model.FJson);
+    var PData = @Html.Raw(Model.PJson);
+    var UData = @Html.Raw(Model.UJson);
 
-       
+
 
         function scriptTreeInit(TreeData)
         {
-      
+
             if (typeof TreeData === 'string') {
                 TreeData = $.parseJSON(TreeData);
             }
@@ -79,11 +79,11 @@
                 onBeforeDrop: function (target, source,point) {
                     if(source.newStep)
                     {
-                    
+
                         $.post("/TestCase/getStep/", { name: source.name,FID:source.FID,PID:source.PID  }, function (result) {
 
                             var job = JSON.parse(result);
-                        
+
                             if(point=="top")
                             {
                                 $('#scriptTree').tree('insert', {
@@ -99,7 +99,7 @@
                             }
 
                         }).error(function() { alert("error"); });
-                   
+
                         return false;
                     }
                 },
@@ -111,7 +111,7 @@
                     editStepClick(node);
                 }
             });
-               
+
         }
 
         scriptTreeInit(scriptTreeData);
@@ -133,7 +133,11 @@
                 if (node.children !== undefined)
                     return false;
                 else
+                {
+                    $("#caseListPanel").panel("collapse",true);
+                    $(this).tree("select",node.target);
                     node["newStep"] = true;
+                }
             }
 
         });
@@ -155,7 +159,11 @@
                 if (node.children !== undefined)
                     return false;
                 else
+                {
+                    $("#caseListPanel").panel("collapse",true);
+                    $(this).tree("select",node.target);
                     node["newStep"] = true;
+                }
             }
 
         });
@@ -178,7 +186,11 @@
                 if (node.children !== undefined)
                     return false;
                 else
+                {
+                    $(this).tree("select",node.target);
                     node["newStep"] = true;
+                    $("#caseListPanel").panel("collapse",true);
+                }
             },
             onDblClick: function (node) {
                 if (node.children !== undefined)
@@ -190,7 +202,7 @@
                             //$('#scriptPanel').panel('refresh', 'userStepView/' + node.id);
                         }
                     });
-                   
+
                 }
             },
 
@@ -207,7 +219,7 @@
                 $("#scriptTree").tree("select", node.target);
             }
 
-            
+
             $.messager.progress({ title: '请稍后', msg: '案例数据加载中...' });
             var pd={};
             pd["desc"] = node.desc;
@@ -236,7 +248,7 @@
             });
 
 
-            
+
         }
 
 
@@ -279,7 +291,7 @@
                     });
                     //$('#scriptPanel').panel('refresh', 'scriptView/' + ID);
                 }
-                    
+
             });
         }
 
@@ -299,14 +311,14 @@
                         {
                             var sm = $("#scriptModal");
                             sm.empty();
-                            sm.html(result); 
+                            sm.html(result);
                             $(function () { $(".modal-body [data-toggle='tooltip']").tooltip(); });
                             sm.modal();
                         }
                     }).error(function() { alert("error"); });
                 }
                 });
-           
+
         }
 
         function debugSubmit(id,Param)
@@ -330,10 +342,16 @@
                     var sm = $("#scriptModal");
                     sm.empty();
                     sm.html(result);
-                   
+
                     sm.modal();
             }).error(function() { alert("error"); });
 
 
         }
+
+        $('#scriptPanel').panel("setTitle", '@Model.scriptName');
+        //新建案例自动打开并选中,这个实现方法不是很好
+        var node = $('#caseTreeList').tree("find",@Model.ID)
+        if(node)
+            $('#caseTreeList').tree("select",node.target);
     </script>

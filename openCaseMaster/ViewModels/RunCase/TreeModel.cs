@@ -16,6 +16,7 @@ namespace openCaseMaster.ViewModels
         {
             QCTESTEntities QC_DB = new QCTESTEntities();
 
+            id = td.ID;
             DemandID = td.ID;
             text = td.name;
             state = td.type == 0 ? "closed" : "open";

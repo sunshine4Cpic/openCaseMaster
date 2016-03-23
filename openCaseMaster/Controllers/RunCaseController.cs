@@ -138,7 +138,7 @@ namespace openCaseMaster.Controllers
                 if (msg != null)
                     return "执行机:" + msg + "发生错误!";
                 else
-                    return "开始执行";
+                    return "True";
             }
             else
             {
