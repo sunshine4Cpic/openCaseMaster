@@ -5,6 +5,17 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="MasterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="admin_log">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Weblog" Type="ntext" />
+          <Property Name="UserCode" Type="int" />
+          <Property Name="Ip" Type="nvarchar" MaxLength="50" />
+          <Property Name="Type" Type="int" />
+          <Property Name="tDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="admin_user">
           <Key>
             <PropertyRef Name="ID" />
@@ -209,6 +220,20 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Type" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <Association Name="FK_admin_log_admin_log">
+          <End Role="admin_user" Type="Self.admin_user" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="admin_log" Type="Self.admin_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin_user">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="admin_log">
+              <PropertyRef Name="UserCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_admin_user_user_type">
           <End Role="user_type" Type="Self.user_type" Multiplicity="0..1" />
           <End Role="admin_user" Type="Self.admin_user" Multiplicity="*" />
@@ -568,6 +593,7 @@
           </ReturnType>
         </Function>
         <EntityContainer Name="MasterModelStoreContainer">
+          <EntitySet Name="admin_log" EntityType="Self.admin_log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admin_user" EntityType="Self.admin_user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="caseFramework" EntityType="Self.caseFramework" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Framework4Project" EntityType="Self.Framework4Project" Schema="dbo" store:Type="Tables" />
@@ -587,6 +613,10 @@
           <EntitySet Name="project_stage" EntityType="Self.project_stage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project_type" EntityType="Self.project_type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user_type" EntityType="Self.user_type" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_admin_log_admin_log" Association="Self.FK_admin_log_admin_log">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="admin_log" EntitySet="admin_log" />
+          </AssociationSet>
           <AssociationSet Name="FK_admin_user_user_type" Association="Self.FK_admin_user_user_type">
             <End Role="user_type" EntitySet="user_type" />
             <End Role="admin_user" EntitySet="admin_user" />
@@ -712,6 +742,7 @@
           <NavigationProperty Name="M_runScene" Relationship="Self.FK_M_runScene_admin_user" FromRole="admin_user" ToRole="M_runScene" />
           <NavigationProperty Name="caseFramework" Relationship="MasterModel.FK_caseFramework_userID" FromRole="admin_user" ToRole="caseFramework" />
           <NavigationProperty Name="user_type" Relationship="MasterModel.FK_admin_user_user_type" FromRole="admin_user" ToRole="user_type" />
+          <NavigationProperty Name="admin_log" Relationship="MasterModel.FK_admin_log_admin_log" FromRole="admin_user" ToRole="admin_log" />
         </EntityType>
         <EntityType Name="M_application">
           <Key>
@@ -1292,6 +1323,11 @@
             <End Role="user_type" EntitySet="user_type" />
             <End Role="admin_user" EntitySet="admin_user" />
           </AssociationSet>
+          <EntitySet Name="admin_log" EntityType="MasterModel.admin_log" />
+          <AssociationSet Name="FK_admin_log_admin_log" Association="MasterModel.FK_admin_log_admin_log">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="admin_log" EntitySet="admin_log" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="M_ContainUserStepCase_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -1403,6 +1439,32 @@
             </Principal>
             <Dependent Role="admin_user">
               <PropertyRef Name="Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="admin_log">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Weblog" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserCode" Type="Int32" />
+          <Property Name="Ip" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="tDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_admin_log_admin_log" FromRole="admin_log" ToRole="admin_user" />
+        </EntityType>
+        <Association Name="FK_admin_log_admin_log">
+          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="MasterModel.admin_log" Role="admin_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin_user">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="admin_log">
+              <PropertyRef Name="UserCode" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1672,6 +1734,18 @@
             <EntityTypeMapping TypeName="MasterModel.user_type">
               <MappingFragment StoreEntitySet="user_type">
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admin_log">
+            <EntityTypeMapping TypeName="MasterModel.admin_log">
+              <MappingFragment StoreEntitySet="admin_log">
+                <ScalarProperty Name="tDate" ColumnName="tDate" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Ip" ColumnName="Ip" />
+                <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+                <ScalarProperty Name="Weblog" ColumnName="Weblog" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

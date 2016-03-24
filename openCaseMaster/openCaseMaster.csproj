@@ -164,6 +164,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\admin_log.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\caseFramework.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
@@ -271,7 +274,9 @@
     <Compile Include="ViewModels\userControl\controlViewModel.cs" />
     <Compile Include="ViewModels\userControl\frameTreeNode.cs" />
     <Compile Include="ViewModels\userControl\projectTreeNode.cs" />
-    <Compile Include="ViewModels\User\UserModel.cs" />
+    <Compile Include="ViewModels\User\proCheckModel.cs" />
+    <Compile Include="ViewModels\User\UserListModel.cs" />
+    <Compile Include="ViewModels\User\LoginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="apkInstall\9ebe59c658c9c5c5ecdd8593e4025321.jpg" />
@@ -873,6 +878,8 @@
     <Content Include="Views\RunCase\_SceneView.cshtml" />
     <Content Include="Views\RunCase\_caseRecord.cshtml" />
     <Content Include="Views\RunCase\_addNew.cshtml" />
+    <Content Include="Views\User\UserManage.cshtml" />
+    <Content Include="Views\User\_editUser.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
