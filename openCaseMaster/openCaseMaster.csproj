@@ -164,6 +164,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\admin_log.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\caseFramework.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
@@ -256,6 +259,7 @@
     </Compile>
     <Compile Include="Models\XElementHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\RunCase\caseRecordModel.cs" />
     <Compile Include="ViewModels\RunCase\SceneCaseDataModel.cs" />
     <Compile Include="ViewModels\RunCase\SceneViewModel.cs" />
     <Compile Include="ViewModels\RunCase\DemandViewModel.cs" />
@@ -270,9 +274,13 @@
     <Compile Include="ViewModels\userControl\controlViewModel.cs" />
     <Compile Include="ViewModels\userControl\frameTreeNode.cs" />
     <Compile Include="ViewModels\userControl\projectTreeNode.cs" />
-    <Compile Include="ViewModels\User\UserModel.cs" />
+    <Compile Include="ViewModels\User\proCheckModel.cs" />
+    <Compile Include="ViewModels\User\UserListModel.cs" />
+    <Compile Include="ViewModels\User\LoginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="apkInstall\9ebe59c658c9c5c5ecdd8593e4025321.jpg" />
+    <Content Include="apkInstall\c7dde71190ef76c6205b2c889c16fdfaae51678c.jpg" />
     <Content Include="apkInstall\empty.txt" />
     <Content Include="App_Data\empty.txt" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -299,6 +307,7 @@
     <Content Include="Content\img\application_windows_locked.png" />
     <Content Include="Content\img\application_windows_new.png" />
     <Content Include="Content\img\application_windows_okay.png" />
+    <Content Include="Content\img\application_windows_right.png" />
     <Content Include="Content\img\arrow1.gif" />
     <Content Include="Content\img\arrow2.gif" />
     <Content Include="Content\img\arrow_state_blue_right.png" />
@@ -867,11 +876,12 @@
     <Content Include="Views\RunCase\Index.cshtml" />
     <Content Include="Views\RunCase\_DemandView.cshtml" />
     <Content Include="Views\RunCase\_SceneView.cshtml" />
-    <Content Include="Views\RunCase\caseRecord.cshtml" />
+    <Content Include="Views\RunCase\_caseRecord.cshtml" />
+    <Content Include="Views\RunCase\_addNew.cshtml" />
+    <Content Include="Views\User\UserManage.cshtml" />
+    <Content Include="Views\User\_editUser.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\UploadFile\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />

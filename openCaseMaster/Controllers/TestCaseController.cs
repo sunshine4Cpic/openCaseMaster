@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using ICSharpCode.SharpZipLib.Checksums;
+using ICSharpCode.SharpZipLib.Zip;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NPOI.HSSF.UserModel;
 using openCaseMaster.Models;
@@ -36,10 +38,6 @@ namespace openCaseMaster.Controllers
         public string projectListInit()
         {
             
-
-            
-            
-         
             using(QCTESTEntities QC_DB = new QCTESTEntities())
             {
                 var tcl = from t in QC_DB.project
@@ -221,6 +219,21 @@ namespace openCaseMaster.Controllers
 
         }
 
+
+        /// <summary>
+        /// tree节点
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        public string scriptData(int ID)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            var mtc = QC_DB.M_testCase.First(t => t.ID == ID);
+
+            return scriptViewModel.getScript2Json(mtc);
+        }
+
         /// <summary>
         /// 编辑脚本
         /// </summary>
@@ -301,7 +314,7 @@ namespace openCaseMaster.Controllers
 
 
         [HttpPost]
-        public ActionResult debugSave(int id, string steps)
+        public ActionResult debugSave(int id, string steps, string Param)
         {
 
             using (QCTESTEntities QC_DB = new QCTESTEntities())
@@ -310,8 +323,10 @@ namespace openCaseMaster.Controllers
                 mtc.editScript(steps);
                 QC_DB.SaveChanges();//先保存
 
+
+                
                 XElement xe = XElement.Parse(mtc.testXML);
-                var pbs = xe.ParamDictionary();
+                var pbs = xe.ParamDictionary(Param);
 
                 if (pbs.Count>0)
                 {
@@ -327,7 +342,25 @@ namespace openCaseMaster.Controllers
             }
 
         }
+        [HttpPost]
+        public XElement runScrpt(int id, Dictionary<string, string> Param)
+        {
+            //要传Param 要传null post时候 指定Param 参数为 其他值就可以 比如 param:"123"
+            /*
+            var tmpParam = Param;
+            if(System.Web.HttpContext.Current.Request.Form.Count==0)
+            {
+                tmpParam = null;
+            }*/
+            using (QCTESTEntities QC_DB = new QCTESTEntities())
+            {
+                M_testCase mtc = QC_DB.M_testCase.First(t => t.ID == id);
+                var xe = mtc.getRunScript(Param);
+                return xe;
+            }
 
+
+        }
 
         [HttpPost]
         public ActionResult CreateUserControl(string steps)
@@ -360,6 +393,8 @@ namespace openCaseMaster.Controllers
             nmtc.name = name;
             nmtc.stepXML = stepXML.ToString();
 
+    
+
             XElement paramXml = new XElement("Step");
             foreach (var p in ParamO)
             {
@@ -380,53 +415,96 @@ namespace openCaseMaster.Controllers
         
 
 
+        
+
+
         [HttpPost]
-        public XElement runScrpt(int id, Dictionary<string, string> Param)
+        public void createScene(List<int> ids)
         {
-            //要传Param 要传null post时候 指定Param 参数为 其他值就可以 比如 param:"123"
-            /*
-            var tmpParam = Param;
-            if(System.Web.HttpContext.Current.Request.Form.Count==0)
-            {
-                tmpParam = null;
-            }*/
-            using (QCTESTEntities QC_DB = new QCTESTEntities())
-            {
-                M_testCase mtc = QC_DB.M_testCase.First(t => t.ID == id);
-                var xe = mtc.getRunScript(Param);
-                return xe;
-            }
-            
+            if (ids == null) return;
+            MemoryStream stm = testCaseHelper.getSceneExcelMS(ids);
+
+            DownLoad(stm, "场景模板.xls", "vnd.ms-excel");
+           
 
         }
 
-
         [HttpPost]
-        public ActionResult createScene(List<int> ids)
+        public void downloadCase(List<int> ids)
         {
-            MemoryStream stm = testCaseHelper.getSceneExcelMS(ids);
+            if (ids == null) return;
+            MemoryStream MyStream = new MemoryStream();
+            ZipOutputStream zipedStream = new ZipOutputStream(MyStream);
+            zipedStream.SetLevel(6);
+            zipedStream.IsStreamOwner = false;
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            var cs = from t in QC_DB.M_testCase
+                     where ids.Contains(t.ID)
+                     select t;
+
+
+            foreach (var c in cs)
+            {
+                creatCaseStream(c, zipedStream);
+            }
+            zipedStream.Finish();
+            zipedStream.Close();
+            DownLoad(MyStream, "案例.zip", "x - zip - compressed");
+        }
+
+
+        [NonAction]
+        private void creatCaseStream(M_testCase mtc, ZipOutputStream zipedStream)
+        {
+           
+            if (mtc == null) return;
+
+            byte[] buffer;
+            if (mtc.testXML != null)
+            {
+                XElement xe = XElement.Parse(mtc.testXML);
+                xe.SetAttributeValue("id", mtc.ID);
+                xe.SetAttributeValue("FID", mtc.FID);
+                buffer = System.Text.Encoding.UTF8.GetBytes(xe.ToString());
+            }
+            else
+            {
+                buffer = System.Text.Encoding.UTF8.GetBytes("");
+            }
+
+            ZipEntry entry = new ZipEntry(mtc.Name + "_" + mtc.ID + ".xml");//案例名
+            entry.Size = buffer.Length;
+            Crc32 crc = new Crc32();
+            crc.Reset();
+            crc.Update(buffer);
+
+            entry.Crc = crc.Value;
+            zipedStream.PutNextEntry(entry);
+            zipedStream.Write(buffer, 0, buffer.Length);
+        }
+
+        //流方式下载
+        [NonAction]
+        private void DownLoad(MemoryStream stm, string FileName, string ContentType)
+        {
+
+
             Response.Clear();
-            Response.ContentType = "application/vnd.ms-excel";
+            Response.ContentType = "application/" + ContentType;
 
 
             //通知浏览器下载文件而不是打开
-            Response.AddHeader("Content-Disposition", "attachment;  filename=" + "场景模板.xls");
+            Response.AddHeader("Content-Disposition", "attachment;  filename=" + FileName);
 
             byte[] ZipBuffer = new byte[stm.Length - 1];
             ZipBuffer = stm.GetBuffer();
 
             Response.OutputStream.Write(ZipBuffer, 0, Convert.ToInt32(ZipBuffer.Length));
             Response.End();
-            return new EmptyResult();
 
         }
-
-
-        
-        
-        
-
-        
      
     }
 }

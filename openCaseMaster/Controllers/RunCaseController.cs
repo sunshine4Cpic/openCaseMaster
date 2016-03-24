@@ -29,22 +29,21 @@ namespace openCaseMaster.Controllers
 
 
                 var tcl = from t in QC_DB.M_testDemand
-                          where t.baseID == ID && t.visable!=false
+                          where t.baseID == ID && t.visable != false
                           orderby t.type
-                          select new testDemandTree
-                          {
-                              iconCls = t.type == 0 ? null : "icon-application_windows",
-                              DemandID = t.ID,
-                              text = t.name,
-                              //state = "close",
-                              state = t.type == 0 ? "closed" : "open",
-                              type = t.type == null ? 0 : t.type.Value
-                          };
+                          select t;
+
+                List<testDemandTree> tdt = new List<testDemandTree>();
+                foreach (var t in tcl)
+                {
+                    tdt.Add(new testDemandTree(t));
+                }
+
 
                 var jSetting = new JsonSerializerSettings();
                 jSetting.NullValueHandling = NullValueHandling.Ignore;
 
-                string json = JsonConvert.SerializeObject(tcl, jSetting);
+                string json = JsonConvert.SerializeObject(tdt, jSetting);
 
                 return json;
             }
@@ -59,20 +58,17 @@ namespace openCaseMaster.Controllers
                           where t.PID == ID && t.visable != false
                           && t.baseID == null
                           orderby t.type
-                          select new testDemandTree
-                          {
-                              DemandID = t.ID,
-                              text = t.name,
-                              //state = "closed",//在tree里显示场景
-                              state = t.type == 0 ? "closed" : "open",
-                              iconCls = t.type == 0 ? null : "icon-application_windows",
-                              type = t.type == null ? 0 : t.type.Value
-                          };
+                          select t;
+                List<testDemandTree> tdt = new List<testDemandTree>();
+                foreach(var t in tcl)
+                {
+                    tdt.Add(new testDemandTree(t));
+                }
 
                 var jSetting = new JsonSerializerSettings();
                 jSetting.NullValueHandling = NullValueHandling.Ignore;
 
-                string json = JsonConvert.SerializeObject(tcl, jSetting);
+                string json = JsonConvert.SerializeObject(tdt, jSetting);
 
                 return json;
             }
@@ -142,7 +138,7 @@ namespace openCaseMaster.Controllers
                 if (msg != null)
                     return "执行机:" + msg + "发生错误!";
                 else
-                    return "开始执行";
+                    return "True";
             }
             else
             {
@@ -166,7 +162,7 @@ namespace openCaseMaster.Controllers
             }
             QC_DB.SaveChanges();
 
-            return "测试任务已停止";
+            return "True";
            
         }
 
@@ -258,12 +254,87 @@ namespace openCaseMaster.Controllers
         }
 
 
-        public ActionResult caseRecord()
+        public ActionResult caseRecord(int ID)
         {
-            return View();
+            caseRecordModel crm = new caseRecordModel(ID);
+            return PartialView("_caseRecord", crm);
         }
 
 
+        [HttpGet]
+        public ActionResult AddNew(int? baseID, int? PID,int type)
+        {
+            ViewData["AddNew"] = true;
+            M_testDemand td = new M_testDemand();
+
+            td.baseID = baseID;
+            td.PID = PID;
+            td.type = type;
+            return PartialView("_addNew", td);
+        }
+
+        [HttpPost]
+        public void AddNew(M_testDemand newTC)
+        {
+            
+            using (QCTESTEntities QC_DB = new QCTESTEntities())
+            {
+                QC_DB.M_testDemand.Add(newTC);
+                QC_DB.SaveChanges();
+             
+            }
+        }
+
+        [HttpGet]
+        public ActionResult EditDemand(int ID)
+        {
+            using (QCTESTEntities QC_DB = new QCTESTEntities())
+            {
+                M_testDemand mt = QC_DB.M_testDemand.First(t => t.ID == ID);
+
+                return PartialView("_addNew", mt);//未做错误处理
+            }
+        }
+
+        [HttpPost]
+        public bool EditDemand(M_testDemand td)
+        {
+            using (QCTESTEntities QC_DB = new QCTESTEntities())
+            {
+                M_testDemand mtc = QC_DB.M_testDemand.FirstOrDefault(t => t.ID == td.ID);
+                mtc.name = td.name;
+                mtc.mark = td.mark;
+                QC_DB.SaveChanges();
+                return true;
+            }
+        }
+
+        [HttpPost]
+        public string DeleteDemand(int ID)
+        {
+
+            using (QCTESTEntities QC_DB = new QCTESTEntities())
+            {
+                M_testDemand md = QC_DB.M_testDemand.First(t => t.ID == ID);
+
+                if (md.type == 0 && md.M_testDemand1.Count > 0)
+                {
+                    return "无法直接删除文件夹,请连续管理员";
+                }else if (md.isRun==true)
+                {
+                    return "无法删除已执行的测试计划";
+                }else
+                {
+
+                    md.visable = false;
+                    md.isRun = false;
+
+                    QC_DB.SaveChanges();
+                    return "True";
+
+                }
+            }
+        }
        
     }
 }

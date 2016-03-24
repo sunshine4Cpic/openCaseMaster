@@ -30,7 +30,7 @@ namespace openCaseMaster.Models
             caseXml.Nodes().Remove();
 
             XElement xx = testCaseHelper.json2StepList(steps);
-            foreach(var step in xx.DescendantNodes())
+            foreach(var step in xx.Elements())
             {
                 caseXml.Add(step);
             }

@@ -58,7 +58,7 @@
         $(".modal-body input[name]").each(function () {
             Param[this.name] = this.value;
         })
-
+        $("#runParam").val(JSON.stringify(Param));
         debugSubmit(id, Param);
 
         //debugSubmit(id, Param);

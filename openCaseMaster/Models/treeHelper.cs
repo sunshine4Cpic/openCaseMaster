@@ -123,9 +123,7 @@ namespace openCaseMaster.Models
         {
             int userID = userHelper.getUserID();
 
-            int[] Permission = userHelper.getUserPermission();
             
-
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
                 //我的组件
@@ -136,9 +134,19 @@ namespace openCaseMaster.Models
                              where t.userID == 1
                              select t).ToList();
 
-                var pjs = (from t in QC_DB.project
+                List<project> pjs;
+                if (userHelper.isAdmin())
+                {
+                    pjs = (from t in QC_DB.project
+                           select t).ToList();
+                }
+                else
+                {
+                    int[] Permission = userHelper.getUserPermission();
+                    pjs = (from t in QC_DB.project
                            where Permission.Contains(t.ID)
                            select t).ToList();
+                }
 
 
                 return getUserControl(myControls, frames, pjs);

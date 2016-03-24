@@ -1,4 +1,6 @@
-﻿using openCaseMaster.ViewModels;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using openCaseMaster.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +26,7 @@ namespace openCaseMaster.Models
             foreach (XElement xe in xel)
             {
                 string value = (string)xe.Attribute("value");
-                if (value == null) continue;//一般没有null 的 ....这个判断比飞舞
+                if (value == null) continue;//一般没有null 的 ....这个判断没什么用
                 Regex reg = new Regex("{.*?}");
                 MatchCollection matches = reg.Matches(value); // 在字符串中匹配
                 foreach (Match match in matches)
@@ -34,6 +36,28 @@ namespace openCaseMaster.Models
                     {
                         Param.Add(name, "");
                     }
+                }
+            }
+
+            return Param;
+        }
+
+        
+        public static Dictionary<string, string> ParamDictionary(this XElement _xe,string json)
+        {
+            Dictionary<string, string> Param = _xe.ParamDictionary();
+
+            if (String.IsNullOrEmpty(json))
+                return Param;
+
+            JObject jo = JObject.Parse(json);
+
+
+            foreach (var p in jo.Properties())
+            {
+                if (Param.ContainsKey(p.Name))
+                {
+                    Param[p.Name] = p.Value.ToString();
                 }
             }
 

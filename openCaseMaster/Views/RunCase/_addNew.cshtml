@@ -1,0 +1,117 @@
+﻿@using openCaseMaster.Models
+@model M_testDemand
+
+@{
+    string nameLabel, markLabel,submitFun;
+    if (Model.type == 0)
+    { nameLabel = "文件夹"; }
+    else
+    { nameLabel = "测试任务"; }
+    markLabel = "备注";
+
+    if (Convert.ToBoolean(ViewData["AddNew"]))
+    {
+        submitFun = "testDemand_New();";
+    }
+    else
+    {
+        submitFun = "testDemand_Edit();";
+    }
+}
+<input type="hidden" id="projectID" name="projectID" value="@Model.PID" />
+<input type="hidden" id="baseID" name="baseID" value="@Model.baseID" />
+
+<input type="hidden" id="type" name="type" value="@Model.type" />
+
+<input type="hidden" id="DemandEditID" name="ID" value="@Model.ID" />
+
+<form class="bs-example bs-example-form" role="form">
+    <div class="input-group" style="width:100%">
+        <span class="input-group-addon" style="width:80px">@nameLabel</span>
+        <input type="text" id="Name" name="Name" value="@Model.name" class="easyui-validatebox form-control input-sm"
+               data-options="required:true,validType:'length[1,50]',missingMessage:'不能为空'" />
+    </div>
+    <br>
+
+
+    <div class="input-group" style="width:100%">
+        <span class="input-group-addon" style="width:80px">@markLabel</span>
+        <input class="form-control input-sm" type="text" id="mark" name="mark" value="@Model.mark" />
+
+    </div>
+  <br>
+
+
+    <div class="input-group" style="width:100%;text-align:center">
+       
+        <input type="button" name="BtnSubmit" class="btn btn-default" value="提交" onclick="@submitFun" style="margin-right:100px" />
+        <input type="button" name="BtnReset" class="btn btn-default" value="重置" onclick="ResetForm();" />
+        
+    </div>
+
+</form>
+
+<script type="text/javascript">
+    //@@ sourceURL=EditDemand.js
+    function ResetForm() {
+        document.getElementById('Name').value = "";
+        document.getElementById('mark').value = "";
+    }
+
+    function testDemand_Edit() {
+
+            var e =
+                {
+                    ID: $('#DemandEditID').val(),
+                    name: $('#Name').val(),
+                    mark: $('#mark').val()
+                };
+            if (e.name.trim().length == 0)
+                return;
+
+
+            $.post("/RunCase/EditDemand", e).then(
+                function (r) {
+                    //这里未判断是否正确返回
+                    $('#dialog').dialog('close');
+
+                    var selectNode = $('#runCaseTreeList').tree("getSelected").target;
+
+                    $('#runCaseTreeList').tree('update', {
+                        target: selectNode,
+                        text: e.name
+                    });
+                }
+                );
+
+    }
+
+    function testDemand_New() {
+
+        var e =
+            {
+                PID: $('#projectID').val(),
+                baseID: $('#baseID').val(),
+                name: $('#Name').val(),
+                mark: $('#mark').val(),
+                type: $('#type').val()
+            };
+        if (e.name.trim().length == 0)
+            return;
+
+
+        $.post("/RunCase/AddNew", e).then(
+            function (r) {
+                //这里未判断是否正确返回
+                $('#dialog').dialog('close');
+                reloadNode();
+            }
+            );
+
+    }
+
+    $(function () {
+        //设置text需要验证
+        $('#Name').validatebox();
+    })
+</script>

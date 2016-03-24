@@ -46,6 +46,7 @@ namespace openCaseMaster.Models
         public virtual DbSet<caseFramework> caseFramework { get; set; }
         public virtual DbSet<Framework4Project> Framework4Project { get; set; }
         public virtual DbSet<user_type> user_type { get; set; }
+        public virtual DbSet<admin_log> admin_log { get; set; }
     
         [DbFunction("QCTESTEntities", "MonthReport")]
         public virtual IQueryable<MonthReport_Result> MonthReport(string startYear, string iD)

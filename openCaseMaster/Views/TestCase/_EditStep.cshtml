@@ -22,27 +22,19 @@
       {
           if (att.data == null)
           {
-            <div class="input-group" style="margin-bottom:5px">
-                <span class="input-group-addon" data-toggle="tooltip" data-html="true" title="@att.desc">
-                    <a href="#">
-                        <span class="glyphicon glyphicon-tags"></span>
-                    </a>
-                </span>
-                <input value="@att.value" name="@att.name" style="height:30px;" class="form-control" placeholder="@att.name" />
+            <div class="input-group" style="margin-bottom:5px;width:100%">
+                <span class="input-group-addon" data-toggle="tooltip" title="@att.desc" style="width:120px;text-align: left;">@att.name</span>
+                <input value="@att.value" name="@att.name" style="height:30px;" class="form-control" placeholder="@att.desc" />
 
             </div>
           }
           else
           {
-    <div class="input-group" style="margin-bottom:5px">
-        <span class="input-group-addon" data-toggle="tooltip" data-html="true" title="@att.desc">
-            <a href="#">
-                <span class="glyphicon glyphicon-tags"></span>
-            </a>
-        </span>
-        <input style="height:30px;" value="@att.value" name="@att.name" class="easyui-combobox" data-options="prompt:'@att.name',panelHeight:'auto',valueField: 'value',textField: 'label',data: @att.data " />
-        </div>
-  }
+            <div class="input-group" style="margin-bottom:5px;width:100%">
+                <span class="input-group-addon" style="width:120px;text-align: left;" data-toggle="tooltip" title="@att.desc">@att.name</span>
+                <input style="height:30px;" value="@att.value" name="@att.name" class="easyui-combobox" data-options="prompt:'@att.desc',panelHeight:'auto',valueField: 'value',textField: 'label',data: @att.data " />
+                </div>
+          }
   
       }
 }

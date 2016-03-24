@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using openCaseMaster.Models;
 using openCaseMaster.ViewModels;
 using System;
@@ -82,12 +83,8 @@ namespace openCaseMaster.Controllers
             }
             //把准备好的cookie加入到响应流中 
             Response.Cookies.Add(cookie);
-
-
-           
-
-          
-
+            loginUser.LastDate = DateTime.Now;
+            qc.SaveChanges();
             return RedirectToLocal(ReturnUrl);
 
 
@@ -121,6 +118,135 @@ namespace openCaseMaster.Controllers
         }
 
 
+        [Authorize(Roles="admin")]
+        public ActionResult UserManage()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "admin")]
+        public string userList(int page, int rows)
+        {
+            UserListModel ulm = new UserListModel(page, rows);
+
+            string json = JsonConvert.SerializeObject(ulm);
+
+            return json;
+
+
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        public ActionResult editUser(int id)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+            var user = QC_DB.admin_user.First(t => t.ID == id);
+
+
+            var tp = from t in QC_DB.user_type
+                     select t;
+
+
+            SelectList selList1 = new SelectList(tp, "ID", "Type");
+            ViewData["typeList"] = selList1.AsEnumerable();
+
+            var pp = (from t in QC_DB.project
+                      select new proCheckModel
+                     {
+                         ID = t.ID,
+                         Pname = t.Pname
+                     }).ToList();
+            if (user.Permission != null)
+            {
+                var psn = user.Permission.Split(',');
+
+                foreach (var p in pp)
+                {
+                    if (psn.Contains(p.ID.ToString()))
+                        p.isCheck = true;
+                    else
+                        p.isCheck = false;
+                }
+            }
+
+
+            ViewData["proList"] = pp;  
+
+
+            return PartialView("_editUser", user);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public string editUser(admin_user user)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+            var u = QC_DB.admin_user.First(t => t.ID == user.ID);
+            u.Name = user.Name;
+            u.Permission = user.Permission;
+            u.Type = user.Type;
+            QC_DB.SaveChanges();
+
+            return "";
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public string deleteUser(int id)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+            var u = QC_DB.admin_user.First(t => t.ID == id);
+            QC_DB.admin_user.Remove(u);
+            QC_DB.SaveChanges();
+            return "";
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        public ActionResult addUser()
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+          
+            var tp = from t in QC_DB.user_type
+                     select t;
+
+            SelectList selList1 = new SelectList(tp, "ID", "Type");
+            ViewData["typeList"] = selList1.AsEnumerable();
+
+            var pp = (from t in QC_DB.project
+                      select new proCheckModel
+                      {
+                          ID = t.ID,
+                          Pname = t.Pname
+                      }).ToList();
+
+            ViewData["proList"] = pp;
+
+            return PartialView("_editUser",new admin_user());
+        }
+
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public int addUser(admin_user user)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+
+            admin_user tmp = new admin_user();
+            tmp.Username = user.Username;
+            tmp.Type = user.Type;
+            tmp.Permission = user.Permission;
+            tmp.Name = user.Name;
+            tmp.GreatDate = DateTime.Now;
+            tmp.Password = "Cpic1234";
+
+            QC_DB.admin_user.Add(tmp);
+            QC_DB.SaveChanges();
+            return tmp.ID;
+            
+        }
 
         
     }

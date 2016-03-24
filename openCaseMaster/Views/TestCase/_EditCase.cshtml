@@ -20,7 +20,7 @@
 }
 
 
-<script>
+<script type="text/javascript">
     //@@ sourceURL=EditCase.js
     function ResetForm() {
         document.getElementById('Name').value = "";
@@ -76,7 +76,7 @@
                 //这里未判断是否正确返回
                 $('#dialog').dialog('close');
                 reloadNode();
-
+                $('#scriptPanel').panel('refresh', 'scriptView/' + r);
             }
             );
 

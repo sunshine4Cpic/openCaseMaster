@@ -29,17 +29,23 @@ namespace openCaseMaster.Models
         /// </summary>
         public static int[] getUserPermission()
         {
-
-
-
             FormsIdentity id = (FormsIdentity)HttpContext.Current.User.Identity;
             var userData = id.Ticket.UserData;//cookie
 
             JObject userJ = JObject.Parse(userData);
+
             string[] PP = userJ["Permission"].ToString().TrimEnd(',').Split(',');
 
+            return Array.ConvertAll<string, int>(PP, s => string.IsNullOrEmpty(s) ? 0 : int.Parse(s));
+        }
 
-            return Array.ConvertAll<string, int>(PP, s => int.Parse(s));
+        public static bool isAdmin()
+        {
+            FormsIdentity id = (FormsIdentity)HttpContext.Current.User.Identity;
+            var userData = id.Ticket.UserData;//cookie
+            JObject userJ = JObject.Parse(userData);
+            var Roles =  userJ["Roles"].ToString().Split(',');
+            return Roles.Contains("admin");
         }
     }
 }

@@ -47,6 +47,8 @@
         <AssociationConnector Association="MasterModel.FK_M_testCaseSteps_FID" />
         <EntityTypeShape EntityType="MasterModel.user_type" Width="1.5" PointX="3" PointY="17.875" />
         <AssociationConnector Association="MasterModel.FK_admin_user_user_type" />
+        <EntityTypeShape EntityType="MasterModel.admin_log" Width="1.5" PointX="7.5" PointY="21.5" />
+        <AssociationConnector Association="MasterModel.FK_admin_log_admin_log" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

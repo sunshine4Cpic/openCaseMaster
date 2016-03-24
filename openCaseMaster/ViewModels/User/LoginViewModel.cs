@@ -22,11 +22,5 @@ namespace openCaseMaster.ViewModels
        
     }
 
-    public enum UserStatus
-    {
-        Admin,
-        User,
-        invalidUser
-    }
 
 }

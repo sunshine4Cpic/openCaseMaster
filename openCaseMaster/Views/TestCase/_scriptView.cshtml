@@ -23,11 +23,11 @@
         <div data-options="iconCls:'icon-box_add'" onclick="creatUserControl()">自定义组件</div>
         <div class="menu-sep"></div>
         <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="debug()"> 调试案例</div>
-        <div data-options="iconCls:'icon-reload'" onclick="refreshScrpt($(scriptID).val())">撤销未保存的操作</div>
+        <div data-options="iconCls:'icon-reload'" onclick="refreshScrpt()">撤销未保存的操作</div>
     </div>
 
     <div style="float:right" class="l-btn-text">
-       @Model.scriptName ( @Model.Fname )
+       ( @Model.Fname )
     </div>
 </div>
 
@@ -41,66 +41,80 @@
 
 </div>
 
+
+
     <script type="text/javascript">
     //@@ sourceURL=scriptView.js
-        var scriptTreeData = @Html.Raw(Model.TreeJson);
-        var FData = @Html.Raw(Model.FJson);
-        var PData = @Html.Raw(Model.PJson);
-        var UData = @Html.Raw(Model.UJson);
+    var scriptTreeData = @Html.Raw(Model.TreeJson);
+    var FData = @Html.Raw(Model.FJson);
+    var PData = @Html.Raw(Model.PJson);
+    var UData = @Html.Raw(Model.UJson);
 
-        $('#scriptTree').tree({
-            data:scriptTreeData,
-            dnd:true,
-            checkbox:true,
-            pointType:["top","top","bottom","bottom"],
-            animate:true,
-            formatter:function(node){
-                if(node.Key==undefined)
-                    return  node.name +" : "+node.desc;
-                else
-                    return  node.Key +" : <span style='color:blue'>"+node.Value+"</span>";
-            },
-            onBeforeDrag:function(node){
-                if($("#scriptTree").tree("getParent",node.target))
-                    return false;
 
-            },
-            onBeforeDrop: function (target, source,point) {
-                if(source.newStep)
-                {
-                    
-                    $.post("/TestCase/getStep/", { name: source.name,FID:source.FID,PID:source.PID  }, function (result) {
 
-                        var job = JSON.parse(result);
-                        
-                        if(point=="top")
-                        {
-                            $('#scriptTree').tree('insert', {
-                                before: target,
-                                data: JSON.parse(result)
-                            });
-                        }else
-                        {
-                            $('#scriptTree').tree('insert', {
-                                after: target,
-                                data: JSON.parse(result)
-                            });
-                        }
+        function scriptTreeInit(TreeData)
+        {
 
-                    }).error(function() { alert("error"); });
-                   
-                    return false;
-                }
-            },
-            onDragOver:function(target, source){
-                if($("#scriptTree").tree("getParent",target))
-                    return false;
-            },
-            onDblClick: function (node) {
-                
-                editStepClick(node);
+            if (typeof TreeData === 'string') {
+                TreeData = $.parseJSON(TreeData);
             }
-        });
+
+            $('#scriptTree').tree({
+                data:TreeData,
+                dnd:true,
+                checkbox:true,
+                pointType:["top","top","bottom","bottom"],
+                animate:true,
+                formatter:function(node){
+                    if(node.Key==undefined)
+                        return  node.name +" : "+node.desc;
+                    else
+                        return  node.Key +" : <span style='color:blue'>"+node.Value+"</span>";
+                },
+                onBeforeDrag:function(node){
+                    if($("#scriptTree").tree("getParent",node.target))
+                        return false;
+
+                },
+                onBeforeDrop: function (target, source,point) {
+                    if(source.newStep)
+                    {
+
+                        $.post("/TestCase/getStep/", { name: source.name,FID:source.FID,PID:source.PID  }, function (result) {
+
+                            var job = JSON.parse(result);
+
+                            if(point=="top")
+                            {
+                                $('#scriptTree').tree('insert', {
+                                    before: target,
+                                    data: JSON.parse(result)
+                                });
+                            }else
+                            {
+                                $('#scriptTree').tree('insert', {
+                                    after: target,
+                                    data: JSON.parse(result)
+                                });
+                            }
+
+                        }).error(function() { alert("error"); });
+
+                        return false;
+                    }
+                },
+                onDragOver:function(target, source){
+                    if($("#scriptTree").tree("getParent",target))
+                        return false;
+                },
+                onDblClick: function (node) {
+                    editStepClick(node);
+                }
+            });
+
+        }
+
+        scriptTreeInit(scriptTreeData);
 
         $('#controlTreeListF').tree({
             data:FData,
@@ -119,7 +133,11 @@
                 if (node.children !== undefined)
                     return false;
                 else
+                {
+                    $("#caseListPanel").panel("collapse",true);
+                    $(this).tree("select",node.target);
                     node["newStep"] = true;
+                }
             }
 
         });
@@ -141,7 +159,11 @@
                 if (node.children !== undefined)
                     return false;
                 else
+                {
+                    $("#caseListPanel").panel("collapse",true);
+                    $(this).tree("select",node.target);
                     node["newStep"] = true;
+                }
             }
 
         });
@@ -164,7 +186,11 @@
                 if (node.children !== undefined)
                     return false;
                 else
+                {
+                    $(this).tree("select",node.target);
                     node["newStep"] = true;
+                    $("#caseListPanel").panel("collapse",true);
+                }
             },
             onDblClick: function (node) {
                 if (node.children !== undefined)
@@ -176,7 +202,7 @@
                             //$('#scriptPanel').panel('refresh', 'userStepView/' + node.id);
                         }
                     });
-                   
+
                 }
             },
 
@@ -187,37 +213,42 @@
         {
             if(node===null) return;
 
-            if(!$("#scriptTree").tree("getParent",node.target))
+            if(node.Key)
             {
-                $.messager.progress({ title: '请稍后', msg: '案例数据加载中...' });
-                var pd={};
-                pd["desc"] = node.desc;
-                pd["name"] = node.name;
-                pd["FID"] = $("#FID").val();
-                pd["PID"] = $("#PID").val();
-                for (n in node.children)
-                {
-                    var nd = node.children[n];
-                    pd["ParamBinding["+n+"].name"] = nd.Key;
-                    pd["ParamBinding["+n+"].value"] = nd.Value;
-                }
-                $('#scriptModal').empty();
-                $("#scriptModal").load('EditStep',pd,function() {
-                    //easyUI-combox 和 bootstrap 样式统一
-                    $.parser.parse($(".modal-body"));
-                    $(".modal-body  .combo").each(function () {
-                        $(this).css('width', '100%');
-                        $(this).children("input").css('width', '100%');
-                        //$(this).children("input").addClass("form-control");
-
-                    });
-                    $(function () { $(".modal-body [data-toggle='tooltip']").tooltip(); });
-                    $.messager.progress('close');
-                    $('#scriptModal').modal();
-                });
-
-
+                node =$("#scriptTree").tree("getParent",node.target);
+                $("#scriptTree").tree("select", node.target);
             }
+
+
+            $.messager.progress({ title: '请稍后', msg: '案例数据加载中...' });
+            var pd={};
+            pd["desc"] = node.desc;
+            pd["name"] = node.name;
+            pd["FID"] = $("#FID").val();
+            pd["PID"] = $("#PID").val();
+            for (n in node.children)
+            {
+                var nd = node.children[n];
+                pd["ParamBinding["+n+"].name"] = nd.Key;
+                pd["ParamBinding["+n+"].value"] = nd.Value;
+            }
+            $('#scriptModal').empty();
+            $("#scriptModal").load('EditStep',pd,function() {
+                //easyUI-combox 和 bootstrap 样式统一
+                $.parser.parse($(".modal-body"));
+                $(".modal-body  .combo").each(function () {
+                    $(this).css('width', '100%');
+                    $(this).children("input").css('width', '100%');
+                    //$(this).children("input").addClass("form-control");
+
+                });
+                $(function () { $(".modal-body [data-toggle='tooltip']").tooltip(); });
+                $.messager.progress('close');
+                $('#scriptModal').modal();
+            });
+
+
+
         }
 
 
@@ -249,11 +280,18 @@
             }
         }
 
-        function refreshScrpt(ID)
+        function refreshScrpt()
         {
             $.messager.confirm('Message', '确认撤销所有案例编辑操作吗?', function (r) {
-                if (r)
-                    $('#scriptPanel').panel('refresh', 'scriptView/' + ID);
+                if (r){
+                    var ID = document.getElementById("scriptID").value;
+
+                    $.get("scriptData/"+ID, function(result){
+                        scriptTreeInit(result);
+                    });
+                    //$('#scriptPanel').panel('refresh', 'scriptView/' + ID);
+                }
+
             });
         }
 
@@ -265,7 +303,8 @@
                     var nodes= $('#scriptTree').tree("getRoots");
                     var steps = getSteps(nodes);
                     var id = $('#scriptID').val();
-                    $.post("/TestCase/debugSave/"+id, { steps: JSON.stringify(steps)  }, function (result) {
+                    var param = $('#runParam').val();
+                    $.post("/TestCase/debugSave/"+id, { steps: JSON.stringify(steps),param:param  }, function (result) {
                         if (result == "") {//没有参数
                             debugSubmit(id,"null");
                         }else
@@ -279,7 +318,7 @@
                     }).error(function() { alert("error"); });
                 }
                 });
-           
+
         }
 
         function debugSubmit(id,Param)
@@ -303,12 +342,15 @@
                     var sm = $("#scriptModal");
                     sm.empty();
                     sm.html(result);
-                   
+
                     sm.modal();
             }).error(function() { alert("error"); });
-
-
-
-          
+            
         }
+
+        $('#scriptPanel').panel("setTitle", '@Model.scriptName');
+        //新建案例自动打开并选中,这个实现方法不是很好
+        var node = $('#caseTreeList').tree("find",@Model.ID)
+        if(node)
+            $('#caseTreeList').tree("select",node.target);
     </script>

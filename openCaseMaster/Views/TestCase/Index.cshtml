@@ -1,4 +1,6 @@
 ﻿@section Scripts {
+@Styles.Render("~/Content/uploader")
+@Scripts.Render("~/bundles/uploader")
     @Styles.Render("~/Content/easyui")
     @Scripts.Render("~/bundles/easyui")
 <script src="~/Scripts/caseEdit.js"></script>
@@ -26,12 +28,12 @@
 <div class="row">
     <div id="left" class="col-md-4" style="padding:5px">
 
-        <div class="easyui-panel" title="测试案例列表" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-filter',closable:false,
+        <div id="caseListPanel" class="easyui-panel" title="测试案例列表" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-filter',closable:false,
     collapsible:true,minimizable:false,maximizable:false">
 
             <div class="easyui-panel" style="margin-bottom:5px">
-                <a href="javascript:void(0)" id="mb" class="easyui-splitbutton" style="width:100px"
-                   data-options="menu:'#mm',iconCls:'icon-edit',duration:200">单选操作</a>
+                <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
+                   data-options="menu:'#mm',iconCls:'icon-edit',duration:400">单选操作</a>
                 <div id="mm" style="width:150px;">
                     <div data-options="iconCls:'icon-folder_classic_add'" onclick="OpenAddNewCase(0);">新增文件夹</div>
                     <div data-options="iconCls:'icon-document_a4_add'" onclick="OpenAddNewCase(1);">新增案例</div>
@@ -39,17 +41,17 @@
                     <div data-options="iconCls:'icon-edit'" onclick="OpenEditCase();">修改信息</div>
                     <div data-options="iconCls:'icon-remove'" onclick="DeleteCase();">删除节点</div>
                     <div class="menu-sep"></div>
-                    <div>上传案例(coding)</div>
+                    <div data-options="iconCls:'icon-document_small_upload'" onclick="uploadCase();">上传案例</div>
                     <div data-options="iconCls:'icon-reload'" onclick="reloadNode();">刷新节点</div>
                 </div>
 
-                <a href="javascript:void(0)" id="mb" class="easyui-splitbutton" style="width:100px"
-                   data-options="menu:'#mm2',iconCls:'icon-ok',duration:200">多选操作</a>
+                <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
+                   data-options="menu:'#mm2',iconCls:'icon-ok',duration:400">多选操作</a>
                 <div id="mm2" style="width:150px;">
                     <div data-options="iconCls:'icon-remove'" onclick="">批量删除(coding)</div>
-                    <div data-options="iconCls:'icon-document_small_download'" onclick="">下载案例(coding)</div>
+                    <div data-options="iconCls:'icon-document_small_download'" onclick="downloadCase()">下载案例</div>
                     <div class="menu-sep"></div>
-                    <div data-options="iconCls:'icon-print'" onclick="createScene()">生成场景模版</div>
+                    <div data-options="iconCls:'icon-movie_grey'" onclick="createScene()">生成场景模版</div>
                 </div>
             </div>
             <div id="caseTreeListDiv" style="overflow:auto;max-height:500px">
@@ -90,7 +92,30 @@
 
 </div>
 
+<div class="modal fade" data-backdrop="static" id="UpLoadModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close" style="position: absolute; top: 0px; right: 0px; z-index: 1;" 
+                    data-dismiss="modal" aria-hidden="true" >
+                &times;
+            </button>
+            <div class="modal-body" style="padding:0px;">
+                <div id="uploader">
+                    <p>
+                        你的浏览器没有Flash支持，请安装最新的Flash！
+                    </p>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
 <div id="dialog" style="padding: 10px 60px 10px;overflow:hidden;"></div>
+
+<input id="runParam" type="hidden" value="" />
+    
     <script type="text/javascript">
 
         $(function () {
@@ -131,26 +156,92 @@
                     $.messager.progress('close');
 
                 },
-                onDblClick: function (node) {
+                onClick: function (node) {
                     if (node.type == 1)
                         $('#scriptPanel').panel('refresh', 'scriptView/' + node.id);
                 },
                 onDragOver: function (target, source) {
                     //('#tt2').tree('getData', target);
                     return false;
+                },
+                onDblClick: function (node) {
+                    if (node.type == 0 || node.PID)
+                        $.messager.confirm('Message', '确认重新刷新节点数据?', function (r) {
+                            if (r)
+                                $('#caseTreeList').tree("reload", node.target);//刷新
+                        });
                 }
             });
+
+            $('#UpLoadModal').on('hidden.bs.modal', function () {
+                $("#uploader").plupload("destroy");
+                reloadNode();
+            })
            
         });
 
    
-      
+        function uploadCase()
+        {
+            var node = $("#caseTreeList").tree("getSelected");
+            if (node.type == 1) {
+                var ParentNode = $("#caseTreeList").tree("getParent", node.target);
+                $("#caseTreeList").tree("select", ParentNode.target);
+                node = $("#caseTreeList").tree("getSelected");
+            }
+            var str;
+            if (node.PID)
+                str = "PID=" + node.PID;
+            else
+                str = "baseID=" + node.id;
+         
+            $("#uploader").plupload({
+                runtimes: 'gears,html5,flash',
+                url: "/UploadFile/uploadCase?" + str, // 服务端上传路径
+                max_file_size: '4mb', // 文件上传最大限制。
+                chunk_size: '0', // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可。
+                unique_names: true, // 上传的文件名是否唯一
+                //// 是否生成缩略图（仅对图片文件有效）
+                //resize: { width: 320, height: 240, quality: 90 },
+                ////  这个数组是选择器，就是上传文件时限制的上传文件类型
+                filters: [{ title: "案例xml文件", extensions: "xml" }],
+                dragdrop: false,
+                unique_names: true
+            });
+
+            var uploader = $("#uploader").plupload("getUploader");
+           
+            uploader.bind('BeforeUpload', function (up, file) {
+                up.setOption("multipart_params", { "originalName": file.name });
+            });
+            $('#UpLoadModal').modal();
+        }
+
+        //展开check的节点
+        function expandCheck()
+        {
+            var checkNodes = $("#caseTreeList").tree("getChecked");
+            var expandFlag = false;
+
+            for (var i = 0; i < checkNodes.length; i++)
+            {
+                if (checkNodes[i].state == "closed") {
+                    $("#caseTreeList").tree("expandAll", checkNodes[i].target);
+                    expandFlag = true;
+                }
+                
+            }
+
+
+            if (expandFlag)
+                expandCheck();
+        }
 
 
         //弹出层
         function OpenAddNewCase(type) {
             var node = $("#caseTreeList").tree("getSelected");
-            if (type == 1 && node.type == 1) {
+            if (node.type == 1) {
                 var ParentNode = $("#caseTreeList").tree("getParent", node.target);
                 $("#caseTreeList").tree("select", ParentNode.target);
                 node = $("#caseTreeList").tree("getSelected");
@@ -180,7 +271,7 @@
             var url = "/TestCase/EditCase/" + node.id;
             $('#dialog').dialog({
                 title: 'Edit Info',
-                width: 500,
+                width: 400,
                 closed: false,
                 cache: false,
                 href: url,
@@ -237,24 +328,27 @@
                 if (CheckedNode[i].type == 1)
                     caseID.push(CheckedNode[i].id);
             }
+            if (caseID.length == 0) return;
 
-     
-              
             var data = { ids: caseID };
 
             $.download('/TestCase/createScene', data, 'post');
 
+        }
 
-            /*
-            var inputs = '<input type="hidden" name="ids" value="' + caseID.toString() + '" />';
+        function downloadCase() {
+            var CheckedNode = $('#caseTreeList').tree("getChecked")
+            var cnt = CheckedNode.length;
+            var caseID = [];
+            for (var i = 0; i < cnt; i++) {
+                if (CheckedNode[i].type == 1)
+                    caseID.push(CheckedNode[i].id);
+            }
+            if (caseID.length == 0) return;
+            var data = { ids: caseID };
 
-            jQuery('<form action="/TestCase/createScene" method="post">' + inputs + '</form>')
-                .appendTo('body').submit().remove();
-                */
-            /*
-            $.post("/TestCase/createScene", { ids: caseID }, function (result) {
+            $.download('/TestCase/downloadCase', data, 'post');
 
-            });*/
         }
         
         jQuery.download = function (url, data, method) {    // 获得url和data

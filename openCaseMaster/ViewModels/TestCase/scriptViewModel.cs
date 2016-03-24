@@ -75,7 +75,7 @@ namespace openCaseMaster.ViewModels
         }
 
 
-        private  string getScript2Json(M_testCase mtc)
+        public static  string getScript2Json(M_testCase mtc)
         {
             XElement xe = XElement.Parse(mtc.testXML);
 

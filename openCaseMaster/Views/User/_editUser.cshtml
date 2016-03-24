@@ -1,0 +1,114 @@
+﻿
+@using openCaseMaster.Models;
+@using openCaseMaster.ViewModels;
+@model admin_user
+
+@{
+    string disabled = "disabled";
+    if(Model.ID ==0)
+    { 
+        disabled=""; 
+    }
+}
+
+    
+ <input id="userID" type="hidden" value="@Model.ID" />
+
+<form class="form-horizontal" >
+ <div class="form-group">
+     <label class="col-md-3 control-label" >用户名</label>
+     <div class="col-md-7 col-sm-4">
+         <input class="form-control" id="Username" name="Username" data-options="required:true,validType:'length[4,50]',missingMessage:'不能为空'" type="text" value="@Model.Username"
+                 @disabled>
+     </div>
+ </div>
+ <div class="form-group">
+     <label class="col-md-3 control-label">用户姓名</label>
+     <div class="col-md-7 col-sm-4">
+         <input class="form-control" id="Name" name="Name" type="text" value="@Model.Name" >
+     </div>
+ </div>
+
+     <div class="form-group">
+   <label class="col-md-3 control-label">用户类型</label>
+    <div class="col-md-7 col-sm-4">
+        @Html.DropDownListFor(m => m.Type, ViewData["typeList"] as IEnumerable<SelectListItem>, "---请选择---", new {@id="Type", @class = "form-control" })
+      </div>
+</div>   
+    
+     <div class="panel panel-info">
+      <div class="panel-heading">
+         <div class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" 
+               href="#proListTree">
+               项目权限 - 点击展开
+            </a>
+         </div>
+      </div>
+      <div id="proListTree" class="panel-collapse collapse">
+         <div class="panel-body">
+             @{
+                 foreach (var p in ViewData["proList"] as List<proCheckModel>)
+                 {
+                     string check="";
+                     if (p.isCheck)
+                     { 
+                         check = "checked=\"checked\"";
+                     }
+                    <div class="col-md-6"><input name="roles" type="checkbox" value="@p.ID" @check  />@p.Pname</div>
+                 }
+            }
+            
+         </div>
+      </div>
+   </div>
+</form>
+
+       
+<script>
+    function submitEdit() {
+        //@@ sourceURL=EditUser.js
+        var Permission = "";
+        $("#proListTree input").each(function () {
+            if (this.checked) {
+                Permission += (this.value + ",");
+            }
+        });
+
+        var e ={
+                    ID: $('#userID').val(),
+                    Username: $('#Username').val(),
+                    Name: $('#Name').val(),
+                    Permission: Permission,
+                    Type: $('#Type').val()
+
+                };
+        if (e.Username.trim().length < 4)
+            return;
+
+        var action = "editUser";
+        if (e.ID==0)
+            action = "addUser";
+
+        $.post(action, e).then(
+            function (r) {
+                $("#myModal").modal("hide");
+                $("#UserTable").datagrid("reload");
+            }
+            );
+    }
+
+    function deleteUser() {
+        $.messager.confirm('Message', '确定删除这个用户吗?', function (r) {
+            if (r) {
+                var ID = $('#userID').val();
+                $.post("deleteUser/" + ID).then(
+                    function (r) {
+                        $("#myModal").modal("hide");
+                        $("#UserTable").datagrid("reload");
+                    });
+            }
+        });
+        
+    }
+</script>
