@@ -10,7 +10,7 @@
 <div class="row">
     <div id="left" class="col-md-4" style="padding:5px">
 
-        <div class="easyui-panel" title="你的组件仓库" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-box',closable:false,
+        <div id="userStepPanel" class="easyui-panel" title="你的组件仓库" style="display: block; width: 100%; padding:5px;" data-options="iconCls:'icon-box',closable:false,
     collapsible:true,minimizable:false,maximizable:false">
 
             <div style="overflow:auto;max-height:500px">
@@ -42,10 +42,7 @@
     collapsible:true,minimizable:false,maximizable:false">
 
         </div>
-
     </div>
-
-
 </div>
 
 <div id="dialog" style="overflow:hidden;"></div>
@@ -114,8 +111,11 @@
                 onBeforeDrag: function (node) {
                     if (node.children !== undefined)
                         return false;
-                    else
+                    else {
+                        $("#userStepPanel").panel("collapse", true);
+                        $(this).tree("select", node.target);
                         node["newStep"] = true;
+                    }
                 }
                 
             });
@@ -144,8 +144,11 @@
                 onBeforeDrag: function (node) {
                     if (node.children !== undefined)
                         return false;
-                    else
+                    else {
+                        $("#userStepPanel").panel("collapse", true);
+                        $(this).tree("select", node.target);
                         node["newStep"] = true;
+                    }
                 }
 
             });
@@ -153,6 +156,9 @@
         });
 
     }
+
+
+
 
 </script>
 

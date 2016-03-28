@@ -43,7 +43,12 @@
 
 <ul id="scriptTree"></ul>
 
-
+<div id="scriptTreeContextMenu" class="easyui-menu" style="width:150px;">
+        <div data-options="iconCls:'icon-save'" onclick="scriptSave();">保存</div>
+        <div class="menu-sep"></div>
+        <div data-options="iconCls:'icon-edit'" onclick="editStepClick($('#scriptTree').tree('getSelected'));">编辑步骤</div>
+        <div data-options="iconCls:'icon-remove'" onclick="DeleteStep();">删除步骤</div>
+    </div>
 
 <!-- Modal -->
 <!-- 模态框（Modal） -->
@@ -119,6 +124,17 @@
                 },
                 onDblClick: function (node) {
                     editStepClick(node);
+                },
+                onContextMenu: function (e, node) {
+                    if($(this).tree("getParent",node.target))
+                        return;
+                    e.preventDefault();
+                    $(this).tree('select', node.target);
+
+                    $('#scriptTreeContextMenu').menu('show', {
+                        left: e.pageX,
+                        top: e.pageY
+                    });
                 }
             });
 
@@ -278,11 +294,18 @@
 
         function DeleteStep()
         {
+            var node= $('#scriptTree').tree("getSelected");
+
+            if($("#scriptTree").tree("getParent",node.target))
+                return;
+
+
             var length = $('#scriptTree').tree("getRoots").length;
             if(length<=1)
                 return;
 
-            var node= $('#scriptTree').tree("getSelected");
+            
+
             if(node)
             {
                 var msg = ' <span style=\'color:blue\'>' + node.desc + '</span>';

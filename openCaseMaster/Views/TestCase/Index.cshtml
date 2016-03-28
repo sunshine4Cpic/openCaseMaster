@@ -110,7 +110,12 @@
     </div><!-- /.modal -->
 </div>
 
-
+ <div id="ContextMenu"  class="easyui-menu" style="width:150px;">
+                    <div data-options="iconCls:'icon-edit'" onclick="OpenEditCase();">修改信息</div>
+                    <div data-options="iconCls:'icon-remove'" onclick="DeleteCase();">删除节点</div>
+                    <div class="menu-sep"></div>
+                    <div data-options="iconCls:'icon-reload'" onclick="reloadNode();">刷新节点</div>
+</div>
 
 <div id="dialog" style="padding: 10px 60px 10px;overflow:hidden;"></div>
 
@@ -164,12 +169,13 @@
                     //('#tt2').tree('getData', target);
                     return false;
                 },
-                onDblClick: function (node) {
-                    if (node.type == 0 || node.PID)
-                        $.messager.confirm('Message', '确认重新刷新节点数据?', function (r) {
-                            if (r)
-                                $('#caseTreeList').tree("reload", node.target);//刷新
-                        });
+                onContextMenu: function (e, node) {
+                    e.preventDefault();
+                    $(this).tree('select', node.target);
+                    $('#ContextMenu').menu('show', {
+                        left: e.pageX,
+                        top: e.pageY
+                    });
                 }
             });
 
