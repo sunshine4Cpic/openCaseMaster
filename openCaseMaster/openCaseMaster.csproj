@@ -317,7 +317,6 @@
     <Content Include="Content\img\arrow_state_blue_right.png" />
     <Content Include="Content\img\badge_cancel_online.png" />
     <Content Include="Content\img\badge_save_outline.png" />
-    <Content Include="Content\img\bbb.jpg" />
     <Content Include="Content\img\box.png" />
     <Content Include="Content\img\box_add.png" />
     <Content Include="Content\img\box_edit.png" />
