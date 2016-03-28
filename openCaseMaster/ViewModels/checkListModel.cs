@@ -5,10 +5,10 @@ using System.Web;
 
 namespace openCaseMaster.ViewModels
 {
-    public class proCheckModel
+    public class checkListModel
     {
-        public int ID { get; set; }
-        public string Pname { get; set; }
+        public string Value { get; set; }
+        public string Text { get; set; }
 
         public bool isCheck { get; set; }
     }

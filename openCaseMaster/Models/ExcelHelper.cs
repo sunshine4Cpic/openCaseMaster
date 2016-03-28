@@ -165,14 +165,10 @@ namespace openCaseMaster.Models
         private static void insertRunCase(QCTESTEntities QC_DB, ISheet sheet, int sceneID)
         {
 
-
-
             int ID = Convert.ToInt32(sheet.SheetName);
 
             M_testCase mtc = QC_DB.M_testCase.Where(t => t.ID == ID).FirstOrDefault();
             if (mtc == null) return;
-
-
 
             System.Collections.IEnumerator rows = sheet.GetRowEnumerator();
             //读取下一行 
@@ -221,10 +217,6 @@ namespace openCaseMaster.Models
                     data[keys[i]] = value;
                 }
 
-
-
-
-               
                 
                 //获得最终案例
                 cloneXML.getRunScript(data);

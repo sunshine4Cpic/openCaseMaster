@@ -9,7 +9,7 @@
 
 <input id="PID" type="hidden" value="@Model.PID" />
 <div class="easyui-panel" style="margin-bottom:5px">
-    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
+    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px;"
        data-options="menu:'#C1',iconCls:'icon-edit',duration:400">编辑</a>
     <div id="C1" style="width:150px;">
         <div data-options="iconCls:'icon-save'" onclick="scriptSave();">保存</div>
@@ -17,7 +17,7 @@
         <div data-options="iconCls:'icon-edit'" onclick="editStepClick($('#scriptTree').tree('getSelected'));">编辑步骤</div>
         <div data-options="iconCls:'icon-remove'" onclick="DeleteStep();">删除步骤</div>
     </div>
-    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
+    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px;"
        data-options="menu:'#C2',iconCls:'icon-tip',duration:400">操作</a>
     <div id="C2" style="width:150px;">
         <div data-options="iconCls:'icon-box_add'" onclick="creatUserControl()">自定义组件</div>
@@ -26,9 +26,19 @@
         <div data-options="iconCls:'icon-reload'" onclick="refreshScrpt()">撤销未保存的操作</div>
     </div>
 
+        <div title="拖拽删除步骤" class="glyphicon glyphicon-trash easyui-droppable" style="color:black; vertical-align: middle; font-size: 16px;" data-options="
+					accept: '#scriptTree div',
+					onDragEnter: onDragEnterDelete,
+					onDragLeave: onDragLeaveDelete,
+					onDrop: onDropDelete
+				">Delete</div>
+
+    
     <div style="float:right" class="l-btn-text">
-       ( @Model.Fname )
+        @Model.Fname 
     </div>
+
+    
 </div>
 
 <ul id="scriptTree"></ul>
@@ -49,7 +59,7 @@
     var FData = @Html.Raw(Model.FJson);
     var PData = @Html.Raw(Model.PJson);
     var UData = @Html.Raw(Model.UJson);
-
+       
 
 
         function scriptTreeInit(TreeData)
@@ -268,6 +278,10 @@
 
         function DeleteStep()
         {
+            var length = $('#scriptTree').tree("getRoots").length;
+            if(length<=1)
+                return;
+
             var node= $('#scriptTree').tree("getSelected");
             if(node)
             {
@@ -353,4 +367,32 @@
         var node = $('#caseTreeList').tree("find",@Model.ID)
         if(node)
             $('#caseTreeList').tree("select",node.target);
+
+
+        function onDragEnterDelete(e,source)
+        {
+            
+            $(this).css("color","red");
+        }
+        function onDragLeaveDelete(e,source)
+        {
+            $(this).css("color","black");
+        }
+
+
+        function onDropDelete(e,source)
+        {
+            $(this).css("color","black");
+
+            var length = $('#scriptTree').tree("getRoots").length;
+            if(length<=1)
+                return false;
+
+            $('#scriptTree').tree("remove",source);
+            
+            return false;
+        }
+
+        
+       
     </script>

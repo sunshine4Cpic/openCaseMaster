@@ -155,7 +155,9 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\RunCaseController.cs" />
     <Compile Include="Controllers\TestCaseController.cs" />
     <Compile Include="Controllers\UploadFileController.cs" />
@@ -259,6 +261,9 @@
     </Compile>
     <Compile Include="Models\XElementHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\checkListModel.cs" />
+    <Compile Include="ViewModels\Device\ProjectListModel.cs" />
+    <Compile Include="ViewModels\Project\ProjectListModel.cs" />
     <Compile Include="ViewModels\RunCase\caseRecordModel.cs" />
     <Compile Include="ViewModels\RunCase\SceneCaseDataModel.cs" />
     <Compile Include="ViewModels\RunCase\SceneViewModel.cs" />
@@ -274,7 +279,6 @@
     <Compile Include="ViewModels\userControl\controlViewModel.cs" />
     <Compile Include="ViewModels\userControl\frameTreeNode.cs" />
     <Compile Include="ViewModels\userControl\projectTreeNode.cs" />
-    <Compile Include="ViewModels\User\proCheckModel.cs" />
     <Compile Include="ViewModels\User\UserListModel.cs" />
     <Compile Include="ViewModels\User\LoginViewModel.cs" />
   </ItemGroup>
@@ -313,6 +317,7 @@
     <Content Include="Content\img\arrow_state_blue_right.png" />
     <Content Include="Content\img\badge_cancel_online.png" />
     <Content Include="Content\img\badge_save_outline.png" />
+    <Content Include="Content\img\bbb.jpg" />
     <Content Include="Content\img\box.png" />
     <Content Include="Content\img\box_add.png" />
     <Content Include="Content\img\box_edit.png" />
@@ -880,6 +885,10 @@
     <Content Include="Views\RunCase\_addNew.cshtml" />
     <Content Include="Views\User\UserManage.cshtml" />
     <Content Include="Views\User\_editUser.cshtml" />
+    <Content Include="Views\Project\ProjectManage.cshtml" />
+    <Content Include="Views\Project\_editProject.cshtml" />
+    <Content Include="Views\Device\DeviceManage.cshtml" />
+    <Content Include="Views\Device\_editDevice.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

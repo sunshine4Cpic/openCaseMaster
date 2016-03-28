@@ -152,10 +152,10 @@ namespace openCaseMaster.Controllers
             ViewData["typeList"] = selList1.AsEnumerable();
 
             var pp = (from t in QC_DB.project
-                      select new proCheckModel
+                      select new checkListModel
                      {
-                         ID = t.ID,
-                         Pname = t.Pname
+                         Value = t.ID.ToString(),
+                         Text = t.Pname
                      }).ToList();
             if (user.Permission != null)
             {
@@ -163,7 +163,7 @@ namespace openCaseMaster.Controllers
 
                 foreach (var p in pp)
                 {
-                    if (psn.Contains(p.ID.ToString()))
+                    if (psn.Contains(p.Value))
                         p.isCheck = true;
                     else
                         p.isCheck = false;
@@ -215,10 +215,10 @@ namespace openCaseMaster.Controllers
             ViewData["typeList"] = selList1.AsEnumerable();
 
             var pp = (from t in QC_DB.project
-                      select new proCheckModel
+                      select new checkListModel
                       {
-                          ID = t.ID,
-                          Pname = t.Pname
+                          Value = t.ID.ToString(),
+                          Text = t.Pname
                       }).ToList();
 
             ViewData["proList"] = pp;

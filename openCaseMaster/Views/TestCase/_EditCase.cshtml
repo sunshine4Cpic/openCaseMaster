@@ -20,73 +20,7 @@
 }
 
 
-<script type="text/javascript">
-    //@@ sourceURL=EditCase.js
-    function ResetForm() {
-        document.getElementById('Name').value = "";
-        document.getElementById('mark').value = "";
-    }
 
-    function EditCase_Edit() {
-
-            var e =
-                {
-                    ID: $('#EditCaseID').val(),
-                    Name: $('#Name').val(),
-                    mark: $('#mark').val(),
-                    FID: $('#EditFID').val()
-                };
-            if (e.Name.trim().length == 0)
-                return;
-
-
-            $.post("/TestCase/EditCase", e).then(
-                function (r) {
-                    //这里未判断是否正确返回
-                    $('#dialog').dialog('close');
-
-                    var selectNode = $('#caseTreeList').tree("getSelected").target;
-
-                    $('#caseTreeList').tree('update', {
-                        target: selectNode,
-                        text: e.Name
-                    });
-                }
-                );
-
-    }
-
-    function EditCase_New() {
-
-        var e =
-            {
-                projectID: $('#projectID').val(),
-                baseID: $('#baseID').val(),
-                Name: $('#Name').val(),
-                mark: $('#mark').val(),
-                type: $('#type').val(),
-                FID: $('#EditFID').val()
-            };
-        if (e.Name.trim().length == 0)
-            return;
-
-
-        $.post("/TestCase/AddNew", e).then(
-            function (r) {
-                //这里未判断是否正确返回
-                $('#dialog').dialog('close');
-                reloadNode();
-                $('#scriptPanel').panel('refresh', 'scriptView/' + r);
-            }
-            );
-
-    }
-
-    $(function () {
-        //设置text需要验证
-        $('#Name').validatebox();
-    })
-</script>
 <input type="hidden" id="projectID" name="projectID" value="@Model.projectID" />
 <input type="hidden" id="baseID" name="baseID" value="@Model.baseID" />
 
@@ -95,7 +29,7 @@
 <input type="hidden" id="EditCaseID" name="ID" value="@Model.ID" />
 <br />
 
-<form class="bs-example bs-example-form" role="form">
+<form id="EditCaseForm" class="bs-example bs-example-form" role="form">
     <div class="input-group" style="width:100%">
         <span class="input-group-addon" style="width:80px">@nameLabel</span>
         <input type="text" id="Name" name="Name" value="@Model.Name" class="easyui-validatebox form-control input-sm"
@@ -132,3 +66,69 @@
 </form>
 
 
+<script type="text/javascript">
+    //@@ sourceURL=EditCase.js
+    function ResetForm() {
+        document.getElementById('Name').value = "";
+        document.getElementById('mark').value = "";
+    }
+
+    function EditCase_Edit() {
+
+        if (!$("#EditCaseForm").form('validate')) {
+            return;
+        }
+
+        var e =
+            {
+                ID: $('#EditCaseID').val(),
+                Name: $('#Name').val(),
+                mark: $('#mark').val(),
+                FID: $('#EditFID').val()
+            };
+
+
+
+        $.post("/TestCase/EditCase", e).then(
+            function (r) {
+                //这里未判断是否正确返回
+                $('#dialog').dialog('close');
+
+                var selectNode = $('#caseTreeList').tree("getSelected").target;
+
+                $('#caseTreeList').tree('update', {
+                    target: selectNode,
+                    text: e.Name
+                });
+            });
+
+    }
+
+    function EditCase_New() {
+        if (!$("#EditCaseForm").form('validate')) {
+            return;
+        }
+        var e =
+            {
+                projectID: $('#projectID').val(),
+                baseID: $('#baseID').val(),
+                Name: $('#Name').val(),
+                mark: $('#mark').val(),
+                type: $('#type').val(),
+                FID: $('#EditFID').val()
+            };
+      
+
+        $.post("/TestCase/AddNew", e).then(
+            function (r) {
+                //这里未判断是否正确返回
+                $('#dialog').dialog('close');
+                reloadNode();
+                $('#scriptPanel').panel('refresh', 'scriptView/' + r);
+            }
+            );
+
+    }
+
+    
+</script>
