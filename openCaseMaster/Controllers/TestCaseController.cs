@@ -81,6 +81,7 @@ namespace openCaseMaster.Controllers
                           {
                               id = t.ID,
                               text = t.Name,
+                              mark = t.mark,
                               state = t.type == 0 ? "closed" : "open",
                               type = t.type == null ? 0 : t.type.Value
                           };
@@ -109,6 +110,7 @@ namespace openCaseMaster.Controllers
                           {
                               id = t.ID,
                               text = t.Name,
+                              mark = t.mark,
                               state = t.type == 0 ? "closed" : "open",
                               type = t.type == null ? 0 : t.type.Value
                           };
@@ -412,10 +414,6 @@ namespace openCaseMaster.Controllers
 
         }
 
-        
-
-
-        
 
 
         [HttpPost]
@@ -425,8 +423,44 @@ namespace openCaseMaster.Controllers
             MemoryStream stm = testCaseHelper.getSceneExcelMS(ids);
 
             DownLoad(stm, "场景模板.xls", "vnd.ms-excel");
-           
 
+
+        }
+
+        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="targetID"></param>
+        /// <param name="sourceID"></param>
+        /// <param name="type">0移动到项目,1移动到目录</param>
+        /// <returns></returns>
+        [HttpPost]
+        public bool sortCaseList(int targetID, int sourceID,int type)
+        {
+
+           
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            if (type == 1)
+            { 
+                int rtn = QC_DB.M_testCase_sort(sourceID, targetID);//存储过程返回最终目标节点ID
+                if (rtn > 0)
+                {
+                    return true;
+                }
+                else
+                    return false;
+            }else
+            {
+                M_testCase mtc = QC_DB.M_testCase.Where(t => t.ID == sourceID).First();//要移动的数据
+
+                mtc.baseID = null;
+                mtc.projectID = targetID;
+                QC_DB.SaveChanges();
+                return true;
+            }
         }
 
         [HttpPost]

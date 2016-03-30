@@ -119,6 +119,11 @@
                     }
                 },
                 onDragOver:function(target, source){
+                    if ($(source.target).parents("#caseTreeList").length == 1)//不接收特定tree
+                    {
+                        return false;
+                    } 
+
                     if($("#scriptTree").tree("getParent",target))
                         return false;
                 },

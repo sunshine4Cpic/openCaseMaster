@@ -14,6 +14,9 @@ namespace openCaseMaster.ViewModels
     {
         [DataMember]
         public int type { get; set; }
+
+        [DataMember]
+        public string mark { get; set; }
     }
 
 
