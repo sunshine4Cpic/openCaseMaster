@@ -155,11 +155,14 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\RunCaseController.cs" />
+    <Compile Include="Controllers\webApi\runClientController.cs" />
     <Compile Include="Controllers\TestCaseController.cs" />
+    <Compile Include="Controllers\tutorialController.cs" />
     <Compile Include="Controllers\UploadFileController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\userStepControlController.cs" />
@@ -888,6 +891,7 @@
     <Content Include="Views\Project\_editProject.cshtml" />
     <Content Include="Views\Device\DeviceManage.cshtml" />
     <Content Include="Views\Device\_editDevice.cshtml" />
+    <Content Include="Views\tutorial\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
