@@ -1,16 +1,129 @@
-﻿@{
+﻿@using CaptchaMvc.HtmlHelpers
+@{
     ViewBag.Title = "平台教程";
 }
+@section Scripts {
+   
+<style type="text/css">
+   
 
-<div class="jumbotron">
-    <h1>教程</h1>
-    <p><a href="#" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    #left a{
+        display: block;
+    }
+</style>
+ 
+}
+
+@using (Html.BeginForm())
+{
+    @Html.Captcha("Refresh", "输入验证码", 4, "Is required field.", true)
+    <br />
+    <input type="submit" value="Send"/>
+}
+
+<div class="row">
+    <div id="left" class="col-sm-6 col-md-3">
+    
+
+<h2 class="left">Bootstrap <span class="left_h2">CSS</span></h2>
+<a target="_top" href="/bootstrap/bootstrap-css-overview.html">
+	Bootstrap CSS 概览	</a>
+<a target="_top" href="/bootstrap/bootstrap-grid-system.html" style="font-weight: bold; color: rgb(255, 255, 255); background-color: rgb(150, 185, 125);">
+	Bootstrap 网格系统	</a>
+<a target="_top" href="/bootstrap/bootstrap-typography.html">
+	Bootstrap 排版	</a>
+<a target="_top" href="/bootstrap/bootstrap-code.html">
+	Bootstrap 代码	</a>
+<a target="_top" href="/bootstrap/bootstrap-tables.html">
+	Bootstrap 表格	</a>
+<a target="_top" href="/bootstrap/bootstrap-forms.html">
+	Bootstrap 表单	</a>
+<a target="_top" href="/bootstrap/bootstrap-buttons.html">
+	Bootstrap 按钮	</a>
+<a target="_top" href="/bootstrap/bootstrap-images.html">
+	Bootstrap 图片	</a>
+<a target="_top" href="/bootstrap/bootstrap-helper-classes.html">
+	Bootstrap 辅助类	</a>
+<a target="_top" href="/bootstrap/bootstrap-responsive-utilities.html">
+	Bootstrap 响应式实用工具	</a>
+<br><h2 class="left">Bootstrap <span class="left_h2">布局组件</span></h2>
+<a target="_top" href="/bootstrap/bootstrap-glyphicons.html">
+	Bootstrap 字体图标	</a>
+<a target="_top" href="/bootstrap/bootstrap-dropdowns.html">
+	Bootstrap 下拉菜单	</a>
+<a target="_top" href="/bootstrap/bootstrap-button-groups.html">
+	Bootstrap 按钮组	</a>
+<a target="_top" href="/bootstrap/bootstrap-button-dropdowns.html">
+	Bootstrap 按钮下拉菜单	</a>
+<a target="_top" href="/bootstrap/bootstrap-input-groups.html">
+	Bootstrap 输入框组	</a>
+<a target="_top" href="/bootstrap/bootstrap-navigation-elements.html">
+	Bootstrap 导航元素	</a>
+<a target="_top" href="/bootstrap/bootstrap-navbar.html">
+	Bootstrap 导航栏	</a>
+<a target="_top" href="/bootstrap/bootstrap-breadcrumbs.html">
+	Bootstrap 面包屑导航	</a>
+<a target="_top" href="/bootstrap/bootstrap-pagination.html">
+	Bootstrap 分页	</a>
+<a target="_top" href="/bootstrap/bootstrap-labels.html">
+	Bootstrap 标签	</a>
+<a target="_top" href="/bootstrap/bootstrap-badges.html">
+	Bootstrap 徽章	</a>
+<a target="_top" href="/bootstrap/bootstrap-jumbotron.html">
+	Bootstrap 超大屏幕	</a>
+<a target="_top" href="/bootstrap/bootstrap-page-header.html">
+	Bootstrap 页面标题	</a>
+<a target="_top" href="/bootstrap/bootstrap-thumbnails.html">
+	Bootstrap 缩略图	</a>
+<a target="_top" href="/bootstrap/bootstrap-alerts.html">
+	Bootstrap 警告	</a>
+<a target="_top" href="/bootstrap/bootstrap-progress-bars.html">
+	Bootstrap 进度条	</a>
+<a target="_top" href="/bootstrap/bootstrap-media-object.html">
+	Bootstrap 多媒体对象	</a>
+<a target="_top" href="/bootstrap/bootstrap-list-group.html">
+	Bootstrap 列表组	</a>
+<a target="_top" href="/bootstrap/bootstrap-panels.html">
+	Bootstrap 面板	</a>
+<a target="_top" href="/bootstrap/bootstrap-wells.html">
+	Bootstrap Wells	</a>
+<br><h2 class="left">Bootstrap <span class="left_h2">插件</span></h2>			<a target="_top" title="Bootstrap 插件概览" href="/bootstrap/bootstrap-plugins-overview.html">
+			Bootstrap 插件概览			</a>
+						<a target="_top" title="Bootstrap 过渡效果（Transition）插件" href="/bootstrap/bootstrap-transition-plugin.html">
+			Bootstrap 过渡效果			</a>
+						<a target="_top" title="Bootstrap 模态框（Modal）插件" href="/bootstrap/bootstrap-modal-plugin.html">
+			Bootstrap 模态框			</a>
+						<a target="_top" title="Bootstrap 下拉菜单（Dropdown）插件" href="/bootstrap/bootstrap-dropdown-plugin.html">
+			Bootstrap 下拉菜单			</a>
+						<a target="_top" title="Bootstrap 滚动监听（Scrollspy）插件" href="/bootstrap/bootstrap-scrollspy-plugin.html">
+			Bootstrap 滚动监听			</a>
+						<a target="_top" title="Bootstrap 标签页（Tab）插件" href="/bootstrap/bootstrap-tab-plugin.html">
+			Bootstrap 标签页			</a>
+						<a target="_top" title="Bootstrap 提示工具（Tooltip）插件" href="/bootstrap/bootstrap-tooltip-plugin.html">
+			Bootstrap 提示工具			</a>
+						<a target="_top" title="Bootstrap 弹出框（Popover）插件" href="/bootstrap/bootstrap-popover-plugin.html">
+			Bootstrap 弹出框			</a>
+						<a target="_top" title="Bootstrap 警告框" href="/bootstrap/bootstrap-alert-plugin.html">
+			Bootstrap 警告框			</a>
+						<a target="_top" title="Bootstrap 按钮（Button）插件" href="/bootstrap/bootstrap-button-plugin.html">
+			Bootstrap 按钮			</a>
+						<a target="_top" title="Bootstrap 折叠（Collapse）插件" href="/bootstrap/bootstrap-collapse-plugin.html">
+			Bootstrap 折叠			</a>
+						<a target="_top" title="Bootstrap 轮播（Carousel）插件" href="/bootstrap/bootstrap-carousel-plugin.html">
+			Bootstrap 轮播			</a>
+						<a target="_top" title="Bootstrap 附加导航（Affix）插件" href="/bootstrap/bootstrap-affix-plugin.html">
+			Bootstrap 附加导航			</a>
+			<br><h2 class="left">Bootstrap <span class="left_h2">其他</span></h2>
+<a target="_top" href="http://www.w3cschool.cc/bootstrap/bootstrap-ui-editor.html">
+	Bootstrap UI 编辑器	</a>
+<a target="_top" href="http://www.w3cschool.cc/bootstrap/bootstrap-v2-tutorial.html">
+	Bootstrap v2 教程	</a>			<a target="_top" title="Bootstrap HTML编码规范" href="/bootstrap/bootstrap-html-codeguide.html">
+			Bootstrap HTML编码规范			</a>
+						<a target="_top" title="Bootstrap CSS编码规范" href="/bootstrap/bootstrap-css-codeguide-html.html">
+			Bootstrap CSS编码规范			</a>
+				
+		</div>
+
+
+    <div class="col-sm-6 col-md-9">内容</div>
 </div>
-
-
-
-
-<address>
-    <strong>Support:</strong>   <a href="mailto:176560744@qq.com">176560744@qq.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:176560744@qq.com">176560744@qq.com</a>
-</address>

@@ -20,7 +20,10 @@ using System.Xml.Linq;
 
 namespace openCaseMaster.Controllers
 {
-    [Authorize(Roles="user")]
+    //*****************************************
+    //项目权限控制不足,后期修改
+
+    [Authorize(Roles = "user,guest")]
     public class TestCaseController : Controller
     {
 
@@ -34,25 +37,30 @@ namespace openCaseMaster.Controllers
         }
 
 
-        
+
         public string projectListInit()
         {
-            
-            using(QCTESTEntities QC_DB = new QCTESTEntities())
-            {
-                var tcl = from t in QC_DB.project
-                         select new
-                         {
-                             PID = t.ID,
-                             text = t.Pname,
-                             state = "closed"
-                         };
 
-             if(!User.IsInRole("admin"))
-             {
-                 int[] pp = userHelper.getUserPermission();
-                 tcl = tcl.Where(t => pp.Contains(t.PID));
-             }
+            using (QCTESTEntities QC_DB = new QCTESTEntities())
+            {
+
+
+                var tcl = from t in QC_DB.project
+                          select new
+                          {
+                              PID = t.ID,
+                              text = t.Pname,
+                              state = "closed"
+                          };
+
+                
+
+                if (!User.IsInRole("admin"))
+                {
+                    int[] pp = userHelper.getUserPermission();
+                    tcl = tcl.Where(t => pp.Contains(t.PID));
+                }
+
 
 
 
@@ -64,7 +72,7 @@ namespace openCaseMaster.Controllers
                 return json;
 
             }
-            
+
         }
 
         
@@ -131,7 +139,7 @@ namespace openCaseMaster.Controllers
 
             if (type == 1)//案例添加框架
             {
-                var fmks = System.Web.HttpContext.Current.Application["Framework"] as List<caseFramework>;
+                var fmks = testCaseHelper.getFramework();
 
 
                 var query = fmks.Select(c => new { c.ID, c.workName });
@@ -169,7 +177,7 @@ namespace openCaseMaster.Controllers
             {
                 M_testCase mt = QC_DB.M_testCase.First(t => t.ID == ID);
 
-                var fmks = System.Web.HttpContext.Current.Application["Framework"] as List<caseFramework>;
+                var fmks = testCaseHelper.getFramework();
                 var items = fmks
                 .Select(c => new {
                         Value = c.ID.ToString(),
@@ -538,7 +546,13 @@ namespace openCaseMaster.Controllers
             Response.OutputStream.Write(ZipBuffer, 0, Convert.ToInt32(ZipBuffer.Length));
             Response.End();
 
+          
+
+
         }
+
+        
+
      
     }
 }

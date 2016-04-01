@@ -17,15 +17,7 @@ namespace openCaseMaster
     {
         protected void Application_Start()
         {
-            //先用Application保存,以后用缓存代替
-            using (QCTESTEntities QC_DB = new QCTESTEntities())
-            {
-                List<caseFramework> ss = (from t in QC_DB.caseFramework
-                                         where t.userID == 1
-                                         select t).ToList();
-                Application["Framework"] = ss;
-            }
-
+           
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
@@ -66,8 +58,6 @@ namespace openCaseMaster
                             //处理个毛线,以后重写,使用 MVC自带的权限控制
                           
                         } 
-                      
-                        
                     }
                 }
             }
