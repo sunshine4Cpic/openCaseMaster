@@ -20,17 +20,20 @@
              foreach (var pb in pbs)
              {
 
-                <div class="input-group" style="margin-bottom:5px">
-                    <span class="input-group-addon" data-toggle="tooltip" data-html="true" title="@pb.Key">
-                        <a href="#">
-                            <span class="glyphicon glyphicon-cog"></span>
-                        </a>
-                    </span>
+                <div class="input-group" style="margin-bottom:5px;width:100%">
+                    <span class="input-group-addon" data-toggle="tooltip" style="width:120px;text-align: left;">@pb.Key</span>
                     <input value="@pb.Value" name="@pb.Key" style="height:30px;" class="form-control" placeholder="@pb.Key" />
 
                 </div>
+
+                
              }
             }
+            <br />
+            <div class="alert alert-info" style="text-align:center;padding: 5px;margin-bottom:auto">
+            为新增参数设置默认值，就不需要更新相关案例了哦。
+        </div>
+
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default"
@@ -41,6 +44,8 @@
                 执行
             </button>
         </div>
+
+    
     </div><!-- /.modal-content -->
 </div><!-- /.modal -->
 

@@ -287,10 +287,10 @@ namespace openCaseMaster.Models
                        where t.userID == 1
                        select t).ToList();
                 //10不操作分钟过期
-                objCache.Insert("Framework", cfs, null, DateTime.MaxValue, TimeSpan.FromMinutes(10));
+                //objCache.Insert("Framework", cfs, null, DateTime.MaxValue, TimeSpan.FromMinutes(10));
 
                 //强制10分钟过期
-                //objCache.Insert("Framework", cfs, null, DateTime.Now.AddMinutes(10), TimeSpan.Zero);
+                objCache.Insert("Framework", cfs, null, DateTime.Now.AddMinutes(10), TimeSpan.Zero);
             }
 
             return cfs;

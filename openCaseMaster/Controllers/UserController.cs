@@ -66,8 +66,7 @@ namespace openCaseMaster.Controllers
             userJ["Permission"] = loginUser.Permission;
 
 
-            if (userRole == "guest")//游客
-                userJ["Permission"] = qc.project.OrderByDescending(t => t.ID).First().ID;
+            
     
 
             //创建身份验证票据 
@@ -144,6 +143,8 @@ namespace openCaseMaster.Controllers
                 tmp.Name = model.Name == null ? model.UserName : model.Name;
                 tmp.GreatDate = DateTime.Now;
                 tmp.Password = model.Password;
+
+                tmp.Permission = QC_DB.project.OrderByDescending(t => t.ID).First().ID.ToString();
 
                 QC_DB.admin_user.Add(tmp);
                 QC_DB.SaveChanges();

@@ -330,6 +330,22 @@
     <Content Include="Content\bootstrap-treeview.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\docs.min.css" />
+    <Content Include="Content\help\buildUserStep.png" />
+    <Content Include="Content\help\changeAndSaveStep.gif" />
+    <Content Include="Content\help\defineParam-2.png" />
+    <Content Include="Content\help\defineParam.png" />
+    <Content Include="Content\help\defultParam-2.png" />
+    <Content Include="Content\help\defultParam.png" />
+    <Content Include="Content\help\editStep.gif" />
+    <Content Include="Content\help\newScript.gif" />
+    <Content Include="Content\help\newStep.gif" />
+    <Content Include="Content\help\newUserStep.gif" />
+    <Content Include="Content\help\openUserStep.png" />
+    <Content Include="Content\help\runScript.gif" />
+    <Content Include="Content\help\startUpClient.gif" />
+    <Content Include="Content\help\useUserStep.png" />
+    <Content Include="Content\help\workwork.jpg" />
     <Content Include="Content\img\001.gif" />
     <Content Include="Content\img\094.gif" />
     <Content Include="Content\img\11.bmp" />
@@ -786,6 +802,7 @@
     <Content Include="Scripts\bootstrap-treeview.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\docs.min.js" />
     <Content Include="Scripts\easyloader.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
@@ -948,6 +965,7 @@
     <Content Include="Views\Device\_editDevice.cshtml" />
     <Content Include="Views\tutorial\Index.cshtml" />
     <Content Include="Views\User\Register.cshtml" />
+    <Content Include="Views\tutorial\framework.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

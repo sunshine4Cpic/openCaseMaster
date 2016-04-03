@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "平台教程";
+}
+@section Scripts {
+    <link href="~/Content/docs.min.css" rel="stylesheet">
+    <script src="~/Scripts/docs.min.js"></script>
+
+
+    <style>
+        h1[id], h2[id] {
+            padding-top: 50px;
+        }
+    </style>
+
+}
+
+
+<div class="row">
+
+    <div class="col-md-9" role="main">
+        <br />
+        <p>施工中...   请移步 @Html.ActionLink("平台使用", "Index", "tutorial") 教程</p>
+        <img src="~/Content/help/workwork.jpg"  />
+    </div>
+
+
+
+
+    <div class="col-sm-3 col-md-3">
+
+       <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" style="top:80px">
+            <ul class="nav bs-docs-sidenav">
+
+                <li class="">
+                    <a href="#testCase">uiautomator 框架</a>
+                    
+                </li>
+
+                <li>
+                    <a href="#userStep">appium 框架</a>
+                    
+                </li>
+
+                <li >
+                    <a href="#Client">robotium 框架</a>
+                    
+                </li>
+
+                <li >
+                    <a href="#Client">chromeDriver 框架</a>
+                </li>
+
+
+            </ul>
+            <a class="back-to-top" href="#top">
+                返回顶部
+            </a>
+
+
+        </nav>
+
+    </div>
+</div>
