@@ -7,7 +7,6 @@
     <div class="easyui-accordion" data-options="multiple:true" >
        @foreach (var s in Model.xrs)
        {
-
            string options;
            string resultState;
            switch (s.ResultStatic)
@@ -28,12 +27,10 @@
 
         <div title="@s.desc" @Html.Raw(options) style="padding:10px;">
             <div class="col-md-4" style="text-align:center">
-                <div style="max-width:260px;margin:0 auto;">
                    @if(s.Photo != null)
                    {
-                    <img src="@s.Photo" style="width:100%; " />
+                    <img class="img-responsive" src="@s.Photo" />
                    }
-                </div>
             </div>
             <div class="col-md-8">
                 <p><b>步骤：</b> @s.name <a href="#"><img src="~/Content/themes/icons/help.png" title='@Html.Raw(s.stepX)' /></a></p>

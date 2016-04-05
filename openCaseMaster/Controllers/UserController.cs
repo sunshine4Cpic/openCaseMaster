@@ -15,6 +15,7 @@ namespace openCaseMaster.Controllers
 {
     public class UserController : Controller
     {
+        [AllowAnonymous]
         // GET: User
         public ActionResult Login(string ReturnUrl)
         {
@@ -53,7 +54,7 @@ namespace openCaseMaster.Controllers
                     userRole += ",admin";
                     break;
                 case null:
-                    userRole = "guest";
+                    //userRole = "guest";
                     break;
                 default:
                     break;

@@ -299,6 +299,7 @@
     <Compile Include="Models\XElementHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\checkListModel.cs" />
+    <Compile Include="ViewModels\Device\DeviceViewModel.cs" />
     <Compile Include="ViewModels\Device\ProjectListModel.cs" />
     <Compile Include="ViewModels\Project\ProjectListModel.cs" />
     <Compile Include="ViewModels\RunCase\caseRecordModel.cs" />
@@ -353,6 +354,7 @@
     <Content Include="Content\img\115.gif" />
     <Content Include="Content\img\116.gif" />
     <Content Include="Content\img\127.gif" />
+    <Content Include="Content\img\phone.png" />
     <Content Include="Content\img\add.png" />
     <Content Include="Content\img\application_osx_down.png" />
     <Content Include="Content\img\application_osx_new.png" />
@@ -798,6 +800,8 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
+    <Content Include="调试客户端.rar" />
+    <None Include="Properties\PublishProfiles\demo.pubxml" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\bootstrap-treeview.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -925,7 +929,9 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="uploadTmp\empty.txt" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -966,6 +972,7 @@
     <Content Include="Views\tutorial\Index.cshtml" />
     <Content Include="Views\User\Register.cshtml" />
     <Content Include="Views\tutorial\framework.cshtml" />
+    <Content Include="Views\Device\DeviceView.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

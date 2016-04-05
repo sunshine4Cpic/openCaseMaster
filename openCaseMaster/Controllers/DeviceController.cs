@@ -9,16 +9,17 @@ using System.Web.Mvc;
 
 namespace openCaseMaster.Controllers
 {
-    [Authorize(Roles = "admin")]
+    
     public class DeviceController : Controller
     {
+        [Authorize(Roles = "admin")]
         // GET: Device
         public ActionResult DeviceManage()
         {
             return View();
         }
 
-
+        [Authorize(Roles = "admin")]
         public string deviceList(int page, int rows)
         {
             DeviceListModel pl = new DeviceListModel(page, rows);
@@ -29,6 +30,7 @@ namespace openCaseMaster.Controllers
 
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public ActionResult editDevice(int id)
         {
@@ -41,7 +43,7 @@ namespace openCaseMaster.Controllers
             return PartialView("_editDevice", p);
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public string editDevice(int ID, string mark, string Model, string Brand)
         {
@@ -54,6 +56,35 @@ namespace openCaseMaster.Controllers
             QC_DB.SaveChanges();
 
             return "";
+        }
+
+
+        [Authorize(Roles = "user")]
+        [OutputCache(Duration = 60)]
+        public ActionResult DeviceView()
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            var rtc = from t in QC_DB.M_runTestCase
+                      select t;
+
+            var ss = (from t in QC_DB.M_deviceConfig
+                     select new DeviceViewModel
+                     {
+                         ID = t.ID,
+                         mark = t.mark,
+                         Model = t.Model,
+                         //img = t.img == null ? "default.jpg" : t.img,
+                         run = rtc.Where(r => r.M_runScene.deviceID == t.ID && r.state != null).Count(),
+                         runing = rtc.Where(r => r.M_runScene.deviceID == t.ID && r.M_runScene.M_testDemand.isRun == true && r.state == null).Count()
+                     }).ToList();
+
+
+            string json = JsonConvert.SerializeObject(ss);
+
+
+            ViewBag.data = json;
+            return View();
         }
     }
 }
