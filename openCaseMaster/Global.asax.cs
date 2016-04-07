@@ -25,6 +25,8 @@ namespace openCaseMaster
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            
         }
 
         //改造原来的User，给其添加一个用户所属的角色数据 

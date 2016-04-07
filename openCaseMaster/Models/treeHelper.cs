@@ -134,19 +134,8 @@ namespace openCaseMaster.Models
                              where t.userID == 1
                              select t).ToList();
 
-                List<project> pjs;
-                if (userHelper.isAdmin())
-                {
-                    pjs = (from t in QC_DB.project
-                           select t).ToList();
-                }
-                else
-                {
-                    int[] Permission = userHelper.getUserPermission();
-                    pjs = (from t in QC_DB.project
-                           where Permission.Contains(t.ID)
-                           select t).ToList();
-                }
+                List<project> pjs = userHelper.getPermissionsProject().ToList();
+                
 
 
                 return getUserControl(myControls, frames, pjs);

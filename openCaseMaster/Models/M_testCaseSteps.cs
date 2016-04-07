@@ -24,7 +24,7 @@ namespace openCaseMaster.Models
         public Nullable<int> PID { get; set; }
         public Nullable<int> FID { get; set; }
     
-        public virtual project project { get; set; }
         public virtual caseFramework caseFramework { get; set; }
+        public virtual project project { get; set; }
     }
 }

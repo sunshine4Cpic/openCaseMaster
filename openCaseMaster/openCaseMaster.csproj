@@ -221,6 +221,7 @@
     <Compile Include="Models\Framework4Project.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\frameworkHelp.cs" />
     <Compile Include="Models\masterDate.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -275,21 +276,6 @@
     <Compile Include="Models\project_app.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\project_department.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\project_executors.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\project_rank.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\project_stage.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\project_type.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\testCaseHelper.cs" />
     <Compile Include="Models\treeHelper.cs" />
     <Compile Include="Models\userHelper.cs" />
@@ -319,6 +305,8 @@
     <Compile Include="ViewModels\userControl\projectTreeNode.cs" />
     <Compile Include="ViewModels\User\UserListModel.cs" />
     <Compile Include="ViewModels\User\LoginViewModel.cs" />
+    <Compile Include="ViewModels\webApi\AutoRunScene.cs" />
+    <Compile Include="ViewModels\webApi\runClient_req.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="apkInstall\9ebe59c658c9c5c5ecdd8593e4025321.jpg" />
@@ -977,7 +965,6 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

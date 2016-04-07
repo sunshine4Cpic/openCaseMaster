@@ -40,38 +40,18 @@ namespace openCaseMaster.Controllers
 
         public string projectListInit()
         {
+           
+            var tcl = from t in userHelper.getPermissionsProject()
+                      select new
+                      {
+                          PID = t.ID,
+                          text = t.Pname,
+                          state = "closed"
+                      };
 
-            using (QCTESTEntities QC_DB = new QCTESTEntities())
-            {
-
-
-                var tcl = from t in QC_DB.project
-                          select new
-                          {
-                              PID = t.ID,
-                              text = t.Pname,
-                              state = "closed"
-                          };
-
-                
-
-                if (!User.IsInRole("admin"))
-                {
-                    int[] pp = userHelper.getUserPermission();
-                    tcl = tcl.Where(t => pp.Contains(t.PID));
-                }
-
-
-
-
-                var jSetting = new JsonSerializerSettings();
-                jSetting.NullValueHandling = NullValueHandling.Ignore;
-
-                string json = JsonConvert.SerializeObject(tcl, jSetting);
+                string json = JsonConvert.SerializeObject(tcl);
 
                 return json;
-
-            }
 
         }
 
@@ -137,9 +117,9 @@ namespace openCaseMaster.Controllers
         {
             ViewData["AddNew"] = true;
 
-            if (type == 1)//案例添加框架
+            if (type == 1)//adbb案例 ,添加框架
             {
-                var fmks = testCaseHelper.getFramework();
+                var fmks = userHelper.getBaseFrameworks();
 
 
                 var query = fmks.Select(c => new { c.ID, c.workName });
@@ -177,7 +157,7 @@ namespace openCaseMaster.Controllers
             {
                 M_testCase mt = QC_DB.M_testCase.First(t => t.ID == ID);
 
-                var fmks = testCaseHelper.getFramework();
+                var fmks = userHelper.getBaseFrameworks();
                 var items = fmks
                 .Select(c => new {
                         Value = c.ID.ToString(),
@@ -186,7 +166,6 @@ namespace openCaseMaster.Controllers
 
                 ViewData["SelectListItem"] = new SelectList(items.AsEnumerable(), "Value", "Text", mt.FID);
 
-               
                 return PartialView("_EditCase", mt);//未做错误处理
             }
         }

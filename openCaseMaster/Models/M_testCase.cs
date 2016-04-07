@@ -29,9 +29,9 @@ namespace openCaseMaster.Models
         public Nullable<int> baseID { get; set; }
         public Nullable<int> FID { get; set; }
     
+        public virtual caseFramework caseFramework { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_testCase> M_testCase1 { get; set; }
         public virtual M_testCase M_testCase2 { get; set; }
-        public virtual caseFramework caseFramework { get; set; }
     }
 }

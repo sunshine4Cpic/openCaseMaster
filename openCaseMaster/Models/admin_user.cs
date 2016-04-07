@@ -17,9 +17,10 @@ namespace openCaseMaster.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public admin_user()
         {
-            this.M_runScene = new HashSet<M_runScene>();
-            this.caseFramework = new HashSet<caseFramework>();
             this.admin_log = new HashSet<admin_log>();
+            this.caseFramework = new HashSet<caseFramework>();
+            this.M_runScene = new HashSet<M_runScene>();
+            this.project = new HashSet<project>();
         }
     
         public int ID { get; set; }
@@ -33,11 +34,13 @@ namespace openCaseMaster.Models
         public Nullable<int> Type { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_runScene> M_runScene { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<caseFramework> caseFramework { get; set; }
+        public virtual ICollection<admin_log> admin_log { get; set; }
         public virtual user_type user_type { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<admin_log> admin_log { get; set; }
+        public virtual ICollection<caseFramework> caseFramework { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<M_runScene> M_runScene { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<project> project { get; set; }
     }
 }

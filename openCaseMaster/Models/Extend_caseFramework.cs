@@ -17,7 +17,9 @@ namespace openCaseMaster.Models
         /// <returns></returns>
         public static treeViewModel getControlJson4Tree(this caseFramework cf)
         {
-            XElement xe = XElement.Parse(cf.controlXML);
+            
+
+            
 
 
             var root = new frameTreeNode();
@@ -26,24 +28,28 @@ namespace openCaseMaster.Models
             root.FID = cf.ID;
 
             root.children = new List<treeViewModel>();
-           
-            var sms = xe.Descendants("Step");
-            foreach (var e in sms)
+
+            if (cf.controlXML != null)
             {
-                scriptStepTreeModel tv = new scriptStepTreeModel();
+                XElement xe = XElement.Parse(cf.controlXML);
+                var sms = xe.Descendants("Step");
+                foreach (var e in sms)
+                {
+                    scriptStepTreeModel tv = new scriptStepTreeModel();
 
-                tv.FID = cf.ID;
-                //tv.PID = null;
-                tv.state = "open";
-                tv.name = e.Attribute("name").Value;//name肯定有把....
-                tv.iconCls = "icon-view_outline_detail";
-                
-                if (e.Attribute("desc")!=null)
-                    tv.desc = e.Attribute("desc").Value;
+                    tv.FID = cf.ID;
+                    //tv.PID = null;
+                    tv.state = "open";
+                    tv.name = e.Attribute("name").Value;//name肯定有把....
+                    tv.iconCls = "icon-view_outline_detail";
 
-               
-                root.children.Add(tv);
-               
+                    if (e.Attribute("desc") != null)
+                        tv.desc = e.Attribute("desc").Value;
+
+
+                    root.children.Add(tv);
+
+                }
             }
 
 

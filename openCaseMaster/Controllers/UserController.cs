@@ -145,9 +145,23 @@ namespace openCaseMaster.Controllers
                 tmp.GreatDate = DateTime.Now;
                 tmp.Password = model.Password;
 
-                tmp.Permission = QC_DB.project.OrderByDescending(t => t.ID).First().ID.ToString();
+                tmp.Permission = "";
 
                 QC_DB.admin_user.Add(tmp);
+
+                //私有项目
+                var newP = new project();
+                newP.Pname = "private project";
+                newP.userID = tmp.ID;
+                QC_DB.project.Add(newP);
+
+
+                //私有框架
+                var newF = new caseFramework();
+                newF.workName = "你的框架";
+                newF.userID = tmp.ID;
+                QC_DB.caseFramework.Add(newF);
+
                 QC_DB.SaveChanges();
                 return RedirectToAction("Login", "User");
                     

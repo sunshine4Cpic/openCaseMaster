@@ -45,6 +45,7 @@
 
 <div id="scriptTreeContextMenu" class="easyui-menu" style="width:150px;">
         <div data-options="iconCls:'icon-save'" onclick="scriptSave();">保存</div>
+        <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="stepDebug();">单步调试</div>
         <div class="menu-sep"></div>
         <div data-options="iconCls:'icon-edit'" onclick="editStepClick($('#scriptTree').tree('getSelected'));">编辑步骤</div>
         <div data-options="iconCls:'icon-remove'" onclick="DeleteStep();">删除步骤</div>
@@ -422,5 +423,11 @@
         }
 
         
+        function stepDebug()
+        {
+            //todo
+            
+            alert("未实现");
+        }
        
     </script>
