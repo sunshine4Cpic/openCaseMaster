@@ -169,15 +169,52 @@
 
             <h1 id="runCase" class="page-header">调度执行</h1>
 
+
+             <h2 id="creatScene">构建场景</h2>
+            <p>在案例tree中勾选你想执行的案例,就能轻松的构建测试场景。</p>
+            <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/creatScene-1.gif"  />
+            </div>
+
+            <p>测试场景将保存为excel文件，您在案例中定义的<a href="#defineParam">参数</a>都将在场景中体现。你也可以在场景文件中配置你的案例。
+             </p>
+             <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/creatScene-2.gif"  />
+            </div>
+
+             <h2 id="creatDemand">创建执行计划</h2>
+            <p>你可以通过上传场景来添加计划的测试场景excel。一个执行计划中可以包含多个场景。</p>
+            <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/creatDemand-1.gif"  />
+            </div>
+
+            <p>在测试计划中，一个场景只能执行在一台设备上。在执行开始前你需要手动为场景分配执行设备</p>
+             <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/creatDemand-2.gif"  />
+            </div>
+
+             <p>你可以测试计划上传一个被测apk，当设备在执行场景前会先安装这个apk再执行案例。</p>
+             <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/creatDemand-3.gif"  />
+            </div>
+
+            
+            <h2 id="runDemand">测试计划执行</h2>
+            <p>当你的测试计划创建完毕后，你就可以开始执行你的测试计划，执行调度程序将自动分配你的案例到相应的设备上。</p>
+            <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/runDemand.png"  />
+            </div>
+
+           <h2 id="runResult">结果查询</h2>
+            <p></p>
             <div class="bs-example" data-example-id="body-copy">
                 
                 <img class="img-responsive" src="~/Content/help/workwork.jpg"  />
-                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
             </div>
 
-
         </div>
-        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+        
     </div>
 
 
@@ -222,9 +259,10 @@
                  <li>
                     <a href="#runCase">调度执行</a>
                     <ul class="nav">
-                        <li class=""><a href="#runCase">测试任务</a></li>
-                        <li class=""><a href="#runCase">场景</a></li>
-                        <li class=""><a href="#runCase">设备</a></li>
+                        <li class=""><a href="#creatScene">构建场景</a></li>
+                        <li class=""><a href="#creatDemand">创建执行计划</a></li>
+                        <li class=""><a href="#runDemand">执行</a></li>
+                        <li class=""><a href="#runResult">结果查询</a></li>
                     </ul>
                 </li>
 

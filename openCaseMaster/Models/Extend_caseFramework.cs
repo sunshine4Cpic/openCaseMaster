@@ -19,9 +19,6 @@ namespace openCaseMaster.Models
         {
             
 
-            
-
-
             var root = new frameTreeNode();
             root.text = cf.workName;
             root.state = "open";

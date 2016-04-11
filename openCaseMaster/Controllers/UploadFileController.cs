@@ -1,4 +1,5 @@
-﻿using openCaseMaster.Models;
+﻿
+using openCaseMaster.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +17,7 @@ namespace openCaseMaster.Controllers
         [HttpPost]
         public void uploadScene(int id)
         {
-
+            
             var stm = FileToStream();
             if (stm != null)
             {
@@ -94,7 +95,38 @@ namespace openCaseMaster.Controllers
             return originalName;
         }
 
+        [HttpPost]
+        public string userFramework()
+        {
+            /*******直接保存不可取 提取需要的信息再保存********/
+            var stm = FileToStream();
+            if (stm != null)
+            {
+                StreamReader sr = new StreamReader(stm);
+                XElement fm = XElement.Parse(sr.ReadToEnd());
 
+                int userID = userHelper.getUserID();
+
+                QCTESTEntities QC_DB = new QCTESTEntities();
+
+                var cf = QC_DB.caseFramework.First(t => t.userID == userID);
+
+                cf.controlXML = fm.ToString();
+                QC_DB.SaveChanges();
+
+                return cf.controlXML;
+
+            }else
+            {
+                Response.Status = "500";
+                return "文件上传失败";
+            }
+           
+        }
+
+
+
+        [NonAction]
         private Stream FileToStream()
         {
             if (Request.Files.Count <= 0) return null;
@@ -145,6 +177,7 @@ namespace openCaseMaster.Controllers
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
+         [NonAction]
         private Stream FileToStream(string fileName)
         {
             // 打开文件 
@@ -167,6 +200,7 @@ namespace openCaseMaster.Controllers
         /// <param name="uploadFile"></param>
         /// <param name="chunk"></param>
         /// <returns></returns>
+         [NonAction]
         private string WriteTempFile(HttpPostedFileBase uploadFile, int chunk, string name)
         {
             // string fileId = DateTime.Now.ToString("yyyyMMddHHmmssfff") + uploadFile.FileName.Substring(uploadFile.FileName.LastIndexOf("."));

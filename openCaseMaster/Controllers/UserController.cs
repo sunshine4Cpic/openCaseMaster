@@ -321,6 +321,48 @@ namespace openCaseMaster.Controllers
             
         }
 
+
+        
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult userInfo()
+        {
+            userInfoModel ul = new userInfoModel();
+            return View(ul);
+
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        public string ChangePassword(ChangePasswordModel req)
+        {
+            if (!ModelState.IsValid)
+            {
+                Response.Status = "400";
+                return "非法提交";
+            }
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            int id = userHelper.getUserID();
+
+            admin_user user = QC_DB.admin_user.First(t => t.ID == id);
+
+            if (user.Password != req.Password)
+            {
+                Response.Status = "400";
+                return "旧密码错误";
+            }
+
+            user.Password = req.Password;
+
+            QC_DB.SaveChanges();
+
+            return true.ToString();
+
+        }
+
         
     }
 }

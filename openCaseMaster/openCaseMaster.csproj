@@ -303,6 +303,8 @@
     <Compile Include="ViewModels\userControl\controlViewModel.cs" />
     <Compile Include="ViewModels\userControl\frameTreeNode.cs" />
     <Compile Include="ViewModels\userControl\projectTreeNode.cs" />
+    <Compile Include="ViewModels\User\RegisterModel.cs" />
+    <Compile Include="ViewModels\User\userInfoModel.cs" />
     <Compile Include="ViewModels\User\UserListModel.cs" />
     <Compile Include="ViewModels\User\LoginViewModel.cs" />
     <Compile Include="ViewModels\webApi\AutoRunScene.cs" />
@@ -322,6 +324,11 @@
     <Content Include="Content\docs.min.css" />
     <Content Include="Content\help\buildUserStep.png" />
     <Content Include="Content\help\changeAndSaveStep.gif" />
+    <Content Include="Content\help\creatDemand-1.gif" />
+    <Content Include="Content\help\creatDemand-2.gif" />
+    <Content Include="Content\help\creatDemand-3.gif" />
+    <Content Include="Content\help\creatScene-1.gif" />
+    <Content Include="Content\help\creatScene-2.gif" />
     <Content Include="Content\help\defineParam-2.png" />
     <Content Include="Content\help\defineParam.png" />
     <Content Include="Content\help\defultParam-2.png" />
@@ -331,6 +338,7 @@
     <Content Include="Content\help\newStep.gif" />
     <Content Include="Content\help\newUserStep.gif" />
     <Content Include="Content\help\openUserStep.png" />
+    <Content Include="Content\help\runDemand.png" />
     <Content Include="Content\help\runScript.gif" />
     <Content Include="Content\help\startUpClient.gif" />
     <Content Include="Content\help\useUserStep.png" />
@@ -788,6 +796,17 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
+    <Content Include="Scripts\highlight\highlight.min.js" />
+    <Content Include="Scripts\highlight\solarized_dark.min.css" />
+    <Content Include="Scripts\loading\ladda-themeless.css" />
+    <Content Include="Scripts\loading\ladda-themeless.min.css" />
+    <Content Include="Scripts\loading\ladda.css" />
+    <Content Include="Scripts\loading\ladda.jquery.min.js" />
+    <Content Include="Scripts\loading\ladda.js" />
+    <Content Include="Scripts\loading\ladda.min.css" />
+    <Content Include="Scripts\loading\ladda.min.js" />
+    <Content Include="Scripts\loading\spin.js" />
+    <Content Include="Scripts\loading\spin.min.js" />
     <Content Include="调试客户端.rar" />
     <None Include="Properties\PublishProfiles\demo.pubxml" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
@@ -961,6 +980,8 @@
     <Content Include="Views\User\Register.cshtml" />
     <Content Include="Views\tutorial\framework.cshtml" />
     <Content Include="Views\Device\DeviceView.cshtml" />
+    <Content Include="Views\User\userInfo.cshtml" />
+    <Content Include="Views\User\_ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

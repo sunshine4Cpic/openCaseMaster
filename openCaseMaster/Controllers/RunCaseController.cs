@@ -197,6 +197,17 @@ namespace openCaseMaster.Controllers
             QC_DB.SaveChanges();
         }
 
+        [HttpPost]
+        public void changeSceneName(int id, string name)
+        {
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            var sc = QC_DB.M_runScene.First(t => t.ID == id);
+            sc.name = name;
+            QC_DB.SaveChanges();
+        }
+
 
 
         public ActionResult SceneView(int ID)
