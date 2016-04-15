@@ -22,7 +22,7 @@
 <div id="SceneTool" style="padding:5px;height:auto">
     <a class="easyui-linkbutton" href="javascript:void(0);"  title="查看详细记录" data-options="plain:true,iconCls:'icon-search'" onclick="viewRecord()"></a>
    <a class="easyui-linkbutton" href="javascript:void(0);"  title="重新执行" data-options="plain:true,iconCls:'icon-reload'" onclick="ResetCase()"></a>
-    <a class="easyui-linkbutton" href="javascript:void(0);"  title="手工确认" data-options="plain:true,iconCls:'icon-contact_blue_edit'" onclick="$('#SceneModal').modal();"></a>
+    <a class="easyui-linkbutton" href="javascript:void(0);"  title="手工确认" data-options="plain:true,iconCls:'icon-contact_blue_edit'" onclick="userCompletedModel()"></a>
 </div>
 
 <div class="modal fade" data-backdrop="static" id="SceneModal" tabindex="-1" role="dialog">
@@ -39,11 +39,7 @@
         </div>
         <div class="modal-body" style="padding:20px">
             
-            <div class="input-group">
-         <span class="input-group-addon">备注</span>
-         <textarea id="userMark" class="form-control" style="width:100%;max-width: initial;height:150px; " ></textarea>
-      </div>
-               
+ 
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default"
@@ -92,7 +88,7 @@
                 break;
         }
 
-        return "<font color='" + color + "'>" + value + "</font>";
+        return "<font color='" + color + "' title='" + row.mark + "'>" + value + "</font>";
     }
 
     function viewRecord() 
@@ -131,6 +127,18 @@
                 }).error(function () { alert("error"); });
             }
         });
+    }
+
+    function userCompletedModel()
+    {
+        var row = $('#SceneTable').datagrid('getSelected');
+        if (row == null) return;
+
+        $("#SceneModal .modal-body").load("userCompleted/" + row.ID, function () {
+            $('#SceneModal').modal();
+        });
+
+       
     }
 
     function userCompleted() {

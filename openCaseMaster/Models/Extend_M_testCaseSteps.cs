@@ -9,7 +9,7 @@ namespace openCaseMaster.Models
     public static class Extend_M_testCaseSteps
     {
 
-
+       
         public static Dictionary<string, string> getParamDictionary(this M_testCaseSteps mtc)
         {
 
@@ -18,8 +18,7 @@ namespace openCaseMaster.Models
             var pbs = xe.ParamDictionary();
 
 
-            XElement pxe = XElement.Parse(mtc.paramXML);
-            var ppbs = pxe.Descendants();
+            var ppbs = xe.Descendants();
 
             string[] keys = new string[pbs.Count];
 

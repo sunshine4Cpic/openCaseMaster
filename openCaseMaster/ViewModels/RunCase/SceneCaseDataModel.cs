@@ -37,6 +37,7 @@ namespace openCaseMaster.ViewModels
         {
             this.ID = r.ID;
             this.name = r.name;
+            this.mark = r.mark;
             if (r.state == null || r.state == 0)
             {
                 this.state = "未执行";
@@ -93,6 +94,8 @@ namespace openCaseMaster.ViewModels
         public string flow { get; set; }
 
         public string runDate { get; set; }
+
+        public string mark { get; set; }
 
     }
 }

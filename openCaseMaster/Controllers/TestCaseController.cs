@@ -352,6 +352,15 @@ namespace openCaseMaster.Controllers
         }
 
         [HttpPost]
+        public XElement runStep(string steps)
+        {
+
+            var xe = testCaseHelper.json2StepList(steps);
+            xe.SetAttributeValue("desc", "单步调试");
+            return xe;
+        }
+
+        [HttpPost]
         public ActionResult CreateUserControl(string steps)
         {
             XElement xe = testCaseHelper.json2StepList(steps);

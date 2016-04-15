@@ -982,6 +982,7 @@
     <Content Include="Views\Device\DeviceView.cshtml" />
     <Content Include="Views\User\userInfo.cshtml" />
     <Content Include="Views\User\_ChangePassword.cshtml" />
+    <Content Include="Views\RunCase\_userCompleted.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

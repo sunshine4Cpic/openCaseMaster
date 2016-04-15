@@ -178,10 +178,13 @@ namespace openCaseMaster.Models
         public static XElement getRunScript(this XElement testCase, Dictionary<string, string> param)
         {
 
-            testCase.setParam(param);//先把参数填好
+            testCase.setParam(param);//参数先填
 
             testCase.userStepChannge();
             testCase.proStepChannge();
+
+            
+
 
             //去除不启用的节点
             var pbs = testCase.XPathSelectElements("//Step/ParamBinding[@name='是否启用' and @value='false']/..");

@@ -247,6 +247,15 @@ namespace openCaseMaster.Controllers
             return json;
         }
 
+        [HttpGet]
+        public ActionResult userCompleted(int ID)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            var pj = QC_DB.M_runTestCase.FirstOrDefault(t => t.ID == ID);
+
+            return PartialView("_userCompleted", pj);
+        }
 
         [HttpPost]
         public string userCompleted(int ID,string mark)

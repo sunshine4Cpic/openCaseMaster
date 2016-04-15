@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Xml.Linq;
 
 namespace openCaseMaster.Controllers
 {
@@ -160,6 +161,7 @@ namespace openCaseMaster.Controllers
                 var newF = new caseFramework();
                 newF.workName = "你的框架";
                 newF.userID = tmp.ID;
+                newF.controlXML = new XElement("Steps").ToString();
                 QC_DB.caseFramework.Add(newF);
 
                 QC_DB.SaveChanges();

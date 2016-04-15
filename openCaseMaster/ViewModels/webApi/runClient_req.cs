@@ -22,7 +22,7 @@ namespace openCaseMaster.ViewModels
         /// 执行机IP
         /// </summary>
         [Required(ErrorMessage = "缺少IP")]
-        [StringLength(20, MinimumLength = 4, ErrorMessage = "IP必须为4~50个字符")]
+        [StringLength(20, MinimumLength = 4, ErrorMessage = "IP必须为4~20个字符")]
         public string IP { get; set; }
 
         /// <summary>
@@ -77,17 +77,22 @@ namespace openCaseMaster.ViewModels
     public class application_res
     {
 
-        public application_res(int id)
+        public application_res(int? id)
         {
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-            //属于这台手机并已经开始的场景
-            var app = QC_DB.M_application.First(t => t.ID == id);
+            M_application app;
+
+            if (id==null)
+                app = QC_DB.M_application.First();
+            else
+                app = QC_DB.M_application.First(t => t.ID == id);
 
             this.id = app.ID;
 
             this.id = app.ID;
             this.name = app.name;
+            this.robotiumApk = app.runApkName;
             this.androidPackeg = app.package;
             this.mainActivity = app.mainActiviy;
             this.iosPackeg = app.package2;
@@ -125,6 +130,10 @@ namespace openCaseMaster.ViewModels
         public bool clearCache { get; set; }
 
 
+        /// <summary>
+        /// robotium脚本apk名
+        /// </summary>
+        public string robotiumApk { get; set; }
     }
 
     

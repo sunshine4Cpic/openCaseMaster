@@ -26,6 +26,7 @@ namespace openCaseMaster.Controllers
         [HttpPost]
         public IHttpActionResult registerDevice([FromBody]registerDevice_req req)
         {
+            
 
              if (!ModelState.IsValid)
              {
@@ -137,7 +138,7 @@ namespace openCaseMaster.Controllers
         /// <param name="id">appID</param>
         /// <returns></returns>
         [HttpGet]
-        public application_res application(int id)
+        public application_res application(int? id)
         {
             application_res res = new application_res(id);
             return res;

@@ -45,8 +45,8 @@
 
 <div id="scriptTreeContextMenu" class="easyui-menu" style="width:150px;">
         <div data-options="iconCls:'icon-save'" onclick="scriptSave();">保存</div>
-        <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="stepDebug();">单步调试</div>
         <div class="menu-sep"></div>
+        <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="stepDebug();">单步调试</div>
         <div data-options="iconCls:'icon-edit'" onclick="editStepClick($('#scriptTree').tree('getSelected'));">编辑步骤</div>
         <div data-options="iconCls:'icon-remove'" onclick="DeleteStep();">删除步骤</div>
     </div>
@@ -425,9 +425,21 @@
         
         function stepDebug()
         {
-            //todo
+            var node = $('#scriptTree').tree('getSelected');
+            var steps = [];
+
+            var step = getStep(node);
+
+            steps.push(step);
+
+            $.post("runStep",{"steps":JSON.stringify(steps)},function(result){//获取执行脚本
+                $.post("http://localhost:8500/testM/?runType=Debug",result,function(result){
+                    $.messager.alert('Messager', '脚本开始执行!', "info");
+                }).error(function() {
+                    $.messager.alert('Error', '调用本机出错啦!', "error");
+                });
+            });
             
-            alert("未实现");
         }
        
     </script>
