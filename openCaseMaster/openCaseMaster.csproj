@@ -29,6 +29,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\openCaseMaster.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,6 +41,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CaptchaMvc, Version=2.5.0.0, Culture=neutral, PublicKeyToken=fe46ad421dd3b0e6, processorArchitecture=MSIL">
+      <HintPath>..\packages\CaptchaMvc.Mvc5.1.5.0\lib\net45-full\CaptchaMvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -155,9 +161,42 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
+    <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
+    <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
+    <Compile Include="Areas\HelpPage\HelpPageAreaRegistration.cs" />
+    <Compile Include="Areas\HelpPage\HelpPageConfigurationExtensions.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\CollectionModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ComplexTypeModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\DictionaryModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\EnumTypeModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\EnumValueDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\IModelDocumentationProvider.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\KeyValuePairModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelDescriptionGenerator.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelNameAttribute.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelNameHelper.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ParameterAnnotation.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ParameterDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\SimpleTypeModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\Models\HelpPageApiModel.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\HelpPageSampleGenerator.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\HelpPageSampleKey.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\ImageSample.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\InvalidSample.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\ObjectGenerator.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
+    <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\RunCaseController.cs" />
+    <Compile Include="Controllers\webApi\runClientController.cs" />
     <Compile Include="Controllers\TestCaseController.cs" />
+    <Compile Include="Controllers\tutorialController.cs" />
     <Compile Include="Controllers\UploadFileController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\userStepControlController.cs" />
@@ -182,6 +221,7 @@
     <Compile Include="Models\Framework4Project.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\frameworkHelp.cs" />
     <Compile Include="Models\masterDate.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -236,21 +276,6 @@
     <Compile Include="Models\project_app.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\project_department.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\project_executors.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\project_rank.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\project_stage.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\project_type.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\testCaseHelper.cs" />
     <Compile Include="Models\treeHelper.cs" />
     <Compile Include="Models\userHelper.cs" />
@@ -259,6 +284,10 @@
     </Compile>
     <Compile Include="Models\XElementHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\checkListModel.cs" />
+    <Compile Include="ViewModels\Device\DeviceViewModel.cs" />
+    <Compile Include="ViewModels\Device\ProjectListModel.cs" />
+    <Compile Include="ViewModels\Project\ProjectListModel.cs" />
     <Compile Include="ViewModels\RunCase\caseRecordModel.cs" />
     <Compile Include="ViewModels\RunCase\SceneCaseDataModel.cs" />
     <Compile Include="ViewModels\RunCase\SceneViewModel.cs" />
@@ -274,20 +303,46 @@
     <Compile Include="ViewModels\userControl\controlViewModel.cs" />
     <Compile Include="ViewModels\userControl\frameTreeNode.cs" />
     <Compile Include="ViewModels\userControl\projectTreeNode.cs" />
-    <Compile Include="ViewModels\User\proCheckModel.cs" />
+    <Compile Include="ViewModels\User\RegisterModel.cs" />
+    <Compile Include="ViewModels\User\userInfoModel.cs" />
     <Compile Include="ViewModels\User\UserListModel.cs" />
     <Compile Include="ViewModels\User\LoginViewModel.cs" />
+    <Compile Include="ViewModels\webApi\AutoRunScene.cs" />
+    <Compile Include="ViewModels\webApi\runClient_req.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="apkInstall\9ebe59c658c9c5c5ecdd8593e4025321.jpg" />
     <Content Include="apkInstall\c7dde71190ef76c6205b2c889c16fdfaae51678c.jpg" />
     <Content Include="apkInstall\empty.txt" />
     <Content Include="App_Data\empty.txt" />
+    <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap-treeview.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\docs.min.css" />
+    <Content Include="Content\help\buildUserStep.png" />
+    <Content Include="Content\help\changeAndSaveStep.gif" />
+    <Content Include="Content\help\creatDemand-1.gif" />
+    <Content Include="Content\help\creatDemand-2.gif" />
+    <Content Include="Content\help\creatDemand-3.gif" />
+    <Content Include="Content\help\creatScene-1.gif" />
+    <Content Include="Content\help\creatScene-2.gif" />
+    <Content Include="Content\help\defineParam-2.png" />
+    <Content Include="Content\help\defineParam.png" />
+    <Content Include="Content\help\defultParam-2.png" />
+    <Content Include="Content\help\defultParam.png" />
+    <Content Include="Content\help\editStep.gif" />
+    <Content Include="Content\help\newScript.gif" />
+    <Content Include="Content\help\newStep.gif" />
+    <Content Include="Content\help\newUserStep.gif" />
+    <Content Include="Content\help\openUserStep.png" />
+    <Content Include="Content\help\runDemand.png" />
+    <Content Include="Content\help\runScript.gif" />
+    <Content Include="Content\help\startUpClient.gif" />
+    <Content Include="Content\help\useUserStep.png" />
+    <Content Include="Content\help\workwork.jpg" />
     <Content Include="Content\img\001.gif" />
     <Content Include="Content\img\094.gif" />
     <Content Include="Content\img\11.bmp" />
@@ -295,6 +350,7 @@
     <Content Include="Content\img\115.gif" />
     <Content Include="Content\img\116.gif" />
     <Content Include="Content\img\127.gif" />
+    <Content Include="Content\img\phone.png" />
     <Content Include="Content\img\add.png" />
     <Content Include="Content\img\application_osx_down.png" />
     <Content Include="Content\img\application_osx_new.png" />
@@ -720,10 +776,44 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Areas\HelpPage\Views\Web.config" />
+    <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\ResourceModel.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\Index.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\TextSample.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\SimpleTypeModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\Samples.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\Parameters.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ModelDescriptionLink.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\KeyValuePairModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\InvalidSample.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ImageSample.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\HelpPageApiModel.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\EnumTypeModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\DictionaryModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ComplexTypeModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
+    <Content Include="Scripts\highlight\highlight.min.js" />
+    <Content Include="Scripts\highlight\solarized_dark.min.css" />
+    <Content Include="Scripts\loading\ladda-themeless.css" />
+    <Content Include="Scripts\loading\ladda-themeless.min.css" />
+    <Content Include="Scripts\loading\ladda.css" />
+    <Content Include="Scripts\loading\ladda.jquery.min.js" />
+    <Content Include="Scripts\loading\ladda.js" />
+    <Content Include="Scripts\loading\ladda.min.css" />
+    <Content Include="Scripts\loading\ladda.min.js" />
+    <Content Include="Scripts\loading\spin.js" />
+    <Content Include="Scripts\loading\spin.min.js" />
+    <Content Include="调试客户端.rar" />
+    <None Include="Properties\PublishProfiles\demo.pubxml" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\bootstrap-treeview.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\docs.min.js" />
     <Content Include="Scripts\easyloader.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
@@ -846,7 +936,9 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="uploadTmp\empty.txt" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -880,11 +972,21 @@
     <Content Include="Views\RunCase\_addNew.cshtml" />
     <Content Include="Views\User\UserManage.cshtml" />
     <Content Include="Views\User\_editUser.cshtml" />
+    <Content Include="Views\Project\ProjectManage.cshtml" />
+    <Content Include="Views\Project\_editProject.cshtml" />
+    <Content Include="Views\Device\DeviceManage.cshtml" />
+    <Content Include="Views\Device\_editDevice.cshtml" />
+    <Content Include="Views\tutorial\Index.cshtml" />
+    <Content Include="Views\User\Register.cshtml" />
+    <Content Include="Views\tutorial\framework.cshtml" />
+    <Content Include="Views\Device\DeviceView.cshtml" />
+    <Content Include="Views\User\userInfo.cshtml" />
+    <Content Include="Views\User\_ChangePassword.cshtml" />
+    <Content Include="Views\RunCase\_userCompleted.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

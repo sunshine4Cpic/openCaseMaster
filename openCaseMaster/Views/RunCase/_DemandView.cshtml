@@ -23,7 +23,7 @@
            collapsible:true,showFooter:true,onClickCell:@onClickCellFun">
     <thead data-options="frozen:true">
         <tr>
-            <th data-options="field:'name',width:160,formatter:fm">场景名</th>
+            <th data-options="field:'name',width:160,formatter:fm,editor:'text'">场景名</th>
         </tr>
     </thead>
 
@@ -115,17 +115,77 @@
             return '<div title="' + value + '" class="easyui-tooltip">' + value + '</div>';
     }
 
+
+    $.extend($.fn.datagrid.methods, {
+        editCell: function(jq,param){
+            return jq.each(function(){
+                var opts = $(this).datagrid('options');
+                var fields = $(this).datagrid('getColumnFields',true).concat($(this).datagrid('getColumnFields'));
+                for(var i=0; i<fields.length; i++){
+                    var col = $(this).datagrid('getColumnOption', fields[i]);
+                    col.editor1 = col.editor;
+                    if (fields[i] != param.field){
+                        col.editor = null;
+                    }
+                }
+                $(this).datagrid('beginEdit', param.index);
+                for(var i=0; i<fields.length; i++){
+                    var col = $(this).datagrid('getColumnOption', fields[i]);
+                    col.editor = col.editor1;
+                }
+            });
+        }
+    });
+
     var editIndex = undefined;
     function endEditing(){
         if (editIndex == undefined){return true}
         if ($('#DemandTable').datagrid('validateRow', editIndex)){
-            //实时保存
-            var ed = $('#DemandTable').datagrid('getEditor', {index:editIndex,field:'DeviceID'});
-            var DeviceName = $(ed.target).combobox('getText');
-            var DeviceID = $(ed.target).combobox('getValue')
+
             var row = $('#DemandTable').datagrid('getRows')[editIndex];
 
             var ret = false;
+            //实时保存
+            var ed = $('#DemandTable').datagrid('getEditor', {index:editIndex,field:'DeviceID'});
+
+            if(ed==null)//修改name
+            {
+                ed = $('#DemandTable').datagrid('getEditor', {index:editIndex,field:'name'});
+
+                if(row['name']==ed.target.val())
+                {
+                    $('#DemandTable').datagrid('endEdit', editIndex);
+                    editIndex = undefined;
+                    return true;
+                }
+
+                $.messager.progress({title: '请稍后',msg: '提交更改中...'});
+                $.ajax({
+                    type : "post",
+                    url : "changeSceneName/"+row.ID,
+                    data : {"name":ed.target.val()} ,
+                    async : false,
+                    success : function(data){
+                        $('#DemandTable').datagrid('endEdit', editIndex);
+                        editIndex = undefined;
+                        ret=true;
+                    } ,
+                    error: function(e) {
+                        $.messager.alert('Error', '修改失败!', "error");
+                    }
+                });
+                $.messager.progress('close');
+                
+                return ret;
+            }
+
+
+
+            var DeviceName = $(ed.target).combobox('getText');
+            var DeviceID = $(ed.target).combobox('getValue')
+            
+
+            
             
             if(row['DeviceID']==DeviceID)
             {
@@ -158,26 +218,26 @@
         }
     }
 
+  
+
     function onClickCell(index, field){
         if(!endEditing()) return;
 
-        if(field=='DeviceID')
+        onClickCell2(index, field);
+
+        if(field=='DeviceID' || field=='name')
         {
             editIndex = index;
-            $(this).datagrid('selectRow', index)
-                .datagrid('beginEdit', index);
-        }else
-        {
-            var row_old = $('#DemandTable').datagrid('getSelected');
-            $('#DemandTable').datagrid('selectRow', index);
-            var row = $('#DemandTable').datagrid('getSelected');
-            if(row_old!=row)
-                refreshScene(row.ID);
+            $(this).datagrid('editCell', {index:index,field:field});
         }
+
+        
+        
     }
 
     //不可编辑
     function onClickCell2(index, field){
+        
         var row_old = $('#DemandTable').datagrid('getSelected');
         $('#DemandTable').datagrid('selectRow', index);
         var row = $('#DemandTable').datagrid('getSelected');

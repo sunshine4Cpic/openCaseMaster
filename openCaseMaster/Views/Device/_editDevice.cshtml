@@ -1,0 +1,85 @@
+﻿
+@using openCaseMaster.Models;
+@using openCaseMaster.ViewModels;
+@model  M_deviceConfig
+
+
+
+    
+ <input id="deviceID" type="hidden" value="@Model.ID" />
+
+<form id="deviceForm" class="form-horizontal" >
+ <div class="form-group">
+     <label class="col-md-3 control-label" >备注</label>
+     <div class="col-md-7 col-sm-4">
+         <input class="form-control" id="mark" name="mark" data-options="required:true,validType:'length[1,50]',missingMessage:'不能为空'" type="text" value="@Model.mark">
+     </div>
+ </div>
+ 
+   <div class="form-group">
+     <label class="col-md-3 control-label" >型号</label>
+     <div class="col-md-7 col-sm-4">
+         <input class="form-control" id="Model" name="Model" type="text" value="@Model.Model">
+     </div>
+ </div>
+
+    <div class="form-group">
+     <label class="col-md-3 control-label" >品牌</label>
+     <div class="col-md-7 col-sm-4">
+         <input class="form-control" id="Brand" name="Brand"  type="text" value="@Model.Brand">
+     </div>
+ </div>
+
+    <div class="form-group">
+     <label class="col-md-3 control-label" >调度机IP</label>
+     <div class="col-md-7 col-sm-4">
+         <input class="form-control" id="IP" name="IP"  type="text" value="@Model.IP" disabled>
+     </div>
+ </div>
+
+    <div class="form-group">
+     <label class="col-md-3 control-label" >端口</label>
+     <div class="col-md-7 col-sm-4">
+         <input class="form-control" id="Port" name="Port"  type="text" value="@Model.Port" disabled>
+     </div>
+ </div>
+
+     <div class="form-group">
+     <label class="col-md-3 control-label" >DeviceID</label>
+     <div class="col-md-7 col-sm-4">
+         <input class="form-control" id="device" name="device"  type="text" value="@Model.device" disabled>
+     </div>
+ </div>
+   
+     
+</form>
+
+       
+<script>
+    function submitEdit() {
+        //@@ sourceURL=EditUser.js
+
+        if (!$("#deviceForm").form('validate')) {
+            return;
+        }
+
+        var e = {
+            ID: $('#deviceID').val(),
+            mark: $('#mark').val(),
+            Model: $('#Model').val(),
+            Brand: $('#Brand').val()
+
+        };
+
+       
+       
+
+        $.post("editDevice", e).then(
+            function (r) {
+                $("#myModal").modal("hide");
+                $("#DeviceTable").datagrid("reload");
+            });
+    }
+
+    
+</script>

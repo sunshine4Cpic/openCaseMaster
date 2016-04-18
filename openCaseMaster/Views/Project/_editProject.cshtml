@@ -1,0 +1,133 @@
+﻿
+@using openCaseMaster.Models;
+@using openCaseMaster.ViewModels;
+@model  project
+
+
+
+    
+ <input id="PID" type="hidden" value="@Model.ID" />
+
+<form id="editProForm" class="form-horizontal" >
+ <div class="form-group">
+     <label class="col-md-3 control-label" >项目名</label>
+     <div class="col-md-7 col-sm-4">
+         <input class="form-control" id="Pname" name="Pname" data-options="required:true,validType:'length[4,50]',missingMessage:'不能为空'" type="text" value="@Model.Pname">
+     </div>
+ </div>
+ 
+    
+     <div class="panel panel-info">
+      <div class="panel-heading">
+         <div class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" 
+               href="#deviceListTree">
+               设备权限 - 点击展开
+            </a>
+         </div>
+      </div>
+      <div id="deviceListTree" class="panel-collapse collapse">
+         <div class="panel-body">
+             @{
+                 foreach (var p in ViewData["deviceList"] as List<checkListModel>)
+                 {
+                     string check="";
+                     if (p.isCheck)
+                     { 
+                         check = "checked=\"checked\"";
+                     }
+                    <div class="col-md-6"><input name="roles" type="checkbox" value="@p.Value" @check  />@p.Text</div>
+                 }
+            }
+            
+         </div>
+      </div>
+   </div>
+    <br />
+     <div class="panel panel-info">
+      <div class="panel-heading">
+         <div class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" 
+               href="#appListTree">
+               app权限 - 点击展开
+            </a>
+         </div>
+      </div>
+      <div id="appListTree" class="panel-collapse collapse">
+         <div class="panel-body">
+             @{
+                 foreach (var p in ViewData["appList"] as List<checkListModel>)
+                 {
+                     string check="";
+                     if (p.isCheck)
+                     { 
+                         check = "checked=\"checked\"";
+                     }
+                    <div class="col-md-6"><input name="roles" type="checkbox" value="@p.Value" @check  />@p.Text</div>
+                 }
+            }
+            
+         </div>
+      </div>
+   </div>
+</form>
+
+       
+<script>
+    function submitEdit() {
+        //@@ sourceURL=EditUser.js
+
+
+        if (!$("#editProForm").form('validate')) {
+            return;
+        }
+
+        var deviceList = "";
+        $("#deviceListTree input").each(function () {
+            if (this.checked) {
+                deviceList += (this.value + ",");
+            }
+        });
+
+        var appList = "";
+        $("#appListTree input").each(function () {
+            if (this.checked) {
+                appList += (this.value + ",");
+            }
+        });
+
+        var e = {
+            ID: $('#PID').val(),
+            Pname: $('#Pname').val(),
+            deviceList: deviceList,
+            appList: appList
+
+        };
+
+      
+
+        var action = "editProject";
+        if (e.ID==0)
+            action = "addProject";
+
+        $.post(action, e).then(
+            function (r) {
+                $("#myModal").modal("hide");
+                $("#ProjectTable").datagrid("reload");
+            });
+    }
+
+    function deleteUser() {
+        $.messager.confirm('Message', '确定删除这个项目吗?', function (r) {
+            if (r) {
+                var ID = $('#userID').val();
+                $.post("deleteProject/" + ID).then(
+                    function (r) {
+                        $("#myModal").modal("hide");
+                        $("#ProjectTable").datagrid("reload");
+                    });
+            }
+        });
+        
+    }
+</script>

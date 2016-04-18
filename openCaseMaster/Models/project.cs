@@ -17,25 +17,20 @@ namespace openCaseMaster.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public project()
         {
+            this.Framework4Project = new HashSet<Framework4Project>();
             this.M_DevProMapping = new HashSet<M_DevProMapping>();
             this.M_testCaseSteps = new HashSet<M_testCaseSteps>();
             this.M_testDemand = new HashSet<M_testDemand>();
             this.project_app = new HashSet<project_app>();
-            this.Framework4Project = new HashSet<Framework4Project>();
         }
     
         public int ID { get; set; }
         public string Pname { get; set; }
-        public string QCPid { get; set; }
-        public Nullable<int> Type { get; set; }
-        public Nullable<int> Rank { get; set; }
-        public string Head { get; set; }
-        public Nullable<int> Stage { get; set; }
         public Nullable<bool> zidonghua { get; set; }
-        public Nullable<int> executor { get; set; }
-        public Nullable<bool> CXGJ_Report { get; set; }
-        public Nullable<int> Department { get; set; }
+        public Nullable<int> userID { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Framework4Project> Framework4Project { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_DevProMapping> M_DevProMapping { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -44,12 +39,6 @@ namespace openCaseMaster.Models
         public virtual ICollection<M_testDemand> M_testDemand { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<project_app> project_app { get; set; }
-        public virtual project_department project_department { get; set; }
-        public virtual project_executors project_executors { get; set; }
-        public virtual project_rank project_rank { get; set; }
-        public virtual project_stage project_stage { get; set; }
-        public virtual project_type project_type { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Framework4Project> Framework4Project { get; set; }
+        public virtual admin_user admin_user { get; set; }
     }
 }

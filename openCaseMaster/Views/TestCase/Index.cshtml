@@ -74,10 +74,7 @@
                     <ul id="controlTreeListU"></ul>
                 </div>
             </div>
-
-
         </div>
-
     </div>
     
     <div id="right" class="col-md-8" style="padding:5px">
@@ -110,7 +107,12 @@
     </div><!-- /.modal -->
 </div>
 
-
+ <div id="ContextMenu"  class="easyui-menu" style="width:150px;">
+                    <div data-options="iconCls:'icon-edit'" onclick="OpenEditCase();">修改信息</div>
+                    <div data-options="iconCls:'icon-remove'" onclick="DeleteCase();">删除节点</div>
+                    <div class="menu-sep"></div>
+                    <div data-options="iconCls:'icon-reload'" onclick="reloadNode();">刷新节点</div>
+</div>
 
 <div id="dialog" style="padding: 10px 60px 10px;overflow:hidden;"></div>
 
@@ -128,21 +130,20 @@
                 url: '/TestCase/projectListInit',
                 lines:true,
                 animate: true,
-                dnd: false,
+                pointType: ["append", "append", "append", "append"],
+                dnd: true,
                 onBeforeExpand: function (node, param) {
                     if ($(this).tree('getParent', node.target))
                         $(this).tree('options').url = "/TestCase/folderExpanded/" + node.id;
                     else
                         $(this).tree('options').url = "/TestCase/getFileByProject/" + node.PID;
-
-
-                    //param.myattr = 'test';    // or change request parameter
                 },
-                formatter:function(node){
-                    var s = node.text;
-                    if (node.children){
-                        s += ' <span style=\'color:blue\'>(' + node.children.length + ')</span>';
-                    }
+                formatter: function (node) {
+                    var s;
+                    if (node.mark)
+                        s = '<span title="' + node.mark + '">' + node.text + '</span>';
+                    else
+                        s = node.text;
                     return s;
                 },
                 onLoadSuccess: function (node) {
@@ -161,15 +162,66 @@
                         $('#scriptPanel').panel('refresh', 'scriptView/' + node.id);
                 },
                 onDragOver: function (target, source) {
-                    //('#tt2').tree('getData', target);
-                    return false;
+                    if ($(source.target).parents("#caseTreeList").length == 1)//只接受自己的节点
+                    {
+                        if ($(this).tree("getNode", target).type == 1)
+                            return false;
+                        else
+                            return true;
+                    } else
+                        return false;
+                    
                 },
-                onDblClick: function (node) {
-                    if (node.type == 0 || node.PID)
-                        $.messager.confirm('Message', '确认重新刷新节点数据?', function (r) {
-                            if (r)
-                                $('#caseTreeList').tree("reload", node.target);//刷新
-                        });
+                onBeforeDrag: function (node) {
+                    if (!$(this).tree("getParent", node.target))//根节点
+                        return false;
+                },
+                onBeforeDrop: function (target, source, point) {
+                    var sourceID = source.id;
+                    var targetNode = $(this).tree("getNode", target);
+
+                    var targetID;
+                    var type;
+
+                    if (targetNode.PID)
+                    {
+                        type = 0;
+                        targetID = targetNode.PID;
+                    } else
+                    {
+                        type = 1;
+                        targetID = targetNode.id;
+                    }
+
+                    //动态加载加排序问题多多 ,暂时这么处理咯
+                    var ret = sortCase(targetID, sourceID, type);
+                    if(ret)
+                    {
+                        ///easyUI 逻辑已修改 不需要这样处理,详情请查看easyUI 脚本 case-2注释
+                        //var sp = $(this).tree("getParent", source.target);
+                        //if (sp.children.length == 1)
+                        //{
+                            //$(this).tree("reload", sp.target);
+                        //}else
+                            $(this).tree("remove", source.target);
+
+                        $(this).tree("reload", target);
+                    } else
+                    {
+                        alert("error");
+                    }
+                    
+                    return false;
+                    
+                    
+                },
+                onContextMenu: function (e, node) {
+                    e.preventDefault();
+                    $(this).tree('select', node.target);
+                    $('#ContextMenu').menu('show', {
+                        left: e.pageX,
+                        top: e.pageY
+                    });
                 }
             });
 
@@ -179,6 +231,26 @@
             })
            
         });
+
+        function sortCase(targetID, sourceID,type)
+        {
+            var ret = true;
+            $.ajax({
+                url: 'sortCaseList',
+                type: 'post',
+                async: false,//使用同步的方式,true为异步方式
+                data: { targetID: targetID, sourceID: sourceID, type: type },
+                success: function (data) {
+                    if (data != "True")
+                        ret = false;
+                },
+                fail: function () {
+                    ret = false;
+                }
+            });
+
+            return ret;
+        }
 
    
         function uploadCase()
@@ -298,9 +370,10 @@
                             var node = $("#caseTreeList").tree("getSelected").target;
                             var nodeParent = $("#caseTreeList").tree("getParent", node);
                           
-                            if (nodeParent.children.length <= 1)
-                                $('#caseTreeList').tree("reload", nodeParent.target);//刷新
-                            else
+                            //easyUI 逻辑已修改 不需要这样处理,详情请查看easyUI 脚本 case-2注释
+                            //if (nodeParent.children.length <= 1)//如果删除最后一条会有问题
+                            //    $('#caseTreeList').tree("reload", nodeParent.target);//刷新
+                            //else
                                 $("#caseTreeList").tree("remove", node);
                             
                             
@@ -344,7 +417,10 @@
                 if (CheckedNode[i].type == 1)
                     caseID.push(CheckedNode[i].id);
             }
-            if (caseID.length == 0) return;
+            if (caseID.length == 0) {
+                $.messager.alert('warning', '请先勾选案例!', "warning");
+                return;
+            }
             var data = { ids: caseID };
 
             $.download('/TestCase/downloadCase', data, 'post');

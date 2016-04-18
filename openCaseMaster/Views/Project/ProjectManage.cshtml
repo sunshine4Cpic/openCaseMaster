@@ -1,0 +1,107 @@
+﻿
+@section Scripts {
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/bundles/easyui")
+}
+<div style="padding-top:5px"></div>
+<table id="ProjectTable" class="easyui-datagrid" title="项目管理"
+       data-options="rownumbers:true,singleSelect:true,toolbar:'#tb',toolbar:'#Tool',
+       pageSize: 10,pagination:true,method:'get',url:'projectList',onDblClickRow:ProjectTableDblClick,
+       collapsible:true">
+
+    <thead data-options="frozen:true">
+        <tr>
+            <th data-options="field:'Pname',width:250,align:'center'">项目名称</th>
+        </tr>
+    </thead>
+    <thead>
+        <tr>
+            <th data-options="field:'Name',width:140,align:'center'">所属开发部门</th>
+            <th data-options="field:'GreatDate',width:140,align:'center'">测试负责方</th>
+
+            <th data-options="field:'LastDate',width:140,align:'center'">项目经理</th>
+            
+          
+        </tr>
+    </thead>
+
+</table>
+<div id="Tool" style="padding:5px;height:auto">
+    <a class="easyui-linkbutton" href="javascript:void(0);"  title="查询" data-options="plain:true,iconCls:'icon-search'" onclick="alert('coding')">查询</a>
+
+    <a class="easyui-linkbutton" href="javascript:void(0);"  title="新增" data-options="plain:true,iconCls:'icon-add'" onclick="addProject()">新增</a>
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"  data-backdrop="static"
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" 
+               data-dismiss="modal" aria-hidden="true">
+                  &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+               项目编辑
+            </h4>
+         </div>
+         <div class="modal-body" style="padding:10px 50px;">
+            
+
+         </div>
+         <div class="modal-footer">
+             <button type="button" style="float:left" class="btn btn-danger" id="del"  onclick="deleteUser()">删除
+            </button>
+             
+            <button type="button" class="btn btn-default"  
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary" id="submit" onclick="submitEdit()">
+               提交更改
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+</div>
+
+<script>
+    function editProject(id) {
+        $.messager.progress({ title: '请稍后', msg: '加载中...' });
+        $("#myModal .modal-body").empty();
+
+        document.getElementById("del").style.display = "inline";
+        $("#submit").text("提交更改");
+        $("#myModal #myModalLabel").text("项目编辑");
+
+
+        $("#myModal .modal-body").load('editProject/' + id, function () {
+            $.messager.progress('close');
+            $("#myModal").modal("show");
+        });
+    }
+
+    function ProjectTableDblClick(rowIndex, rowData)
+    {
+        editProject(rowData.id)
+    }
+
+    function addProject()
+    {
+        $.messager.progress({ title: '请稍后', msg: '加载中...' });
+        $("#myModal .modal-body").empty();
+
+        document.getElementById("del").style.display = "none";
+        $("#submit").text("新增项目");
+        $("#myModal #myModalLabel").text("新增项目");
+
+
+        $("#myModal .modal-body").load('addProject', function () {
+            $.messager.progress('close');
+            $("#myModal").modal("show");
+        });
+      
+    }
+
+    
+</script>

@@ -11,9 +11,9 @@
        data-options="menu:'#C1',iconCls:'icon-edit',duration:400">编辑</a>
     <div id="C1" style="width:150px;">
         <div data-options="iconCls:'icon-save'" onclick="controlSaveClick();">保存</div>
-        <div class="menu-sep"></div>
         <div data-options="iconCls:'icon-edit'" onclick="EditNameClick()">改名</div>
-        <div data-options="iconCls:'icon-remove'" onclick="DeleteStep();">删除步骤</div>
+        <div class="menu-sep"></div>
+        <div data-options="iconCls:'icon-remove'" onclick="DeleteStep();">删除所选步骤</div>
     </div>
     <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
        data-options="menu:'#C2',iconCls:'icon-tip',duration:400">操作</a>
@@ -26,13 +26,18 @@
     </div>
 
     <div style="float:right" class="l-btn-text">
-        @Model.userStep.name ( @Model.userStep.caseFramework.workName)
+        @Model.userStep.caseFramework.workName
     </div>
 </div>
 
 <ul id="scriptTree"></ul>
 
-
+<div id="viewContextMenu" class="easyui-menu" style="width:150px;">
+        <div data-options="iconCls:'icon-save'" onclick="controlSaveClick();">保存</div>
+        <div class="menu-sep"></div>
+        <div data-options="iconCls:'icon-edit'" onclick="editStepClick($('#scriptTree').tree('getSelected'))">编辑步骤</div>
+        <div data-options="iconCls:'icon-remove'" onclick="DeleteStep();">删除步骤</div>
+    </div>
 
 <!-- Modal -->
 <!-- 模态框（Modal） -->
@@ -42,9 +47,9 @@
 <script type="text/javascript">
     //@@ sourceURL=scriptView.js
     var controlData = @Html.Raw(Model.viewJson);
-   
 
-    
+
+
 
     $('#scriptTree').tree({
         data:controlData,
@@ -65,11 +70,11 @@
         onBeforeDrop: function (target, source,point) {
             if(source.newStep)
             {
-                    
+
                 $.post("/TestCase/getStep/", { name: source.name,FID:source.FID,PID:source.PID  }, function (result) {
 
                     var job = JSON.parse(result);
-                        
+
                     if(point=="top")
                     {
                         $('#scriptTree').tree('insert', {
@@ -85,7 +90,7 @@
                     }
 
                 }).error(function() { alert("error"); });
-                   
+
                 return false;
             }
         },
@@ -94,13 +99,30 @@
                 return false;
         },
         onDblClick: function (node) {
-           
+
             editStepClick(node);
+        },
+        onContextMenu: function (e, node) {
+            if($(this).tree("getParent",node.target))
+                return;
+            e.preventDefault();
+            $(this).tree('select', node.target);
+
+            $('#viewContextMenu').menu('show', {
+                left: e.pageX,
+                top: e.pageY
+            });
         }
     });
     function editStepClick(node)
     {
         if(node===null) return;
+
+        if(node.Key)
+        {
+            node =$("#scriptTree").tree("getParent",node.target);
+            $("#scriptTree").tree("select", node.target);
+        }
 
         if(!$("#scriptTree").tree("getParent",node.target))
         {
@@ -209,6 +231,6 @@
 
     }
 
-    
+    $('#controlViewPanel').panel("setTitle", '@Model.userStep.name');
 
     </script>

@@ -20,7 +20,10 @@ using System.Xml.Linq;
 
 namespace openCaseMaster.Controllers
 {
-    [Authorize(Roles="user")]
+    //*****************************************
+    //项目权限控制不足,后期修改
+
+    [Authorize(Roles = "user,guest")]
     public class TestCaseController : Controller
     {
 
@@ -34,37 +37,22 @@ namespace openCaseMaster.Controllers
         }
 
 
-        
+
         public string projectListInit()
         {
-            
-            using(QCTESTEntities QC_DB = new QCTESTEntities())
-            {
-                var tcl = from t in QC_DB.project
-                         select new
-                         {
-                             PID = t.ID,
-                             text = t.Pname,
-                             state = "closed"
-                         };
+           
+            var tcl = from t in userHelper.getPermissionsProject()
+                      select new
+                      {
+                          PID = t.ID,
+                          text = t.Pname,
+                          state = "closed"
+                      };
 
-             if(!User.IsInRole("admin"))
-             {
-                 int[] pp = userHelper.getUserPermission();
-                 tcl = tcl.Where(t => pp.Contains(t.PID));
-             }
-
-
-
-                var jSetting = new JsonSerializerSettings();
-                jSetting.NullValueHandling = NullValueHandling.Ignore;
-
-                string json = JsonConvert.SerializeObject(tcl, jSetting);
+                string json = JsonConvert.SerializeObject(tcl);
 
                 return json;
 
-            }
-            
         }
 
         
@@ -81,6 +69,7 @@ namespace openCaseMaster.Controllers
                           {
                               id = t.ID,
                               text = t.Name,
+                              mark = t.mark,
                               state = t.type == 0 ? "closed" : "open",
                               type = t.type == null ? 0 : t.type.Value
                           };
@@ -109,6 +98,7 @@ namespace openCaseMaster.Controllers
                           {
                               id = t.ID,
                               text = t.Name,
+                              mark = t.mark,
                               state = t.type == 0 ? "closed" : "open",
                               type = t.type == null ? 0 : t.type.Value
                           };
@@ -127,9 +117,9 @@ namespace openCaseMaster.Controllers
         {
             ViewData["AddNew"] = true;
 
-            if (type == 1)//案例添加框架
+            if (type == 1)//adbb案例 ,添加框架
             {
-                var fmks = System.Web.HttpContext.Current.Application["Framework"] as List<caseFramework>;
+                var fmks = userHelper.getBaseFrameworks();
 
 
                 var query = fmks.Select(c => new { c.ID, c.workName });
@@ -167,7 +157,7 @@ namespace openCaseMaster.Controllers
             {
                 M_testCase mt = QC_DB.M_testCase.First(t => t.ID == ID);
 
-                var fmks = System.Web.HttpContext.Current.Application["Framework"] as List<caseFramework>;
+                var fmks = userHelper.getBaseFrameworks();
                 var items = fmks
                 .Select(c => new {
                         Value = c.ID.ToString(),
@@ -176,7 +166,6 @@ namespace openCaseMaster.Controllers
 
                 ViewData["SelectListItem"] = new SelectList(items.AsEnumerable(), "Value", "Text", mt.FID);
 
-               
                 return PartialView("_EditCase", mt);//未做错误处理
             }
         }
@@ -363,6 +352,15 @@ namespace openCaseMaster.Controllers
         }
 
         [HttpPost]
+        public XElement runStep(string steps)
+        {
+
+            var xe = testCaseHelper.json2StepList(steps);
+            xe.SetAttributeValue("desc", "单步调试");
+            return xe;
+        }
+
+        [HttpPost]
         public ActionResult CreateUserControl(string steps)
         {
             XElement xe = testCaseHelper.json2StepList(steps);
@@ -412,10 +410,6 @@ namespace openCaseMaster.Controllers
 
         }
 
-        
-
-
-        
 
 
         [HttpPost]
@@ -425,8 +419,44 @@ namespace openCaseMaster.Controllers
             MemoryStream stm = testCaseHelper.getSceneExcelMS(ids);
 
             DownLoad(stm, "场景模板.xls", "vnd.ms-excel");
-           
 
+
+        }
+
+        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="targetID"></param>
+        /// <param name="sourceID"></param>
+        /// <param name="type">0移动到项目,1移动到目录</param>
+        /// <returns></returns>
+        [HttpPost]
+        public bool sortCaseList(int targetID, int sourceID,int type)
+        {
+
+           
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            if (type == 1)
+            { 
+                int rtn = QC_DB.M_testCase_sort(sourceID, targetID);//存储过程返回最终目标节点ID
+                if (rtn > 0)
+                {
+                    return true;
+                }
+                else
+                    return false;
+            }else
+            {
+                M_testCase mtc = QC_DB.M_testCase.Where(t => t.ID == sourceID).First();//要移动的数据
+
+                mtc.baseID = null;
+                mtc.projectID = targetID;
+                QC_DB.SaveChanges();
+                return true;
+            }
         }
 
         [HttpPost]
@@ -504,7 +534,13 @@ namespace openCaseMaster.Controllers
             Response.OutputStream.Write(ZipBuffer, 0, Convert.ToInt32(ZipBuffer.Length));
             Response.End();
 
+          
+
+
         }
+
+        
+
      
     }
 }

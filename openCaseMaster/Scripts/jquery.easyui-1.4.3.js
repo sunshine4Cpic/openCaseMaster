@@ -1796,14 +1796,14 @@
 				if (bol == false) {
 					$(this).removeClass("tree-node-append tree-node-top tree-node-bottom");
 					return;
-				}else if (bol == "top") {//孙建平重构by2016/2/25
+				} else if (bol == "top") {//case-1 onBeforeDrop方法 添加 return "top"和"bottom" 的逻辑
 				    _f7 = _fa;
 				    _f8 = "top";
 				} else if (bol == "bottom")
 				{
 				    _f7 = _fa;
 				    _f8 = "bottom";
-				}//孙建平重构by2016/2/25 end
+				}//case-1 end
 				_f7(_f5, _f6, _f8);
 				$(this).removeClass("tree-node-append tree-node-top tree-node-bottom");
 			}
@@ -2372,13 +2372,17 @@
 		var _163 = del(_162);
 		$(_162).parent().remove();
 		if (_163) {
+            //case-2
+		    //如果节点下没有元素 恢复成叶节点
+            //2016-3-30 孙建平注释注释这个逻辑
+            /*
 			if (!_163.children || !_163.children.length) {
 				var node = $(_163.target);
 				node.find(".tree-icon").removeClass("tree-folder").addClass("tree-file");
 				node.find(".tree-hit").remove();
 				$("<span class=\"tree-indent\"></span>").prependTo(node);
 				node.next().remove();
-			}
+			}*/
 			_127(_161, _163);
 			_118(_161, _163.target);
 		}
@@ -2901,7 +2905,9 @@
 							_1c8 = true;
 						}
 					}
-					if (opts.checkbox && item.checkbox !== false) {//孙建平添加节点属性checkbox
+				    //case-3
+				    //添加节点属性checkbox
+					if (opts.checkbox && item.checkbox !== false) {
 						if ((!opts.onlyLeafCheck) || _1c8) {
 							cc.push("<span class=\"tree-checkbox tree-checkbox0\"></span>");
 						}

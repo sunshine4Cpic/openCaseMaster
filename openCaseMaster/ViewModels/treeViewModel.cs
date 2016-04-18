@@ -46,9 +46,6 @@ namespace openCaseMaster.ViewModels
         [DataMember]
         public Boolean? checkbox { get; set; }
 
-       
-        
-
         [DataMember]
         public List<treeViewModel> children { get; set; }
 

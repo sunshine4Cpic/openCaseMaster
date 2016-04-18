@@ -9,7 +9,7 @@
 
 <input id="PID" type="hidden" value="@Model.PID" />
 <div class="easyui-panel" style="margin-bottom:5px">
-    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
+    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px;"
        data-options="menu:'#C1',iconCls:'icon-edit',duration:400">编辑</a>
     <div id="C1" style="width:150px;">
         <div data-options="iconCls:'icon-save'" onclick="scriptSave();">保存</div>
@@ -17,7 +17,7 @@
         <div data-options="iconCls:'icon-edit'" onclick="editStepClick($('#scriptTree').tree('getSelected'));">编辑步骤</div>
         <div data-options="iconCls:'icon-remove'" onclick="DeleteStep();">删除步骤</div>
     </div>
-    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px"
+    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" style="width:100px;"
        data-options="menu:'#C2',iconCls:'icon-tip',duration:400">操作</a>
     <div id="C2" style="width:150px;">
         <div data-options="iconCls:'icon-box_add'" onclick="creatUserControl()">自定义组件</div>
@@ -26,14 +26,30 @@
         <div data-options="iconCls:'icon-reload'" onclick="refreshScrpt()">撤销未保存的操作</div>
     </div>
 
+        <div title="拖拽删除步骤" class="glyphicon glyphicon-trash easyui-droppable" style="color:black; vertical-align: middle; font-size: 16px;" data-options="
+					accept: '#scriptTree div',
+					onDragEnter: onDragEnterDelete,
+					onDragLeave: onDragLeaveDelete,
+					onDrop: onDropDelete
+				">Delete</div>
+
+    
     <div style="float:right" class="l-btn-text">
-       ( @Model.Fname )
+        @Model.Fname 
     </div>
+
+    
 </div>
 
 <ul id="scriptTree"></ul>
 
-
+<div id="scriptTreeContextMenu" class="easyui-menu" style="width:150px;">
+        <div data-options="iconCls:'icon-save'" onclick="scriptSave();">保存</div>
+        <div class="menu-sep"></div>
+        <div data-options="iconCls:'icon-media_controls_dark_play'" onclick="stepDebug();">单步调试</div>
+        <div data-options="iconCls:'icon-edit'" onclick="editStepClick($('#scriptTree').tree('getSelected'));">编辑步骤</div>
+        <div data-options="iconCls:'icon-remove'" onclick="DeleteStep();">删除步骤</div>
+    </div>
 
 <!-- Modal -->
 <!-- 模态框（Modal） -->
@@ -49,7 +65,7 @@
     var FData = @Html.Raw(Model.FJson);
     var PData = @Html.Raw(Model.PJson);
     var UData = @Html.Raw(Model.UJson);
-
+       
 
 
         function scriptTreeInit(TreeData)
@@ -104,11 +120,27 @@
                     }
                 },
                 onDragOver:function(target, source){
+                    if ($(source.target).parents("#caseTreeList").length == 1)//不接收特定tree
+                    {
+                        return false;
+                    } 
+
                     if($("#scriptTree").tree("getParent",target))
                         return false;
                 },
                 onDblClick: function (node) {
                     editStepClick(node);
+                },
+                onContextMenu: function (e, node) {
+                    if($(this).tree("getParent",node.target))
+                        return;
+                    e.preventDefault();
+                    $(this).tree('select', node.target);
+
+                    $('#scriptTreeContextMenu').menu('show', {
+                        left: e.pageX,
+                        top: e.pageY
+                    });
                 }
             });
 
@@ -269,6 +301,17 @@
         function DeleteStep()
         {
             var node= $('#scriptTree').tree("getSelected");
+
+            if($("#scriptTree").tree("getParent",node.target))
+                return;
+
+
+            var length = $('#scriptTree').tree("getRoots").length;
+            if(length<=1)
+                return;
+
+            
+
             if(node)
             {
                 var msg = ' <span style=\'color:blue\'>' + node.desc + '</span>';
@@ -353,4 +396,50 @@
         var node = $('#caseTreeList').tree("find",@Model.ID)
         if(node)
             $('#caseTreeList').tree("select",node.target);
+
+
+        function onDragEnterDelete(e,source)
+        {
+            
+            $(this).css("color","red");
+        }
+        function onDragLeaveDelete(e,source)
+        {
+            $(this).css("color","black");
+        }
+
+
+        function onDropDelete(e,source)
+        {
+            $(this).css("color","black");
+
+            var length = $('#scriptTree').tree("getRoots").length;
+            if(length<=1)
+                return false;
+
+            $('#scriptTree').tree("remove",source);
+            
+            return false;
+        }
+
+        
+        function stepDebug()
+        {
+            var node = $('#scriptTree').tree('getSelected');
+            var steps = [];
+
+            var step = getStep(node);
+
+            steps.push(step);
+
+            $.post("runStep",{"steps":JSON.stringify(steps)},function(result){//获取执行脚本
+                $.post("http://localhost:8500/testM/?runType=Debug",result,function(result){
+                    $.messager.alert('Messager', '脚本开始执行!', "info");
+                }).error(function() {
+                    $.messager.alert('Error', '调用本机出错啦!', "error");
+                });
+            });
+            
+        }
+       
     </script>

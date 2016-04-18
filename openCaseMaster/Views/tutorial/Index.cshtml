@@ -1,0 +1,279 @@
+﻿@{
+    ViewBag.Title = "平台教程";
+}
+@section Scripts {
+    <link href="~/Content/docs.min.css" rel="stylesheet">
+    <script src="~/Scripts/docs.min.js"></script>
+
+
+    <style>
+        h1[id], h2[id] {
+            padding-top: 50px;
+        }
+    </style>
+
+}
+
+
+<div class="row">
+
+    <div class="col-md-9" role="main">
+        <div class="bs-docs-section">
+            <h1 id="testCase" class="page-header">案例管理</h1>
+
+            <p class="lead">在本系统中，我们使用组件驱动的方式管理自动化案例。你可以随意选择组件框架或构建个性化的组件来完成你的自动化案例。</p>
+
+            <h2 id="newScript">创建案例</h2>
+            <p>你可以任意选择框架来创建你的案例。</p>
+            <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/newScript.gif" />
+            </div>
+
+            <h2 id="newStep">添加步骤</h2>
+            <p>选择你希望添加的步骤移动到案例中。</p>
+            <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/newStep.gif" />
+            </div>
+
+            <h2 id="editStep">编辑步骤</h2>
+            <p>双击或右键来编辑步骤中的属性。</p>
+            <p>属性帮助请参阅 @Html.ActionLink("框架帮助", "framework", "tutorial")。 </p>
+            <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/editStep.gif" />
+            </div>
+
+            <h2 id="changeAndSaveStep">排序和保存</h2>
+            <p>你可以通过拖动相关步骤来进行排序或者删除。</p>
+            <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/changeAndSaveStep.gif" />
+            </div>
+
+            <h2 id="defineParam">参数定义</h2>
+            <p>以 { } 标记的数据，将被识别为参数。(请使用英文花括号)</p>
+            <div class="bs-example" data-example-id="body-copy">
+                <p>可以定义多个参数：</p>
+                <img class="img-responsive" src="~/Content/help/defineParam.png" />
+                <p>执行案例时将自动识别：</p>
+                <img class="img-responsive" src="~/Content/help/defineParam-2.png" />
+            </div>
+
+
+            <h2 id="runScript">调试案例</h2>
+            <p>在<a href="#startUpClient">启动执行客户端</a>后，可以进行案例调试。</p>
+            <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/runScript.gif" />
+            </div>
+
+        </div>
+
+        <div class="bs-docs-section">
+            <h1 id="userStep" class="page-header">自定义组件</h1>
+
+            <p class="lead">在使用组件驱动管理案例时,我们可以通过自定义组件来定制、复用我们的组件</p>
+
+            <h2 id="aboutUserStep">简介</h2>
+            <p>自定义组件就是将多步基础组件组装成一个自定义模块的过程。在执行时，系统将会自动分解成基础组件。</p>
+
+            <div class="bs-example" data-example-id="body-copy">
+                <p>组件的生成：</p>
+                <img class="img-responsive" src="~/Content/help/buildUserStep.png" />
+                <p>组件的分解：</p>
+                <img class="img-responsive" src="~/Content/help/openUserStep.png" />
+            </div>
+
+            
+
+
+            <h2 id="newUserStep">创建组件</h2>
+            <p>勾选想要复用的步骤，创建属于你的组件。</p>
+            <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/newUserStep.gif" />
+            </div>
+
+            <h2 id="userStepParm">组件参数</h2>
+            <p><a href="#defineParam">步骤中定义的参数</a>将作为自定义组件的输入参数。</p>
+            <p>组件被创建后也可以添加或删除相关参数。</p>
+            <p>为新增 <b>参数设置默认值</b> 时，无需手动更新案例，之前使用该组件的案例自动使用默认值作为新增参数的 <b>初始值</b>。</p>
+
+            <div class="bs-example" data-example-id="body-copy">
+                 <p>为新参数设置默认值：</p>
+                <img class="img-responsive" src="~/Content/help/defultParam.png" />
+                <br />
+                <p>原案例无需手动更新：</p>
+                <img class="img-responsive" src="~/Content/help/defultParam-2.png" />
+            </div>
+            
+            
+            
+            <h2 id="useUserStep">使用组件</h2>
+            <p>选择自定义组件tab页后，你可以像基础组件一样<a href="#newStep">使用</a>它们。</p>
+            <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/useUserStep.png" />
+            </div>
+
+            
+
+        </div>
+
+
+
+        <div class="bs-docs-section">
+
+            <h1 id="Client" class="page-header">执行客户端</h1>
+
+            <p class="lead">执行客户端负责自动化的执行和结果收集，你可以定制自己特有的客户端来满足个性化的需求。</p>
+
+            <p>客户端在启动时候会监听本机8500端口。当用户点击调试时，浏览器发送案例文件到<code> http://localhost:8500/testM </code>，客户端开始执行案例。</p>
+            <div class="zero-clipboard"><span class="btn-clipboard">案例文件</span></div>
+<pre class="highlight xml"><code><span class="nt">&lt;TestCase</span> <span class="na">desc=</span><span class="s">"新建案例"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;Step</span> <span class="na">name=</span><span class="s">"UI_InitStep"</span> <span class="na">desc=</span><span class="s">"打开程序"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;ParamBinding</span> <span class="na">name=</span><span class="s">"PackageName"</span> <span class="na">value=</span><span class="s">"com.test.cmp"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;ParamBinding</span> <span class="na">name=</span><span class="s">"Activity"</span> <span class="na">value=</span><span class="s">"com.test.cmp.activity"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;ParamBinding</span> <span class="na">name=</span><span class="s">"isClear"</span> <span class="na">value=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;ParamBinding</span> <span class="na">name=</span><span class="s">"waitTime"</span> <span class="na">value=</span><span class="s">"2"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;ParamBinding</span> <span class="na">name=</span><span class="s">"是否启用"</span> <span class="na">value=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/Step&gt;</span>
+  <span class="nt">&lt;Step</span> <span class="na">name=</span><span class="s">"UI_ClickStep"</span> <span class="na">desc=</span><span class="s">"点击按钮1"</span><span class="nt">&gt;</span>
+    ...
+  <span class="nt">&lt;/Step&gt;</span>
+  <span class="nt">&lt;Step</span> <span class="na">name=</span><span class="s">"UI_ClickStep"</span> <span class="na">desc=</span><span class="s">"点击按钮2"</span><span class="nt">&gt;</span>
+    ...
+  <span class="nt">&lt;/Step&gt;</span>
+<span class="nt">&lt;/TestCase&gt;</span></code></pre>
+
+
+            <h2 id="downloadClient">下载</h2>
+            <p>您可以在目录： </p>
+            <p>自动化测试 - <a target="_blank" href="/DownLoad/debug.rar">下载调试客户端</a> 中下载到最新的客户端。</p>
+
+
+
+            <h2 id="startUpClient">如何使用</h2>
+            <p>以管理员模式启动客户端，选择想要调试的手机，启动服务。</p>
+            <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/startUpClient.gif" />
+            </div>
+
+            <h2 id="diyClient">定制开发</h2>
+            <p>您可以定制你的执行框架客户端。</p>
+            <div class="bs-example" data-example-id="body-copy">
+                
+                <img class="img-responsive" src="~/Content/help/workwork.jpg"  />
+                
+            </div>
+
+        </div>
+
+
+         <div class="bs-docs-section">
+
+            <h1 id="runCase" class="page-header">调度执行</h1>
+
+
+             <h2 id="creatScene">构建场景</h2>
+            <p>在案例tree中勾选你想执行的案例,就能轻松的构建测试场景。</p>
+            <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/creatScene-1.gif"  />
+            </div>
+
+            <p>测试场景将保存为excel文件，您在案例中定义的<a href="#defineParam">参数</a>都将在场景中体现。你也可以在场景文件中配置你的案例。
+             </p>
+             <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/creatScene-2.gif"  />
+            </div>
+
+             <h2 id="creatDemand">创建执行计划</h2>
+            <p>你可以通过上传场景来添加计划的测试场景excel。一个执行计划中可以包含多个场景。</p>
+            <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/creatDemand-1.gif"  />
+            </div>
+
+            <p>在测试计划中，一个场景只能执行在一台设备上。在执行开始前你需要手动为场景分配执行设备</p>
+             <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/creatDemand-2.gif"  />
+            </div>
+
+             <p>你可以测试计划上传一个被测apk，当设备在执行场景前会先安装这个apk再执行案例。</p>
+             <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/creatDemand-3.gif"  />
+            </div>
+
+            
+            <h2 id="runDemand">测试计划执行</h2>
+            <p>当你的测试计划创建完毕后，你就可以开始执行你的测试计划，执行调度程序将自动分配你的案例到相应的设备上。</p>
+            <div class="bs-example" data-example-id="body-copy">
+                <img class="img-responsive" src="~/Content/help/runDemand.png"  />
+            </div>
+
+           <h2 id="runResult">结果查询</h2>
+            <p></p>
+            <div class="bs-example" data-example-id="body-copy">
+                
+                <img class="img-responsive" src="~/Content/help/workwork.jpg"  />
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+            </div>
+
+        </div>
+        
+    </div>
+
+
+
+
+    <div class="col-sm-3 col-md-3">
+
+        <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" style="top:80px">
+            <ul class="nav bs-docs-sidenav">
+
+                <li class="">
+                    <a href="#testCase">案例管理</a>
+                    <ul class="nav">
+                        <li class=""><a href="#newScript">创建案例</a></li>
+                        <li class=""><a href="#newStep">添加步骤</a></li>
+                        <li class=""><a href="#editStep">编辑步骤</a></li>
+                        <li class=""><a href="#changeAndSaveStep">排序和保存</a></li>
+                        <li class=""><a href="#defineParam">参数定义</a></li>
+                        <li class=""><a href="#runScript">调试案例</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#userStep">自定义组件</a>
+                    <ul class="nav">
+                        <li class=""><a href="#aboutUserStep">简介</a></li>
+                        <li class=""><a href="#newUserStep">创建组件</a></li>
+                        <li class=""><a href="#userStepParm">组件参数</a></li>
+                        <li class=""><a href="#useUserStep">使用组件</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#Client">执行客户端</a>
+                    <ul class="nav">
+                        <li class=""><a href="#downloadClient">下载</a></li>
+                        <li class=""><a href="#startUpClient">如何使用</a></li>
+                        <li class=""><a href="#diyClient">定制开发</a></li>
+                    </ul>
+                </li>
+
+                 <li>
+                    <a href="#runCase">调度执行</a>
+                    <ul class="nav">
+                        <li class=""><a href="#creatScene">构建场景</a></li>
+                        <li class=""><a href="#creatDemand">创建执行计划</a></li>
+                        <li class=""><a href="#runDemand">执行</a></li>
+                        <li class=""><a href="#runResult">结果查询</a></li>
+                    </ul>
+                </li>
+
+
+            </ul>
+            <a class="back-to-top" href="#top">
+                返回顶部
+            </a>
+
+
+        </nav>
+
+    </div>
+</div>

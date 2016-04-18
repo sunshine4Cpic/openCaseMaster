@@ -25,7 +25,7 @@
 
 <input type="hidden" id="DemandEditID" name="ID" value="@Model.ID" />
 
-<form class="bs-example bs-example-form" role="form">
+<form id="RunCaseAddForm" class="bs-example bs-example-form" role="form">
     <div class="input-group" style="width:100%">
         <span class="input-group-addon" style="width:80px">@nameLabel</span>
         <input type="text" id="Name" name="Name" value="@Model.name" class="easyui-validatebox form-control input-sm"
@@ -60,14 +60,17 @@
 
     function testDemand_Edit() {
 
+        if (!$("#RunCaseAddForm").form('validate')) {
+            return;
+        }
+
             var e =
                 {
                     ID: $('#DemandEditID').val(),
                     name: $('#Name').val(),
                     mark: $('#mark').val()
                 };
-            if (e.name.trim().length == 0)
-                return;
+          
 
 
             $.post("/RunCase/EditDemand", e).then(
@@ -87,7 +90,9 @@
     }
 
     function testDemand_New() {
-
+        if (!$("#RunCaseAddForm").form('validate')) {
+            return;
+        }
         var e =
             {
                 PID: $('#projectID').val(),
@@ -96,9 +101,7 @@
                 mark: $('#mark').val(),
                 type: $('#type').val()
             };
-        if (e.name.trim().length == 0)
-            return;
-
+      
 
         $.post("/RunCase/AddNew", e).then(
             function (r) {
@@ -109,9 +112,4 @@
             );
 
     }
-
-    $(function () {
-        //设置text需要验证
-        $('#Name').validatebox();
-    })
 </script>

@@ -1,0 +1,92 @@
+﻿
+@section Scripts {
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/bundles/easyui")
+}
+<div style="padding-top:5px"></div>
+<table id="DeviceTable" class="easyui-datagrid" title="设备管理"
+       data-options="rownumbers:true,singleSelect:true,toolbar:'#Tool',
+       pageSize: 10,pagination:true,method:'get',url:'DeviceList',onDblClickRow:DeviceTableDblClick,
+       collapsible:true">
+
+    <thead>
+        <tr>
+            <th data-options="field:'Model',width:140,align:'center'">型号</th>
+            <th data-options="field:'mark',width:220,align:'center'">备注</th>
+            <th data-options="field:'IP',width:140,align:'center'">调度机</th>
+            <th data-options="field:'device',width:300,align:'center'">deviceID</th>
+        </tr>
+    </thead>
+
+</table>
+<div id="Tool" style="padding:5px;height:auto">
+    <a class="easyui-linkbutton" href="javascript:void(0);"  title="查询" data-options="plain:true,iconCls:'icon-search'" onclick="alert('coding')">查询</a>
+    <!--
+    <a class="easyui-linkbutton" href="javascript:void(0);"  title="新增" data-options="plain:true,iconCls:'icon-add'" onclick="addDevice()">新增</a>
+        -->
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"  data-backdrop="static"
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" 
+               data-dismiss="modal" aria-hidden="true">
+                  &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+               设备编辑
+            </h4>
+         </div>
+         <div class="modal-body" style="padding:10px 50px;">
+            
+
+         </div>
+         <div class="modal-footer">
+             
+             <button type="button" style="float:left" class="btn btn-danger" id="del"  onclick="deleteDevice()">不启用
+            </button>
+              
+            <button type="button" class="btn btn-default"  
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary" id="submit" onclick="submitEdit()">
+               提交更改
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+</div>
+
+<script>
+    function editDevice(id) {
+        $.messager.progress({ title: '请稍后', msg: '加载中...' });
+        $("#myModal .modal-body").empty();
+
+      
+
+        $("#myModal .modal-body").load('editDevice/' + id, function () {
+            $.messager.progress('close');
+            $("#myModal").modal("show");
+        });
+    }
+
+    function DeviceTableDblClick(rowIndex, rowData)
+    {
+        editDevice(rowData.id)
+    }
+
+    function addDevice()
+    {
+        alert("请联系管理员");
+      
+    }
+
+    function deleteDevice() {
+        alert("请联系管理员");
+
+    }
+    
+</script>

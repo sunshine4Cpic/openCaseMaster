@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CaptchaMvc.Attributes;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using openCaseMaster.Models;
 using openCaseMaster.ViewModels;
@@ -9,11 +10,13 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Xml.Linq;
 
 namespace openCaseMaster.Controllers
 {
     public class UserController : Controller
     {
+        [AllowAnonymous]
         // GET: User
         public ActionResult Login(string ReturnUrl)
         {
@@ -51,15 +54,22 @@ namespace openCaseMaster.Controllers
                 case 1:
                     userRole += ",admin";
                     break;
+                case null:
+                    //userRole = "guest";
+                    break;
                 default:
                     break;
             }
+            
 
             JObject userJ = new JObject();
             userJ["ID"] = loginUser.ID;
             userJ["Roles"] = userRole;
             userJ["Permission"] = loginUser.Permission;
-   
+
+
+            
+    
 
             //创建身份验证票据 
             FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1,
@@ -101,6 +111,71 @@ namespace openCaseMaster.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        //
+        // GET: /Account/Register
+
+        [AllowAnonymous]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Account/Register
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        [CaptchaVerify("Captcha is not valid")]
+        public ActionResult Register(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                QCTESTEntities QC_DB = new QCTESTEntities();
+
+                var ss = QC_DB.admin_user.FirstOrDefault(t => t.Username == model.UserName);
+                if (ss != null)
+                {
+                    ModelState.AddModelError("", "用户名已存在");
+                    return View(model);
+                }
+                admin_user tmp = new admin_user();
+                tmp.Username = model.UserName;
+                tmp.Type = null;//游客
+                tmp.Name = model.Name == null ? model.UserName : model.Name;
+                tmp.GreatDate = DateTime.Now;
+                tmp.Password = model.Password;
+
+                tmp.Permission = "";
+
+                QC_DB.admin_user.Add(tmp);
+
+                //私有项目
+                var newP = new project();
+                newP.Pname = "private project";
+                newP.userID = tmp.ID;
+                QC_DB.project.Add(newP);
+
+
+                //私有框架
+                var newF = new caseFramework();
+                newF.workName = "你的框架";
+                newF.userID = tmp.ID;
+                newF.controlXML = new XElement("Steps").ToString();
+                QC_DB.caseFramework.Add(newF);
+
+                QC_DB.SaveChanges();
+                return RedirectToAction("Login", "User");
+                    
+
+            }
+
+            // 如果我们进行到这一步时某个地方出错，则重新显示表单
+            return View(model);
+        }
+
+
+
 
         /// <summary>
         /// 跳转URL
@@ -114,7 +189,7 @@ namespace openCaseMaster.Controllers
             {
                 return Redirect(ReturnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "TestCase");
         }
 
 
@@ -152,10 +227,10 @@ namespace openCaseMaster.Controllers
             ViewData["typeList"] = selList1.AsEnumerable();
 
             var pp = (from t in QC_DB.project
-                      select new proCheckModel
+                      select new checkListModel
                      {
-                         ID = t.ID,
-                         Pname = t.Pname
+                         Value = t.ID.ToString(),
+                         Text = t.Pname
                      }).ToList();
             if (user.Permission != null)
             {
@@ -163,7 +238,7 @@ namespace openCaseMaster.Controllers
 
                 foreach (var p in pp)
                 {
-                    if (psn.Contains(p.ID.ToString()))
+                    if (psn.Contains(p.Value))
                         p.isCheck = true;
                     else
                         p.isCheck = false;
@@ -215,10 +290,10 @@ namespace openCaseMaster.Controllers
             ViewData["typeList"] = selList1.AsEnumerable();
 
             var pp = (from t in QC_DB.project
-                      select new proCheckModel
+                      select new checkListModel
                       {
-                          ID = t.ID,
-                          Pname = t.Pname
+                          Value = t.ID.ToString(),
+                          Text = t.Pname
                       }).ToList();
 
             ViewData["proList"] = pp;
@@ -246,6 +321,48 @@ namespace openCaseMaster.Controllers
             QC_DB.SaveChanges();
             return tmp.ID;
             
+        }
+
+
+        
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult userInfo()
+        {
+            userInfoModel ul = new userInfoModel();
+            return View(ul);
+
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        public string ChangePassword(ChangePasswordModel req)
+        {
+            if (!ModelState.IsValid)
+            {
+                Response.Status = "400";
+                return "非法提交";
+            }
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            int id = userHelper.getUserID();
+
+            admin_user user = QC_DB.admin_user.First(t => t.ID == id);
+
+            if (user.Password != req.Password)
+            {
+                Response.Status = "400";
+                return "旧密码错误";
+            }
+
+            user.Password = req.Password;
+
+            QC_DB.SaveChanges();
+
+            return true.ToString();
+
         }
 
         

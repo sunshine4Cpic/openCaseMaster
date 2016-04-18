@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -16,19 +17,16 @@ namespace openCaseMaster
     {
         protected void Application_Start()
         {
-            //先用Application保存,以后用缓存代替
-            using (QCTESTEntities QC_DB = new QCTESTEntities())
-            {
-                List<caseFramework> ss = (from t in QC_DB.caseFramework
-                                         where t.userID == 1
-                                         select t).ToList();
-                Application["Framework"] = ss;
-            }
-            
+           
             AreaRegistration.RegisterAllAreas();
+
+            WebApiConfig.Register(GlobalConfiguration.Configuration);
+            
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            
         }
 
         //改造原来的User，给其添加一个用户所属的角色数据 
@@ -62,8 +60,6 @@ namespace openCaseMaster
                             //处理个毛线,以后重写,使用 MVC自带的权限控制
                           
                         } 
-                      
-                        
                     }
                 }
             }

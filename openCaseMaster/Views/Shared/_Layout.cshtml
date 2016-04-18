@@ -35,8 +35,9 @@
                             <li><a href="/RunCase/Index">调度执行</a></li>
                             <li class="divider"></li>
                             <li><a href="/Home/Index">测试报告</a></li>
+                            <li>@Html.ActionLink("设备状态", "DeviceView", "Device")</li>
                             <li class="divider"></li>
-                            <li><a target="_blank" href="/DownLoad/debug.rar">下载调试客户端</a></li>
+                            <li><a target="_blank" href="~/调试客户端.rar">下载调试客户端</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -45,16 +46,28 @@
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">设备管理</a></li>
-                            <li><a href="#">项目管理</a></li>
+                            <li><a href="/Device/DeviceManage">设备管理</a></li>
+                            <li><a href="/Project/ProjectManage">项目管理</a></li>
                             <li><a href="/User/UserManage">用户管理</a></li>
                         </ul>
                     </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            教程
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("平台使用", "Index", "tutorial")</li>
+                            <li>@Html.ActionLink("框架帮助", "framework", "tutorial")</li>
+                        </ul>
+                    </li>
+
                     <li>@Html.ActionLink("关于我们", "About", "Home")</li>
+                   
                     
                 </ul>
                 @Html.Partial("_LoginPartial")
-                
             </div>
          
         </div>
@@ -63,7 +76,6 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        
     </div>
    
     

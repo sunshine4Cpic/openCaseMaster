@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace openCaseMaster.Controllers
 {
-    [Authorize(Roles = "user")]
+     [Authorize(Roles = "user,guest")]
     public class userStepControlController : Controller
     {
         // GET: userStepControl

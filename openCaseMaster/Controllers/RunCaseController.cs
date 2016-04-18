@@ -197,6 +197,17 @@ namespace openCaseMaster.Controllers
             QC_DB.SaveChanges();
         }
 
+        [HttpPost]
+        public void changeSceneName(int id, string name)
+        {
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            var sc = QC_DB.M_runScene.First(t => t.ID == id);
+            sc.name = name;
+            QC_DB.SaveChanges();
+        }
+
 
 
         public ActionResult SceneView(int ID)
@@ -236,6 +247,15 @@ namespace openCaseMaster.Controllers
             return json;
         }
 
+        [HttpGet]
+        public ActionResult userCompleted(int ID)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            var pj = QC_DB.M_runTestCase.FirstOrDefault(t => t.ID == ID);
+
+            return PartialView("_userCompleted", pj);
+        }
 
         [HttpPost]
         public string userCompleted(int ID,string mark)

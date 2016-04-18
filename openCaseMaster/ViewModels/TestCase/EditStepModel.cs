@@ -99,6 +99,9 @@ namespace openCaseMaster.ViewModels
                 {
                     QCTESTEntities QC_DB = new QCTESTEntities();
 
+                    
+
+
                     if (userHelper.isAdmin())
                     {
                         var app = from t in QC_DB.M_application
@@ -112,7 +115,7 @@ namespace openCaseMaster.ViewModels
                     }
                     else
                     {
-                        var pjs = userHelper.getUserPermission();
+                        var pjs = userHelper.getPermissionsProject().Select(t => t.ID).ToList();
 
                         var app = from t in QC_DB.project_app
                                   where t.usable && pjs.Contains(t.PID)

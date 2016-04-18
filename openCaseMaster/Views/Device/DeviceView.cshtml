@@ -1,0 +1,23 @@
+﻿
+@section Scripts {
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/bundles/easyui")
+}
+
+<div style="padding-top:5px"></div>
+<table id="DeviceTable" class="easyui-datagrid" title="设备管理"
+       data-options="rownumbers:true,singleSelect:true,collapsible:true,data:data,remoteSort: false">
+    <thead>
+        <tr>
+            <th data-options="field:'Model',width:140,align:'center'">型号</th>
+            <th data-options="field:'mark',width:220,align:'center'">备注</th>
+            <th data-options="field:'run',width:140,align:'center',sortable:true">已执行案例</th>
+            <th data-options="field:'runing',width:140,align:'center',sortable:true">目前队列数量</th>
+        </tr>
+    </thead>
+
+</table>
+
+<script>
+    var data = @Html.Raw(ViewBag.data);
+</script>
