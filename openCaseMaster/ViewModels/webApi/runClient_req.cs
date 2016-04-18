@@ -35,12 +35,16 @@ namespace openCaseMaster.ViewModels
 
     public class caseResult_req
     {
+        
+        [Required]
+        public int ID { get; set; }
+
 
         /// <summary>
         /// 结果文件
         /// </summary>
         [Required]
-        public XElement resultXML { get; set; }
+        public string resultXML { get; set; }
 
         /// <summary>
         /// 开始时间
@@ -59,7 +63,7 @@ namespace openCaseMaster.ViewModels
         /// 状态 1完成 null未执行
         /// </summary>
         [Required]
-        public int? state { get; set; }
+        public int state { get; set; }
 
 
         /// <summary>
@@ -69,8 +73,16 @@ namespace openCaseMaster.ViewModels
         public string resultPath { get; set; }
 
 
-       
+    }
 
+
+    public class SceneInstallResult_req
+    {
+        [Required]
+        public int ID { get; set; }
+
+        [Required]
+        public string installResult { get; set; }
     }
 
 
