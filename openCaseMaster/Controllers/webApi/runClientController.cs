@@ -71,6 +71,8 @@ namespace openCaseMaster.Controllers
         {
            
             AutoRunSceneModel rsm = new AutoRunSceneModel(device);
+            if (rsm.id == 0)
+                return null;
             return rsm; 
         }
 
