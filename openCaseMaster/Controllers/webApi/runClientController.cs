@@ -94,11 +94,21 @@ namespace openCaseMaster.Controllers
            
             var rtc = QC_DB.M_runTestCase.First(t => t.ID == id);
 
-            HttpResponseMessage responseMessage =
-               new HttpResponseMessage { Content = new StringContent(rtc.testXML, Encoding.GetEncoding("UTF-8"), "text/xml") };
+            if (rtc.M_runScene.M_testDemand.isRun != true)
+            {
+                HttpResponseMessage responseMessage =
+                   new HttpResponseMessage { Content = new StringContent("null", Encoding.GetEncoding("UTF-8")) };
 
-            return responseMessage;
-            
+                return responseMessage;
+            }
+            else
+            {
+
+                HttpResponseMessage responseMessage =
+                   new HttpResponseMessage { Content = new StringContent(rtc.testXML, Encoding.GetEncoding("UTF-8"), "text/xml") };
+
+                return responseMessage;
+            }
         }
 
 
