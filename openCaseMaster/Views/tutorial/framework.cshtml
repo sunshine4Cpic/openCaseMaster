@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "平台教程";
+    ViewBag.Title = "框架帮助";
 }
 @section Scripts {
     <link href="~/Content/docs.min.css" rel="stylesheet">
@@ -18,36 +18,1706 @@
 <div class="row">
 
     <div class="col-md-9" role="main">
-        <br />
-        <p>施工中...   请移步 @Html.ActionLink("平台使用", "Index", "tutorial") 教程</p>
-        <img class="img-responsive" src="~/Content/help/workwork.jpg"  />
+        <div class="bs-docs-section">
+            <h1 id="uiautomator" class="page-header">uiautomator</h1>
+            <p class="lead">基于安卓网页视图控件</p>
+
+            <h2 id="UI_InitStep">1.程序初始化(UI_InitStep)</h2>
+                <p>进行打开应用程序操作</p>
+                     <div class="table_box">
+                         <table class="table table-striped table-bordered">
+                             <tbody>
+                                   <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                                   <tr>
+                            <td>PackageName</td>
+                            <td>被测程序的包名</td>
+                            <td>null</td>
+                        </tr>
+                                   <tr>
+                            <td>Activity</td>
+                            <td>打开程序的Activity名</td>
+                            <td>null</td>
+                        </tr>
+                                   <tr>
+                            <td>isClear</td>
+                            <td>是否清理打开程序的缓存,默认不写或填写true,清理缓存,
+                             <br />填写flase不清理缓存</td>
+                            <td>启用</td>
+                        </tr>
+                                            <tr>
+                            <td>waitTime</td>
+                            <td>打开应用后等待的时间（例:value =”1”等待1秒）</td>
+                            <td>0</td>
+                        </tr>
+                              </tbody>
+                          </table>
+                      </div>
+
+            <h2 id="UI_ClickStep">2.点击控件(UI_ClickStep)</h2>
+                <p>进行点击控件操作</p>
+                             <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>控件的id的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>desc</td>
+                            <td>控件comtent-desc的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>classname</td>
+                            <td>控件的class的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td>控件的text的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>index</td>
+                            <td>控件的index的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>countIndex</td>
+                            <td>表示当前页面中符合条件的控件的索引值</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>PiontXY</td>
+                            <td>点击屏幕的某点的x,y的坐标 例: value =”100,100” <br />
+                            点击屏幕上x轴等于100 ,y轴等于100的位置点击(注意xy之间有”,”分开)
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>Advanced</td>
+                            <td>高级属性。可选：‘点击直到消失’、‘点击控件左侧’、‘点击控件右侧’。<br />
+                                启用‘点击直到消失’后会持续点击至该控件消失在当前页面（常用于页面跳转时加载过慢等情况。)<br />
+                                启用‘点击控件左侧’后点击该控件的最左侧。<br />
+                                启用‘点击控件右侧’后点击该控件的最右侧。<br />
+                                当某些控件无法定位时可定位附近的控件再以需定位的控件做参照的方式来。<br />                                
+                                填写方式如下：<br />
+                                例:填 Right 100 点击控件右边框外100像素位置<br />
+                                例:填 left  100 点击控件右边框内100像素位置
+
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>neglect</td>
+                            <td>可选：‘忽略’、‘不忽略’。启用‘忽略’后执行时如找不到控件不会报错并执行下个步骤组件。<br />
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>点击控件后等待的时间（例:value =”1”等待1秒）</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>inputText</td>
+                            <td>填写输入的内容</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>若选择不启用则在执行中忽略本步骤组件</td>
+                            <td>启用</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="UI_EditStep">3.输入控件(UI_EditStep)</h2>
+                <p>在输入控件中进行输入操作</p>
+                     <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>控件的id的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>desc</td>
+                            <td>控件comtent-desc的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>index</td>
+                            <td>
+                                控件的index的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>type</td>
+                            <td>输入类型。可选：‘系统输入法’、‘字符间隔0.5秒输入’。启用‘系统输入法’后在执行本输入控件时,<br />
+                                会自动切换成手机系统的输入法进行输入操作。<br />
+                                启用‘字符间隔0.5秒输入’后执行输入操作会以每个字符间隔0.5秒的时间的频率进行输入操作。<br />
+                                （常用于某些输入框输入过快导致输入内容不全）</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>countIndex</td>
+                            <td>
+                                表示当前页面中符合条件的控件的索引值
+                            </td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                输入控件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>inputText</td>
+                            <td>
+                                请输入内容
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h2 id="UI_SwipStep">4.滑动(UI_SwipStep)</h2>
+                 <p>进行页面滑动操作</p>
+                     <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>
+                                滑动方向。可选:‘向上滑动'、‘向下滑动'、‘向左滑动'、‘向右滑动'、<br />
+                                向上滑动:屏幕中心点向上滑动<br />
+                                向下滑动:屏幕中心点向下滑动<br />
+                                向左滑动: 屏幕中心点向左滑动<br />
+                                向右滑动: 屏幕中心点向右滑动
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>PiontXY</td>
+                            <td>
+                                坐标滑动。
+                                startX :启始点的X坐标(或填写该点X轴占屏幕的百分比)<br />
+                                startY :启始点的Y坐标(或填写该点Y轴占屏幕的百分比)<br />
+                                endX :目标点的X坐标(或填写该点X轴占屏幕的百分比)<br />
+                                endY :目标点的Y坐标(或填写该点Y轴占屏幕的百分比)<br />
+                                例: value =”100,10%,50%,70%”或value =”100,10%,50%,70%,40”
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                输入控件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="UI_CheckStep">5.检查点(UI_CheckStep)</h2>
+                <p>进行检查页面是否存在某个控件的操作 </p>
+                     <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>
+                                控件的id的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>desc</td>
+                            <td>
+                                控件comtent-desc的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>classname</td>
+                            <td>
+                                控件的class的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td>
+                                控件的text的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>index</td>
+                            <td>
+                                控件的index的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>countIndex</td>
+                            <td>
+                                表示当前页面中符合条件的控件的索引值
+                            </td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>checkmode</td>
+                            <td>
+                                检查模式。可选：‘出现’、‘不出现’。<br />
+                                启用‘出现’后在当前页面查找到指定的控件为正确。<br />
+                                启用‘不出现’后在当前页面查找不到指定的控件为正确。
+                            </td>
+                            <td>出现</td>
+                        </tr>
+                        <tr>
+                            <td>neglect</td>
+                            <td>
+                                可选：‘忽略’、‘不忽略’。启用‘忽略’后执行时如找不到控件不会报错并执行下个步骤组件。
+                            </td>
+                            <td>不忽略</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                输入控件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="UI_KeyEvent">6.按键(UI_KeyEvent)</h2>
+                <p>进行向设备发送按键事件操作</p>
+                     <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>key</td>
+                            <td>
+                                向设备发送keyevent按键事件(数字)
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                输入控件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="UI_Location">7.滑动控件(UI_Location)</h2>
+                <p>
+                    针对ui 对HTML 的缺陷 , 在HTML中的滚动页面 ,我们需要的控件不在当前页面(需要滚动才能找到的),<br />
+                    所以填写目标控件的参数,这个属性会将我们需要的控件滑动到目标控件所在的位置<br />
+                    (注意：目标控件要在当前页面上可以看到,否则不会滑动
+                </p>
+                     <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>
+                                控件的id的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>desc</td>
+                            <td>
+                                控件comtent-desc的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>classname</td>
+                            <td>
+                                控件的class的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td>
+                                控件的text的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>index</td>
+                            <td>
+                                控件的index的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>countIndex</td>
+                            <td>
+                                表示当前页面中符合条件的控件的索引值
+                            </td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>LocationId</td>
+                            <td>
+                                目标控件的Id的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>LocationDesc</td>
+                            <td>
+                                目标控件Desc的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>LocationClassname</td>
+                            <td>
+                                目标控件的Classname的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>LocationText</td>
+                            <td>
+                                目标控件的Text的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>LocationIndex</td>
+                            <td>
+                                目标控件的Index的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>LocationCountIndex</td>
+                            <td>
+                                目标控件的index的值
+                            </td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>LocationWaitTime</td>
+                            <td>
+                                滑动控件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+             </div>
+            </div>
+
+        <div class="bs-docs-section">
+            <h1 id="appium" class="page-header">appium</h1>
+            <p class="lead">基于ios移动设备自动化控件</p>
+
+            <h2 id="U_InitStep">1.程序初始化(U_InitStep)</h2>
+            <p>打开被测应用</p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>applicationID</td>
+                            <td>被测应用程序的名称</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>打开应用后等待的时间（例:value =”1”等待1秒）</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>若选择不启用则在执行中忽略本步骤组件</td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="U_ClickStep">2.点击控件(U_ClickStep)</h2>
+            <p>点击控件操作</p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>控件的id的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>tagname</td>
+                            <td>控件的tagName(标签名)</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>classname</td>
+                            <td>控件的class的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>textContent</td>
+                            <td>控件的文本的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>index</td>
+                            <td>表示当前页面中符合条件的控件的索引值</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>点击控件后等待的时间（例:value =”1”等待1秒）</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>userXPath</td>
+                            <td>通过xpath路径表达式来查找控件</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>PiontXY</td>
+                            <td>
+                                点击屏幕的某点的x,y的坐标 例: value =”100,100” <br />
+                                点击屏幕上x轴等于100 ,y轴等于100的位置点击(注意xy之间有”,”分开)
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>若选择不启用则在执行中忽略本步骤组件</td>
+                            <td>启用</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="U_EditStep">3.输入控件(U_EditStep)</h2>
+            <p>对输入框进行输入操作</p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>控件的id的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>tagname</td>
+                            <td>控件的tagName(标签名)</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>classname</td>
+                            <td>
+                                控件的class的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>inputText</td>
+                            <td>
+                                填写输入的内容
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>index</td>
+                            <td>
+                                表示当前页面中符合条件的控件的索引值
+                            </td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>userXPath</td>
+                            <td>
+                                通过xpath路径表达式来查找控件
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                输入控件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>textContent</td>
+                            <td>
+                                控件的文本的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="U_SwipStep">4.滑动(U_SwipStep)</h2>
+            <p>对页面进行滑动操作</p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                输入控件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>
+                                滑动方向。可选:‘向上滑动'、‘向下滑动'、‘向左滑动'、‘向右滑动'、<br />
+                                向上滑动:屏幕中心点向上滑动<br />
+                                向下滑动:屏幕中心点向下滑动<br />
+                                向左滑动: 屏幕中心点向左滑动<br />
+                                向右滑动: 屏幕中心点向右滑动
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="U_CheckStep">5.检查点(U_CheckStep)</h2>
+            <p>检查页面是否存在某个控件的操作 </p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>
+                                控件的id的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>tagname</td>
+                            <td>
+                                控件的tagName(标签名)
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>classname</td>
+                            <td>
+                                控件的class的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>textContent</td>
+                            <td>
+                                控件的文本值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                输入控件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            
+        </div>
+
+        <div class="bs-docs-section">
+            <h1 id="robotium" class="page-header">robotium</h1>
+            <p class="lead">基于安卓移动设备自动化控件</p>
+
+            <h2 id="R_InitStep">1.程序初始化(R_InitStep)</h2>
+            <p>打开被测应用</p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>applicationID</td>
+                            <td>被测应用程序的名称</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>打开应用后等待的时间（例:value =”1”等待1秒）</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>若选择不启用则在执行中忽略本步骤组件</td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="R_ClickStep">2.点击控件(R_ClickStep)</h2>
+            <p>点击控件操作</p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>控件的id的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>tagname</td>
+                            <td>控件的tagName(标签名)</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>classname</td>
+                            <td>控件的class的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>textContent</td>
+                            <td>控件的文本的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>index</td>
+                            <td>表示当前页面中符合条件的控件的索引值</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>点击控件后等待的时间（例:value =”1”等待1秒）</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>userXPath</td>
+                            <td>通过xpath路径表达式来查找控件</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>Advanced</td>
+                            <td>
+                                高级属性。可选：‘滑动查找’、‘找不到控件忽略’、‘点击控件左侧’、‘点击控件右侧’。<br /> 
+                                启用‘滑动查找’后在当前页面查找不到控件后向下滑动页面查找控件。<br />                                  
+                                启用‘找不到控件忽略’后执行时如找不到控件不会报错并执行下个步骤组件。<br />                             
+                                启用‘点击控件左侧’后点击该控件的最左侧<br />        
+                                启用‘点击控件右侧’后点击该控件的最右侧
+                            </td>
+                            <td>不启用</td>
+                        </tr>
+                        <tr>
+                            <td>untilNotFound</td>
+                            <td>启用后会持续点击至该控件消失在当前页面（常用于页面跳转时加载过慢等情况）</td>
+                            <td>不启用</td>
+                        </tr>
+                        <tr>
+                            <td>checkText</td>
+                            <td>检查当点击控件后出现的toast的提示文本</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>若选择不启用则在执行中忽略本步骤组件</td>
+                            <td>启用</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="R_EditStep">3.输入控件(R_EditStep)</h2>
+            <p>对输入框进行输入操作</p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>控件的id的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>tagname</td>
+                            <td>控件的tagName(标签名)</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>classname</td>
+                            <td>
+                                控件的class的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>inputText</td>
+                            <td>
+                                填写输入的内容
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>index</td>
+                            <td>
+                                表示当前页面中符合条件的控件的索引值
+                            </td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>userXPath</td>
+                            <td>
+                                通过xpath路径表达式来查找控件
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>Advanced</td>
+                            <td>
+                                高级属性。可选：‘滑动查找’、‘找不到控件忽略’、‘点击控件左侧’、‘点击控件右侧’。<br />
+                                启用‘滑动查找’后在当前页面查找不到控件后向下滑动页面查找控件。<br />
+                                启用‘找不到控件忽略’后执行时如找不到控件不会报错并执行下个步骤组件。<br />
+                                启用‘点击控件左侧’后点击该控件的最左侧<br />
+                                启用‘点击控件右侧’后点击该控件的最右侧
+                            </td>
+                            <td>不启用</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                输入控件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>textContent</td>
+                            <td>
+                                控件的文本的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="R_SelectStep">4.下拉框控件(R_SelectStep)</h2>
+            <p>对web页面中下拉框进行点击操作</p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>控件的id的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>classname</td>
+                            <td>
+                                控件的class的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>textContent</td>
+                            <td>
+                                控件的文本的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>userXPath</td>
+                            <td>
+                                通过xpath路径表达式来查找控件
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>index</td>
+                            <td>
+                                表示当前页面中符合条件的控件的索引值
+                            </td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                点击下拉框控件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                        
+                        
+                        
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="R_SwipStep">5.滑动(R_SwipStep)</h2>
+            <p>对页面进行滑动操作</p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>Point</td>
+                            <td>
+                                坐标滑动。<br />
+                                startX :启始点的X坐标(或填写该点X轴占屏幕的百分比)<br />
+                                startY :启始点的Y坐标(或填写该点Y轴占屏幕的百分比)<br />
+                                endX :目标点的X坐标(或填写该点X轴占屏幕的百分比)<br />
+                                endY :目标点的Y坐标(或填写该点Y轴占屏幕的百分比)<br />
+                                例: value =”100,10%,50%,70%”或value =”100,10%,50%,70%,40”
+                                
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                滑动后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>
+                                滑动方向。可选:‘向上滑动'、‘向下滑动'、‘向左滑动'、‘向右滑动'、<br />
+                                向上滑动:屏幕中心点向上滑动<br />
+                                向下滑动:屏幕中心点向下滑动<br />
+                                向左滑动: 屏幕中心点向左滑动<br />
+                                向右滑动: 屏幕中心点向右滑动
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>
+                                控件的id的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>tagname</td>
+                            <td>
+                                控件的tagName(标签名)
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>classname</td>
+                            <td>
+                                控件的class的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>index</td>
+                            <td>
+                                表示当前页面中符合条件的控件的索引值
+                            </td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>userXPath</td>
+                            <td>
+                                通过xpath来查找控件
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="R_CheckStep">6.检查点(R_CheckStep)</h2>
+            <p>检查web页面是否存在某个控件的操作 </p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>
+                                控件的id的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>tagname</td>
+                            <td>
+                                控件的tagName(标签名)
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>classname</td>
+                            <td>
+                                控件的class的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>textContent</td>
+                            <td>
+                                控件的文本值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>Advanced</td>
+                            <td>
+                                高级属性。可选：‘滑动查找’
+                            </td>
+                            <td>不启用</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="R_AndClickStep">7.安卓控件点击控件(R_AndClickStep)</h2>
+            <p>点击安卓原生控件操作 </p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>
+                                控件的id的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>tagname</td>
+                            <td>
+                                控件的类型 例: value =”Imagebutton” value =”Listview” value =”Imageview”value =”checkbox”
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>textContent</td>
+                            <td>
+                                控件的文本值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>checkText</td>
+                            <td>
+                                检查当点击控件后出现的文本
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>Advanced</td>
+                            <td>
+                                高级属性。可选：‘长按’。  启用‘长按’后在当前页面做长按该控件操作直至出现提示。
+                            </td>
+                            <td>不启用</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                长按件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <h2 id="R_AndEditStep">8.安卓输入控件(R_AndEditStep)</h2>
+            <p>对安卓原生的输入框进行输入操作 </p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>
+                                控件的id的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>textContent</td>
+                            <td>
+                                控件的文本值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>index</td>
+                            <td>
+                                表示当前页面中符合条件的控件的索引值
+                            </td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>inputText</td>
+                            <td>
+                                填写输入的内容
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                长按件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="R_AndCheckStep">9.安卓检查点控件(R_AndCheckStep)</h2>
+            <p>检查当前页面是否存在安卓原生控件的操作 </p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>
+                                控件的id的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+
+                        <tr>
+                            <td>textContent</td>
+                            <td>
+                                控件的文本值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>checkMode</td>
+                            <td>
+                                检查模式。可选：‘出现’、‘不出现’。  <br />      
+                                启用‘出现’后在当前页面查找到指定的控件为正确。<br />
+                                启用‘不出现’后在当前页面查找不到指定的控件为正确。<br />
+                            </td>
+                            <td>出现</td>
+                        </tr>
+                       
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                长按件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="R_KeyEvent">10.安卓按键输入控件(R_KeyEvent)</h2>
+            <p> 对设备发送按键事件操作 </p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>key</td>
+                            <td>
+                                向设备发送keyevent按键事件(数字)
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                长按件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="bs-docs-section">
+            <h1 id="chrome" class="page-header">chrome</h1>
+            <p class="lead">基于web移动设备自动化控件</p>
+
+            <h2 id="C_InitStep">1.程序初始化(C_InitStep)</h2>
+            <p>打开被测应用</p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>url</td>
+                            <td>被测应用的url地址</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>clickType</td>
+                            <td>点击类型。可选:‘模拟真实点击'、‘webDriver模式'。<br />
+                               启用‘模拟真实点击’后为还原指尖触碰设备屏幕的点击事件。<br />                                                
+                               启用‘webDriver模式’后为控件自动发生点击事件</td>
+                            <td>webDriver模式</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>打开应用后等待的时间（例:value =”1”等待1秒）</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>若选择不启用则在执行中忽略本步骤组件</td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="C_ClickStep">2.点击控件(C_ClickStep)</h2>
+            <p>点击控件操作</p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>控件的id的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>tagname</td>
+                            <td>控件的tagName(标签名)</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>classname</td>
+                            <td>控件的class的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>textContent</td>
+                            <td>控件的文本的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>userXPath</td>
+                            <td>通过xpath路径表达式来查找控件</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>PiontXY</td>
+                            <td>
+                                点击屏幕的某点的x,y的坐标 例: value =”100,100” <br />
+                                点击屏幕上x轴等于100 ,y轴等于100的位置点击(注意xy之间有”,”分开)
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>clickType</td>
+                            <td>点击类型。可选:‘模拟真实点击'、‘webDriver模式'。<br /> 
+                                启用‘模拟真实点击’后为还原指尖触碰设备屏幕的点击事件。<br />                                                 
+                                启用‘webDriver模式’后为控件自动发生点击事件</td>
+                            <td>webDriver模式</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>点击控件后等待的时间（例:value =”1”等待1秒）</td>
+                            <td>0</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>是否启用</td>
+                            <td>若选择不启用则在执行中忽略本步骤组件</td>
+                            <td>启用</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="C_EditStep">3.输入控件(C_EditStep)</h2>
+            <p>对输入框进行输入操作</p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>控件的id的值</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>tagname</td>
+                            <td>控件的tagName(标签名)</td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>classname</td>
+                            <td>
+                                控件的class的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>inputText</td>
+                            <td>
+                                填写输入的内容
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>index</td>
+                            <td>
+                                表示当前页面中符合条件的控件的索引值
+                            </td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>userXPath</td>
+                            <td>
+                                通过xpath路径表达式来查找控件
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                输入控件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>textContent</td>
+                            <td>
+                                控件的文本的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="C_SwipStep">4.滑动控件(C_SwipStep)</h2>
+            <p>对页面进行滑动操作</p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                输入控件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>
+                                滑动方向。可选:‘向上滑动'、‘向下滑动'、‘向左滑动'、‘向右滑动'、<br />
+                                向上滑动:屏幕中心点向上滑动<br />
+                                向下滑动:屏幕中心点向下滑动<br />
+                                向左滑动: 屏幕中心点向左滑动<br />
+                                向右滑动: 屏幕中心点向右滑动
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="C_CheckStep">5.检查点(C_CheckStep)</h2>
+            <p>检查web页面是否存在某个控件的操作 </p>
+            <div class="table_box">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th align="left">名称</th>
+                            <th align="left">描述</th>
+                            <th align="left">默认值</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>
+                                控件的id的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>tagname</td>
+                            <td>
+                                控件的tagName(标签名)
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>classname</td>
+                            <td>
+                                控件的class的值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>textContent</td>
+                            <td>
+                                控件的文本值
+                            </td>
+                            <td>null</td>
+                        </tr>
+                        <tr>
+                            <td>waitTime</td>
+                            <td>
+                                输入控件后等待的时间（例:value =”1”等待1秒）
+                            </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>是否启用</td>
+                            <td>
+                                若选择不启用则在执行中忽略本步骤组件
+                            </td>
+                            <td>启用</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
     </div>
+  
+   
 
 
 
-
-    <div class="col-sm-3 col-md-3">
+    <div  class="col-sm-3 col-md-3">
 
        <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" style="top:80px">
             <ul class="nav bs-docs-sidenav">
 
                 <li class="">
-                    <a href="#testCase">uiautomator 框架</a>
+                    <a href="#uiautomator">uiautomator 框架</a>
+                    <ul class="nav">
+                        <li class=""><a href="#UI_InitStep">1.程序初始化(UI_InitStep)</a></li>
+                        <li class=""><a href="#UI_ClickStep">2.点击控件(UI_ClickStep)</a></li>
+                        <li class=""><a href="#UI_EditStep">3.输入控件(UI_EditStep)</a></li>
+                        <li class=""><a href="#UI_SwipStep">4.滑动(UI_SwipStep)</a></li>
+                        <li class=""><a href="#UI_CheckStep">5.检查点(UI_CheckStep)</a></li>
+                        <li class=""><a href="#UI_KeyEvent">6.按键(UI_KeyEvent)</a></li>
+                        <li class=""><a href="#UI_Location">7. 滑动控件(UI_Location)</a></li>
+                     </ul>
                     
                 </li>
 
                 <li>
-                    <a href="#userStep">appium 框架</a>
+                    <a href="#appium">appium 框架</a>
+                    <ul class="nav">
+                        <li class=""><a href="#U_InitStep">1.程序初始化(U_InitStep)</a></li>
+                        <li class=""><a href="#U_ClickStep">2.点击控件(U_ClickStep)</a></li>
+                        <li class=""><a href="#U_EditStep">3.输入控件(U_EditStep)</a></li>
+                        <li class=""><a href="#U_SwipStep">4.滑动控件(U_SwipStep)</a></li>
+                        <li class=""><a href="#U_CheckStep">5.检查点(U_CheckStep)</a></li>
+                    </ul>
+                </li>
+
+                <li >
+                    <a href="#robotium">robotium 框架</a>
+                    <ul class="nav">
+                        <li class=""><a href="#R_InitStep">1.程序初始化(R_InitStep)</a></li>
+                        <li class=""><a href="#R_ClickStep">2.点击控件(R_ClickStep)</a></li>
+                        <li class=""><a href="#R_EditStep">3.输入控件(R_EditStep)</a></li>
+                        <li class=""><a href="#R_SelectStep">4.下拉框控件(R_SelectStep)</a></li>
+                        <li class=""><a href="#R_SwipStep">5.滑动控件(R_SwipStep)</a></li>
+                        <li class=""><a href="#R_CheckStep">6.检查点(R_CheckStep)</a></li>
+                        <li class=""><a href="#R_AndClickStep">7.安卓点击控件(R_AndClickStep)</a></li>
+                        <li class=""><a href="#R_AndEditStep">8.安卓输入控件(R_AndEditStep)</a></li>
+                        <li class=""><a href="#R_AndCheckStep">9.安卓检查控件(R_AndCheckStep)</a></li>
+                        <li class=""><a href="#R_KeyEvent">10.安卓按键输入控件(R_KeyEvent)</a></li>
+                    </ul>
                     
                 </li>
 
                 <li >
-                    <a href="#Client">robotium 框架</a>
-                    
-                </li>
-
-                <li >
-                    <a href="#Client">chromeDriver 框架</a>
+                    <a href="#chrome">chromeDriver 框架</a>
+                    <ul class="nav">
+                        <li class=""><a href="#C_InitStep">1.程序初始化(C_InitStep)</a></li>
+                        <li class=""><a href="#C_ClickStep">2.点击控件(C_ClickStep)</a></li>
+                        <li class=""><a href="#C_EditStep">3.输入控件(C_EditStep)</a></li>
+                        <li class=""><a href="#C_SwipStep">4.滑动控件(C_SwipStep)</a></li>
+                        <li class=""><a href="#C_CheckStep">5.检查点(C_CheckStep)</a></li>
+                    </ul>
                 </li>
 
 
