@@ -22,7 +22,6 @@ function getStep(node) {
     step["desc"] = node.desc;
     step["ParamBinding"] = p;
     step["name"] = node.name;
-
-
     return step
 }
+

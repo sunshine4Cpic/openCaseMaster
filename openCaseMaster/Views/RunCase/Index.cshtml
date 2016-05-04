@@ -69,24 +69,16 @@
             onBeforeExpand: function (node, param) {
                 if (!node.hasOwnProperty('PID')) {
                     if (node.type == 0)
-                        $(this).tree('options').url = "/RunCase/folderExpanded/" + node.DemandID;
-                    //else //Tree不再显示场景,此逻辑暂不生效
-                        //$(this).tree('options').url = "/RunCase/DemandScene/" + node.DemandID;
+                        $(this).tree('options').url = "folderExpanded/" + node.DemandID;
                 }
                 else
-                    $(this).tree('options').url = "/RunCase/getFileByProject/" + node.PID;
-                //param.myattr = 'test';    // or change request parameter
+                    $(this).tree('options').url = "getFileByProject/" + node.PID;
             },
             onClick: function (node) {
-                /*
-                if (node.id) {//Tree不再显示场景,此逻辑暂不生效
-                    refreshScene(node.id,node.DemandID);
-                } else */
                 if (node.type == 1)
                 {
                     refreshDemand(node.DemandID);
                 }
-
             },
             onDblClick: function (node) {
                 if (node.type == 0 || node.PID)
@@ -96,10 +88,10 @@
                     });
             }
         });
-
-      
-
     });
+
+
+    
 
     function refreshDemand(DemandID) {
         document.getElementById("ScenePanel").style.display = "none";
