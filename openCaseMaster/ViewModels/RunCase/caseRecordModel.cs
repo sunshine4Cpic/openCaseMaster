@@ -35,11 +35,29 @@ namespace openCaseMaster.ViewModels
                 //rs.Photo = "~/apkInstall/9ebe59c658c9c5c5ecdd8593e4025321.jpg";
                 xrs.Add(rs);
             }
+            if (mt.resultXML == null) return;
+
+
+            var runOK = xrs.Where(t => t.ResultStatic == "1").Count();
+            var cnt = xrs.Count;
+
+            if (runOK != cnt)
+            {
+                var fail = new caseRecordStep();
+                fail.desc = "失败步骤";
+                fail.ResultStatic = "2";
+                fail.name = "失败截图";
+                fail.Photo = this.resultPath + "fail.jpg";
+                xrs.Add(fail);
+
+            }
         }
     }
 
     public class caseRecordStep
     {
+        public caseRecordStep()
+        { }
         public caseRecordStep(XElement xe)
         {
             this.stepX = xe;
