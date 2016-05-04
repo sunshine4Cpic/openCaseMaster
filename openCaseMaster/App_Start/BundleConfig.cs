@@ -56,7 +56,7 @@ namespace openCaseMaster
 
 
 
-            BundleTable.EnableOptimizations = false;//不启用压缩
+            BundleTable.EnableOptimizations = true;//不启用压缩
         }
     }
     /// <summary>

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MarkdownSharp;
 
 namespace openCaseMaster.Controllers
 {
@@ -21,6 +22,14 @@ namespace openCaseMaster.Controllers
         public ActionResult add()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public string markdown(string body)
+        {
+            Markdown md = new Markdown();
+            return md.Transform(body);
         }
 
 
