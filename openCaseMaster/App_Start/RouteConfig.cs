@@ -13,6 +13,8 @@ namespace openCaseMaster
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //启用自定义路由设置
+            routes.MapMvcAttributeRoutes();
             
             routes.MapRoute(
                 name: "Default",
@@ -20,7 +22,7 @@ namespace openCaseMaster
                 defaults: new { controller = "User", action = "Login", id = UrlParameter.Optional }
             );
 
-
+           
             
 
         }

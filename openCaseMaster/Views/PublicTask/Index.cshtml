@@ -1,0 +1,324 @@
+﻿
+@using MarkdownSharp;
+@{
+
+<style type="text/css">
+
+</style>
+ 
+}
+
+
+
+
+<div>
+
+    @{
+        string str = "#标签\r\n 1. 文字!\r\n 2. 文字2\r\n";
+        Markdown md = new Markdown();
+        string cont = md.Transform(str);
+    }
+    @MvcHtmlString.Create(cont)
+</div>
+
+
+<ul class="tbui_aside_float_bar"><li class="tbui_aside_fbar_button tbui_fbar_square"><a href="/f?kw=%D0%E3" target="_blank"></a></li>
+<li class="tbui_aside_fbar_button tbui_fbar_post"><a href="#sub"></a></li>
+<li class="tbui_aside_fbar_button tbui_fbar_refresh"><a href="#"></a></li>
+<li class="tbui_aside_fbar_button tbui_fbar_share"><a href="#"><div class="tbshare_popup_wrapper"><div class="tbshare_popup_enter"></div><div class="tbshare_popup_main clearfix" style="display: none;"><div class="tbshare_wrapper_theme_coco"><ul class=""><li><div class="tbshare_tieba tbshare_icon" title="百度贴吧" data-share="tieba"><div class="tbshare_title_box">百度贴吧</div></div></li>
+<li><div class="tbshare_weixin tbshare_icon" title="微信" data-share="weixin"><div class="tbshare_title_box">微信</div></div></li>
+<li><div class="tbshare_tsina tbshare_icon" title="新浪微博" data-share="tsina"><div class="tbshare_title_box">新浪微博</div></div></li>
+<li><div class="tbshare_qqzone tbshare_icon" title="QQ空间" data-share="qqzone"><div class="tbshare_title_box">QQ空间</div></div></li>
+<li><div class="tbshare_copy tbshare_icon" onclick="return false;" title="复制链接" data-share="copy"><div class="tbshare_title_box">复制链接</div></div></li>
+</ul><div class="tbshare_qrcode_mask" style="display: none;"><div class="tbshare_qrcode_outer"><div class="tbshare_qrcode_wrapper"><h6>扫一扫分享到微信</h6><div class="tbshare_qrcode_content" title="http://tieba.baidu.com/f?ie=utf-8&amp;kw=%E7%8C%8E%E4%BA%BA&amp;fr=search&amp;pn=0&amp;"><canvas width="90" height="90" style="display: none;"></canvas><img alt="Scan me!" src="data:image/png;base64,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" style="display: block;"></div><div class="tbshare_qrcode_instruction"><p>打开微信，点击底部的“发现”，<br>使用“扫一扫”即可将网页分享至朋友圈。</p></div><div class="tbshare_qrcode_close">×</div></div></div><div class="tbshare_qrcode_triangle"></div></div></div></div></div></a></li>
+<li class="tbui_aside_fbar_button tbui_fbar_favor"><a href="#"></a><ul class="tbui_aside_favor_list clearfix" id="tbui_aside_favor_list" style="display: none;"><li class="j_favor_loading" style="display: none;"><div class="favor_loading"><img src="http://tb2.bdstatic.com/tb/img/loading2_a8a93d0.gif">正在加载，请稍后。。。</div></li>
+<li><a href="http://tieba.baidu.com/f?ie=utf-8&amp;kw=%E6%9C%BA%E6%88%98" target="_blank" class="ui_text_summary">机战</a></li>
+<li><a href="http://tieba.baidu.com/f?ie=utf-8&amp;kw=%E9%AD%94%E7%95%8C%E6%88%98%E8%AE%B0" target="_blank" class="ui_text_summary">魔界战记</a></li>
+<li><a href="http://tieba.baidu.com/f?ie=utf-8&amp;kw=%E9%AD%94%E5%85%BD%E4%B8%96%E7%95%8C" target="_blank" class="ui_text_summary">魔兽世界</a></li>
+<li><a href="http://tieba.baidu.com/f?ie=utf-8&amp;kw=%E6%97%A0%E5%B0%BD%E4%B9%8B%E5%89%913" target="_blank" class="ui_text_summary">无尽之剑3</a></li>
+<li><a href="http://tieba.baidu.com/f?ie=utf-8&amp;kw=%E6%9A%97%E9%BB%913" target="_blank" class="ui_text_summary">暗黑3</a></li>
+<li><a href="http://tieba.baidu.com/f?ie=utf-8&amp;kw=%E8%A1%8C%E5%B0%B8%E8%B5%B0%E8%82%89" target="_blank" class="ui_text_summary">行尸走肉</a></li>
+<li><a href="http://tieba.baidu.com/f?ie=utf-8&amp;kw=%E6%80%AA%E7%89%A9%E7%8C%8E%E4%BA%BA" target="_blank" class="ui_text_summary">怪物猎人</a></li>
+<li><a target="_blank" class="ui_text_desc" href="http://tieba.baidu.com/home/forum?id=4808bdd0ced2b0a2c4b7c2de4f30">更多&gt;&gt;</a></li>
+</ul></li>
+<li class="tbui_aside_fbar_button tbui_fbar_lab"><a href="http://tieba.baidu.com/idea/index" target="_blank"></a><div class="tbui_aside_lab_tip"></div></li>
+<li class="tbui_aside_fbar_button tbui_fbar_top" style="visibility: hidden;"><a href="#"></a></li>
+</ul>
+
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+<div class="home_suggest_topics panel panel-default">
+    <div class="panel-heading">最新帖子</div>
+    <div class="panel-body topics row">
+        <div class="col-md-6">
+                
+    <div class="topic media topic-4778">
+
+  <div class="avatar media-left">
+    <a href="/an168ge"><img class="media-object avatar-48" src="https://testerhome.com/user/large_avatar/3295.jpg" alt="3295"></a>
+  </div>
+  <div class="infos media-body">
+    <div class="title media-heading">
+      <a title="无厘头吐槽自己" href="/topics/4778">无厘头吐槽自己</a>
+      
+    </div>
+    <div class="info">
+      <a class="node" href="/topics/node12">职业</a>
+      •
+      <a data-author="true" data-name="chenyouan" href="/an168ge">an168ge</a>
+      <span class="hidden-mobile">
+      于 <abbr class="timeago" title="2016-05-03T10:57:03+08:00">6 小时前</abbr>发布
+      •
+        最后由 <a data-name="simple" href="/simple">simple</a> 于 <abbr class="timeago" title="2016-05-03T14:02:42+08:00">3 小时前</abbr>回复
+      </span>
+    </div>
+  </div>
+  <div class="count media-right">
+      <a class="state-false" href="/topics/4778#reply10">10</a>
+  </div>
+</div>
+
+    <div class="topic media topic-4776">
+
+  <div class="avatar media-left">
+    <a href="/debugtalk"><img class="media-object avatar-48" src="https://testerhome.com/user/large_avatar/6109.jpg" alt="6109"></a>
+  </div>
+  <div class="infos media-body">
+    <div class="title media-heading">
+      <a title="通过 API 远程管理 Jenkins" href="/topics/4776">通过 API 远程管理 Jenkins</a>
+      <i title="精华帖" class="fa fa-star"></i>
+    </div>
+    <div class="info">
+      <a class="node" href="/topics/node32">移动性能测试</a>
+      •
+      <a data-author="true" data-name="九毫" href="/debugtalk">debugtalk</a>
+      <span class="hidden-mobile">
+      于 <abbr class="timeago" title="2016-05-02T17:21:17+08:00">23 小时前</abbr>发布
+      •
+        最后由 <a data-name="debugtalk" href="/debugtalk">debugtalk</a> 于 <abbr class="timeago" title="2016-05-03T11:22:13+08:00">5 小时前</abbr>回复
+      </span>
+    </div>
+  </div>
+  <div class="count media-right">
+      <a class="state-false" href="/topics/4776#reply3">3</a>
+  </div>
+</div>
+
+    <div class="topic media topic-4774">
+
+  <div class="avatar media-left">
+    <a href="/monkey"><img class="media-object avatar-48" src="https://testerhome.com/user/large_avatar/118.jpg" alt="118"></a>
+  </div>
+  <div class="infos media-body">
+    <div class="title media-heading">
+      <a title="一年多，将近两年时间的尾声" href="/topics/4774">一年多，将近两年时间的尾声</a>
+      
+    </div>
+    <div class="info">
+      <a class="node" href="/topics/node22">测试书籍</a>
+      •
+      <a data-author="true" data-name="monkey" href="/monkey">monkey</a>
+      <span class="hidden-mobile">
+      于 <abbr class="timeago" title="2016-05-02T00:02:42+08:00">1 天前</abbr>发布
+      •
+        最后由 <a data-name="liuhao121" href="/liuhao121">liuhao121</a> 于 <abbr class="timeago" title="2016-05-03T16:33:20+08:00">13 分钟前</abbr>回复
+      </span>
+    </div>
+  </div>
+  <div class="count media-right">
+      <a class="state-false" href="/topics/4774#reply20">20</a>
+  </div>
+</div>
+
+    <div class="topic media topic-4772">
+
+  <div class="avatar media-left">
+    <a href="/codeskyblue"><img class="media-object avatar-48" src="https://testerhome.com/user/large_avatar/6853.jpg" alt="6853"></a>
+  </div>
+  <div class="infos media-body">
+    <div class="title media-heading">
+      <a title="让 adb install 也能看到进度" href="/topics/4772">让 adb install 也能看到进度</a>
+      
+    </div>
+    <div class="info">
+      <a class="node" href="/topics/node45">Android 开发基础</a>
+      •
+      <a data-author="true" data-name="shengxiang" href="/codeskyblue">codeskyblue</a>
+      <span class="hidden-mobile">
+      于 <abbr class="timeago" title="2016-05-01T18:11:37+08:00">1 天前</abbr>发布
+      •
+        最后由 <a data-name="codeskyblue" href="/codeskyblue">codeskyblue</a> 于 <abbr class="timeago" title="2016-05-03T13:12:10+08:00">4 小时前</abbr>回复
+      </span>
+    </div>
+  </div>
+  <div class="count media-right">
+      <a class="state-false" href="/topics/4772#reply11">11</a>
+  </div>
+</div>
+
+    <div class="topic media topic-4770">
+
+  <div class="avatar media-left">
+    <a href="/xuxu"><img class="media-object avatar-48" src="https://testerhome.com/user/large_avatar/784.jpg" alt="784"></a>
+  </div>
+  <div class="infos media-body">
+    <div class="title media-heading">
+      <a title="GT 流畅度测试-Choreographer" href="/topics/4770">GT 流畅度测试-Choreographer</a>
+      
+    </div>
+    <div class="info">
+      <a class="node" href="/topics/node32">移动性能测试</a>
+      •
+      <a data-author="true" data-name="xuxu" href="/xuxu">xuxu</a>
+      <span class="hidden-mobile">
+      于 <abbr class="timeago" title="2016-04-30T19:50:54+08:00">2 天前</abbr>发布
+      •
+        最后由 <a data-name="codeskyblue" href="/codeskyblue">codeskyblue</a> 于 <abbr class="timeago" title="2016-05-01T09:13:04+08:00">2 天前</abbr>回复
+      </span>
+    </div>
+  </div>
+  <div class="count media-right">
+      <a class="state-false" href="/topics/4770#reply1">1</a>
+  </div>
+</div>
+
+        </div>
+
+        <div class="col-md-6">
+                
+    <div class="topic media topic-4780">
+
+  <div class="avatar media-left">
+    <a href="/chenhengjie123"><img class="media-object avatar-48" src="https://testerhome.com/user/large_avatar/605.jpg" alt="605"></a>
+  </div>
+  <div class="infos media-body">
+    <div class="title media-heading">
+      <a title="KIF 在真机上进行截图踩坑小记" href="/topics/4780">KIF 在真机上进行截图踩坑小记</a>
+      
+    </div>
+    <div class="info">
+      <a class="node" href="/topics/node51">iOS 测试</a>
+      •
+      <a data-author="true" data-name="陈恒捷" href="/chenhengjie123">chenhengjie123</a>
+      <span class="hidden-mobile">
+      于 <abbr class="timeago" title="2016-05-03T15:05:10+08:00">2 小时前</abbr>发布
+      •
+        最后由 <a data-name="monkey" href="/monkey">monkey</a> 于 <abbr class="timeago" title="2016-05-03T15:42:58+08:00">1 小时前</abbr>回复
+      </span>
+    </div>
+  </div>
+  <div class="count media-right">
+      <a class="state-false" href="/topics/4780#reply1">1</a>
+  </div>
+</div>
+
+    <div class="topic media topic-4777">
+
+  <div class="avatar media-left">
+    <a href="/ycwdaaaa"><img class="media-object avatar-48" src="https://testerhome.com/user/large_avatar/7606.jpg" alt="7606"></a>
+  </div>
+  <div class="infos media-body">
+    <div class="title media-heading">
+      <a title="作为一个面试官，我想说点什么" href="/topics/4777">作为一个面试官，我想说点什么</a>
+      <i title="精华帖" class="fa fa-star"></i>
+    </div>
+    <div class="info">
+      <a class="node" href="/topics/node11">灌水</a>
+      •
+      <a data-author="true" data-name="孙高飞" href="/ycwdaaaa">ycwdaaaa</a>
+      <span class="hidden-mobile">
+      于 <abbr class="timeago" title="2016-05-02T19:21:48+08:00">21 小时前</abbr>发布
+      •
+        最后由 <a data-name="ycwdaaaa" href="/ycwdaaaa">ycwdaaaa</a> 于 <abbr class="timeago" title="2016-05-03T16:42:44+08:00">3 分钟前</abbr>回复
+      </span>
+    </div>
+  </div>
+  <div class="count media-right">
+      <a class="state-false" href="/topics/4777#reply71">71</a>
+  </div>
+</div>
+
+    <div class="topic media topic-4775">
+
+  <div class="avatar media-left">
+    <a href="/sandman"><img class="media-object avatar-48" src="https://testerhome.com/user/large_avatar/982.jpg" alt="982"></a>
+  </div>
+  <div class="infos media-body">
+    <div class="title media-heading">
+      <a title="shell 脚本通过 dumpsys SurfaceFlinger --latency 数据计算 FPS 和评价流畅度。" href="/topics/4775">shell 脚本通过 dumpsys SurfaceFlinger --latency 数据计算 FPS 和评价流畅度。</a>
+      <i title="精华帖" class="fa fa-star"></i>
+    </div>
+    <div class="info">
+      <a class="node" href="/topics/node32">移动性能测试</a>
+      •
+      <a data-author="true" data-name="浮云" href="/sandman">sandman</a>
+      <span class="hidden-mobile">
+      于 <abbr class="timeago" title="2016-05-02T01:30:43+08:00">1 天前</abbr>发布
+      •
+        最后由 <a data-name="xiaoyy" href="/xiaoyy">xiaoyy</a> 于 <abbr class="timeago" title="2016-05-03T16:14:57+08:00">31 分钟前</abbr>回复
+      </span>
+    </div>
+  </div>
+  <div class="count media-right">
+      <a class="state-false" href="/topics/4775#reply9">9</a>
+  </div>
+</div>
+
+    <div class="topic media topic-4773">
+
+  <div class="avatar media-left">
+    <a href="/ycwdaaaa"><img class="media-object avatar-48" src="https://testerhome.com/user/large_avatar/7606.jpg" alt="7606"></a>
+  </div>
+  <div class="infos media-body">
+    <div class="title media-heading">
+      <a title="测试开发之路----框架中数据的管理策略" href="/topics/4773">测试开发之路----框架中数据的管理策略</a>
+      
+    </div>
+    <div class="info">
+      <a class="node" href="/topics/node31">其他测试框架</a>
+      •
+      <a data-author="true" data-name="孙高飞" href="/ycwdaaaa">ycwdaaaa</a>
+      <span class="hidden-mobile">
+      于 <abbr class="timeago" title="2016-05-01T18:16:30+08:00">1 天前</abbr>发布
+      •
+        最后由 <a data-name="yuweixx" href="/yuweixx">yuweixx</a> 于 <abbr class="timeago" title="2016-05-03T16:37:57+08:00">8 分钟前</abbr>回复
+      </span>
+    </div>
+  </div>
+  <div class="count media-right">
+      <a class="state-false" href="/topics/4773#reply34">34</a>
+  </div>
+</div>
+
+    <div class="topic media topic-4771">
+
+  <div class="avatar media-left">
+    <a href="/ycwdaaaa"><img class="media-object avatar-48" src="https://testerhome.com/user/large_avatar/7606.jpg" alt="7606"></a>
+  </div>
+  <div class="infos media-body">
+    <div class="title media-heading">
+      <a title="测试开发之路----概要" href="/topics/4771">测试开发之路----概要</a>
+      
+    </div>
+    <div class="info">
+      <a class="node" href="/topics/node31">其他测试框架</a>
+      •
+      <a data-author="true" data-name="孙高飞" href="/ycwdaaaa">ycwdaaaa</a>
+      <span class="hidden-mobile">
+      于 <abbr class="timeago" title="2016-05-01T15:39:52+08:00">2 天前</abbr>发布
+      •
+        最后由 <a data-name="songguo" href="/songguo">songguo</a> 于 <abbr class="timeago" title="2016-05-03T15:14:35+08:00">2 小时前</abbr>回复
+      </span>
+    </div>
+  </div>
+  <div class="count media-right">
+      <a class="state-false" href="/topics/4771#reply20">20</a>
+  </div>
+</div>
+
+        </div>
+    </div>
+    <div class="panel-footer">
+        <a href="/topics/last">查看更多...</a>
+    </div>
+</div>

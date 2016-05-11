@@ -174,7 +174,9 @@ namespace openCaseMaster.Models
         }
 
 
-
+        /// <summary>
+        /// 展开获取最后的案例
+        /// </summary>
         public static XElement getRunScript(this XElement testCase, Dictionary<string, string> param)
         {
 

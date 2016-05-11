@@ -18,12 +18,10 @@
     white-space: normal;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+#loginForm input{
+    max-width:240px;
 }
+
 
 .modal input,select{
     max-width: none;
@@ -31,3 +29,56 @@ textarea {
 }
 
 
+.bootstrap-select .btn-default,.bootstrap-select .btn-default.active {
+    border: 0px;
+    background: #FFF;
+    border-bottom: 1px solid #F3F3F3;
+    transition: none;
+    padding-bottom: 7px;
+    border-radius: 0;
+}
+
+ .avatar-48 {
+    width: 48px;
+    height: 48px;
+    border-radius: 2px
+}
+@media (max-width: 480px) {
+    .avatar-48 {
+        width:32px;
+        height: 32px
+    }
+}
+.tbui_aside_float_bar {
+
+    position: fixed;
+    bottom: 100px;
+    left:50%;
+    z-index: 1005;
+}
+.topic-detail .info .node {
+    padding: 1px 0px;
+    color: #778087;
+    text-decoration: none;
+    background-color: #f5f5f5;
+}
+.topic-detail .info a {
+    color: #444;
+}
+.topic-detail .info {
+    color: #c0c0c0;
+    font-size: 12px;
+}
+
+/*markdown 图标高亮*/
+i[name=preview],i[name=watch]{
+    color: #317DDA;
+}
+
+
+
+
+/*验证控件*/
+input.input-validation-error {
+    border: 1px dotted red;
+}

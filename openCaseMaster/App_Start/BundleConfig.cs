@@ -30,7 +30,7 @@ namespace openCaseMaster
 
 
             bundles.Add(new ScriptBundle("~/bundles/easyui").Include(
-                      "~/Scripts/jquery.easyui-1.4.3.js"));
+                      "~/Scripts/jquery.easyui-{version}.js"));
 
             bundles.Add(new StyleBundle("~/Content/easyui").Include(
                       "~/Content/themes/bootstrap/easyui.css", "~/Content/themes/icon.css"));
@@ -56,7 +56,15 @@ namespace openCaseMaster
 
 
 
-            BundleTable.EnableOptimizations = true;//不启用压缩
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap-select").Include(
+                       "~/Scripts/bootstrap-select.js"));
+
+            bundles.Add(new StyleBundle("~/Content/bootstrap-select").Include(
+                       "~/Content/bootstrap-select.css"));
+
+
+
+            BundleTable.EnableOptimizations = false;//不启用压缩
         }
     }
     /// <summary>

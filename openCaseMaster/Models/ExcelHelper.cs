@@ -115,7 +115,9 @@ namespace openCaseMaster.Models
 
         }
 
-
+        /// <summary>
+        /// 创建场景
+        /// </summary>
         public static void creatScene(Stream MS, int DemandID, string name)
         {
             QCTESTEntities QC_DB = new QCTESTEntities();
@@ -150,11 +152,64 @@ namespace openCaseMaster.Models
 
                 ISheet caseSheet = hssfworkbook.GetSheet(sheetName);
 
-                insertRunCase(QC_DB,caseSheet, mrs.ID);
+                //找不到相关案例的话直接下一条
+                int ID = Convert.ToInt32(caseSheet.SheetName);
+                M_testCase mtc = QC_DB.M_testCase.Where(t => t.ID == ID).FirstOrDefault();
+                if (mtc == null) continue;
+
+                var rts = getRunScript<M_runTestCase>(mtc, caseSheet, mrs.ID);
+                QC_DB.M_runTestCase.AddRange(rts);
 
             }
 
             QC_DB.SaveChanges();
+        }
+
+
+        public static List<tmp_TaskScript> tmpTaskScript(Stream MS)
+        {
+
+            List<tmp_TaskScript> result = new List<tmp_TaskScript>();
+            
+            HSSFWorkbook hssfworkbook = new HSSFWorkbook(MS);
+
+
+            HSSFFormulaEvaluator eva = new HSSFFormulaEvaluator(hssfworkbook);
+            //eva.EvaluateInCell(cell);//取结果不取公式
+            eva.EvaluateAll();//取结果不取公式
+
+            ISheet sheet = hssfworkbook.GetSheetAt(0);
+
+            System.Collections.IEnumerator rows = sheet.GetRowEnumerator();
+            rows.MoveNext();
+
+
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            while (rows.MoveNext())
+            {
+                IRow row = (IRow)rows.Current;
+                string sheetName = row.GetCell(1).ToString();
+                if (sheetName == null || sheetName.Trim() == "") break;
+
+                ISheet caseSheet = hssfworkbook.GetSheet(sheetName);
+
+                //找不到相关案例的话直接下一条
+                int ID = Convert.ToInt32(caseSheet.SheetName);
+                M_testCase mtc = QC_DB.M_testCase.Where(t => t.ID == ID).FirstOrDefault();
+                if (mtc == null) continue;
+
+                var rts = getRunScript<tmp_TaskScript>(mtc, caseSheet);
+                QC_DB.tmp_TaskScript.AddRange(rts);
+                result.AddRange(rts);
+
+            }
+
+            QC_DB.SaveChanges();
+
+            return result;
+
         }
 
         /// <summary>
@@ -231,6 +286,88 @@ namespace openCaseMaster.Models
               
             }
 
+
+        }
+
+
+
+        private static List<T> getRunScript<T>(M_testCase mtc, ISheet sheet, int sceneID = 0)
+            where T : class
+        {
+            List<T> result = new List<T>();
+  
+
+            int ID = Convert.ToInt32(sheet.SheetName);
+
+           
+            System.Collections.IEnumerator rows = sheet.GetRowEnumerator();
+            //读取下一行 
+            rows.MoveNext();//如果没有要处理下
+            IRow headRow = (IRow)rows.Current;
+
+
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            List<string> keys = new List<string>();
+
+            //首先获得参数列表
+            for (int i = 1; i < headRow.LastCellNum; i++)
+            {
+                ICell cell = headRow.GetCell(i);
+                if (cell == null || cell.ToString() == "") break;//有空数据直接退出
+                string key = cell.ToString();
+                data.Add(key, "");
+                keys.Add(key);
+
+            }
+
+            //逐行转化案例
+            while (rows.MoveNext())
+            {
+
+                IRow row = (IRow)rows.Current;
+                if (row.GetCell(0) == null || row.GetCell(0).StringCellValue.Trim() == "") break;//案例名字没有退出
+
+                string caseName = row.GetCell(0).StringCellValue;
+                if (caseName.Length > 50)
+                    caseName = caseName.Substring(0, 50);
+                XElement cloneXML = XElement.Parse(mtc.testXML);
+                cloneXML.SetAttributeValue("name", caseName);//name
+
+                for (int i = 0; i < keys.Count; i++)
+                {
+                    ICell cell = row.GetCell(i + 1);
+                    string value = "";
+                    if (cell != null)
+                    {
+                        //cell = eva.EvaluateInCell(cell);
+                        cell.SetCellType(CellType.String);
+                        value = cell.StringCellValue;
+                    }
+                    data[keys[i]] = value;
+                }
+
+
+                //获得最终案例
+                cloneXML.getRunScript(data);
+
+                if(typeof(T)==typeof(M_runTestCase) )
+                {
+                    M_runTestCase mrtc = new M_runTestCase();
+                    mrtc.sceneID = sceneID;
+                    mrtc.testXML = cloneXML.ToString();
+                    mrtc.name = caseName;
+                    result.Add(mrtc as T);
+                }else if(typeof(T)==typeof(tmp_TaskScript))
+                {
+                    tmp_TaskScript mrtc = new tmp_TaskScript();
+                    mrtc.title = caseName;
+                    mrtc.script = cloneXML.ToString();
+                    result.Add(mrtc as T);
+                }
+
+            }
+            return result;
 
         }
     }

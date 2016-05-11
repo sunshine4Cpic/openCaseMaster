@@ -97,37 +97,18 @@ namespace openCaseMaster.ViewModels
                 }
                 else if (pb.name == "applicationID")  //打开应用的ID,修改?
                 {
-                    QCTESTEntities QC_DB = new QCTESTEntities();
 
-                    
+                    var apps = from t in userHelper.getApps()
+                               select new
+                               {
+                                   label = t.name,
+                                   value = t.ID
+                               };
 
 
-                    if (userHelper.isAdmin())
-                    {
-                        var app = from t in QC_DB.M_application
-                                  select new
-                                  {
-                                      label = t.name,
-                                      value = t.ID
-                                  };
+                    pb.data = JsonConvert.SerializeObject(apps);
 
-                        pb.data = JsonConvert.SerializeObject(app);
-                    }
-                    else
-                    {
-                        var pjs = userHelper.getPermissionsProject().Select(t => t.ID).ToList();
-
-                        var app = from t in QC_DB.project_app
-                                  where t.usable && pjs.Contains(t.PID)
-                                  select new
-                                  {
-                                      label = t.M_application.name,
-                                      value = t.M_application.ID
-                                  };
-
-                        pb.data = JsonConvert.SerializeObject(app);
-                    }
-
+                  
                 }
 
                 pbs.Add(pb);

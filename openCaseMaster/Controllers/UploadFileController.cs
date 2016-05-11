@@ -13,7 +13,9 @@ namespace openCaseMaster.Controllers
     [Authorize(Roles = "user")]
     public class UploadFileController : Controller
     {
-
+        /// <summary>
+        /// 上传场景
+        /// </summary>
         [HttpPost]
         public void uploadScene(int id)
         {
@@ -26,6 +28,30 @@ namespace openCaseMaster.Controllers
 
             }
 
+
+        }
+
+        /// <summary>
+        /// 上传public脚本
+        /// </summary>
+        [HttpPost]
+        public JsonResult uploadTaskScript()
+        {
+
+            var stm = FileToStream();
+            if (stm != null)
+            {
+                string originalName = Request["originalName"];
+                var result = from t in ExcelHelper.tmpTaskScript(stm)
+                             select new
+                             {
+                                 ID = t.ID,
+                                 title = t.title
+                             };
+                return Json(result); 
+
+            }
+            return null;
 
         }
 

@@ -83,6 +83,39 @@
           <Property Name="DeviceID" Type="int" Nullable="false" />
           <Property Name="usable" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="M_publicTask">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="50" />
+          <Property Name="userID" Type="int" />
+          <Property Name="appID" Type="int" />
+          <Property Name="creatDate" Type="datetime" />
+          <Property Name="startDate" Type="datetime" />
+          <Property Name="endDate" Type="datetime" />
+          <Property Name="body" Type="ntext" />
+          <Property Name="state" Type="int" />
+        </EntityType>
+        <EntityType Name="M_publicTaskResult">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="deviceID" Type="int" />
+          <Property Name="result" Type="xml" />
+          <Property Name="creatDate" Type="datetime" />
+          <Property Name="state" Type="int" />
+        </EntityType>
+        <EntityType Name="M_publicTaskScript">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="50" />
+          <Property Name="script" Type="xml" />
+          <Property Name="taskID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="M_runScene">
           <Key>
             <PropertyRef Name="ID" />
@@ -170,6 +203,14 @@
           <Property Name="appID" Type="int" Nullable="false" />
           <Property Name="PID" Type="int" Nullable="false" />
           <Property Name="usable" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tmp_TaskScript">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="50" />
+          <Property Name="script" Type="xml" />
         </EntityType>
         <EntityType Name="user_type">
           <Key>
@@ -265,6 +306,54 @@
             </Principal>
             <Dependent Role="M_DevProMapping">
               <PropertyRef Name="PID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_publicTaskResult_deviceID">
+          <End Role="M_deviceConfig" Type="Self.M_deviceConfig" Multiplicity="0..1" />
+          <End Role="M_publicTaskResult" Type="Self.M_publicTaskResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_deviceConfig">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_publicTaskResult">
+              <PropertyRef Name="deviceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_publicTaskScript_taskID">
+          <End Role="M_publicTask" Type="Self.M_publicTask" Multiplicity="1" />
+          <End Role="M_publicTaskScript" Type="Self.M_publicTaskScript" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_publicTask">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_publicTaskScript">
+              <PropertyRef Name="taskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_publicTest_appID">
+          <End Role="M_application" Type="Self.M_application" Multiplicity="0..1" />
+          <End Role="M_publicTask" Type="Self.M_publicTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_application">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_publicTask">
+              <PropertyRef Name="appID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_publicTest_userID">
+          <End Role="admin_user" Type="Self.admin_user" Multiplicity="0..1" />
+          <End Role="M_publicTask" Type="Self.M_publicTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin_user">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_publicTask">
+              <PropertyRef Name="userID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -510,6 +599,9 @@
           <EntitySet Name="M_application" EntityType="Self.M_application" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_deviceConfig" EntityType="Self.M_deviceConfig" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_DevProMapping" EntityType="Self.M_DevProMapping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_publicTask" EntityType="Self.M_publicTask" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_publicTaskResult" EntityType="Self.M_publicTaskResult" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_publicTaskScript" EntityType="Self.M_publicTaskScript" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_runScene" EntityType="Self.M_runScene" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_runTestCase" EntityType="Self.M_runTestCase" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_testCase" EntityType="Self.M_testCase" Schema="dbo" store:Type="Tables" />
@@ -517,6 +609,7 @@
           <EntitySet Name="M_testDemand" EntityType="Self.M_testDemand" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project" EntityType="Self.project" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project_app" EntityType="Self.project_app" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tmp_TaskScript" EntityType="Self.tmp_TaskScript" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user_type" EntityType="Self.user_type" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_admin_log_admin_log" Association="Self.FK_admin_log_admin_log">
             <End Role="admin_user" EntitySet="admin_user" />
@@ -545,6 +638,22 @@
           <AssociationSet Name="FK_M_DevProMapping_project" Association="Self.FK_M_DevProMapping_project">
             <End Role="project" EntitySet="project" />
             <End Role="M_DevProMapping" EntitySet="M_DevProMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_publicTaskResult_deviceID" Association="Self.FK_M_publicTaskResult_deviceID">
+            <End Role="M_deviceConfig" EntitySet="M_deviceConfig" />
+            <End Role="M_publicTaskResult" EntitySet="M_publicTaskResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_publicTaskScript_taskID" Association="Self.FK_M_publicTaskScript_taskID">
+            <End Role="M_publicTask" EntitySet="M_publicTask" />
+            <End Role="M_publicTaskScript" EntitySet="M_publicTaskScript" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_publicTest_appID" Association="Self.FK_M_publicTest_appID">
+            <End Role="M_application" EntitySet="M_application" />
+            <End Role="M_publicTask" EntitySet="M_publicTask" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_publicTest_userID" Association="Self.FK_M_publicTest_userID">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="M_publicTask" EntitySet="M_publicTask" />
           </AssociationSet>
           <AssociationSet Name="FK_M_runScene_admin_user" Association="Self.FK_M_runScene_admin_user">
             <End Role="admin_user" EntitySet="admin_user" />
@@ -765,6 +874,26 @@
             <End Role="admin_user" EntitySet="admin_user" />
             <End Role="project" EntitySet="project" />
           </AssociationSet>
+          <EntitySet Name="M_publicTask" EntityType="MasterModel.M_publicTask" />
+          <AssociationSet Name="FK_M_publicTest_userID" Association="MasterModel.FK_M_publicTest_userID">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="M_publicTask" EntitySet="M_publicTask" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_publicTest_appID" Association="MasterModel.FK_M_publicTest_appID">
+            <End Role="M_application" EntitySet="M_application" />
+            <End Role="M_publicTask" EntitySet="M_publicTask" />
+          </AssociationSet>
+          <EntitySet Name="M_publicTaskResult" EntityType="MasterModel.M_publicTaskResult" />
+          <EntitySet Name="M_publicTaskScript" EntityType="MasterModel.M_publicTaskScript" />
+          <EntitySet Name="tmp_TaskScript" EntityType="MasterModel.tmp_TaskScript" />
+          <AssociationSet Name="FK_M_publicTaskResult_deviceID" Association="MasterModel.FK_M_publicTaskResult_deviceID">
+            <End Role="M_deviceConfig" EntitySet="M_deviceConfig" />
+            <End Role="M_publicTaskResult" EntitySet="M_publicTaskResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_publicTaskScript_taskID" Association="MasterModel.FK_M_publicTaskScript_taskID">
+            <End Role="M_publicTask" EntitySet="M_publicTask" />
+            <End Role="M_publicTaskScript" EntitySet="M_publicTaskScript" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="M_ContainUserStepCase_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -805,6 +934,7 @@
           <NavigationProperty Name="caseFramework" Relationship="MasterModel.FK_caseFramework_userID" FromRole="admin_user" ToRole="caseFramework" />
           <NavigationProperty Name="M_runScene" Relationship="MasterModel.FK_M_runScene_admin_user" FromRole="admin_user" ToRole="M_runScene" />
           <NavigationProperty Name="project" Relationship="MasterModel.FK_project_userID" FromRole="admin_user" ToRole="project" />
+          <NavigationProperty Name="M_publicTask" Relationship="MasterModel.FK_M_publicTest_userID" FromRole="admin_user" ToRole="M_publicTask" />
         </EntityType>
         <EntityType Name="caseFramework">
           <Key>
@@ -843,6 +973,7 @@
           <Property Name="package2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="isClear" Type="Boolean" />
           <NavigationProperty Name="project_app" Relationship="MasterModel.FK_project_app_appID" FromRole="M_application" ToRole="project_app" />
+          <NavigationProperty Name="M_publicTask" Relationship="MasterModel.FK_M_publicTest_appID" FromRole="M_application" ToRole="M_publicTask" />
         </EntityType>
         <EntityType Name="M_deviceConfig">
           <Key>
@@ -858,6 +989,7 @@
           <Property Name="Brand" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="M_DevProMapping" Relationship="MasterModel.FK_M_DevProMapping_M_deviceConfig" FromRole="M_deviceConfig" ToRole="M_DevProMapping" />
           <NavigationProperty Name="M_runScene" Relationship="MasterModel.FK_M_runScene_M_deviceConfig" FromRole="M_deviceConfig" ToRole="M_runScene" />
+          <NavigationProperty Name="M_publicTaskResult" Relationship="MasterModel.FK_M_publicTaskResult_deviceID" FromRole="M_deviceConfig" ToRole="M_publicTaskResult" />
         </EntityType>
         <EntityType Name="M_DevProMapping">
           <Key>
@@ -1238,6 +1370,100 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="M_publicTask">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="userID" Type="Int32" />
+          <Property Name="appID" Type="Int32" />
+          <Property Name="creatDate" Type="DateTime" Precision="3" />
+          <Property Name="endDate" Type="DateTime" Precision="3" />
+          <Property Name="body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_M_publicTest_userID" FromRole="M_publicTask" ToRole="admin_user" />
+          <NavigationProperty Name="M_application" Relationship="MasterModel.FK_M_publicTest_appID" FromRole="M_publicTask" ToRole="M_application" />
+          <Property Name="startDate" Type="DateTime" Precision="3" />
+          <Property Name="state" Type="Int32" />
+          <NavigationProperty Name="M_publicTaskScript" Relationship="MasterModel.FK_M_publicTaskScript_taskID" FromRole="M_publicTask" ToRole="M_publicTaskScript" />
+        </EntityType>
+        <Association Name="FK_M_publicTest_userID">
+          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="0..1" />
+          <End Type="MasterModel.M_publicTask" Role="M_publicTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin_user">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_publicTask">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_publicTest_appID">
+          <End Type="MasterModel.M_application" Role="M_application" Multiplicity="0..1" />
+          <End Type="MasterModel.M_publicTask" Role="M_publicTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_application">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_publicTask">
+              <PropertyRef Name="appID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="M_publicTaskResult">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="deviceID" Type="Int32" />
+          <Property Name="result" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="creatDate" Type="DateTime" Precision="3" />
+          <Property Name="state" Type="Int32" />
+          <NavigationProperty Name="M_deviceConfig" Relationship="MasterModel.FK_M_publicTaskResult_deviceID" FromRole="M_publicTaskResult" ToRole="M_deviceConfig" />
+        </EntityType>
+        <EntityType Name="M_publicTaskScript">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="script" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="taskID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="M_publicTask" Relationship="MasterModel.FK_M_publicTaskScript_taskID" FromRole="M_publicTaskScript" ToRole="M_publicTask" />
+        </EntityType>
+        <EntityType Name="tmp_TaskScript">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="script" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_M_publicTaskResult_deviceID">
+          <End Type="MasterModel.M_deviceConfig" Role="M_deviceConfig" Multiplicity="0..1" />
+          <End Type="MasterModel.M_publicTaskResult" Role="M_publicTaskResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_deviceConfig">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_publicTaskResult">
+              <PropertyRef Name="deviceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_publicTaskScript_taskID">
+          <End Type="MasterModel.M_publicTask" Role="M_publicTask" Multiplicity="1" />
+          <End Type="MasterModel.M_publicTaskScript" Role="M_publicTaskScript" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_publicTask">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_publicTaskScript">
+              <PropertyRef Name="taskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1469,6 +1695,51 @@
             <EntityTypeMapping TypeName="MasterModel.user_type">
               <MappingFragment StoreEntitySet="user_type">
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_publicTask">
+            <EntityTypeMapping TypeName="MasterModel.M_publicTask">
+              <MappingFragment StoreEntitySet="M_publicTask">
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="startDate" ColumnName="startDate" />
+                <ScalarProperty Name="body" ColumnName="body" />
+                <ScalarProperty Name="endDate" ColumnName="endDate" />
+                <ScalarProperty Name="creatDate" ColumnName="creatDate" />
+                <ScalarProperty Name="appID" ColumnName="appID" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_publicTaskResult">
+            <EntityTypeMapping TypeName="MasterModel.M_publicTaskResult">
+              <MappingFragment StoreEntitySet="M_publicTaskResult">
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="creatDate" ColumnName="creatDate" />
+                <ScalarProperty Name="result" ColumnName="result" />
+                <ScalarProperty Name="deviceID" ColumnName="deviceID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_publicTaskScript">
+            <EntityTypeMapping TypeName="MasterModel.M_publicTaskScript">
+              <MappingFragment StoreEntitySet="M_publicTaskScript">
+                <ScalarProperty Name="taskID" ColumnName="taskID" />
+                <ScalarProperty Name="script" ColumnName="script" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tmp_TaskScript">
+            <EntityTypeMapping TypeName="MasterModel.tmp_TaskScript">
+              <MappingFragment StoreEntitySet="tmp_TaskScript">
+                <ScalarProperty Name="script" ColumnName="script" />
+                <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

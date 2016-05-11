@@ -86,6 +86,39 @@ namespace openCaseMaster.Models
 
             return cfs;
         }
+
+
+        /// <summary>
+        /// 获取可编辑的app
+        /// </summary>
+        /// <returns></returns>
+        public static IQueryable<M_application> getApps()
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            IQueryable<M_application> apps;
+
+            if (userHelper.isAdmin())
+            {
+                apps = QC_DB.M_application;
+                
+            }
+            else
+            {
+
+                int[] pjs = userHelper.getUserPermission();
+
+
+
+                apps = from t in QC_DB.project_app
+                          where t.usable && pjs.Contains(t.PID)
+                          select t.M_application;
+
+               
+            }
+
+            return apps;
+        }
        
     }
 }
