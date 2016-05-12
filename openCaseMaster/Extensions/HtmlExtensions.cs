@@ -19,14 +19,14 @@ namespace System.Web.Mvc
             sb.Append("<li class=\"prev previous_page\"><a rel=\"prev\" href=\"?page=" + prev + "\">← 上一页</a></li>");
 
             if(page==1)
-                sb.Append("<li class=\"active\"><a rel=\"start\" href=\"?page=1\">1</a></li>");
+                sb.Append(PaginationLi(1,true));
             else
-                sb.Append("<li><a rel=\"start\" href=\"?page=1\">1</a></li>");
+                sb.Append(PaginationLi(1));
 
             if (page == 2)
-                sb.Append("<li class=\"active\"><a href=\"?page=2\">2</a></li>");
+                sb.Append(PaginationLi(2,true));
             else
-                sb.Append("<li><a href=\"?page=2\">2</a></li>");
+                sb.Append(PaginationLi(2));
 
          
 
@@ -34,6 +34,8 @@ namespace System.Web.Mvc
 
             if (start > 3)
                 sb.Append("<li class=\"disabled\"><a href=\"#\">…</a></li>");
+            
+
 
             for (int i = 0; i < 5; i++)
             {
@@ -41,11 +43,14 @@ namespace System.Web.Mvc
                 if (pg > 2)
                 {
                     if (pg==page)
-                        sb.Append("<li class=\"active\"><a href=\"?page=" + pg + "\">" + pg + "</a></li>");
+                        sb.Append(PaginationLi(pg,true));
                     else
-                        sb.Append("<li><a href=\"?page=" + pg + "\">" + pg + "</a></li>");
+                        sb.Append(PaginationLi(pg));
                 }
             }
+
+
+            
 
             sb.Append("<li class=\"disabled\"><a href=\"#\">…</a></li>");
 
@@ -58,7 +63,13 @@ namespace System.Web.Mvc
             return new HtmlString(sb.ToString());
         }
 
-
+        private static string PaginationLi(int pg, bool active = false)
+        {
+            if (active)
+                return "<li class=\"active\"><a href=\"?page=" + pg + "\">" + pg + "</a></li>";
+            else
+                return "<li><a href=\"?page=" + pg + "\">" + pg + "</a></li>";
+        }
         
     }
 

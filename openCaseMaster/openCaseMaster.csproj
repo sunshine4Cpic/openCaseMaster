@@ -1439,7 +1439,6 @@
     <Content Include="Views\PublicTask\Index.cshtml" />
     <Content Include="Views\PublicTask\add.cshtml" />
     <Content Include="Views\PublicTask\Task.cshtml" />
-    <Content Include="Views\Shared\_Pagination.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
