@@ -1,14 +1,13 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
-    background: #f6f6f6
+    background: #f6f6f6;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
-
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -18,18 +17,18 @@
     white-space: normal;
 }
 
-#loginForm input{
-    max-width:240px;
+#loginForm input {
+    max-width: 240px;
 }
 
 
-.modal input,select{
+.modal input, select {
     max-width: none;
-    font-size:14px;
+    font-size: 14px;
 }
 
 
-.bootstrap-select .btn-default,.bootstrap-select .btn-default.active {
+.bootstrap-select .btn-default, .bootstrap-select .btn-default.active {
     border: 0px;
     background: #FFF;
     border-bottom: 1px solid #F3F3F3;
@@ -39,48 +38,79 @@
 }
 
 /*testerhome css*/
- .avatar-48 {
+.avatar-48 {
     width: 48px;
     height: 48px;
-    border-radius: 2px
+    border-radius: 2px;
 }
+
 @media (max-width: 480px) {
     .avatar-48 {
-        width:32px;
-        height: 32px
+        width: 32px;
+        height: 32px;
     }
-}
-.tbui_aside_float_bar {
+    .pagination {
+        display: block;
+    }
+    .pagination li {
+        display: none;
+    }
 
+        .pagination li.prev, .pagination li.next {
+            float: left;
+            display: block;
+        }
+
+        .pagination li.next {
+            float: right;
+        }
+}
+.panel-footer {
+    padding: 10px 15px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+.pagination {
+    margin: 0;
+}
+
+.tbui_aside_float_bar {
     position: fixed;
     bottom: 100px;
-    left:50%;
+    left: 50%;
     z-index: 1005;
 }
+
 .topic-detail .info .node {
     padding: 1px 0px;
     color: #778087;
     text-decoration: none;
     background-color: #f5f5f5;
 }
+
 .topic-detail .info a {
     color: #444;
 }
+
 .topic-detail .info {
     color: #c0c0c0;
     font-size: 12px;
 }
+
 .topics .topic .info {
     color: #aaa;
     font-size: 12px;
     margin-top: 10px;
 }
-.topics .topic .info .node {
-    padding: 1px 5px;
-    color: #778087;
-    text-decoration: none;
-    background-color: #f5f5f5;
-}
+
+    .topics .topic .info .node {
+        padding: 1px 5px;
+        color: #778087;
+        text-decoration: none;
+        background-color: #f5f5f5;
+    }
 
 .topics .topic {
     min-height: 68px;
@@ -91,19 +121,20 @@
     position: relative;
 }
 
-.topics .topic .count a:link {
-    background: #98ACDF;
-}
+    .topics .topic .state-false {
+        background: #98ACDF;
+    }
 
-.topics .topic .count a:link, .topics .topic .count a:hover, .topics .topic .count a:visited {
-    line-height: 12px;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 80px;
-    padding: 2px 10px 2px 10px;
-    display: inline-block;
-    text-decoration: none;
-}
+    .topics .topic .state-false {
+        line-height: 12px;
+        color: #fff;
+        font-weight: bold;
+        border-radius: 80px;
+        padding: 2px 10px 2px 10px;
+        display: inline-block;
+        text-decoration: none;
+    }
+
 .avatar .uface, .avatar .media-object {
     border-radius: 120px;
 }
@@ -119,8 +150,11 @@
 }
 
 
+
+
+
 /*markdown 图标高亮*/
-i[name=preview],i[name=watch]{
+i[name=preview], i[name=watch] {
     color: #317DDA;
 }
 
