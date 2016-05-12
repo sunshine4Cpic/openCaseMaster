@@ -1,4 +1,4 @@
-﻿﻿using openCaseMaster.Models;
+﻿using openCaseMaster.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +10,6 @@ namespace openCaseMaster.ViewModels
     public class caseRecordModel
     {
         public List<caseRecordStep> xrs;
-
-
 
         public string caseName { get; set; }
 
@@ -29,34 +27,30 @@ namespace openCaseMaster.ViewModels
                 xe = XElement.Parse(mt.testXML);
 
             xrs = new List<caseRecordStep>();
-            foreach (var x in xe.Descendants("Step"))
+            foreach(var x in xe.Descendants("Step"))
             {
                 var rs = new caseRecordStep(x);
-                if (rs.Photo != null)
+                if (rs.Photo!=null)
                     rs.Photo = this.resultPath + rs.Photo;
-
+                //rs.Photo = "~/apkInstall/9ebe59c658c9c5c5ecdd8593e4025321.jpg";
                 xrs.Add(rs);
-
             }
-
             if (mt.resultXML == null) return;
 
-            var fail = new caseRecordStep();
-            fail.desc = "失败步骤";
-            fail.ResultStatic = "2";
-            fail.name = "失败截图";
 
             var runOK = xrs.Where(t => t.ResultStatic == "1").Count();
             var cnt = xrs.Count;
 
             if (runOK != cnt)
             {
+                var fail = new caseRecordStep();
+                fail.desc = "失败步骤";
+                fail.ResultStatic = "2";
+                fail.name = "失败截图";
                 fail.Photo = this.resultPath + "fail.jpg";
+                xrs.Add(fail);
 
             }
-            xrs.Add(fail);
-
-
         }
     }
 
@@ -64,19 +58,15 @@ namespace openCaseMaster.ViewModels
     {
         public caseRecordStep()
         { }
-
         public caseRecordStep(XElement xe)
         {
-
             this.stepX = xe;
 
             name = xe.Attribute("name").Value;
             desc = xe.Attribute("desc").Value;
-
-
             if (xe.Attribute("Photo") != null)
                 Photo = xe.Attribute("Photo").Value;
-
+            //Photo = "/test/1_20151103142525.jpg",
             ResultStatic = (string)xe.Attribute("ResultStatic");
             ResultMsg = (string)xe.Attribute("ResultMsg");
         }
