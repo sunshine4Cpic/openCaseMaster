@@ -1,5 +1,5 @@
 ﻿@using openCaseMaster.ViewModels
-@model taskModel
+@model taskModel_add
 
 @section Scripts {
     @Styles.Render("~/Content/bootstrap-select")
@@ -21,12 +21,10 @@
     <script src="~/Scripts/locale/bootstrap-datetimepicker.zh-CN.js"></script>
     <link href="/Content/bootstrap-datetimepicker.css" rel="stylesheet">
 
-    <script>
+    <script type="text/javascript">
 
         var testEditor;
         $(function () {
-
-
 
             var l = Ladda.create(document.getElementById("uploadF"));
             //实例化一个plupload上传对象
@@ -115,13 +113,7 @@
                 td2.innerHTML = p.title;
                 $("#scriptTable tbody").append(tr);
             }
-
-
         }
-
-
-
-
     </script>
 
 
@@ -134,27 +126,17 @@
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-
+    
+    @Html.ValidationMessageFor(m => m.appID, "", new { @class = "text-danger" })
     <div class="panel panel-default">
         <div class="panel-heading">发布新任务</div>
         <div class="panel-body">
-
-
-
-
             <div class="form-group">
                 <div class="input-group">
                     <span class="node-select input-group-btn">
-
-
                         @Html.DropDownListFor(t => t.appID, ViewBag.apps as List<SelectListItem>, new { @class = "selectpicker",@data_live_search="true",@data_width="140px" })
-
-
-                        
                     </span>
                     @Html.TextBoxFor(m => m.title, new { @class = "form-control", @placeholder = "在这里填写标题" })
-
                 </div>
             </div>
 
@@ -178,8 +160,8 @@
 
                         <div class="row">
                             <label class="col-md-2 control-label">开始时间</label>
-                            <div class="input-append date form_date col-md-4" data-date="2013-02-21T15:25:00Z" style="display: table;">
-                                <input size="16" class="form-control" type="text" value="" name="startDate" readonly>
+                            <div class="input-append date form_date col-md-4" style="display: table;">
+                                @Html.TextBoxFor(m => m.startDate, new { @class = "form-control", @size = "16", @readOnly = "readOnly" })
                                 <span class="add-on input-group-addon"><span class="icon-remove glyphicon glyphicon-remove"></span></span>
                                 <span class="add-on input-group-addon"><span class="icon-calendar glyphicon glyphicon-calendar"></span></span>
                             </div>
@@ -189,8 +171,9 @@
                         <br />
                         <div class="row">
                             <label class="col-md-2 control-label">结束时间</label>
-                            <div class="input-append date form_date col-md-4" data-date="2013-02-21T15:25:00Z" style="display: table;">
-                                <input size="16" class="form-control" type="text" value="" name="endDate" readonly>
+                            <div class="input-append date form_date col-md-4" style="display: table;">
+                                @Html.TextBoxFor(m => m.endDate, new { @class = "form-control", @size = "16", @readOnly = "readOnly" })
+                                
                                 <span class="add-on input-group-addon"><span class="icon-remove glyphicon glyphicon-remove"></span></span>
                                 <span class="add-on input-group-addon"><span class="icon-calendar glyphicon glyphicon-calendar"></span></span>
                             </div>
@@ -218,11 +201,10 @@
             </div>
             <br />
             <div class="form-group">
-                <input type="submit" value="保存" class="btn btn-default" />
+                <input type="submit" value="保存" class="btn btn-primary col-xs-2" />
 
                 <div class="pull-right"><a href="/markdown/help" target="_blank"><i class="fa fa-tip"></i> 排版说明</a></div>
             </div>
-
 
 
         </div>
@@ -243,5 +225,7 @@
         minView: 1,
     });
 
+
+    
 
 </script>

@@ -22,12 +22,12 @@ namespace openCaseMaster.Models
     
         public int ID { get; set; }
         public string title { get; set; }
-        public Nullable<int> userID { get; set; }
+        public int userID { get; set; }
         public Nullable<int> appID { get; set; }
-        public Nullable<System.DateTime> creatDate { get; set; }
+        public System.DateTime creatDate { get; set; }
+        public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
         public string body { get; set; }
-        public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<int> state { get; set; }
     
         public virtual admin_user admin_user { get; set; }

@@ -59,10 +59,6 @@
       <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MarkdownSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MarkdownSharp.1.13.0.0\lib\35\MarkdownSharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="M_runClient">
       <HintPath>..\packages\M_runClient.dll</HintPath>
@@ -213,6 +209,9 @@
     <Compile Include="Models\admin_log.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\admin_user.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\caseFramework.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
@@ -220,9 +219,6 @@
     <Compile Include="Models\Extend_caseFramework.cs" />
     <Compile Include="Models\Extend_Framework4Project.cs" />
     <Compile Include="Models\Extend_M_testCase.cs" />
-    <Compile Include="Models\admin_user.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Extend_M_testDemand.cs" />
     <Compile Include="Models\Extend_M_testCaseSteps.cs" />
     <Compile Include="Models\Framework4Project.cs">
@@ -346,6 +342,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\docs.min.css" />
     <Content Include="Content\editormd.css" />
+    <Content Include="Content\editormd.preview.css" />
     <Content Include="Content\help\buildUserStep.png" />
     <Content Include="Content\help\changeAndSaveStep.gif" />
     <Content Include="Content\help\creatDemand-1.gif" />
@@ -367,6 +364,7 @@
     <Content Include="Content\help\startUpClient.gif" />
     <Content Include="Content\help\useUserStep.png" />
     <Content Include="Content\help\workwork.jpg" />
+    <Content Include="Content\images\everyone.jpg" />
     <Content Include="Content\images\loading%402x.gif" />
     <Content Include="Content\images\loading%403x.gif" />
     <Content Include="Content\images\loading.gif" />
@@ -1440,6 +1438,7 @@
     <Content Include="Views\PublicTask\Index.cshtml" />
     <Content Include="Views\PublicTask\add.cshtml" />
     <Content Include="Views\PublicTask\Task.cshtml" />
+    <Content Include="Views\Shared\_Pagination.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
