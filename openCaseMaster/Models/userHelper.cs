@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
+using System.Web.Mvc;
 using System.Web.Security;
 
 namespace openCaseMaster.Models
@@ -63,9 +64,9 @@ namespace openCaseMaster.Models
             }
         }
 
-        public static bool isAdmin()
+        public static bool isAdmin
         {
-            return HttpContext.Current.User.IsInRole("admin");
+            get { return HttpContext.Current.User.IsInRole("admin"); }
         }
 
         /// <summary>
@@ -98,7 +99,7 @@ namespace openCaseMaster.Models
 
             IQueryable<M_application> apps;
 
-            if (userHelper.isAdmin())
+            if (userHelper.isAdmin)
             {
                 apps = QC_DB.M_application;
                 
@@ -118,6 +119,35 @@ namespace openCaseMaster.Models
             }
 
             return apps;
+        }
+
+        /// <summary>
+        /// 获取可编辑节点
+        /// </summary>
+        /// <returns></returns>
+        public static List<SelectListItem> editNodes()
+        {
+            List<SelectListItem> SLI = new List<SelectListItem>();
+
+            SelectListGroup slg = new SelectListGroup();
+            slg.Name = "可选节点";
+
+            SLI.Add(new SelectListItem { Text = "欢乐吐槽", Value = "0", Group = slg });
+            SLI.Add(new SelectListItem { Text = "心得经验", Value = "2", Group = slg });
+            SLI.Add(new SelectListItem { Text = "BUG反馈", Value = "3", Group = slg });
+            SLI.Add(new SelectListItem { Text = "意见和建议", Value = "4", Group = slg });
+
+            
+
+            if (isAdmin)
+            {
+                SelectListGroup slgTask = new SelectListGroup();
+                slgTask.Name = "测试任务";
+                SLI.Add(new SelectListItem { Text = "测试任务", Value = "1", Group = slgTask });
+            }
+            SLI.Insert(0, new SelectListItem { Text = "请选择节点", Value = "" });
+            return SLI;
+            
         }
        
     }

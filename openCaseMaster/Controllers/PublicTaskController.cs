@@ -17,9 +17,11 @@ namespace openCaseMaster.Controllers
         [AllowAnonymous]
         public ActionResult Index(int page=1)
         {
+         
             QCTESTEntities QC_DB = new QCTESTEntities();
 
             var lsv = from t in QC_DB.M_publicTask
+                      orderby t.ID
                       select new taskModel_view
                       {
                           ID = t.ID,
@@ -31,46 +33,45 @@ namespace openCaseMaster.Controllers
                       };
             ViewBag.select = "Index";
             ViewBag.page = page;
-            return View(lsv.ToList());
+            int rows = 20;
+            return View(lsv.Skip(rows * (page - 1)).Take(rows).ToList());
         }
 
         [HttpGet]
         public ActionResult add()
         {
 
-            SelectListGroup slg = new SelectListGroup();
-            slg.Name = "可选应用";
-
-            var apps = (from t in userHelper.getApps()
-                       select new SelectListItem
-                       {
-                           Text = t.name,
-                           Value = t.ID.ToString(),
-                           //Group = slg
-                       }).ToList();
-
-            
-            apps.ForEach(t => t.Group = slg);
-            apps.Insert(0, new SelectListItem { Text = "请选择被测应用", Value = "" });
-
-           // var apps = userHelper.getApps().ToDictionary(k => k.ID, v => v.name);
-            ViewBag.apps = apps;
-
-            return View();
+            ViewBag.nodes = userHelper.editNodes();
+            if (userHelper.isAdmin)
+            {
+                appSelectItem();
+                return View("adminAdd");
+            }
+            else
+                return View("add");
         }
 
         [HttpPost]
         public ActionResult add(taskModel_add tm)
         {
-           
-
-            if (!ModelState.IsValid)
+            //这样实现总感觉怪怪的
+            string view = "add";
+            if (userHelper.isAdmin)
+                view = "adminAdd";
+          
+            if (!ModelState.IsValid)//验证模型
             {
-                var apps = userHelper.getApps().ToDictionary(k => k.ID, v => v.name);
-                ViewBag.apps = apps;
-
-                return View(tm);
+                if (userHelper.isAdmin) appSelectItem();
+                return View(view,tm);
             }
+
+            if(!userHelper.isAdmin && tm.node==1)//非admin 用户无法添加 测试任务
+            {
+                return View(view, tm);
+            }
+
+            //开始操作
+
             QCTESTEntities QC_DB = new QCTESTEntities();
 
             M_publicTask pt = new M_publicTask();
@@ -82,24 +83,27 @@ namespace openCaseMaster.Controllers
 
             QC_DB.M_publicTask.Add(pt);
 
-            //解析json
-
-            var ja = JArray.Parse(tm.scripts);
-            foreach (var j in ja.Children<JObject>())
+            //解析json,添加script
+            if (tm.node == 1)
             {
+                var ja = JArray.Parse(tm.scripts);
+                foreach (var j in ja.Children<JObject>())
+                {
 
-                int ID = Convert.ToInt32(j["ID"].ToString());
-                var tmp = QC_DB.tmp_TaskScript.FirstOrDefault(t => t.ID == ID);
-                if (tmp == null) continue;
+                    int ID = Convert.ToInt32(j["ID"].ToString());
+                    var tmp = QC_DB.tmp_TaskScript.FirstOrDefault(t => t.ID == ID);
+                    if (tmp == null) continue;
 
-                M_publicTaskScript ts = new M_publicTaskScript();
-                ts.taskID = pt.ID;
-                ts.title = tmp.title;
-                ts.script = tmp.script;
+                    M_publicTaskScript ts = new M_publicTaskScript();
+                    ts.taskID = pt.ID;
+                    ts.title = tmp.title;
+                    ts.script = tmp.script;
 
-                QC_DB.M_publicTaskScript.Add(ts);
-                QC_DB.tmp_TaskScript.Remove(tmp);
+                    QC_DB.M_publicTaskScript.Add(ts);
+                    QC_DB.tmp_TaskScript.Remove(tmp);
+                }
             }
+
             QC_DB.SaveChanges();
 
             TempData["add"] = true;
@@ -107,6 +111,30 @@ namespace openCaseMaster.Controllers
             return RedirectToAction(pt.ID.ToString(), "PublicTask");
             
         }
+
+        /// <summary>
+        /// 初始化 可选app
+        /// </summary>
+        [NonAction]
+        private void appSelectItem()
+        {
+            SelectListGroup slg = new SelectListGroup();
+            slg.Name = "可选应用";
+
+            var apps = (from t in userHelper.getApps()
+                        select new SelectListItem
+                        {
+                            Text = t.name,
+                            Value = t.ID.ToString()
+                        }).ToList();
+
+
+            apps.ForEach(t => t.Group = slg);
+            apps.Insert(0, new SelectListItem { Text = "请选择被测应用", Value = "" });
+            ViewBag.apps = apps;
+        }
+
+    
 
         [Route("{control}/{id:int}")]
         public ActionResult Task(int id)

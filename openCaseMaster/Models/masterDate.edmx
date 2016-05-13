@@ -89,13 +89,14 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="body" Type="ntext" />
           <Property Name="userID" Type="int" Nullable="false" />
+          <Property Name="node" Type="int" />
+          <Property Name="state" Type="int" />
           <Property Name="appID" Type="int" />
           <Property Name="creatDate" Type="datetime" Nullable="false" />
           <Property Name="startDate" Type="datetime" />
           <Property Name="endDate" Type="datetime" />
-          <Property Name="body" Type="ntext" />
-          <Property Name="state" Type="int" />
         </EntityType>
         <EntityType Name="M_publicTaskResult">
           <Key>
@@ -1417,13 +1418,14 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="userID" Type="Int32" Nullable="false" />
+          <Property Name="node" Type="Int32" />
+          <Property Name="state" Type="Int32" />
           <Property Name="appID" Type="Int32" />
           <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="startDate" Type="DateTime" Precision="3" />
           <Property Name="endDate" Type="DateTime" Precision="3" />
-          <Property Name="body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="state" Type="Int32" />
           <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_M_publicTest_userID" FromRole="M_publicTask" ToRole="admin_user" />
           <NavigationProperty Name="M_application" Relationship="MasterModel.FK_M_publicTest_appID" FromRole="M_publicTask" ToRole="M_application" />
           <NavigationProperty Name="M_publicTaskScript" Relationship="MasterModel.FK_M_publicTaskScript_taskID" FromRole="M_publicTask" ToRole="M_publicTaskScript" />
@@ -1732,13 +1734,14 @@
           <EntitySetMapping Name="M_publicTask">
             <EntityTypeMapping TypeName="MasterModel.M_publicTask">
               <MappingFragment StoreEntitySet="M_publicTask">
-                <ScalarProperty Name="state" ColumnName="state" />
-                <ScalarProperty Name="body" ColumnName="body" />
                 <ScalarProperty Name="endDate" ColumnName="endDate" />
                 <ScalarProperty Name="startDate" ColumnName="startDate" />
                 <ScalarProperty Name="creatDate" ColumnName="creatDate" />
                 <ScalarProperty Name="appID" ColumnName="appID" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="node" ColumnName="node" />
                 <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="body" ColumnName="body" />
                 <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>

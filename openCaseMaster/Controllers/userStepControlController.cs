@@ -110,7 +110,7 @@ namespace openCaseMaster.Controllers
 
            
          
-            //nmtc.userID = userHelper.getUserID();
+            //nmtc.userID = userHelper.getUserID()
             nmtc.name = name;
             nmtc.stepXML = stepXML.ToString();
 

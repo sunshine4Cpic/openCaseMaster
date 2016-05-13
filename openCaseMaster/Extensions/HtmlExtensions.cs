@@ -16,6 +16,13 @@ namespace System.Web.Mvc
 
 
             StringBuilder sb = new StringBuilder();
+
+            sb.Append("<div class=\"panel-footer clearfix\"><ul class=\"pagination\">");
+
+            
+              
+
+
             sb.Append("<li class=\"prev previous_page\"><a rel=\"prev\" href=\"?page=" + prev + "\">← 上一页</a></li>");
 
             if(page==1)
@@ -59,6 +66,8 @@ namespace System.Web.Mvc
 
 
             sb.Append("<li class=\"next next_page\"><a rel=\"next\" href=\"?page=" + next + "\">下一页 →</a></li>");
+
+            sb.Append(" </ul></div>");
 
             return new HtmlString(sb.ToString());
         }

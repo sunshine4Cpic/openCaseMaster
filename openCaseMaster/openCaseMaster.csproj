@@ -365,6 +365,7 @@
     <Content Include="Content\help\startUpClient.gif" />
     <Content Include="Content\help\useUserStep.png" />
     <Content Include="Content\help\workwork.jpg" />
+    <Content Include="Content\images\app.jpg" />
     <Content Include="Content\images\everyone.jpg" />
     <Content Include="Content\images\loading%402x.gif" />
     <Content Include="Content\images\loading%403x.gif" />
@@ -1439,6 +1440,7 @@
     <Content Include="Views\PublicTask\Index.cshtml" />
     <Content Include="Views\PublicTask\add.cshtml" />
     <Content Include="Views\PublicTask\Task.cshtml" />
+    <Content Include="Views\PublicTask\adminAdd.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
