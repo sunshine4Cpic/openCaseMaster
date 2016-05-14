@@ -76,6 +76,11 @@
                 theme: "dark",
                 //previewTheme: "dark",
                 //editorTheme: "pastel-on-dark",
+
+                imageUpload: true,
+                imageFormats: ["jpg", "jpeg", "gif", "png"],
+                imageUploadURL: "/UploadFile/imgUpLoad",
+
                 toolbarIcons: function () {
                     return ["undo", "redo", "|", "watch", "preview", "|", "bold", "del", "italic", "hr", "|", "h1", "h2", "h3", "|", "link", "image", "emoji", "table", "code-block", "datetime", "||", "watch", "preview"]
                 },
@@ -132,6 +137,11 @@
 
 
 <br />
+@using (Html.BeginForm("imgUpLoad", "UploadFile", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+<input name ="imageUpLoad" type="file" />
+<input type="submit" value="Upload File" />
+}
 
 @using (Html.BeginForm("add", "PublicTask", FormMethod.Post))
 {

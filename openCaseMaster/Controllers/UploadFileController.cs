@@ -150,6 +150,25 @@ namespace openCaseMaster.Controllers
            
         }
 
+        public string imgUpLoad()
+        {
+            HttpPostedFileBase file = Request.Files[0];
+            string fileName = file.FileName;
+            //转换只取得文件名，去掉路径。 
+            if (fileName.LastIndexOf("\\") > -1)
+            {
+                fileName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
+            }
+            //保存到相对路径下。 
+            file.SaveAs(Server.MapPath("../../image/img/" + fileName));
+            //以下代码是将 路径保存到数据库。 
+            string ImagePath = "../../image/img/" + fileName;
+            string sql = "insert into bookinfo(bookphoto)values('" + ImagePath + "')";
+            //封装好的代码，直接调用。 
+           
+            return "";
+        }
+
 
 
         [NonAction]
