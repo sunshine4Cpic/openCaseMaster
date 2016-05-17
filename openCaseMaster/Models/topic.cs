@@ -26,7 +26,9 @@ namespace openCaseMaster.Models
         public int userID { get; set; }
         public int node { get; set; }
         public Nullable<int> state { get; set; }
+        public System.DateTime creatDate { get; set; }
     
+        public virtual admin_user admin_user { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_publicTask> M_publicTask { get; set; }
     }

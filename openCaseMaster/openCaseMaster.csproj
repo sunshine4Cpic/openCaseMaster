@@ -195,7 +195,7 @@
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
-    <Compile Include="Controllers\PublicTaskController.cs" />
+    <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Controllers\RunCaseController.cs" />
     <Compile Include="Controllers\webApi\runClientController.cs" />
     <Compile Include="Controllers\TestCaseController.cs" />
@@ -1440,12 +1440,12 @@
     <Content Include="Views\User\userInfo.cshtml" />
     <Content Include="Views\User\_ChangePassword.cshtml" />
     <Content Include="Views\RunCase\_userCompleted.cshtml" />
-    <Content Include="Views\PublicTask\Index.cshtml" />
-    <Content Include="Views\PublicTask\add.cshtml" />
-    <Content Include="Views\PublicTask\Task.cshtml" />
-    <Content Include="Views\PublicTask\adminAdd.cshtml" />
-    <Content Include="Views\PublicTask\_taskMarkdown.cshtml" />
-    <Content Include="Views\PublicTask\_taskScript.cshtml" />
+    <Content Include="Views\Topic\Index.cshtml" />
+    <Content Include="Views\Topic\add.cshtml" />
+    <Content Include="Views\Topic\Topic.cshtml" />
+    <Content Include="Views\Topic\adminAdd.cshtml" />
+    <Content Include="Views\Topic\_taskMarkdown.cshtml" />
+    <Content Include="Views\Topic\_taskScript.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

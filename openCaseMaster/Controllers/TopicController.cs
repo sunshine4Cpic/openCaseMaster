@@ -11,7 +11,7 @@ using System.Web.Mvc;
 namespace openCaseMaster.Controllers
 {
     [Authorize(Roles = "user")]
-    public class PublicTaskController : Controller
+    public class TopicController : Controller
     {
 
         [AllowAnonymous]
@@ -20,9 +20,9 @@ namespace openCaseMaster.Controllers
          
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-            var lsv = from t in QC_DB.M_publicTask
+            var lsv = from t in QC_DB.topic
                       where t.state != 0
-                      orderby t.ID
+                      orderby t.ID descending
                       select new taskModel_prev
                       {
                           ID = t.ID,
@@ -30,15 +30,18 @@ namespace openCaseMaster.Controllers
                           nodeID = t.node,
                           userName = t.admin_user.Username,
                           creatDate = t.creatDate,
-                          scriptCount = t.M_publicTaskScript.Count
+                          scriptCount = t.M_publicTask.Sum(tk=>tk.M_publicTaskScript.Count)
                       };
+
+         
             ViewBag.select = "Index";
             ViewBag.page = page;
-            int rows = 20;
+            int rows = 15;
+
 
             var v = lsv.Skip(rows * (page - 1)).Take(rows).ToList();
          
-
+        
             return View(v);
         }
 
@@ -73,7 +76,7 @@ namespace openCaseMaster.Controllers
 
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-            M_publicTask pt = new M_publicTask();
+            topic pt = new topic();
 
             pt.node = tm.node;
             pt.creatDate = DateTime.Now;
@@ -81,14 +84,14 @@ namespace openCaseMaster.Controllers
             pt.body = tm.body;
             pt.userID = userHelper.getUserID();
 
-            QC_DB.M_publicTask.Add(pt);
+            QC_DB.topic.Add(pt);
 
             
             QC_DB.SaveChanges();
 
             TempData["add"] = true;
 
-            return RedirectToAction(pt.ID.ToString(), "PublicTask");
+            return RedirectToAction(pt.ID.ToString());
             
         }
 
@@ -96,10 +99,11 @@ namespace openCaseMaster.Controllers
         [HttpPost]
         public ActionResult adminAdd(taskModel_adminAdd tm)
         {
-            
+      
 
             if (!ModelState.IsValid)//验证模型
             {
+                appSelectItem();
                 ViewBag.nodes = userHelper.editNodes();
                 return View(tm);
             }
@@ -110,20 +114,27 @@ namespace openCaseMaster.Controllers
 
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-            M_publicTask pt = new M_publicTask();
-           
-            pt.creatDate = DateTime.Now;
-            pt.title = tm.title;
-            pt.body = tm.body;
-            pt.userID = userHelper.getUserID();
-            pt.node = tm.node;
+            topic tp = new topic();
 
-            QC_DB.M_publicTask.Add(pt);
+            tp.creatDate = DateTime.Now;
+            tp.title = tm.title;
+            tp.body = tm.body;
+            tp.userID = userHelper.getUserID();
+            tp.node = tm.node;
+
+            QC_DB.topic.Add(tp);
 
             //解析json,添加script
             if (tm.node == 101)
             {
+                M_publicTask pt = new M_publicTask();
+                pt.topicID = tp.ID;
                 pt.appID = tm.appID;
+                pt.creatDate = DateTime.Now;
+                pt.startDate = tm.startDate;
+                pt.endDate = tm.endDate;
+
+                QC_DB.M_publicTask.Add(pt);
 
                 var ja = JArray.Parse(tm.scripts);
                 foreach (var j in ja.Children<JObject>())
@@ -147,7 +158,7 @@ namespace openCaseMaster.Controllers
 
             TempData["add"] = true;
 
-            return RedirectToAction(pt.ID.ToString(), "PublicTask");
+            return RedirectToAction(tp.ID.ToString());
 
         }
 
@@ -176,7 +187,7 @@ namespace openCaseMaster.Controllers
     
         [HttpGet]
         [Route("{control}/{id:int}")]
-        public ActionResult Task(int id)
+        public ActionResult Topic(int id)
         {
             if (TempData["add"] != null)
                 ViewBag.add = true;

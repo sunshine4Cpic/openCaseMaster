@@ -25,9 +25,9 @@
             <div class="panel-heading clearfix">
                 <div class="filter pull-right">
                     <span class="l">查看:</span>
-                    <a href="/PublicTask/Index" @IndexCss>全部</a> /
-                    <a href="/PublicTask/node/101" @RealCss><i class="glyphicon glyphicon-star"></i> 测试任务</a> /
-                    <a href="/PublicTask/Index" @NewCss>最新创建</a>
+                    <a href="/Topic/Index" @IndexCss>全部</a> /
+                    <a href="/Topic/node/101" @RealCss><i class="glyphicon glyphicon-star"></i> 测试任务</a> /
+                    <a href="/Topic/Index" @NewCss>最新创建</a>
                 </div>
             </div>
 
@@ -41,26 +41,26 @@
                         </div>
                         <div class="infos media-body">
                             <div class="title media-heading">
-                                <a title="@tmv.title" href="/PublicTask/@tmv.ID">@tmv.title</a>
+                                <a title="@tmv.title" href="/Topic/@tmv.ID">@tmv.title</a>
 
                             </div>
                             <div class="info">
-                                <a class="node" href="/PublicTask/node/@tmv.nodeID">@tmv.nodeText</a>
+                                <a class="node" href="/Topic/node/@tmv.nodeID">@tmv.nodeText</a>
                                 •
                                 <a data-author="true" data-name="nana" href="#">@tmv.userName</a>
                                 <span class="hidden-mobile">
                                     于 <abbr class="timeago" title="@tmv.creatDate">@tmv.timeago</abbr>发布
                                 </span>
                                 •
-                                @if(@tmv.scriptCount>0)
+                                @if (@tmv.scriptCount !=null)
                                 {
-                                <a class="state-false" title="测试案例" href="/PublicTask/@tmv.ID">@tmv.scriptCount 个案例</a>
+                                <a class="state-false" title="测试案例" href="/Topic/@tmv.ID">@tmv.scriptCount 个任务</a>
                                 }
                             </div>
                         </div>
                         <!--
                         <div class="count media-right">
-                                <a class="state-false" title="案例数" href="/PublicTask/1">1</a>
+                                <a class="state-false" title="案例数" href="/Topic/1">1</a>
                         </div>
                              -->
                     </div>
@@ -76,7 +76,7 @@
         <div class="panel panel-default clearfix">
             <div class="panel-body">
                 <div class="btn-group pull-left">
-                    <a class="btn btn-primary" href="/PublicTask/add">发布新话题</a>
+                    <a class="btn btn-primary" href="/Topic/add">发布新话题</a>
                     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                         <span class="caret"></span>
                     </button>

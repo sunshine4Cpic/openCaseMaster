@@ -22,7 +22,7 @@ namespace openCaseMaster.ViewModels
         [StringLength(50,  ErrorMessage = "不能大于50个字符")]
         public string title { get; set; }
 
-        [Required]
+  
         [StringLength(2000, ErrorMessage = "不能超过2000个字符")]
         public string body { get; set; }
 
@@ -38,10 +38,11 @@ namespace openCaseMaster.ViewModels
     public class taskModel_adminAdd : taskModel_add
     {
         [Required]
-        [Range(100, 599)]
+        [Range(100, 500)]
         new public int node { get; set; }
 
-        public int? appID { get; set; }
+        [Required]
+        public int appID { get; set; }
 
 
         public DateTime? startDate { get; set; }
@@ -84,7 +85,9 @@ namespace openCaseMaster.ViewModels
             }
         }
 
-        public int scriptCount { get; set; }
+
+        public int? scriptCount { get; set; }
+
         public string title { get; set; }
 
 
@@ -96,27 +99,28 @@ namespace openCaseMaster.ViewModels
         {
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
-                var tk = QC_DB.M_publicTask.First(t => t.ID == ID);
-                if(tk.node<200)
+                var tic = QC_DB.topic.First(t => t.ID == ID);
+                if (tic.node < 200)
                 {
+                    var tk = tic.M_publicTask.First();
                     taskInfo = new testTask();
                     taskInfo.appName = tk.M_application.name;
-                    taskInfo.appID = tk.appID.Value;
+                    taskInfo.appID = tk.appID;
                     taskInfo.taskScripts = tk.M_publicTaskScript.ToDictionary(k => k.ID, v => v.title);
                     taskInfo.startDate = tk.startDate;
                     taskInfo.endDate = tk.endDate;
                 }
 
-                this.ID = tk.ID;
+                this.ID = tic.ID;
 
-                this.nodeID = tk.node;
-                
-                this.userName = tk.admin_user.Username;
-                
-                this.creatDate = tk.creatDate;
-                
-                this.title = tk.title;
-                this.body = tk.body;
+                this.nodeID = tic.node;
+
+                this.userName = tic.admin_user.Username;
+
+                this.creatDate = tic.creatDate;
+
+                this.title = tic.title;
+                this.body = tic.body;
                 
             }
         }

@@ -32,7 +32,7 @@
             <caption>
                 <div class="input-group">
                     <span class="node-select input-group-btn">
-                        @Html.DropDownListFor(t => t.appID, ViewBag.apps as List<SelectListItem>, new { @class = "selectpicker ignore", @data_live_search = "true", @data_width = "140px" })
+                        @Html.DropDownListFor(t => t.appID, ViewBag.apps as List<SelectListItem>, new { @class = "selectpicker", @data_live_search = "true", @data_width = "140px", @disabled = "disabled" })
                     </span>
                     <button type="button" class="btn btn-info ladda-button" data-style="expand-left" id="uploadF" style="margin-left:20px">上传案例 »</button>
                 </div>

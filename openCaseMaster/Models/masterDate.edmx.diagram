@@ -45,7 +45,8 @@
         <EntityTypeShape EntityType="MasterModel.tmp_TaskScript" Width="1.5" PointX="6.375" PointY="0.75" />
         <AssociationConnector Association="MasterModel.FK_M_publicTaskResult_deviceID" />
         <EntityTypeShape EntityType="MasterModel.M_publicTask" Width="1.5" PointX="6" PointY="16.125" />
-        <EntityTypeShape EntityType="MasterModel.topic" Width="1.5" PointX="3.75" PointY="17.375" />
+        <EntityTypeShape EntityType="MasterModel.topic" Width="1.5" PointX="3.75" PointY="30.25" />
+        <AssociationConnector Association="MasterModel.FK_topic_userID" />
         <AssociationConnector Association="MasterModel.FK_M_publicTest_appID" />
         <AssociationConnector Association="MasterModel.FK_M_publicTask_topicID" />
         <AssociationConnector Association="MasterModel.FK_M_publicTaskScript_taskID" />
