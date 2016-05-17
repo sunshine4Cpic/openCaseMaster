@@ -12,25 +12,22 @@ namespace openCaseMaster.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class M_publicTask
+    public partial class topic
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public M_publicTask()
+        public topic()
         {
-            this.M_publicTaskScript = new HashSet<M_publicTaskScript>();
+            this.M_publicTask = new HashSet<M_publicTask>();
         }
     
         public int ID { get; set; }
-        public Nullable<int> topicID { get; set; }
+        public string title { get; set; }
+        public string body { get; set; }
+        public int userID { get; set; }
+        public int node { get; set; }
         public Nullable<int> state { get; set; }
-        public Nullable<int> appID { get; set; }
-        public System.DateTime creatDate { get; set; }
-        public Nullable<System.DateTime> startDate { get; set; }
-        public Nullable<System.DateTime> endDate { get; set; }
     
-        public virtual M_application M_application { get; set; }
-        public virtual topic topic { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_publicTaskScript> M_publicTaskScript { get; set; }
+        public virtual ICollection<M_publicTask> M_publicTask { get; set; }
     }
 }

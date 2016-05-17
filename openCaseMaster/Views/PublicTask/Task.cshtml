@@ -30,7 +30,21 @@
                 sequenceDiagram: true,  // 默认不解析
             });
 
-
+            $("a[method=post]").click(function () {
+                var cf = true;
+                if(this.getAttribute("confirm"))
+                    cf = confirm(this.getAttribute("confirm"));
+                if(cf)
+                {
+                    var temp = document.createElement("form");
+                    temp.action = this.href;
+                    temp.method = "post";
+                    temp.style.display = "none";
+                    document.body.appendChild(temp);
+                    temp.submit();
+                }
+                return false;
+            });
         });
     </script>
 
@@ -41,9 +55,9 @@
     <div class="topic-detail panel panel-default">
         <div class="panel-heading media clearfix">
             <div class="media-body">
-                <h3 class="media-heading">@Model.title</h3>
+                <h1 class="media-heading">@Model.title</h1>
                 <div class="info">
-                    <a class="node" href="/PublicTask/node/@Model.node">@Model.nodeText</a>
+                    <a class="node" href="/PublicTask/node/@Model.nodeID">@Model.nodeText</a>
                     ·
                     <a data-author="true" data-name="tongyx" href="#">@Model.userName</a>
                     ·
@@ -64,18 +78,36 @@
         </div>
     </div>
 
+    <div class="panel-footer clearfix">
+        <div class="opts">
+            
+          
+            <a class="knot" href="#" ><i class="fa fa-lock" style="color:#ff6a00"></i> 关闭任务</a>
 
+          
+               
+            <span class="pull-right opts">
+                <a class="fa fa-pencil" title="修改本帖" href="/PublicTask/edit/@Model.ID"></a>
+                <a confirm="确定要删除吗？" class="fa fa-trash" title="删除本帖" method="post" href="/PublicTask/Delete/@Model.ID"></a>
+               
+            </span>
+        </div>
+    </div>
 </div>
 
-@if(Model.)
-<div class="sidebar col-md-3">
-    <div class="panel panel-default">
-            <div class="panel-heading">测试案例</div>
+@if (Model.taskInfo != null)
+{
+    <div class="sidebar col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">测试app: @Model.taskInfo.appName</div>
             <ul class="list-group">
-             @foreach (var d in Model.taskScript)
-            {
-                <li class="list-group-item" title="@d.Value" style="display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><a href="#">@d.Value</a> </li>
-            }
+                @foreach (var d in Model.taskInfo.taskScripts)
+                {
+                    <li class="list-group-item" title="@d.Value" style="display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><a href="#">@d.Value</a> </li>
+                }
             </ul>
         </div>
-</div>
+        <hr>
+
+    </div>
+}

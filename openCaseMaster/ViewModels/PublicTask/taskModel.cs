@@ -51,46 +51,17 @@ namespace openCaseMaster.ViewModels
         public string scripts { get; set; }
     }
 
-
-    public class taskModel_view
+    public class taskModel_prev
     {
-        public taskModel_view()
-        {
-
-        }
-        public taskModel_view(int ID)
-        {
-            using (QCTESTEntities QC_DB = new QCTESTEntities())
-            {
-                var tk = QC_DB.M_publicTask.First(t => t.ID == ID);
-                if(tk.node<200)
-                {
-                    taskInfo = new testTask();
-                    taskInfo.appName = tk.M_application.name;
-                    taskInfo.appID = tk.appID.Value;
-                    taskInfo.taskScripts = tk.M_publicTaskScript.ToDictionary(k => k.ID, v => v.title);
-                }
-
-                
-                this.userName = tk.admin_user.Username;
-                this.startDate = tk.startDate;
-                this.creatDate = tk.creatDate;
-                this.endDate = tk.endDate;
-                this.title = tk.title;
-                this.body = tk.body;
-                
-            }
-        }
-
-        public testTask taskInfo;
-
-        public int ID { get; set; }
 
         public string userName { get; set; }
+        public int ID { get; set; }
+
+        public int nodeID { get; set; }
+
+        public string nodeText { get { return userHelper.nodes[nodeID]; } }
 
         public string img { get; set; }
-
-
 
         public DateTime creatDate { get; set; }
 
@@ -114,14 +85,46 @@ namespace openCaseMaster.ViewModels
         }
 
         public int scriptCount { get; set; }
-
-        public DateTime? startDate { get; set; }
-
-        public DateTime? endDate { get; set; }
-
-
-
         public string title { get; set; }
+
+
+    }
+
+    public class taskModel_view : taskModel_prev
+    {
+        public taskModel_view(int ID)
+        {
+            using (QCTESTEntities QC_DB = new QCTESTEntities())
+            {
+                var tk = QC_DB.M_publicTask.First(t => t.ID == ID);
+                if(tk.node<200)
+                {
+                    taskInfo = new testTask();
+                    taskInfo.appName = tk.M_application.name;
+                    taskInfo.appID = tk.appID.Value;
+                    taskInfo.taskScripts = tk.M_publicTaskScript.ToDictionary(k => k.ID, v => v.title);
+                    taskInfo.startDate = tk.startDate;
+                    taskInfo.endDate = tk.endDate;
+                }
+
+                this.ID = tk.ID;
+
+                this.nodeID = tk.node;
+                
+                this.userName = tk.admin_user.Username;
+                
+                this.creatDate = tk.creatDate;
+                
+                this.title = tk.title;
+                this.body = tk.body;
+                
+            }
+        }
+
+        
+
+        public testTask taskInfo;
+
 
         public string body { get; set; }
 
@@ -134,45 +137,15 @@ namespace openCaseMaster.ViewModels
 
         public string appName { get; set; }
 
+        public DateTime? startDate { get; set; }
+
+        public DateTime? endDate { get; set; }
+
+
         public Dictionary<int, string> taskScripts;
     }
 
 
-    public class taskModel_prev
-    {
-
-        public string userName { get; set; }
-        public int ID { get; set; }
-        public int node { get; set; }
-        public string nodeText { get { return userHelper.nodes[this.node]; } }
-
-        public string img { get; set; }
-
-        public DateTime creatDate { get; set; }
-
-        public string timeago
-        {
-            get
-            {
-                var ts = DateTime.Now.Subtract(creatDate);
-                if (ts.TotalDays > 1)
-                {
-                    return ts.Days + " 天前";
-                }
-                else if (ts.TotalHours > 1)
-                {
-                    return ts.Hours + " 小时前";
-                }
-
-                return ts.Minutes + " 分钟前";
-
-            }
-        }
-
-        public int scriptCount { get; set; }
-        public string title { get; set; }
-
-
-    }
+    
 
 }

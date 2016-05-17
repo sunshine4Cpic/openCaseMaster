@@ -293,6 +293,9 @@
     <Compile Include="Models\tmp_TaskScript.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\topic.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\treeHelper.cs" />
     <Compile Include="Models\userHelper.cs" />
     <Compile Include="Models\user_type.cs">

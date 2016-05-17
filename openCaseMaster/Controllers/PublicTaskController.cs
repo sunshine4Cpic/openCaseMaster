@@ -21,12 +21,13 @@ namespace openCaseMaster.Controllers
             QCTESTEntities QC_DB = new QCTESTEntities();
 
             var lsv = from t in QC_DB.M_publicTask
+                      where t.state != 0
                       orderby t.ID
                       select new taskModel_prev
                       {
                           ID = t.ID,
-                          title=t.title,
-                          node=t.node,
+                          title = t.title,
+                          nodeID = t.node,
                           userName = t.admin_user.Username,
                           creatDate = t.creatDate,
                           scriptCount = t.M_publicTaskScript.Count
@@ -34,7 +35,11 @@ namespace openCaseMaster.Controllers
             ViewBag.select = "Index";
             ViewBag.page = page;
             int rows = 20;
-            return View(lsv.Skip(rows * (page - 1)).Take(rows).ToList());
+
+            var v = lsv.Skip(rows * (page - 1)).Take(rows).ToList();
+         
+
+            return View(v);
         }
 
         [HttpGet]
@@ -111,11 +116,12 @@ namespace openCaseMaster.Controllers
             pt.title = tm.title;
             pt.body = tm.body;
             pt.userID = userHelper.getUserID();
+            pt.node = tm.node;
 
             QC_DB.M_publicTask.Add(pt);
 
             //解析json,添加script
-            if (tm.node == 1)
+            if (tm.node == 101)
             {
                 pt.appID = tm.appID;
 
@@ -168,7 +174,7 @@ namespace openCaseMaster.Controllers
         }
 
     
-
+        [HttpGet]
         [Route("{control}/{id:int}")]
         public ActionResult Task(int id)
         {
@@ -179,8 +185,15 @@ namespace openCaseMaster.Controllers
             return View(tv);
         }
 
-
-      
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+            var ts = QC_DB.M_publicTask.First(t => t.ID == id);
+            ts.state = 0;
+            QC_DB.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
 
     }
