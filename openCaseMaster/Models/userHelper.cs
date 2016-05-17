@@ -11,6 +11,60 @@ namespace openCaseMaster.Models
 {
     public class userHelper
     {
+        public static Dictionary<int, string> nodes { get; set; }
+
+        static userHelper()
+        {
+            nodes = new Dictionary<int, string>();
+            nodes.Add(101, "测试任务");
+
+            nodes.Add(201, "欢乐吐槽");
+            nodes.Add(202, "心得体会");
+            nodes.Add(203, "BUG反馈");
+            nodes.Add(204, "意见和建议");
+        }
+
+
+
+ 
+
+        /// <summary>
+        /// 获取可编辑节点
+        /// </summary>
+        /// <returns></returns>
+        public static List<SelectListItem> editNodes()
+        {
+            List<SelectListItem> SLI = new List<SelectListItem>();
+
+            SelectListGroup slg = new SelectListGroup();
+            slg.Name = "可选节点";
+
+            foreach (var n in nodes.Where(t => t.Key > 200))
+            {
+              
+                SLI.Add(new SelectListItem { Text = n.Value, Value = n.Key.ToString(), Group = slg });
+            }
+
+            
+
+            if (isAdmin)
+            {
+                var adminNode = nodes.Where(t => t.Key < 200).ToList();
+                SelectListGroup slgTask = new SelectListGroup();
+                slgTask.Name = "测试任务";
+                foreach (var n in adminNode.Where(t => t.Key < 200))
+                {
+                    SLI.Add(new SelectListItem { Text = n.Value, Value = n.Key.ToString(), Group = slgTask });
+                }
+
+               
+            }
+            SLI.Insert(0, new SelectListItem { Text = "请选择节点", Value = "" });
+            return SLI;
+
+        }
+
+        
 
         /// <summary>
         /// 获得ID
@@ -121,34 +175,9 @@ namespace openCaseMaster.Models
             return apps;
         }
 
-        /// <summary>
-        /// 获取可编辑节点
-        /// </summary>
-        /// <returns></returns>
-        public static List<SelectListItem> editNodes()
-        {
-            List<SelectListItem> SLI = new List<SelectListItem>();
+        
 
-            SelectListGroup slg = new SelectListGroup();
-            slg.Name = "可选节点";
-
-            SLI.Add(new SelectListItem { Text = "欢乐吐槽", Value = "0", Group = slg });
-            SLI.Add(new SelectListItem { Text = "心得经验", Value = "2", Group = slg });
-            SLI.Add(new SelectListItem { Text = "BUG反馈", Value = "3", Group = slg });
-            SLI.Add(new SelectListItem { Text = "意见和建议", Value = "4", Group = slg });
-
-            
-
-            if (isAdmin)
-            {
-                SelectListGroup slgTask = new SelectListGroup();
-                slgTask.Name = "测试任务";
-                SLI.Add(new SelectListItem { Text = "测试任务", Value = "1", Group = slgTask });
-            }
-            SLI.Insert(0, new SelectListItem { Text = "请选择节点", Value = "" });
-            return SLI;
-            
-        }
+        
        
     }
 }

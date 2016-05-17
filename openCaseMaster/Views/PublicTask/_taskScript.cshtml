@@ -1,0 +1,142 @@
+﻿@using openCaseMaster.ViewModels
+@model taskModel_adminAdd
+
+<div class="tab-pane fade" id="script">
+    <div class="form-control" style="display: block;border-radius: 4px;min-height:300px;height:auto">
+        <input type="hidden" name="scripts" id="scripts" />
+
+        <div class="row">
+            <label class="col-md-2 control-label">开始时间</label>
+            <div class="input-append date form_date col-md-4" style="display: table;">
+                @Html.TextBoxFor(m => m.startDate, new { @class = "form-control", @size = "16", @readOnly = "readOnly" })
+                <span class="add-on input-group-addon"><span class="icon-remove glyphicon glyphicon-remove"></span></span>
+                <span class="add-on input-group-addon"><span class="icon-calendar glyphicon glyphicon-calendar"></span></span>
+            </div>
+
+
+        </div>
+        <br />
+        <div class="row">
+            <label class="col-md-2 control-label">结束时间</label>
+            <div class="input-append date form_date col-md-4" style="display: table;">
+                @Html.TextBoxFor(m => m.endDate, new { @class = "form-control", @size = "16", @readOnly = "readOnly" })
+
+                <span class="add-on input-group-addon"><span class="icon-remove glyphicon glyphicon-remove"></span></span>
+                <span class="add-on input-group-addon"><span class="icon-calendar glyphicon glyphicon-calendar"></span></span>
+            </div>
+
+
+        </div>
+
+        <table class="table table-striped" id="scriptTable">
+            <caption>
+                <div class="input-group">
+                    <span class="node-select input-group-btn">
+                        @Html.DropDownListFor(t => t.appID, ViewBag.apps as List<SelectListItem>, new { @class = "selectpicker ignore", @data_live_search = "true", @data_width = "140px" })
+                    </span>
+                    <button type="button" class="btn btn-info ladda-button" data-style="expand-left" id="uploadF" style="margin-left:20px">上传案例 »</button>
+                </div>
+            </caption>
+            <thead>
+                <tr>
+                    <th style="width:15%;">序号</th>
+                    <th>案例名</th>
+
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+
+
+    </div>
+</div>
+
+  @Styles.Render("~/Content/uploader")
+    @Scripts.Render("~/bundles/uploader")
+
+
+    <link rel="stylesheet" href="~/Scripts/loading/ladda-themeless.min.css">
+    <script src="~/Scripts/loading/spin.min.js"></script>
+    <script src="~/Scripts/loading/ladda.min.js"></script>
+
+    <script src="/Scripts/bootstrap-datetimepicker.js"></script>
+    <script src="~/Scripts/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+    <link href="/Content/bootstrap-datetimepicker.css" rel="stylesheet">
+
+    <script type="text/javascript">
+
+
+        $(function () {
+
+            var l = Ladda.create(document.getElementById("uploadF"));
+            //实例化一个plupload上传对象
+            var uploaderF = new plupload.Uploader({
+                browse_button: 'uploadF', //触发文件选择对话框的按钮，为那个元素id
+                runtimes: 'html5',
+                url: '/UploadFile/uploadTaskScript', // 服务端上传路径
+                unique_names: false, // 上传的文件名是否唯一
+                max_file_size: '256kb', // 文件上传最大限制。
+                //// 是否生成缩略图（仅对图片文件有效）
+                //resize: { width: 320, height: 240, quality: 90 },
+                ////  这个数组是选择器，就是上传文件时限制的上传文件类型
+                filters: [{ title: "xls", extensions: "xls" }
+                ],
+                multi_selection: false
+
+            });
+            //在实例对象上调用init()方法进行初始化
+            uploaderF.init();
+
+            //绑定各种事件，并在事件监听函数中做你想做的事
+            uploaderF.bind('FilesAdded', function (uploader, files) {
+                //$.messager.progress({ title: '请稍后', msg: '上传中...' });
+                l.start();
+                uploader.start();
+
+            });
+
+            uploaderF.bind('Error', function (uploader, errObject) {
+                l.stop();
+                alert("上传失败,请检查xls格式或联系管理员");
+            });
+
+            uploaderF.bind('FileUploaded', function (up, file, result) {
+                var data = result.response;
+                localStorage.setItem("addTaskscript", data);
+
+                initscript();
+
+
+
+                l.stop();
+
+            });
+
+
+         
+
+         
+
+
+
+            $('.form_date').datetimepicker({
+                format: "yyyy-mm-dd h:00",
+                language: 'zh-CN',
+                todayBtn: true,
+                todayHighlight: true,
+                startDate: new Date(),
+
+                autoclose: true,//选择日期后立即关闭
+                minView: 1,
+            });
+
+
+        });
+
+
+        
+
+
+    </script>
+

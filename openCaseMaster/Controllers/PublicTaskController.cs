@@ -22,11 +22,11 @@ namespace openCaseMaster.Controllers
 
             var lsv = from t in QC_DB.M_publicTask
                       orderby t.ID
-                      select new taskModel_view
+                      select new taskModel_prev
                       {
                           ID = t.ID,
                           title=t.title,
-                          appName=t.M_application.name,
+                          node=t.node,
                           userName = t.admin_user.Username,
                           creatDate = t.creatDate,
                           scriptCount = t.M_publicTaskScript.Count
@@ -54,28 +54,59 @@ namespace openCaseMaster.Controllers
         [HttpPost]
         public ActionResult add(taskModel_add tm)
         {
-            //这样实现总感觉怪怪的
-            string view = "add";
-            if (userHelper.isAdmin)
-                view = "adminAdd";
+            
           
             if (!ModelState.IsValid)//验证模型
             {
-                if (userHelper.isAdmin) appSelectItem();
-                return View(view,tm);
+                ViewBag.nodes = userHelper.editNodes();
+                return View(tm);
             }
 
-            if(!userHelper.isAdmin && tm.node==1)//非admin 用户无法添加 测试任务
-            {
-                return View(view, tm);
-            }
+           
 
             //开始操作
 
             QCTESTEntities QC_DB = new QCTESTEntities();
 
             M_publicTask pt = new M_publicTask();
-            pt.appID = tm.appID;
+
+            pt.node = tm.node;
+            pt.creatDate = DateTime.Now;
+            pt.title = tm.title;
+            pt.body = tm.body;
+            pt.userID = userHelper.getUserID();
+
+            QC_DB.M_publicTask.Add(pt);
+
+            
+            QC_DB.SaveChanges();
+
+            TempData["add"] = true;
+
+            return RedirectToAction(pt.ID.ToString(), "PublicTask");
+            
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public ActionResult adminAdd(taskModel_adminAdd tm)
+        {
+            
+
+            if (!ModelState.IsValid)//验证模型
+            {
+                ViewBag.nodes = userHelper.editNodes();
+                return View(tm);
+            }
+
+            
+
+            //开始操作
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            M_publicTask pt = new M_publicTask();
+           
             pt.creatDate = DateTime.Now;
             pt.title = tm.title;
             pt.body = tm.body;
@@ -86,6 +117,8 @@ namespace openCaseMaster.Controllers
             //解析json,添加script
             if (tm.node == 1)
             {
+                pt.appID = tm.appID;
+
                 var ja = JArray.Parse(tm.scripts);
                 foreach (var j in ja.Children<JObject>())
                 {
@@ -109,7 +142,7 @@ namespace openCaseMaster.Controllers
             TempData["add"] = true;
 
             return RedirectToAction(pt.ID.ToString(), "PublicTask");
-            
+
         }
 
         /// <summary>

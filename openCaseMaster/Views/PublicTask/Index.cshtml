@@ -1,5 +1,5 @@
 ﻿@using openCaseMaster.ViewModels
-@model List<taskModel_view>
+@model List<taskModel_prev>
 
 @{
     string IndexCss, RealCss, NewCss;
@@ -26,12 +26,9 @@
                 <div class="filter pull-right">
                     <span class="l">查看:</span>
                     <a href="/PublicTask/Index" @IndexCss>全部</a> /
-                    <a href="/PublicTask/Real" @RealCss><i class="glyphicon glyphicon-star"></i> 当前任务</a> /
+                    <a href="/PublicTask/node/101" @RealCss><i class="glyphicon glyphicon-star"></i> 测试任务</a> /
                     <a href="/PublicTask/Index" @NewCss>最新创建</a>
                 </div>
-
-                
-
             </div>
 
             <div class="panel-body">
@@ -48,7 +45,7 @@
 
                             </div>
                             <div class="info">
-                                <a class="node" href="#">@tmv.appName</a>
+                                <a class="node" href="/PublicTask/node/@tmv.node">@tmv.nodeText</a>
                                 •
                                 <a data-author="true" data-name="nana" href="#">@tmv.userName</a>
                                 <span class="hidden-mobile">

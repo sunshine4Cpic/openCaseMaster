@@ -7,64 +7,7 @@
 
     @Scripts.Render("~/bundles/jqueryval")
 
-
-
-    <link rel="stylesheet" href="/Content/editormd.css" />
-    <script src="/Scripts/editormd.js"></script>
-
-
-
-    <script type="text/javascript">
-
-
-        $(function () {
-
-            editormd("editormd", {
-                name: "body",
-                theme: "dark",
-                //previewTheme: "dark",
-                //editorTheme: "pastel-on-dark",
-                toolbarIcons: function () {
-                    return ["undo", "redo", "|", "watch", "preview", "|", "bold", "del", "italic", "hr", "|", "h1", "h2", "h3", "|", "link", "image", "emoji", "table", "code-block", "datetime", "||", "watch", "preview"]
-                },
-                watch: false,
-                height: 620,
-                path: '/Scripts/editormd/lib/',
-                markdown: localStorage["addTask"],
-                emoji: true,
-                delay: 1000,
-                onchange: function () {
-                    localStorage.setItem("addTask", this.getMarkdown());
-                }
-
-
-            });
-
-            initscript();
-
-
-        });
-
-
-        function initscript() {
-            if (localStorage["addTaskscript"]) {
-                $("#scripts").val(localStorage["addTaskscript"]);
-
-                var data = $.parseJSON(localStorage["addTaskscript"]);
-                var i = 1;
-                $("#scriptTable tbody").empty();
-                for (var d in data) {
-                    var p = data[d];
-                    var tr = document.createElement("tr");
-                    var td1 = tr.insertCell();
-                    td1.innerHTML = i++;
-                    var td2 = tr.insertCell();
-                    td2.innerHTML = p.title;
-                    $("#scriptTable tbody").append(tr);
-                }
-            }
-        }
-    </script>
+     
 
 }
 
@@ -76,7 +19,7 @@
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    @Html.ValidationMessageFor(m => m.node, "", new { @class = "text-danger"  })
+    @Html.ValidationMessageFor(m => m.node, "", new { @class = "text-danger" })
     <div class="panel panel-default">
         <div class="panel-heading">发布新任务</div>
         <div class="panel-body">
@@ -94,9 +37,7 @@
                 </li>
             </ul>
             <div id="myTabContent" class="tab-content">
-                <div class="tab-pane fade in active" id="edit">
-                    <div id="editormd"></div>
-                </div>
+                @Html.Partial("_taskMarkdown")
             </div>
             <br />
             <div class="form-group">

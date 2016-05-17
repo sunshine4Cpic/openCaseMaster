@@ -4,13 +4,13 @@
 @section Scripts {
     <link rel="stylesheet" href="/Content/editormd.preview.css" />
 
-       <script src="/Scripts/editormd/lib/marked.min.js"></script>
-        <script src="/Scripts/editormd/lib/prettify.min.js"></script>
-        <script src="/Scripts/editormd/lib/raphael.min.js"></script>
-        <script src="/Scripts/editormd/lib/underscore.min.js"></script>
-        <script src="/Scripts/editormd/lib/sequence-diagram.min.js"></script>
-        <script src="/Scripts/editormd/lib/flowchart.min.js"></script>
-        <script src="/Scripts/editormd/lib/jquery.flowchart.min.js"></script>
+    <script src="/Scripts/editormd/lib/marked.min.js"></script>
+    <script src="/Scripts/editormd/lib/prettify.min.js"></script>
+    <script src="/Scripts/editormd/lib/raphael.min.js"></script>
+    <script src="/Scripts/editormd/lib/underscore.min.js"></script>
+    <script src="/Scripts/editormd/lib/sequence-diagram.min.js"></script>
+    <script src="/Scripts/editormd/lib/flowchart.min.js"></script>
+    <script src="/Scripts/editormd/lib/jquery.flowchart.min.js"></script>
 
     <script src="/Scripts/editormd.js"></script>
     <script type="text/javascript">
@@ -36,11 +36,6 @@
 
 }
 
-
-
-
-
-
 <br />
 <div class="col-md-9">
     <div class="topic-detail panel panel-default">
@@ -48,7 +43,7 @@
             <div class="media-body">
                 <h3 class="media-heading">@Model.title</h3>
                 <div class="info">
-                    <a class="node" href="#">@Model.appName</a>
+                    <a class="node" href="/PublicTask/node/@Model.node">@Model.nodeText</a>
                     ·
                     <a data-author="true" data-name="tongyx" href="#">@Model.userName</a>
                     ·
@@ -67,10 +62,20 @@
 @Model.body
             </textarea>
         </div>
-
-
-
     </div>
 
 
+</div>
+
+@if(Model.)
+<div class="sidebar col-md-3">
+    <div class="panel panel-default">
+            <div class="panel-heading">测试案例</div>
+            <ul class="list-group">
+             @foreach (var d in Model.taskScript)
+            {
+                <li class="list-group-item" title="@d.Value" style="display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><a href="#">@d.Value</a> </li>
+            }
+            </ul>
+        </div>
 </div>

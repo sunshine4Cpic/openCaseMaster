@@ -24,7 +24,7 @@ namespace openCaseMaster.Models
         public string title { get; set; }
         public string body { get; set; }
         public int userID { get; set; }
-        public Nullable<int> node { get; set; }
+        public int node { get; set; }
         public Nullable<int> state { get; set; }
         public Nullable<int> appID { get; set; }
         public System.DateTime creatDate { get; set; }

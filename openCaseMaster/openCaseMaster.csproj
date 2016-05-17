@@ -1441,6 +1441,8 @@
     <Content Include="Views\PublicTask\add.cshtml" />
     <Content Include="Views\PublicTask\Task.cshtml" />
     <Content Include="Views\PublicTask\adminAdd.cshtml" />
+    <Content Include="Views\PublicTask\_taskMarkdown.cshtml" />
+    <Content Include="Views\PublicTask\_taskScript.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -89,9 +89,9 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="title" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="body" Type="ntext" />
+          <Property Name="body" Type="ntext" Nullable="false" />
           <Property Name="userID" Type="int" Nullable="false" />
-          <Property Name="node" Type="int" />
+          <Property Name="node" Type="int" Nullable="false" />
           <Property Name="state" Type="int" />
           <Property Name="appID" Type="int" />
           <Property Name="creatDate" Type="datetime" Nullable="false" />
@@ -1418,9 +1418,9 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="userID" Type="Int32" Nullable="false" />
-          <Property Name="node" Type="Int32" />
+          <Property Name="node" Type="Int32" Nullable="false" />
           <Property Name="state" Type="Int32" />
           <Property Name="appID" Type="Int32" />
           <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
