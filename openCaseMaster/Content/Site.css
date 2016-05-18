@@ -10,6 +10,20 @@
     padding-left: 15px;
     padding-right: 15px;
 }
+.container.body-content
+{
+    margin-top:10px;
+}
+#left,#right
+{
+    padding:0px 10px;
+}
+
+#left,#right > .panel
+{
+    margin-bottom: 10px;
+}
+
 
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
@@ -186,6 +200,7 @@
 }
 
 
+ 
 
 /*markdown 图标高亮*/
 i[name=preview], i[name=watch] {

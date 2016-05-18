@@ -23,7 +23,7 @@ namespace openCaseMaster.ViewModels
         public string title { get; set; }
 
   
-        [StringLength(2000, ErrorMessage = "不能超过2000个字符")]
+        //[StringLength(10000, ErrorMessage = "不能超过2000个字符")]
         public string body { get; set; }
 
 

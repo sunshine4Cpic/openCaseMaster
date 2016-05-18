@@ -59,6 +59,7 @@ namespace openCaseMaster.Controllers
                 return View("add");
         }
 
+       
         [HttpPost]
         public ActionResult add(taskModel_add tm)
         {
@@ -184,7 +185,7 @@ namespace openCaseMaster.Controllers
             ViewBag.apps = apps;
         }
 
-    
+        [AllowAnonymous]
         [HttpGet]
         [Route("{control}/{id:int}")]
         public ActionResult Topic(int id)
@@ -196,11 +197,15 @@ namespace openCaseMaster.Controllers
             return View(tv);
         }
 
+       
         [HttpPost]
         public ActionResult Delete(int id)
         {
             QCTESTEntities QC_DB = new QCTESTEntities();
-            var ts = QC_DB.M_publicTask.First(t => t.ID == id);
+            
+            var ts = QC_DB.topic.First(t => t.ID == id);
+            if (ts.userID!=userHelper.getUserID())
+                return RedirectToAction("Index");
             ts.state = 0;
             QC_DB.SaveChanges();
             return RedirectToAction("Index");
