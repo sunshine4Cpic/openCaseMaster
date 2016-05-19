@@ -296,6 +296,7 @@
     <Compile Include="Models\topic.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\topicHelper.cs" />
     <Compile Include="Models\treeHelper.cs" />
     <Compile Include="Models\userHelper.cs" />
     <Compile Include="Models\user_type.cs">
@@ -307,7 +308,7 @@
     <Compile Include="ViewModels\Device\DeviceViewModel.cs" />
     <Compile Include="ViewModels\Device\ProjectListModel.cs" />
     <Compile Include="ViewModels\Project\ProjectListModel.cs" />
-    <Compile Include="ViewModels\PublicTask\taskModel.cs" />
+    <Compile Include="ViewModels\PublicTask\topicModel.cs" />
     <Compile Include="ViewModels\RunCase\caseRecordModel.cs" />
     <Compile Include="ViewModels\RunCase\SceneCaseDataModel.cs" />
     <Compile Include="ViewModels\RunCase\SceneViewModel.cs" />
@@ -1444,8 +1445,10 @@
     <Content Include="Views\Topic\add.cshtml" />
     <Content Include="Views\Topic\Topic.cshtml" />
     <Content Include="Views\Topic\adminAdd.cshtml" />
-    <Content Include="Views\Topic\_taskMarkdown.cshtml" />
+    <Content Include="Views\Topic\_topicMarkdown.cshtml" />
     <Content Include="Views\Topic\_taskScript.cshtml" />
+    <Content Include="Views\Topic\edit.cshtml" />
+    <Content Include="Views\Topic\_topicMarkdownEdit.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

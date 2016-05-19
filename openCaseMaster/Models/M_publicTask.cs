@@ -22,7 +22,6 @@ namespace openCaseMaster.Models
     
         public int ID { get; set; }
         public int topicID { get; set; }
-        public Nullable<int> state { get; set; }
         public int appID { get; set; }
         public System.DateTime creatDate { get; set; }
         public Nullable<System.DateTime> startDate { get; set; }

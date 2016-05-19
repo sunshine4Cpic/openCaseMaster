@@ -11,12 +11,9 @@ using System.Web;
 namespace openCaseMaster.ViewModels
 {
 
-    public class taskModel_add
+    public class topicModel
     {
-
-
-
-
+        public int ID { get; set; }
 
         [Required(ErrorMessage = "标题必须填写")]
         [StringLength(50,  ErrorMessage = "不能大于50个字符")]
@@ -35,7 +32,7 @@ namespace openCaseMaster.ViewModels
     }
 
 
-    public class taskModel_adminAdd : taskModel_add
+    public class topicModel_taskAdd : topicModel
     {
         [Required]
         [Range(100, 500)]
@@ -60,7 +57,7 @@ namespace openCaseMaster.ViewModels
 
         public int nodeID { get; set; }
 
-        public string nodeText { get { return userHelper.nodes[nodeID]; } }
+        public string nodeText { get { return topicHelper.nodes[nodeID]; } }
 
         public string img { get; set; }
 
@@ -89,7 +86,7 @@ namespace openCaseMaster.ViewModels
         public int? scriptCount { get; set; }
 
         public string title { get; set; }
-
+        public int userID { get; set; }
 
     }
 
@@ -116,6 +113,7 @@ namespace openCaseMaster.ViewModels
                 this.nodeID = tic.node;
 
                 this.userName = tic.admin_user.Username;
+                this.userID = tic.userID;
 
                 this.creatDate = tic.creatDate;
 
@@ -133,6 +131,8 @@ namespace openCaseMaster.ViewModels
         public string body { get; set; }
 
 
+
+        
     }
 
     public class testTask

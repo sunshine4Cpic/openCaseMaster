@@ -1,5 +1,5 @@
 ﻿@using openCaseMaster.ViewModels
-@model taskModel_adminAdd
+@model topicModel_taskAdd
 
 @section Scripts {
     @Styles.Render("~/Content/bootstrap-select")
@@ -47,7 +47,7 @@
     @Html.ValidationMessageFor(m => m.appID, "", new { @class = "text-danger", style = "display:block;" })
 
     <div class="panel panel-default">
-        <div class="panel-heading">发布新任务</div>
+        <div class="panel-heading">创建话题</div>
         <div class="panel-body">
             <div class="form-group">
                 <div class="input-group">
@@ -59,13 +59,13 @@
             </div>
             <ul id="myTab" class="nav nav-tabs" style="border-bottom:0px;">
                 <li class="active">
-                    <a href="#edit" data-toggle="tab">主题描述</a>
+                    <a href="#edit" data-toggle="tab">话题内容</a>
                 </li>
 
                 <li id="scriptTab" style="display: none;"><a href="#script" data-toggle="tab">相关案例</a></li>
             </ul>
             <div id="myTabContent" class="tab-content">
-                @Html.Partial("_taskMarkdown")
+                @Html.Partial("_topicMarkdown")
 
 
                 @Html.Partial("_taskScript", Model)

@@ -11,58 +11,7 @@ namespace openCaseMaster.Models
 {
     public class userHelper
     {
-        public static Dictionary<int, string> nodes { get; set; }
-
-        static userHelper()
-        {
-            nodes = new Dictionary<int, string>();
-            nodes.Add(101, "测试任务");
-
-            nodes.Add(201, "欢乐吐槽");
-            nodes.Add(202, "心得体会");
-            nodes.Add(203, "BUG反馈");
-            nodes.Add(204, "意见和建议");
-        }
-
-
-
-     
-
-        /// <summary>
-        /// 获取可编辑节点
-        /// </summary>
-        /// <returns></returns>
-        public static List<SelectListItem> editNodes()
-        {
-            List<SelectListItem> SLI = new List<SelectListItem>();
-
-            SelectListGroup slg = new SelectListGroup();
-            slg.Name = "可选节点";
-
-            foreach (var n in nodes.Where(t => t.Key > 200))
-            {
-              
-                SLI.Add(new SelectListItem { Text = n.Value, Value = n.Key.ToString(), Group = slg });
-            }
-
-            
-
-            if (isAdmin)
-            {
-                var adminNode = nodes.Where(t => t.Key < 200).ToList();
-                SelectListGroup slgTask = new SelectListGroup();
-                slgTask.Name = "测试任务";
-                foreach (var n in adminNode.Where(t => t.Key < 200))
-                {
-                    SLI.Add(new SelectListItem { Text = n.Value, Value = n.Key.ToString(), Group = slgTask });
-                }
-
-               
-            }
-            SLI.Insert(0, new SelectListItem { Text = "请选择节点", Value = "" });
-            return SLI;
-
-        }
+        
 
         
 
@@ -72,12 +21,18 @@ namespace openCaseMaster.Models
         /// <returns></returns>
         public static int getUserID()
         {
+            if (HttpContext.Current.User != null)
+            {
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    FormsIdentity id = (FormsIdentity)HttpContext.Current.User.Identity;
+                    var userData = id.Ticket.UserData;//cookie
 
-            FormsIdentity id = (FormsIdentity)HttpContext.Current.User.Identity;
-            var userData = id.Ticket.UserData;//cookie
-            
-            JObject userJ = JObject.Parse(userData);
-            return Convert.ToInt32(userJ["ID"]);
+                    JObject userJ = JObject.Parse(userData);
+                    return Convert.ToInt32(userJ["ID"]);
+                }
+            }
+            return -1;
         }
 
         /// <summary>

@@ -1,0 +1,66 @@
+﻿
+<div class="tab-pane fade in active" id="edit">
+    <div id="editormd"></div>
+</div>
+
+
+
+<link rel="stylesheet" href="/Content/editormd.css" />
+<script src="/Scripts/editormd.js"></script>
+
+
+
+<script type="text/javascript">
+
+
+    $(function () {
+        editormd("editormd", {
+            name: "body",
+            theme: "dark",
+            //previewTheme: "dark",
+            //editorTheme: "pastel-on-dark",
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "./php/upload.php",
+            toolbarIcons: function () {
+                return ["undo", "redo", "|", "watch", "preview", "|", "bold", "del", "italic", "hr", "|", "h1", "h2", "h3", "|", "link", "image", "emoji", "table", "code-block", "datetime", "||", "watch", "preview"]
+            },
+            watch: false,
+            height: 620,
+            path: '/Scripts/editormd/lib/',
+            markdown: localStorage["addTask"],
+            emoji: true,
+            delay: 1000,
+            onchange: function () {
+                localStorage.setItem("addTask", this.getMarkdown());
+            }
+
+
+        });
+
+        initscript();
+
+
+
+    });
+
+
+    function initscript() {
+        if (localStorage["addTaskscript"]) {
+            $("#scripts").val(localStorage["addTaskscript"]);
+
+            var data = $.parseJSON(localStorage["addTaskscript"]);
+            var i = 1;
+            $("#scriptTable tbody").empty();
+            for (var d in data) {
+                var p = data[d];
+                var tr = document.createElement("tr");
+                var td1 = tr.insertCell();
+                td1.innerHTML = i++;
+                var td2 = tr.insertCell();
+                td2.innerHTML = p.title;
+                $("#scriptTable tbody").append(tr);
+            }
+        }
+    }
+</script>

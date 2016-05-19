@@ -7,14 +7,14 @@
 
 <link rel="stylesheet" href="/Content/editormd.css" />
 <script src="/Scripts/editormd.js"></script>
-
+<textarea id="md" hidden>@ViewData["markdown"]</textarea>
 
 
 <script type="text/javascript">
 
 
-    $(function () {
 
+    $(function () {
         editormd("editormd", {
             name: "body",
             theme: "dark",
@@ -29,12 +29,10 @@
             watch: false,
             height: 620,
             path: '/Scripts/editormd/lib/',
-            markdown: localStorage["addTask"],
+            markdown: $("#md").val(),
             emoji: true,
             delay: 1000,
-            onchange: function () {
-                localStorage.setItem("addTask", this.getMarkdown());
-            }
+           
 
 
         });

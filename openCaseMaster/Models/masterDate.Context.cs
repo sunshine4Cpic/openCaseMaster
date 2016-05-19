@@ -45,8 +45,8 @@ namespace openCaseMaster.Models
         public virtual DbSet<M_publicTaskResult> M_publicTaskResult { get; set; }
         public virtual DbSet<M_publicTaskScript> M_publicTaskScript { get; set; }
         public virtual DbSet<tmp_TaskScript> tmp_TaskScript { get; set; }
-        public virtual DbSet<M_publicTask> M_publicTask { get; set; }
         public virtual DbSet<topic> topic { get; set; }
+        public virtual DbSet<M_publicTask> M_publicTask { get; set; }
     
         [DbFunction("QCTESTEntities", "MonthReport")]
         public virtual IQueryable<MonthReport_Result> MonthReport(string startYear, string iD)
