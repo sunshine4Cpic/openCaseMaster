@@ -23,7 +23,7 @@ namespace openCaseMaster.Controllers
             var lsv = from t in QC_DB.topic
                       where t.state != 0
                       orderby t.ID descending
-                      select new taskModel_prev
+                      select new topicModel_prev
                       {
                           ID = t.ID,
                           title = t.title,
@@ -65,9 +65,14 @@ namespace openCaseMaster.Controllers
         [HttpGet]
         public ActionResult edit(int id)
         {
+
+
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-            var tic = QC_DB.topic.First(t => t.ID == id && t.state != 0 && t.node > 200);
+
+
+            var tic = QC_DB.topic.First(t =>
+                t.ID == id && t.state != 0 && t.userID == userHelper.getUserID);
 
 
             topicModel tm = new topicModel();
@@ -75,61 +80,61 @@ namespace openCaseMaster.Controllers
             tm.title = tic.title;
             tm.body = tic.body;
 
-            var nodes = this.PublicNodes();
 
-            foreach(var n in nodes)
+            if (tic.node < 200)
             {
-                if(n.Value == tic.node.ToString())
-                {
-                    n.Selected = true;
-                    break;
-                }
+                var node = topicHelper.nodes.First(t => t.Key == tic.node);
+
+                List<SelectListItem> nodes = new List<SelectListItem>();
+                nodes.Add(new SelectListItem { Text = node.Value, Value = node.Key.ToString(), Selected = true });
+                ViewBag.nodes = nodes;
+
+                var tk = tic.M_publicTask.First();
+                taskModel taskInfo = new taskModel();
+                taskInfo.appName = tk.M_application.name;
+                taskInfo.appID = tk.appID;
+                taskInfo.taskScripts = tk.M_publicTaskScript.ToDictionary(k => k.ID, v => v.title);
+                taskInfo.startDate = tk.startDate;
+                taskInfo.endDate = tk.endDate;
+                ViewBag.taskInfo = taskInfo;
+
+                return View(tm);
+
             }
+            else
+            {
+                var nodes = this.PublicNodes();
 
-            ViewBag.nodes = nodes;
+                foreach (var n in nodes)
+                {
+                    if (n.Value == tic.node.ToString())
+                    {
+                        n.Selected = true;
+                        break;
+                    }
+                }
+                ViewBag.nodes = nodes;
 
-            return View("edit", tm);
-
-        }
-
-
-        /// <summary>
-        /// 编辑任务节点
-        /// </summary>
-        [HttpGet]
-        public ActionResult editTask(int id)
-        {
-            QCTESTEntities QC_DB = new QCTESTEntities();
-
-            var tic = QC_DB.topic.First(t => t.ID == id && t.state != 0 && t.node < 200);
-
-
-            topicModel tm = new topicModel();
-            tm.node = tic.node;
-            tm.title = tic.title;
-            tm.body = tic.body;
-
-            var node =  topicHelper.nodes.First(t => t.Key == tic.node);
-
-            List<SelectListItem> ls = new List<SelectListItem>();
-            ls.Add(new SelectListItem { Text = node.Value, Value = node.Key.ToString(), Selected = true });
-            
-          
-            ViewBag.nodes = ls;
-
-            return View("editTask", tm);
-
+                return View(tm);
+            }
         }
 
         /// <summary>
-        /// 编辑普通节点
+        /// 编辑
         /// </summary>
         [HttpPost]
         public ActionResult edit(topicModel tm)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.nodes = this.NodesList();
+                return View(tm);
+            }
+
             QCTESTEntities QC_DB = new QCTESTEntities();
-            
-            var tic = QC_DB.topic.First(t => t.ID == tm.ID && t.state != 0 && t.node > 200);
+
+            var tic = QC_DB.topic.First(t => 
+                t.ID == tm.ID && t.state != 0 && t.userID == userHelper.getUserID);
             tic.node = tm.node;
             tic.title = tm.title;
             tic.body = tm.body;
@@ -144,9 +149,9 @@ namespace openCaseMaster.Controllers
         [HttpPost]
         public ActionResult add(topicModel tm)
         {
-            
-          
-            if (!ModelState.IsValid)//验证模型
+
+
+            if (!ModelState.IsValid || tm.node < 200)//普通用户不能add任务
             {
                 ViewBag.nodes = this.NodesList();
                 return View(tm);
@@ -164,7 +169,7 @@ namespace openCaseMaster.Controllers
             pt.creatDate = DateTime.Now;
             pt.title = tm.title;
             pt.body = tm.body;
-            pt.userID = userHelper.getUserID();
+            pt.userID = userHelper.getUserID;
 
             QC_DB.topic.Add(pt);
 
@@ -179,7 +184,7 @@ namespace openCaseMaster.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost]
-        public ActionResult adminAdd(topicModel_taskAdd tm)
+        public ActionResult adminAdd(topicTaskModel tm)
         {
       
 
@@ -199,7 +204,7 @@ namespace openCaseMaster.Controllers
             tp.creatDate = DateTime.Now;
             tp.title = tm.title;
             tp.body = tm.body;
-            tp.userID = userHelper.getUserID();
+            tp.userID = userHelper.getUserID;
             tp.node = tm.node;
 
             QC_DB.topic.Add(tp);
@@ -271,7 +276,7 @@ namespace openCaseMaster.Controllers
         {
             if (TempData["event"] != null)
                 ViewBag.clear = true;
-            taskModel_view tv = new taskModel_view(id);
+            topicModel_view tv = new topicModel_view(id);
 
             return View(tv);
         }
@@ -283,7 +288,7 @@ namespace openCaseMaster.Controllers
             QCTESTEntities QC_DB = new QCTESTEntities();
 
             var ts = QC_DB.topic.First(t => t.ID == id);
-            if (ts.userID != userHelper.getUserID())
+            if (ts.userID != userHelper.getUserID)
                 return RedirectToAction("Index");
             ts.state = 0;
             QC_DB.SaveChanges();

@@ -1,0 +1,25 @@
+﻿@model openCaseMaster.ViewModels.taskModel
+
+    <table class="table" style="table-layout:fixed">
+        <caption><b>测试app:</b><a href="#">@Model.appName</a> </caption>
+        <thead>
+            <tr>
+                <th width="20%">编号</th>
+                <th>案例</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int i = 1;}
+            @foreach (var d in Model.taskScripts)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td nowrap style="overflow:hidden; text-overflow:ellipsis;"><a href="#">@d.Value</a></td>
+                </tr>
+                { i++; }
+            }
+
+        </tbody>
+    </table>
+
+

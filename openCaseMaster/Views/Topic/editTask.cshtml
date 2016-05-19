@@ -1,53 +1,24 @@
 ﻿@using openCaseMaster.ViewModels
-@model topicTaskModel
+@model topicModel
 
 @section Scripts {
     @Styles.Render("~/Content/bootstrap-select")
     @Scripts.Render("~/bundles/bootstrap-select")
 
     @Scripts.Render("~/bundles/jqueryval")
-    <script type="text/javascript">
-       
-
-      
-        $(function () {
-            //$("#script *[name]").attr("disabled", "disabled");
-
-            $('#node').change(function () {
-                var sel = $(this).val();
-                if (sel == 101) {
-                    $("#taskForm").attr("action", "adminAdd");
-                    $("#script *[name]").removeAttr("disabled");//前端验证去除
-                    $("#script button[data-id]").removeClass("disabled");//很傻的select
-
-                    $("#scriptTab").show();
-                }
-                else {
-                    $("#taskForm").attr("action", "add");
-                    $("#script *[name]").attr("disabled", "disabled");
-                    
-
-           
-                    $('#myTab a[href="#edit"]').tab('show');
-                    $("#scriptTab").hide();
-                }
-            })
-        });
-    </script>
 
 }
 
-@using (Html.BeginForm("adminAdd", "Topic", FormMethod.Post, new {id="taskForm" }))
+
+
+@using (Html.BeginForm("edit", "Topic", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    @Html.ValidationMessageFor(m => m.node, "", new { @class = "text-danger", style = "display:block;" })
-
-    @Html.ValidationMessageFor(m => m.appID, "", new { @class = "text-danger", style = "display:block;" })
-
+    @Html.Hidden("ID", Model.ID)
     <div class="panel panel-default">
-        <div class="panel-heading">创建话题</div>
+        <div class="panel-heading">修改话题</div>
         <div class="panel-body">
             <div class="form-group">
                 <div class="input-group">
@@ -61,16 +32,15 @@
                 <li class="active">
                     <a href="#edit" data-toggle="tab">话题内容</a>
                 </li>
-
-                <li id="scriptTab" style="display: none;"><a href="#script" data-toggle="tab">相关案例</a></li>
+                <li id="scriptTab"><a href="#script" data-toggle="tab">相关案例</a></li>
             </ul>
             <div id="myTabContent" class="tab-content">
-                @Html.Partial("_topicMarkdown")
+                @Html.Partial("_topicMarkdownEdit", new ViewDataDictionary { { "markdown", Model.body } })
 
-
-                @Html.Partial("_taskScriptAdd", Model)
+                <div class="tab-pane fade" id="script">
+                    @Html.Partial("_taskScriptView", ViewBag.taskInfo as taskModel)
+                </div>
             </div>
-
             <br />
             <div class="form-group">
                 <input type="submit" value="保存" class="btn btn-primary col-xs-2" />
@@ -83,4 +53,5 @@
     </div>
 
 }
+
 

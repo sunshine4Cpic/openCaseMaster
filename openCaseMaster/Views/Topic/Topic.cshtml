@@ -1,6 +1,6 @@
 ﻿@using openCaseMaster.ViewModels
 @using openCaseMaster.Models
-@model taskModel_view
+@model topicModel_view
 
 @section Scripts {
     <link rel="stylesheet" href="/Content/editormd.preview.css" />
@@ -76,7 +76,7 @@
             </textarea>
         </div>
     </div>
-    @if (Model.userID == userHelper.getUserID())
+    @if (Model.userID == userHelper.getUserID)
     {
         <div class="panel-footer clearfix">
             <div class="opts">
@@ -87,16 +87,8 @@
 
 
                 <span class="pull-right opts">
-                    @if (Model.nodeID < 200)
-                    {
 
-                        <a class="fa fa-pencil" title="修改本帖" href="editTask/@Model.ID"></a>
-
-                    }
-                    else
-                    {
-                        <a class="fa fa-pencil" title="修改本帖" href="edit/@Model.ID"></a>
-                    }
+                    <a class="fa fa-pencil" title="修改本帖" href="edit/@Model.ID"></a>
                     <a confirm="确定要删除吗？" class="fa fa-trash" title="删除本帖" method="post" href="Delete/@Model.ID"></a>
 
                 </span>
@@ -109,27 +101,7 @@
     {
         <div class="panel-footer clearfix">
 
-            <table class="table" style="table-layout:fixed">
-                <caption><b>测试app:</b><a href="#">@Model.taskInfo.appName</a> </caption>
-                <thead>
-                    <tr>
-                        <th width="20%">编号</th>
-                        <th>案例</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{int i = 1;}
-                    @foreach (var d in Model.taskInfo.taskScripts)
-                    {
-                        <tr>
-                            <td>@i</td>
-                            <td nowrap style="overflow:hidden; text-overflow:ellipsis;"><a href="#">@d.Value</a></td>
-        </tr>
-                        { i++; }
-                    }
-
-                </tbody>
-            </table>
+            @Html.Partial("_taskScriptView", Model.taskInfo)
 
         </div>
     }

@@ -1446,9 +1446,11 @@
     <Content Include="Views\Topic\Topic.cshtml" />
     <Content Include="Views\Topic\adminAdd.cshtml" />
     <Content Include="Views\Topic\_topicMarkdown.cshtml" />
-    <Content Include="Views\Topic\_taskScript.cshtml" />
+    <Content Include="Views\Topic\_taskScriptAdd.cshtml" />
     <Content Include="Views\Topic\edit.cshtml" />
     <Content Include="Views\Topic\_topicMarkdownEdit.cshtml" />
+    <Content Include="Views\Topic\editTask.cshtml" />
+    <Content Include="Views\Topic\_taskScriptView.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

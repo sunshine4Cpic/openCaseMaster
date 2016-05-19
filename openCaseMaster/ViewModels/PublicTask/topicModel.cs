@@ -27,16 +27,13 @@ namespace openCaseMaster.ViewModels
 
 
         [Required]
-        [Range(201, 599)]
+        [Range(100, 599)]
         public int node { get; set; }
     }
 
 
-    public class topicModel_taskAdd : topicModel
+    public class topicTaskModel : topicModel
     {
-        [Required]
-        [Range(100, 500)]
-        new public int node { get; set; }
 
         [Required]
         public int appID { get; set; }
@@ -49,7 +46,7 @@ namespace openCaseMaster.ViewModels
         public string scripts { get; set; }
     }
 
-    public class taskModel_prev
+    public class topicModel_prev
     {
 
         public string userName { get; set; }
@@ -90,9 +87,9 @@ namespace openCaseMaster.ViewModels
 
     }
 
-    public class taskModel_view : taskModel_prev
+    public class topicModel_view : topicModel_prev
     {
-        public taskModel_view(int ID)
+        public topicModel_view(int ID)
         {
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
@@ -100,7 +97,7 @@ namespace openCaseMaster.ViewModels
                 if (tic.node < 200)
                 {
                     var tk = tic.M_publicTask.First();
-                    taskInfo = new testTask();
+                    taskInfo = new taskModel();
                     taskInfo.appName = tk.M_application.name;
                     taskInfo.appID = tk.appID;
                     taskInfo.taskScripts = tk.M_publicTaskScript.ToDictionary(k => k.ID, v => v.title);
@@ -123,9 +120,9 @@ namespace openCaseMaster.ViewModels
             }
         }
 
-        
 
-        public testTask taskInfo;
+
+        public taskModel taskInfo;
 
 
         public string body { get; set; }
@@ -135,7 +132,7 @@ namespace openCaseMaster.ViewModels
         
     }
 
-    public class testTask
+    public class taskModel
     {
         public int appID { get; set; }
 

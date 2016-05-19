@@ -110,7 +110,7 @@ namespace openCaseMaster.Controllers
 
            
          
-            //nmtc.userID = userHelper.getUserID()
+            //nmtc.userID = userHelper.getUserID
             nmtc.name = name;
             nmtc.stepXML = stepXML.ToString();
 
@@ -143,7 +143,7 @@ namespace openCaseMaster.Controllers
             }
             var nmtc = QC_DB.M_testCaseSteps.First(t => t.ID == id);
 
-            var userID = userHelper.getUserID();
+            var userID = userHelper.getUserID;
             if (nmtc.userID == userID)
             {
                 QC_DB.M_testCaseSteps.Remove(nmtc);

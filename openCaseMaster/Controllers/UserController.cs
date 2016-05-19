@@ -350,7 +350,7 @@ namespace openCaseMaster.Controllers
             }
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-            int id = userHelper.getUserID();
+            int id = userHelper.getUserID;
 
             admin_user user = QC_DB.admin_user.First(t => t.ID == id);
 

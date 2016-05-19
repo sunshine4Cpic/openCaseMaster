@@ -387,7 +387,7 @@ namespace openCaseMaster.Controllers
             M_testCaseSteps nmtc = new M_testCaseSteps();
             nmtc.PID = PID;
             nmtc.FID = FID;
-            nmtc.userID = userHelper.getUserID();
+            nmtc.userID = userHelper.getUserID;
             nmtc.name = name;
             nmtc.stepXML = stepXML.ToString();
 

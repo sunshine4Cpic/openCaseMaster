@@ -34,7 +34,7 @@ namespace openCaseMaster.ViewModels
         {
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-            int userID = userHelper.getUserID();
+            int userID = userHelper.getUserID;
 
             var fm = QC_DB.caseFramework.FirstOrDefault(t=>t.userID==userID);
             if (fm != null)

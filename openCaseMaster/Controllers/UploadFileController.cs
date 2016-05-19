@@ -131,7 +131,7 @@ namespace openCaseMaster.Controllers
                 StreamReader sr = new StreamReader(stm);
                 XElement fm = XElement.Parse(sr.ReadToEnd());
 
-                int userID = userHelper.getUserID();
+                int userID = userHelper.getUserID;
 
                 QCTESTEntities QC_DB = new QCTESTEntities();
 
