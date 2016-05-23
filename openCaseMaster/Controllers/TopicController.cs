@@ -30,7 +30,8 @@ namespace openCaseMaster.Controllers
                           nodeID = t.node,
                           userName = t.admin_user.Username,
                           creatDate = t.creatDate,
-                          scriptCount = t.M_publicTask.Sum(tk=>tk.M_publicTaskScript.Count)
+                          scriptCount = t.M_publicTask.Sum(tk=>tk.M_publicTaskScript.Count),
+                          userAvatar = t.admin_user.Avatar
                       };
 
          
@@ -43,6 +44,38 @@ namespace openCaseMaster.Controllers
          
         
             return View(v);
+        }
+
+        [AllowAnonymous]
+        public ActionResult node(int id,int page=1)
+        {
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            var lsv = from t in QC_DB.topic
+                      where t.node==id && t.state != 0 
+                      orderby t.ID descending
+                      select new topicModel_prev
+                      {
+                          ID = t.ID,
+                          title = t.title,
+                          nodeID = t.node,
+                          userName = t.admin_user.Username,
+                          creatDate = t.creatDate,
+                          scriptCount = t.M_publicTask.Sum(tk => tk.M_publicTaskScript.Count),
+                          userAvatar = t.admin_user.Avatar
+                      };
+
+
+            ViewBag.select = "Task";
+            ViewBag.page = page;
+            int rows = 15;
+
+
+            var v = lsv.Skip(rows * (page - 1)).Take(rows).ToList();
+
+            
+            return View("Index",v);
         }
 
         [HttpGet]
@@ -66,13 +99,11 @@ namespace openCaseMaster.Controllers
         public ActionResult edit(int id)
         {
 
-
             QCTESTEntities QC_DB = new QCTESTEntities();
 
 
-
             var tic = QC_DB.topic.First(t =>
-                t.ID == id && t.state != 0 && t.userID == userHelper.getUserID);
+                t.ID == id && t.state != 0 && t.userID == userHelper.UserID);
 
 
             topicModel tm = new topicModel();
@@ -81,7 +112,7 @@ namespace openCaseMaster.Controllers
             tm.body = tic.body;
 
 
-            if (tic.node < 200)
+            if (tic.node ==101)
             {
                 var node = topicHelper.nodes.First(t => t.Key == tic.node);
 
@@ -134,7 +165,7 @@ namespace openCaseMaster.Controllers
             QCTESTEntities QC_DB = new QCTESTEntities();
 
             var tic = QC_DB.topic.First(t => 
-                t.ID == tm.ID && t.state != 0 && t.userID == userHelper.getUserID);
+                t.ID == tm.ID && t.state != 0 && t.userID == userHelper.UserID);
             tic.node = tm.node;
             tic.title = tm.title;
             tic.body = tm.body;
@@ -142,6 +173,55 @@ namespace openCaseMaster.Controllers
             QC_DB.SaveChanges();
 
             return RedirectToAction(tm.ID.ToString());
+
+        }
+
+
+        /// <summary>
+        /// 回复
+        /// </summary>
+        [HttpPost]
+        public ActionResult reply(int id, string body)
+        {
+         
+
+            if(string.IsNullOrEmpty(body))
+            {
+                return RedirectToAction(id.ToString());
+            }
+            
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            //是否有效主题
+            var tic = QC_DB.topic.FirstOrDefault(t =>t.ID == id && t.state != 0 );
+            if (tic == null) throw new HttpException(404, "page not found");
+
+            topicReply tr = new topicReply();
+            tr.topicID = id;
+            tr.body = body;
+            tr.userID = userHelper.UserID;
+            tr.creatDate = DateTime.Now;
+            QC_DB.topicReply.Add(tr);
+            QC_DB.SaveChanges();
+
+            return RedirectToAction(id.ToString());
+
+        }
+
+
+        [Route("reply/Delete/{id}")]
+        [HttpPost]
+        public bool replyDelete(int id)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            //是否有效主题
+            var tr = QC_DB.topicReply.FirstOrDefault(t => t.ID == id && t.state != 0 && t.userID == userHelper.UserID);
+            if (tr == null) return true;
+            tr.state = 0;
+            QC_DB.SaveChanges();
+
+            return true;
 
         }
 
@@ -169,7 +249,7 @@ namespace openCaseMaster.Controllers
             pt.creatDate = DateTime.Now;
             pt.title = tm.title;
             pt.body = tm.body;
-            pt.userID = userHelper.getUserID;
+            pt.userID = userHelper.UserID;
 
             QC_DB.topic.Add(pt);
 
@@ -204,7 +284,7 @@ namespace openCaseMaster.Controllers
             tp.creatDate = DateTime.Now;
             tp.title = tm.title;
             tp.body = tm.body;
-            tp.userID = userHelper.getUserID;
+            tp.userID = userHelper.UserID;
             tp.node = tm.node;
 
             QC_DB.topic.Add(tp);
@@ -288,7 +368,7 @@ namespace openCaseMaster.Controllers
             QCTESTEntities QC_DB = new QCTESTEntities();
 
             var ts = QC_DB.topic.First(t => t.ID == id);
-            if (ts.userID != userHelper.getUserID)
+            if (ts.userID != userHelper.UserID)
                 return RedirectToAction("Index");
             ts.state = 0;
             QC_DB.SaveChanges();

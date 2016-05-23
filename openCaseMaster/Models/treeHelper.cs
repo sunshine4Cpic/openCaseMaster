@@ -93,7 +93,7 @@ namespace openCaseMaster.Models
 
         public static string getUserControl(int FID,int PID)
         {
-            int userID = userHelper.getUserID;
+            int userID = userHelper.UserID;
 
          
             QCTESTEntities QC_DB = new QCTESTEntities();
@@ -121,7 +121,7 @@ namespace openCaseMaster.Models
 
         public static string getUserControl()
         {
-            int userID = userHelper.getUserID;
+            int userID = userHelper.UserID;
 
             
             using (QCTESTEntities QC_DB = new QCTESTEntities())

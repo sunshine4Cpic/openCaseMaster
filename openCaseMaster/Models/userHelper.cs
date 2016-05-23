@@ -19,7 +19,7 @@ namespace openCaseMaster.Models
         /// 获得ID
         /// </summary>
         /// <returns></returns>
-        public static int getUserID
+        public static int UserID
         {
             get
             {
@@ -35,6 +35,26 @@ namespace openCaseMaster.Models
                     }
                 }
                 return -1;
+            }
+        }
+
+        /// <summary>
+        /// 获得用户名
+        /// </summary>
+        /// <returns></returns>
+        public static string UserName
+        {
+            get
+            {
+                if (HttpContext.Current.User != null)
+                {
+                    if (HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        return HttpContext.Current.User.Identity.Name;
+                       
+                    }
+                }
+                return "null";
             }
         }
 
@@ -59,7 +79,7 @@ namespace openCaseMaster.Models
         /// </summary>
         public static IQueryable<project> getPermissionsProject()
         {
-            int userID = getUserID;
+            int userID = UserID;
             QCTESTEntities QC_DB = new QCTESTEntities();
 
            
@@ -88,7 +108,7 @@ namespace openCaseMaster.Models
         public static List<caseFramework> getBaseFrameworks()
         {
 
-            int userID = getUserID;
+            int userID = UserID;
             List<caseFramework> cfs = frameworkHelp.getAutoFramework();
 
 

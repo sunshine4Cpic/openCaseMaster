@@ -14,22 +14,27 @@
     <script src="/Scripts/editormd/lib/jquery.flowchart.min.js"></script>
 
     <script src="/Scripts/editormd.js"></script>
+    <link rel="stylesheet" href="/Content/editormd.css" />
     <script type="text/javascript">
         $(function () {
+
 
             @if (ViewBag.clear == true)
             {
                 @Html.Raw("localStorage.clear();");
             }
 
-            editormd.markdownToHTML("markdownView", {
-                htmlDecode: "style,script,iframe",  // you can filter tags decode
-                emoji: true,
-                taskList: true,
-                tex: true,  // 默认不解析
-                flowChart: true,  // 默认不解析
-                sequenceDiagram: true,  // 默认不解析
-            });
+            $(".markdownView").each(function () {
+                editormd.markdownToHTML($(this), {
+                    htmlDecode: "style,script,iframe",  // you can filter tags decode
+                    emoji: true,
+                    taskList: true,
+                    tex: false,  // 默认不解析
+                    flowChart: false,  // 默认不解析
+                    sequenceDiagram: false,  // 默认不解析
+                });
+            })
+
 
             $("a[method=post]").click(function () {
                 var cf = true;
@@ -45,6 +50,43 @@
                 }
                 return false;
             });
+
+            $(".replyDelete").click(function () {
+
+                var cf = confirm("确认删除回复?");
+                if (cf) {
+                    var reply = $(this).parents(".reply");
+                    $.post(this.href, {},
+                      function (data) {
+                          if(data=="True")
+                              reply.remove();
+                      });
+                }
+                return false;
+            });
+
+
+
+
+            editormd("editormd", {
+                name: "body",
+                //theme: "dark",
+                //previewTheme: "dark",
+                //editorTheme: "pastel-on-dark",
+                imageUpload: true,
+                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                imageUploadURL: "/UploadFile/imgUpLoad",
+                toolbarIcons: function () {
+                    return ["preview", "|", "undo", "redo", "|", "link", "image", "emoji", "code-block"]
+                },
+                autoFocus: false,
+                lineNumbers: false,
+                watch: false,
+                height: 200,
+                path: '/Scripts/editormd/lib/',
+                emoji: true,
+            });
+
         });
     </script>
 
@@ -65,18 +107,16 @@
                 </div>
             </div>
             <div class="avatar media-right">
-                <a href="#"><img class="media-object avatar-48" src="~/Content/images/everyone.jpg"></a>
+                <a href="#"><img class="media-object avatar-48" src="~/Content/userAvatar/@Model.userAvatar"></a>
             </div>
         </div>
 
-        <div class="panel-body markdown" id="markdownView">
+        <div class="panel-body markdownView">
 
-            <textarea id="append-test" style="display:none;">
-@Model.body
-            </textarea>
+            <textarea style="display:none;">@Model.body</textarea>
         </div>
     </div>
-    @if (Model.userID == userHelper.getUserID)
+    @if (Model.userID == userHelper.UserID)
     {
         <div class="panel-footer clearfix">
             <div class="opts">
@@ -99,13 +139,77 @@
 
     @if (Model.taskInfo != null)
     {
-        <div class="panel-footer clearfix">
+
+        <div style="border-top:1px dashed #ff6a00">
 
             @Html.Partial("_taskScriptView", Model.taskInfo)
 
         </div>
     }
 
+    <div id="replies" class="panel panel-default">
+        <div class="total panel-heading">
+            共收到 <b>@Model.replies.Count(t=>t.state!=0)</b> 条回复
+        </div>
+        <div class="items panel-body">
+            @{int i = 0;}
+            @foreach (var m in Model.replies)
+            {
+                { i++; }
+                { if (m.state == 0) { continue; } }
+                <div class="reply" data-id="42155" id=@Html.Raw("reply" + i)>
+                    <div class="avatar"><a href="#"><img class="media-object avatar-48" src="~/Content/userAvatar/@m.userAvatar"></a></div>
+                    <div class="infos">
+                        <div class="info">
+                            <span class="name">
+                                <a href="#">@m.userName</a>
+                            </span> ·
+                            <span class="time">
+                                <a class="reply-floor" href=@Html.Raw("#reply" + i)>#@i</a> · <abbr class="timeago" title="@m.creatDate">@m.timeago</abbr>
+                            </span>
+                            <span class="opts pull-right">
+                                @if (m.userID == userHelper.UserID)
+                                {
+                                    <a class="edit fa fa-pencil" title="修改回帖" href="#"></a>
+                                    <a data-id="@m.ID" class="fa fa-trash replyDelete" title="删除回复" href="/reply/Delete/@m.ID"></a>
+                                }
+                                <a title="回复此楼" class="btn-reply fa fa-mail-reply" href="#"></a>
+                            </span>
+                        </div>
+
+                        <div class="panel-body markdownView">
+
+                            <textarea id="append-test" style="display:none;">@m.body</textarea>
+                        </div>
+                    </div>
+
+                </div>
+                               
+            }
+
+
+
+        </div>
+    </div>
+
+
+    <div id="reply" class="panel panel-default">
+        <div class="panel-heading">回帖</div>
+        <div class="panel-body">
+
+            <form id="replyForm" action="/topic/reply/@Model.ID" method="post">
+                <div id="editormd"></div>
+                <div class="submit-buttons">
+                    <button type="submit" id="reply-button" class="btn btn-primary" tabindex="2" ,="" data-disable-with="提交回复">提交回复</button>
+
+
+
+                    <div class="pull-right"><a href="#" target="_blank">排版说明</a></div>
+
+                </div>
+            </form>
+        </div>
+    </div>
 
 
 </div>

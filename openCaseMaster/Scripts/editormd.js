@@ -4032,7 +4032,7 @@
      * @returns {Object}   div           返回jQuery对象元素
      */
     
-    editormd.markdownToHTML = function(id, options) {
+    editormd.markdownToHTML = function(div, options) {
         var defaults = {
             gfm                  : true,
             toc                  : true,
@@ -4058,7 +4058,7 @@
         
         editormd.$marked  = marked;
 
-        var div           = $("#" + id);
+        //var div           = $("#" + id);
         var settings      = div.settings = $.extend(true, defaults, options || {});
         var saveTo        = div.find("textarea");
         

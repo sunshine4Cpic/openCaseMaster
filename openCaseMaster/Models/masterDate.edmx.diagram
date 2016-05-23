@@ -50,6 +50,9 @@
         <AssociationConnector Association="MasterModel.FK_M_publicTest_appID" />
         <AssociationConnector Association="MasterModel.FK_M_publicTask_topicID" />
         <AssociationConnector Association="MasterModel.FK_M_publicTaskScript_taskID" />
+        <EntityTypeShape EntityType="MasterModel.topicReply" Width="1.5" PointX="6" PointY="15.625" />
+        <AssociationConnector Association="MasterModel.FK_topicReply_userID" />
+        <AssociationConnector Association="MasterModel.FK_topicReply_topicID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

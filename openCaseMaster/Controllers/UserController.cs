@@ -54,6 +54,9 @@ namespace openCaseMaster.Controllers
                 case 1:
                     userRole += ",admin";
                     break;
+                case 5:
+                    userRole += ",tester";
+                    break;
                 case null:
                     //userRole = "guest";
                     break;
@@ -126,7 +129,7 @@ namespace openCaseMaster.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [CaptchaVerify("Captcha is not valid")]
+        [CaptchaVerify("Captcha is not valid")]//验证码
         public ActionResult Register(RegisterModel model)
         {
             if (ModelState.IsValid)
@@ -147,6 +150,7 @@ namespace openCaseMaster.Controllers
                 tmp.Password = model.Password;
 
                 tmp.Permission = "";
+                tmp.Avatar = "auto.jpg";
 
                 QC_DB.admin_user.Add(tmp);
 
@@ -316,6 +320,8 @@ namespace openCaseMaster.Controllers
             tmp.Name = user.Name;
             tmp.GreatDate = DateTime.Now;
             tmp.Password = "Cpic1234";
+            tmp.Avatar = "auto.jpg";
+      
 
             QC_DB.admin_user.Add(tmp);
             QC_DB.SaveChanges();
@@ -350,7 +356,7 @@ namespace openCaseMaster.Controllers
             }
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-            int id = userHelper.getUserID;
+            int id = userHelper.UserID;
 
             admin_user user = QC_DB.admin_user.First(t => t.ID == id);
 

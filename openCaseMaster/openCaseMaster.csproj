@@ -297,6 +297,9 @@
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\topicHelper.cs" />
+    <Compile Include="Models\topicReply.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\treeHelper.cs" />
     <Compile Include="Models\userHelper.cs" />
     <Compile Include="Models\user_type.cs">
@@ -370,7 +373,6 @@
     <Content Include="Content\help\useUserStep.png" />
     <Content Include="Content\help\workwork.jpg" />
     <Content Include="Content\images\app.jpg" />
-    <Content Include="Content\images\everyone.jpg" />
     <Content Include="Content\images\loading%402x.gif" />
     <Content Include="Content\images\loading%403x.gif" />
     <Content Include="Content\images\loading.gif" />
@@ -785,6 +787,7 @@
     <Content Include="Content\themes\metro\validatebox.css" />
     <Content Include="Content\themes\metro\window.css" />
     <Content Include="Content\themes\mobile.css" />
+    <Content Include="Content\userAvatar\auto.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\editormd-logo.svg" />
     <Content Include="fonts\fontawesome-webfont.svg" />
@@ -837,6 +840,8 @@
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\highlight\highlight.min.js" />
+    <Content Include="Scripts\highlight\solarized_dark.min.css" />
     <Content Include="Scripts\locale\bootstrap-datetimepicker.zh-CN.js" />
     <Content Include="Scripts\bootstrap-select.js" />
     <Content Include="Scripts\bootstrap-select.min.js" />
@@ -1174,8 +1179,6 @@
     <Content Include="Scripts\editormd\plugins\reference-link-dialog\reference-link-dialog.js" />
     <Content Include="Scripts\editormd\plugins\table-dialog\table-dialog.js" />
     <Content Include="Scripts\editormd\plugins\test-plugin\test-plugin.js" />
-    <Content Include="Scripts\highlight\highlight.min.js" />
-    <Content Include="Scripts\highlight\solarized_dark.min.css" />
     <Content Include="Scripts\i18n\defaults-ar_AR.js" />
     <Content Include="Scripts\i18n\defaults-ar_AR.min.js" />
     <Content Include="Scripts\i18n\defaults-bg_BG.js" />
@@ -1247,6 +1250,7 @@
     <Content Include="Scripts\loading\ladda.min.js" />
     <Content Include="Scripts\loading\spin.js" />
     <Content Include="Scripts\loading\spin.min.js" />
+    <Content Include="Scripts\stepEdit.js" />
     <Content Include="调试客户端.rar" />
     <Content Include="Content\bootstrap-select.css.map" />
     <Content Include="fonts\editormd-logo.eot" />
@@ -1405,7 +1409,6 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
@@ -1438,7 +1441,7 @@
     <Content Include="Views\User\Register.cshtml" />
     <Content Include="Views\tutorial\framework.cshtml" />
     <Content Include="Views\Device\DeviceView.cshtml" />
-    <Content Include="Views\User\userInfo.cshtml" />
+    <Content Include="Views\User\userInfo2.cshtml" />
     <Content Include="Views\User\_ChangePassword.cshtml" />
     <Content Include="Views\RunCase\_userCompleted.cshtml" />
     <Content Include="Views\Topic\Index.cshtml" />
@@ -1451,6 +1454,8 @@
     <Content Include="Views\Topic\_topicMarkdownEdit.cshtml" />
     <Content Include="Views\Topic\editTask.cshtml" />
     <Content Include="Views\Topic\_taskScriptView.cshtml" />
+    <Content Include="Views\Shared\Error404.cshtml" />
+    <Content Include="Views\User\userInfo.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

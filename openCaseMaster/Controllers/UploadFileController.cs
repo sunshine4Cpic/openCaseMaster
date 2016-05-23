@@ -1,4 +1,5 @@
 ﻿
+using Newtonsoft.Json;
 using openCaseMaster.Models;
 using System;
 using System.Collections.Generic;
@@ -121,17 +122,18 @@ namespace openCaseMaster.Controllers
             return originalName;
         }
 
+        /*
         [HttpPost]
         public string userFramework()
         {
-            /*******直接保存不可取 提取需要的信息再保存********/
+            //直接保存不可取 提取需要的信息再保存
             var stm = FileToStream();
             if (stm != null)
             {
                 StreamReader sr = new StreamReader(stm);
                 XElement fm = XElement.Parse(sr.ReadToEnd());
 
-                int userID = userHelper.getUserID;
+                int userID = userHelper.UserID;
 
                 QCTESTEntities QC_DB = new QCTESTEntities();
 
@@ -149,24 +151,70 @@ namespace openCaseMaster.Controllers
             }
            
         }
+        */
+
+        [HttpPost]
+        public bool userAvatar()
+        {
+            HttpPostedFileBase file = Request.Files[0];
+
+            string upFileName = file.FileName;
+
+            string ext = Path.GetExtension(upFileName).ToLower();
+
+            string[] exts = { ".jpg",".jpeg", ".png" };
+
+            if (exts.Contains(ext))
+            {
+                string fileName = userHelper.UserID + ext;
+                string fileDir = Server.MapPath("~/Content/userAvatar/" + fileName);
+
+                file.SaveAs(fileDir);
+                QCTESTEntities QC_DB = new QCTESTEntities();
+                var user = QC_DB.admin_user.First(t => t.ID == userHelper.UserID);
+                user.Avatar = fileName;
+                QC_DB.SaveChanges();
+
+                return true;
+            }
+            else
+            {
+               
+                return false;
+            }
+   
+        }
 
         public string imgUpLoad()
         {
             HttpPostedFileBase file = Request.Files[0];
-            string fileName = file.FileName;
-            //转换只取得文件名，去掉路径。 
-            if (fileName.LastIndexOf("\\") > -1)
+            
+            string upFileName = file.FileName;
+
+            string ext = Path.GetExtension(upFileName).ToLower();
+
+            string[] exts = { ".jpg", ".gif", ".jpeg", ".png" };
+
+            if (exts.Contains(ext))
             {
-                fileName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
+                string fileName = System.Guid.NewGuid().ToString("N") + ext;
+                string fileDir = new DirectoryInfo(Server.MapPath("~/")).Parent.FullName + "/img/" + fileName;
+
+                file.SaveAs(fileDir);
+
+                var rt = new { success = 1, message = "成功", url = "/img/" + fileName };
+                string json = JsonConvert.SerializeObject(rt);
+                return json;
+            }else
+            {
+                var rt = new { success = 0, message = "非法的文件"};
+                string json = JsonConvert.SerializeObject(rt);
+                return json;
             }
-            //保存到相对路径下。 
-            file.SaveAs(Server.MapPath("../../image/img/" + fileName));
-            //以下代码是将 路径保存到数据库。 
-            string ImagePath = "../../image/img/" + fileName;
-            string sql = "insert into bookinfo(bookphoto)values('" + ImagePath + "')";
-            //封装好的代码，直接调用。 
-           
-            return "";
+          
+
+          
+            
         }
 
 

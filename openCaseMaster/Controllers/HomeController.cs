@@ -22,9 +22,8 @@ namespace openCaseMaster.Controllers
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Error404()
         {
-            ViewBag.Message = "Your contact page.";
 
             return View();
         }

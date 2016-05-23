@@ -34,15 +34,21 @@ namespace openCaseMaster.ViewModels
         {
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-            int userID = userHelper.getUserID;
+            int userID = userHelper.UserID;
 
+            this.Avatar = QC_DB.admin_user.First(t => t.ID == userID).Avatar;
+
+            /*
             var fm = QC_DB.caseFramework.FirstOrDefault(t=>t.userID==userID);
             if (fm != null)
                 this.framework = XElement.Parse( fm.controlXML).ToString();
             else
                 this.framework = "";
+             */
         }
         public string framework { get; set; }
+
+        public string Avatar { get; set; }
     }
 
     

@@ -18,6 +18,7 @@ namespace openCaseMaster.Models
         public topic()
         {
             this.M_publicTask = new HashSet<M_publicTask>();
+            this.topicReply = new HashSet<topicReply>();
         }
     
         public int ID { get; set; }
@@ -31,5 +32,7 @@ namespace openCaseMaster.Models
         public virtual admin_user admin_user { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_publicTask> M_publicTask { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<topicReply> topicReply { get; set; }
     }
 }

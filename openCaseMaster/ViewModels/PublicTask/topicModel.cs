@@ -46,18 +46,20 @@ namespace openCaseMaster.ViewModels
         public string scripts { get; set; }
     }
 
-    public class topicModel_prev
+    public class topicModel_prev :topicUser
     {
 
         public string userName { get; set; }
+        public string userAvatar { get; set; }
+        public int userID { get; set; }
+
         public int ID { get; set; }
 
         public int nodeID { get; set; }
 
         public string nodeText { get { return topicHelper.nodes[nodeID]; } }
 
-        public string img { get; set; }
-
+        
         public DateTime creatDate { get; set; }
 
         public string timeago
@@ -83,7 +85,6 @@ namespace openCaseMaster.ViewModels
         public int? scriptCount { get; set; }
 
         public string title { get; set; }
-        public int userID { get; set; }
 
     }
 
@@ -94,7 +95,7 @@ namespace openCaseMaster.ViewModels
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
                 var tic = QC_DB.topic.First(t => t.ID == ID);
-                if (tic.node < 200)
+                if (tic.node == 101 )
                 {
                     var tk = tic.M_publicTask.First();
                     taskInfo = new taskModel();
@@ -111,11 +112,25 @@ namespace openCaseMaster.ViewModels
 
                 this.userName = tic.admin_user.Username;
                 this.userID = tic.userID;
+                this.userAvatar = tic.admin_user.Avatar;
 
                 this.creatDate = tic.creatDate;
 
                 this.title = tic.title;
                 this.body = tic.body;
+
+                replies = (from t in tic.topicReply
+                           //where t.state != 0
+                           select new replyModel
+                           {
+                               ID = t.ID,
+                               body = t.body,
+                               userName = t.admin_user.Name,
+                               creatDate = t.creatDate,
+                               userID = t.userID,
+                               state = t.state,
+                               userAvatar = t.admin_user.Avatar
+                           }).ToList();
                 
             }
         }
@@ -128,8 +143,44 @@ namespace openCaseMaster.ViewModels
         public string body { get; set; }
 
 
-
+        public List<replyModel> replies;
         
+    }
+
+    public class replyModel : topicUser
+    {
+        public int ID { get; set; }
+
+        public DateTime creatDate { get; set; }
+
+        public string timeago
+        {
+            get
+            {
+                var ts = DateTime.Now.Subtract(creatDate);
+                if (ts.TotalDays > 1)
+                {
+                    return ts.Days + " 天前";
+                }
+                else if (ts.TotalHours > 1)
+                {
+                    return ts.Hours + " 小时前";
+                }
+
+                return ts.Minutes + " 分钟前";
+
+            }
+        }
+
+        public string userName { get; set; }
+
+        public string userAvatar { get; set; }
+       
+        public string body { get; set; }
+
+        public int userID { get; set; }
+
+        public int? state { get; set; }
     }
 
     public class taskModel
@@ -147,6 +198,12 @@ namespace openCaseMaster.ViewModels
     }
 
 
-    
+    interface topicUser
+    {
+        int userID { get; set; }
+        string userName { get; set; }
+
+        string userAvatar { get; set; }
+    }
 
 }

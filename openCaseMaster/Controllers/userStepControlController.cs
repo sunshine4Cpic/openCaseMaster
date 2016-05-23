@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace openCaseMaster.Controllers
 {
-     [Authorize(Roles = "user,guest")]
+     [Authorize(Roles = "user")]
     public class userStepControlController : Controller
     {
         // GET: userStepControl
@@ -110,7 +110,7 @@ namespace openCaseMaster.Controllers
 
            
          
-            //nmtc.userID = userHelper.getUserID
+            //nmtc.userID = userHelper.UserID
             nmtc.name = name;
             nmtc.stepXML = stepXML.ToString();
 
@@ -143,7 +143,7 @@ namespace openCaseMaster.Controllers
             }
             var nmtc = QC_DB.M_testCaseSteps.First(t => t.ID == id);
 
-            var userID = userHelper.getUserID;
+            var userID = userHelper.UserID;
             if (nmtc.userID == userID)
             {
                 QC_DB.M_testCaseSteps.Remove(nmtc);
