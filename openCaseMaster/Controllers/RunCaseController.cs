@@ -337,10 +337,12 @@ namespace openCaseMaster.Controllers
             {
                 M_testDemand md = QC_DB.M_testDemand.First(t => t.ID == ID);
 
-                if (md.type == 0 && md.M_testDemand1.Count > 0)
+                
+                /*if (md.type == 0 && md.M_testDemand1.Count > 0)
                 {
                     return "无法直接删除文件夹,请连续管理员";
-                }else if (md.isRun==true)
+                }else */
+                if (md.isRun==true)
                 {
                     return "无法删除已执行的测试计划";
                 }else

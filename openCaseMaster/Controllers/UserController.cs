@@ -193,7 +193,7 @@ namespace openCaseMaster.Controllers
             {
                 return Redirect(ReturnUrl);
             }
-            return RedirectToAction("Index", "TestCase");
+            return Redirect("/");
         }
 
 
