@@ -13,6 +13,11 @@ namespace openCaseMaster.Controllers
     [Authorize(Roles = "user")]
     public class TopicController : Controller
     {
+         [AllowAnonymous]
+        public ActionResult markdown()
+        {
+            return View();
+        }
 
         [AllowAnonymous]
         public ActionResult Index(int page=1)
