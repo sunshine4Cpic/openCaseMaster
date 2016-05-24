@@ -31,11 +31,12 @@ namespace openCaseMaster.Controllers
                           userName = t.admin_user.Username,
                           creatDate = t.creatDate,
                           scriptCount = t.M_publicTask.Sum(tk=>tk.M_publicTaskScript.Count),
-                          userAvatar = t.admin_user.Avatar
+                          userAvatar = t.admin_user.Avatar,
+                          replies = t.topicReply.Count
                       };
 
-         
-            ViewBag.select = "Index";
+
+            ViewBag.nodeID = 0;
             ViewBag.page = page;
             int rows = 15;
 
@@ -63,11 +64,12 @@ namespace openCaseMaster.Controllers
                           userName = t.admin_user.Username,
                           creatDate = t.creatDate,
                           scriptCount = t.M_publicTask.Sum(tk => tk.M_publicTaskScript.Count),
-                          userAvatar = t.admin_user.Avatar
+                          userAvatar = t.admin_user.Avatar,
+                          replies = t.topicReply.Count
                       };
 
 
-            ViewBag.select = "Task";
+            ViewBag.nodeID = id;
             ViewBag.page = page;
             int rows = 15;
 
@@ -77,6 +79,8 @@ namespace openCaseMaster.Controllers
             
             return View("Index",v);
         }
+
+      
 
         [HttpGet]
         public ActionResult add()
@@ -134,7 +138,7 @@ namespace openCaseMaster.Controllers
             }
             else
             {
-                var nodes = this.PublicNodes();
+                var nodes = topicHelper.PublicNodes();
 
                 foreach (var n in nodes)
                 {
@@ -389,11 +393,11 @@ namespace openCaseMaster.Controllers
             SLI.Add(new SelectListItem { Text = "请选择节点", Value = "" });
 
 
-            SLI.AddRange(PublicNodes());
+            SLI.AddRange(topicHelper.PublicNodes());
 
 
             if (userHelper.isAdmin)
-                SLI.AddRange(adminNodes());
+                SLI.AddRange(topicHelper.adminNodes());
 
             if (id < 1) return SLI;
 
@@ -411,43 +415,6 @@ namespace openCaseMaster.Controllers
         }
 
 
-        /// <summary>
-        /// 普通节点
-        /// </summary>
-        [NonAction]
-        private List<SelectListItem> PublicNodes()
-        {
-            List<SelectListItem> SLI = new List<SelectListItem>();
-           
-
-            SelectListGroup slg = new SelectListGroup();
-            slg.Name = "可选节点";
-
-            topicHelper.nodes.Where(t => t.Key > 200).ToList()
-                .ForEach(n => SLI.Add(new SelectListItem { Text = n.Value, Value = n.Key.ToString(), Group = slg }));
-
-
-            return SLI;
-
-        }
-
-        /// <summary>
-        /// admin 节点
-        /// </summary>
-        [NonAction]
-        private List<SelectListItem> adminNodes()
-        {
-            List<SelectListItem> SLI = new List<SelectListItem>();
-
-            SelectListGroup slgTask = new SelectListGroup();
-            slgTask.Name = "测试任务";
-
-            topicHelper.nodes.Where(t => t.Key < 200).ToList()
-                .ForEach(n => SLI.Add(new SelectListItem { Text = n.Value, Value = n.Key.ToString(), Group = slgTask }));
-
-
-            return SLI;
-
-        }
+        
     }
 }

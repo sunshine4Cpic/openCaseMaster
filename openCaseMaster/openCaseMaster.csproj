@@ -332,8 +332,6 @@
     <Compile Include="ViewModels\webApi\runClient_req.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="apkInstall\9ebe59c658c9c5c5ecdd8593e4025321.jpg" />
-    <Content Include="apkInstall\c7dde71190ef76c6205b2c889c16fdfaae51678c.jpg" />
     <Content Include="apkInstall\empty.txt" />
     <Content Include="App_Data\empty.txt" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -448,6 +446,7 @@
     <Content Include="Content\themes\icons\folder_classic_up.png" />
     <Content Include="Content\themes\icons\folder_modernist_opened_stuffed.png" />
     <Content Include="Content\themes\icons\gem_save.png" />
+    <Content Include="Content\themes\icons\gnew.gif" />
     <Content Include="Content\themes\icons\heart.png" />
     <Content Include="Content\themes\icons\heart_add.png" />
     <Content Include="Content\themes\icons\home_green.png" />

@@ -86,6 +86,8 @@ namespace openCaseMaster.ViewModels
 
         public string title { get; set; }
 
+        public int replies { get; set; }
+
     }
 
     public class topicModel_view : topicModel_prev
