@@ -33,7 +33,7 @@ namespace openCaseMaster.Controllers
                           ID = t.ID,
                           title = t.title,
                           nodeID = t.node,
-                          userName = t.admin_user.Username,
+                          userName = t.admin_user.Name,
                           creatDate = t.creatDate,
                           scriptCount = t.M_publicTask.Sum(tk=>tk.M_publicTaskScript.Count),
                           userAvatar = t.admin_user.Avatar,
@@ -66,7 +66,7 @@ namespace openCaseMaster.Controllers
                           ID = t.ID,
                           title = t.title,
                           nodeID = t.node,
-                          userName = t.admin_user.Username,
+                          userName = t.admin_user.Name,
                           creatDate = t.creatDate,
                           scriptCount = t.M_publicTask.Sum(tk => tk.M_publicTaskScript.Count),
                           userAvatar = t.admin_user.Avatar,
@@ -113,8 +113,9 @@ namespace openCaseMaster.Controllers
 
             var tic = QC_DB.topic.First(t =>
                 t.ID == id && t.state != 0 && t.userID == userHelper.UserID);
-
-
+            
+            
+            string[] aa = new string[6];
             topicModel tm = new topicModel();
             tm.node = tic.node;
             tm.title = tic.title;

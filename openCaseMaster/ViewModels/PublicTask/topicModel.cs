@@ -112,7 +112,7 @@ namespace openCaseMaster.ViewModels
 
                 this.nodeID = tic.node;
 
-                this.userName = tic.admin_user.Username;
+                this.userName = tic.admin_user.Name;
                 this.userID = tic.userID;
                 this.userAvatar = tic.admin_user.Avatar;
 

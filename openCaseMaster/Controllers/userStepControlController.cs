@@ -146,7 +146,8 @@ namespace openCaseMaster.Controllers
             var userID = userHelper.UserID;
             if (nmtc.userID == userID)
             {
-                QC_DB.M_testCaseSteps.Remove(nmtc);
+                nmtc.state = 0;
+                //QC_DB.M_testCaseSteps.Remove(nmtc);
                 QC_DB.SaveChanges();
                 return "True";
             }else

@@ -26,7 +26,6 @@ namespace openCaseMaster.Controllers
         public IHttpActionResult registerDevice([FromBody]registerDevice_req req)
         {
             
-
              if (!ModelState.IsValid)
              {
                  return BadRequest(ModelState);

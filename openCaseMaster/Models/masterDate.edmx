@@ -168,6 +168,7 @@
           <Property Name="paramXML" Type="xml" />
           <Property Name="PID" Type="int" />
           <Property Name="FID" Type="int" />
+          <Property Name="state" Type="int" />
         </EntityType>
         <EntityType Name="M_testDemand">
           <Key>
@@ -1153,6 +1154,7 @@
           <Property Name="FID" Type="Int32" />
           <NavigationProperty Name="caseFramework" Relationship="MasterModel.FK_M_testCaseSteps_FID" FromRole="M_testCaseSteps" ToRole="caseFramework" />
           <NavigationProperty Name="project" Relationship="MasterModel.FK_M_testCaseSteps_project" FromRole="M_testCaseSteps" ToRole="project" />
+          <Property Name="state" Type="Int32" />
         </EntityType>
         <EntityType Name="M_testDemand">
           <Key>
@@ -1793,6 +1795,7 @@
           <EntitySetMapping Name="M_testCaseSteps">
             <EntityTypeMapping TypeName="MasterModel.M_testCaseSteps">
               <MappingFragment StoreEntitySet="M_testCaseSteps">
+                <ScalarProperty Name="state" ColumnName="state" />
                 <ScalarProperty Name="FID" ColumnName="FID" />
                 <ScalarProperty Name="PID" ColumnName="PID" />
                 <ScalarProperty Name="paramXML" ColumnName="paramXML" />

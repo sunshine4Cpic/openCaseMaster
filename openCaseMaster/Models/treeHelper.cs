@@ -128,7 +128,7 @@ namespace openCaseMaster.Models
             {
                 //我的组件
                 var myControls = (from t in QC_DB.M_testCaseSteps
-                                  where t.userID == userID
+                                  where t.userID == userID && t.state!=0
                                   select t).ToList();
                 var frames = (from t in QC_DB.caseFramework
                              where t.userID == 1
