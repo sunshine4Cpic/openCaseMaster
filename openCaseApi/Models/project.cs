@@ -17,10 +17,6 @@ namespace openCaseApi.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public project()
         {
-            this.Framework4Project = new HashSet<Framework4Project>();
-            this.M_DevProMapping = new HashSet<M_DevProMapping>();
-            this.M_testCaseSteps = new HashSet<M_testCaseSteps>();
-            this.M_testDemand = new HashSet<M_testDemand>();
             this.project_app = new HashSet<project_app>();
         }
     
@@ -29,16 +25,8 @@ namespace openCaseApi.Models
         public Nullable<bool> zidonghua { get; set; }
         public Nullable<int> userID { get; set; }
     
-        public virtual admin_user admin_user { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Framework4Project> Framework4Project { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_DevProMapping> M_DevProMapping { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_testCaseSteps> M_testCaseSteps { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_testDemand> M_testDemand { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<project_app> project_app { get; set; }
+        public virtual admin_user admin_user { get; set; }
     }
 }

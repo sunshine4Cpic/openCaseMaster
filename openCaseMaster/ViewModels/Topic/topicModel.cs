@@ -82,11 +82,11 @@ namespace openCaseMaster.ViewModels
         }
 
 
-        public int? scriptCount { get; set; }
+        public int scriptCount { get; set; }
 
         public string title { get; set; }
 
-        public int replies { get; set; }
+        public int replyCnt { get; set; }
 
     }
 
@@ -97,9 +97,9 @@ namespace openCaseMaster.ViewModels
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
                 var tic = QC_DB.topic.First(t => t.ID == ID);
-                if (tic.node == 101 )
+                if (tic.node == 101 && tic.M_publicTask!=null)
                 {
-                    var tk = tic.M_publicTask.First();
+                    var tk = tic.M_publicTask;
                     taskInfo = new taskModel();
                     taskInfo.appName = tk.M_application.name;
                     taskInfo.appID = tk.appID;

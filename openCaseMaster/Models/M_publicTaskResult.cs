@@ -15,11 +15,13 @@ namespace openCaseMaster.Models
     public partial class M_publicTaskResult
     {
         public int ID { get; set; }
-        public Nullable<int> deviceID { get; set; }
+        public int deviceID { get; set; }
         public string result { get; set; }
-        public Nullable<System.DateTime> creatDate { get; set; }
+        public System.DateTime creatDate { get; set; }
         public Nullable<int> state { get; set; }
+        public int scriptID { get; set; }
     
         public virtual M_deviceConfig M_deviceConfig { get; set; }
+        public virtual M_publicTaskScript M_publicTaskScript { get; set; }
     }
 }

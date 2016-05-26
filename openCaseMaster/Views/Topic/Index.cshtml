@@ -50,16 +50,16 @@
                                     于 <abbr class="timeago" title="@tmv.creatDate">@tmv.timeago</abbr>发布
                                 </span>
                                 •
-                                @if (@tmv.scriptCount != null)
+                                @if (@tmv.scriptCount >0)
                                 {
                                     <a class="state-false" title="测试案例" href="/Topic/@tmv.ID">@tmv.scriptCount 个案例</a>
                                 }
                             </div>
                         </div>
-                        @if (tmv.replies != 0)
+                        @if (tmv.replyCnt != 0)
                         {
                             <div class="count media-right">
-                                <a class="state-false" title="回复" href="/Topic/@tmv.ID">@tmv.replies</a>
+                                <a class="state-false" title="回复" href="/Topic/@tmv.ID">@tmv.replyCnt</a>
                             </div>
                         }
 
@@ -73,7 +73,7 @@
         
 <nav class="navbar navbar-default" role="navigation">
    <div class="navbar-header">
-      <a class="navbar-brand" href="#">节点分类导航</a>
+      <span class="navbar-brand">节点分类导航</span>
    </div>
    <div>
       <ul class="nav navbar-nav">

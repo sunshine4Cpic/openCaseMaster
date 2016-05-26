@@ -184,21 +184,14 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\projectController.cs" />
+    <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Models\admin_log.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\admin_user.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\caseFramework.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Framework4Project.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\DeviceModel.cs" />
     <Compile Include="Models\masterDate.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -217,25 +210,16 @@
     <Compile Include="Models\M_application.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\M_deviceConfig.cs">
+    <Compile Include="Models\M_publicDevice.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\M_DevProMapping.cs">
+    <Compile Include="Models\M_publicTask.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\M_runScene.cs">
+    <Compile Include="Models\M_publicTaskResult.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\M_runTestCase.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\M_testCase.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\M_testCaseSteps.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\M_testDemand.cs">
+    <Compile Include="Models\M_publicTaskScript.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\project.cs">
@@ -244,7 +228,10 @@
     <Compile Include="Models\project_app.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\user_type.cs">
+    <Compile Include="Models\topic.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\topicReply.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

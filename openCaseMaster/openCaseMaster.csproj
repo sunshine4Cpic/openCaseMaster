@@ -308,7 +308,7 @@
     <Compile Include="ViewModels\Device\DeviceViewModel.cs" />
     <Compile Include="ViewModels\Device\ProjectListModel.cs" />
     <Compile Include="ViewModels\Project\ProjectListModel.cs" />
-    <Compile Include="ViewModels\PublicTask\topicModel.cs" />
+    <Compile Include="ViewModels\Topic\topicModel.cs" />
     <Compile Include="ViewModels\RunCase\caseRecordModel.cs" />
     <Compile Include="ViewModels\RunCase\SceneCaseDataModel.cs" />
     <Compile Include="ViewModels\RunCase\SceneViewModel.cs" />

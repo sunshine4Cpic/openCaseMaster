@@ -35,9 +35,9 @@ namespace openCaseMaster.Controllers
                           nodeID = t.node,
                           userName = t.admin_user.Name,
                           creatDate = t.creatDate,
-                          scriptCount = t.M_publicTask.Sum(tk=>tk.M_publicTaskScript.Count),
+                          scriptCount = t.M_publicTask.M_publicTaskScript.Count,
                           userAvatar = t.admin_user.Avatar,
-                          replies = t.topicReply.Count
+                          replyCnt = t.topicReply.Count
                       };
 
 
@@ -68,9 +68,9 @@ namespace openCaseMaster.Controllers
                           nodeID = t.node,
                           userName = t.admin_user.Name,
                           creatDate = t.creatDate,
-                          scriptCount = t.M_publicTask.Sum(tk => tk.M_publicTaskScript.Count),
+                          scriptCount = t.M_publicTask.M_publicTaskScript.Count,
                           userAvatar = t.admin_user.Avatar,
-                          replies = t.topicReply.Count
+                          replyCnt = t.topicReply.Count
                       };
 
 
@@ -130,7 +130,7 @@ namespace openCaseMaster.Controllers
                 nodes.Add(new SelectListItem { Text = node.Value, Value = node.Key.ToString(), Selected = true });
                 ViewBag.nodes = nodes;
 
-                var tk = tic.M_publicTask.First();
+                var tk = tic.M_publicTask;
                 taskModel taskInfo = new taskModel();
                 taskInfo.appName = tk.M_application.name;
                 taskInfo.appID = tk.appID;
@@ -303,9 +303,9 @@ namespace openCaseMaster.Controllers
             if (tm.node == 101)
             {
                 M_publicTask pt = new M_publicTask();
-                pt.topicID = tp.ID;
+                pt.ID = tp.ID;
                 pt.appID = tm.appID;
-                pt.creatDate = DateTime.Now;
+                //pt.creatDate = DateTime.Now;
                 pt.startDate = tm.startDate;
                 pt.endDate = tm.endDate;
 

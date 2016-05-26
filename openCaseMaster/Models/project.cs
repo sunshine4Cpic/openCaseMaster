@@ -29,6 +29,7 @@ namespace openCaseMaster.Models
         public Nullable<bool> zidonghua { get; set; }
         public Nullable<int> userID { get; set; }
     
+        public virtual admin_user admin_user { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Framework4Project> Framework4Project { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -39,6 +40,5 @@ namespace openCaseMaster.Models
         public virtual ICollection<M_testDemand> M_testDemand { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<project_app> project_app { get; set; }
-        public virtual admin_user admin_user { get; set; }
     }
 }

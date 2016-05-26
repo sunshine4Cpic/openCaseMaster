@@ -12,15 +12,16 @@ namespace openCaseApi.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class admin_log
+    public partial class topicReply
     {
         public int ID { get; set; }
-        public string Weblog { get; set; }
-        public Nullable<int> UserCode { get; set; }
-        public string Ip { get; set; }
-        public Nullable<int> Type { get; set; }
-        public Nullable<System.DateTime> tDate { get; set; }
+        public int topicID { get; set; }
+        public string body { get; set; }
+        public int userID { get; set; }
+        public System.DateTime creatDate { get; set; }
+        public Nullable<int> state { get; set; }
     
+        public virtual topic topic { get; set; }
         public virtual admin_user admin_user { get; set; }
     }
 }

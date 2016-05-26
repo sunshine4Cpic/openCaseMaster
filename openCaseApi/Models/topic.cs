@@ -12,26 +12,25 @@ namespace openCaseApi.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class M_testCase
+    public partial class topic
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public M_testCase()
+        public topic()
         {
-            this.M_testCase1 = new HashSet<M_testCase>();
+            this.topicReply = new HashSet<topicReply>();
         }
     
         public int ID { get; set; }
-        public Nullable<int> projectID { get; set; }
-        public string Name { get; set; }
-        public string mark { get; set; }
-        public string testXML { get; set; }
-        public Nullable<int> type { get; set; }
-        public Nullable<int> baseID { get; set; }
-        public Nullable<int> FID { get; set; }
+        public string title { get; set; }
+        public string body { get; set; }
+        public int userID { get; set; }
+        public int node { get; set; }
+        public Nullable<int> state { get; set; }
+        public System.DateTime creatDate { get; set; }
     
-        public virtual caseFramework caseFramework { get; set; }
+        public virtual M_publicTask M_publicTask { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_testCase> M_testCase1 { get; set; }
-        public virtual M_testCase M_testCase2 { get; set; }
+        public virtual ICollection<topicReply> topicReply { get; set; }
+        public virtual admin_user admin_user { get; set; }
     }
 }
