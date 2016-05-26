@@ -12,16 +12,20 @@ namespace openCaseMaster.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class M_publicTaskResult
+    public partial class M_publicDevice
     {
-        public int ID { get; set; }
-        public long IMEI { get; set; }
-        public string result { get; set; }
-        public System.DateTime creatDate { get; set; }
-        public Nullable<int> state { get; set; }
-        public int scriptID { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public M_publicDevice()
+        {
+            this.M_publicTaskResult = new HashSet<M_publicTaskResult>();
+        }
     
-        public virtual M_publicDevice M_publicDevice { get; set; }
-        public virtual M_publicTaskScript M_publicTaskScript { get; set; }
+        public long IMEI { get; set; }
+        public int system { get; set; }
+        public string version { get; set; }
+        public Nullable<int> state { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<M_publicTaskResult> M_publicTaskResult { get; set; }
     }
 }

@@ -34,6 +34,7 @@ namespace openCaseMaster.Models
         public virtual DbSet<M_application> M_application { get; set; }
         public virtual DbSet<M_deviceConfig> M_deviceConfig { get; set; }
         public virtual DbSet<M_DevProMapping> M_DevProMapping { get; set; }
+        public virtual DbSet<M_publicDevice> M_publicDevice { get; set; }
         public virtual DbSet<M_publicTask> M_publicTask { get; set; }
         public virtual DbSet<M_publicTaskResult> M_publicTaskResult { get; set; }
         public virtual DbSet<M_publicTaskScript> M_publicTaskScript { get; set; }
@@ -48,30 +49,6 @@ namespace openCaseMaster.Models
         public virtual DbSet<topic> topic { get; set; }
         public virtual DbSet<topicReply> topicReply { get; set; }
         public virtual DbSet<user_type> user_type { get; set; }
-    
-        [DbFunction("QCTESTEntities", "MonthReport")]
-        public virtual IQueryable<MonthReport_Result> MonthReport(string startYear, string iD)
-        {
-            var startYearParameter = startYear != null ?
-                new ObjectParameter("startYear", startYear) :
-                new ObjectParameter("startYear", typeof(string));
-    
-            var iDParameter = iD != null ?
-                new ObjectParameter("ID", iD) :
-                new ObjectParameter("ID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<MonthReport_Result>("[QCTESTEntities].[MonthReport](@startYear, @ID)", startYearParameter, iDParameter);
-        }
-    
-        [DbFunction("QCTESTEntities", "ProjectReport")]
-        public virtual IQueryable<ProjectReport_Result> ProjectReport(Nullable<System.DateTime> startDate)
-        {
-            var startDateParameter = startDate.HasValue ?
-                new ObjectParameter("startDate", startDate) :
-                new ObjectParameter("startDate", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<ProjectReport_Result>("[QCTESTEntities].[ProjectReport](@startDate)", startDateParameter);
-        }
     
         public virtual ObjectResult<M_ContainUserStepCase_Result> M_ContainUserStepCase(Nullable<int> p_1)
         {

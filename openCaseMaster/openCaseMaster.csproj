@@ -253,6 +253,9 @@
     <Compile Include="Models\M_DevProMapping.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\M_publicDevice.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\M_publicTask.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>

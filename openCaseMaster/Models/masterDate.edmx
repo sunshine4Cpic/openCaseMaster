@@ -84,6 +84,15 @@
           <Property Name="DeviceID" Type="int" Nullable="false" />
           <Property Name="usable" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="M_publicDevice">
+          <Key>
+            <PropertyRef Name="IMEI" />
+          </Key>
+          <Property Name="IMEI" Type="bigint" Nullable="false" />
+          <Property Name="system" Type="int" Nullable="false" />
+          <Property Name="version" Type="nvarchar" MaxLength="10" />
+          <Property Name="state" Type="int" />
+        </EntityType>
         <EntityType Name="M_publicTask">
           <Key>
             <PropertyRef Name="ID" />
@@ -98,8 +107,8 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="deviceID" Type="int" Nullable="false" />
-          <Property Name="result" Type="xml" />
+          <Property Name="IMEI" Type="bigint" Nullable="false" />
+          <Property Name="result" Type="xml" Nullable="false" />
           <Property Name="creatDate" Type="datetime" Nullable="false" />
           <Property Name="state" Type="int" />
           <Property Name="scriptID" Type="int" Nullable="false" />
@@ -342,15 +351,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_M_publicTaskResult_deviceID">
-          <End Role="M_deviceConfig" Type="Self.M_deviceConfig" Multiplicity="1" />
+        <Association Name="FK_M_publicTaskResult_IMEI">
+          <End Role="M_publicDevice" Type="Self.M_publicDevice" Multiplicity="1" />
           <End Role="M_publicTaskResult" Type="Self.M_publicTaskResult" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="M_deviceConfig">
-              <PropertyRef Name="ID" />
+            <Principal Role="M_publicDevice">
+              <PropertyRef Name="IMEI" />
             </Principal>
             <Dependent Role="M_publicTaskResult">
-              <PropertyRef Name="deviceID" />
+              <PropertyRef Name="IMEI" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -633,33 +642,6 @@
           <Parameter Name="p_1" Type="int" Mode="In" />
           <Parameter Name="p_2" Type="int" Mode="In" />
         </Function>
-        <Function Name="MonthReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="startYear" Type="nvarchar" Mode="In" />
-          <Parameter Name="ID" Type="nvarchar" Mode="In" />
-          <ReturnType>
-            <CollectionType>
-              <RowType>
-                <Property Name="Months" Type="nvarchar" MaxLength="50" />
-                <Property Name="Cnt" Type="int" />
-                <Property Name="Pname" Type="char" MaxLength="100" />
-              </RowType>
-            </CollectionType>
-          </ReturnType>
-        </Function>
-        <Function Name="ProjectReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="startDate" Type="datetime" Mode="In" />
-          <ReturnType>
-            <CollectionType>
-              <RowType>
-                <Property Name="PID" Type="int" />
-                <Property Name="caseCnt" Type="int" />
-                <Property Name="testDemand" Type="int" />
-                <Property Name="device" Type="int" />
-                <Property Name="Pname" Type="nvarchar" MaxLength="50" />
-              </RowType>
-            </CollectionType>
-          </ReturnType>
-        </Function>
         <EntityContainer Name="MasterModelStoreContainer">
           <EntitySet Name="admin_log" EntityType="Self.admin_log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admin_user" EntityType="Self.admin_user" Schema="dbo" store:Type="Tables" />
@@ -668,6 +650,7 @@
           <EntitySet Name="M_application" EntityType="Self.M_application" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_deviceConfig" EntityType="Self.M_deviceConfig" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_DevProMapping" EntityType="Self.M_DevProMapping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_publicDevice" EntityType="Self.M_publicDevice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_publicTask" EntityType="Self.M_publicTask" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_publicTaskResult" EntityType="Self.M_publicTaskResult" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_publicTaskScript" EntityType="Self.M_publicTaskScript" Schema="dbo" store:Type="Tables" />
@@ -714,8 +697,8 @@
             <End Role="topic" EntitySet="topic" />
             <End Role="M_publicTask" EntitySet="M_publicTask" />
           </AssociationSet>
-          <AssociationSet Name="FK_M_publicTaskResult_deviceID" Association="Self.FK_M_publicTaskResult_deviceID">
-            <End Role="M_deviceConfig" EntitySet="M_deviceConfig" />
+          <AssociationSet Name="FK_M_publicTaskResult_IMEI" Association="Self.FK_M_publicTaskResult_IMEI">
+            <End Role="M_publicDevice" EntitySet="M_publicDevice" />
             <End Role="M_publicTaskResult" EntitySet="M_publicTaskResult" />
           </AssociationSet>
           <AssociationSet Name="FK_M_publicTaskResult_scriptID" Association="Self.FK_M_publicTaskResult_scriptID">
@@ -812,13 +795,6 @@
           <Property Name="Pname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </ComplexType>
         <EntityContainer Name="QCTESTEntities" annotation:LazyLoadingEnabled="true">
-          <FunctionImport Name="MonthReport" IsComposable="true" ReturnType="Collection(MasterModel.MonthReport_Result)">
-            <Parameter Name="startYear" Mode="In" Type="String" />
-            <Parameter Name="ID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="ProjectReport" IsComposable="true" ReturnType="Collection(MasterModel.ProjectReport_Result)">
-          <Parameter Name="startDate" Mode="In" Type="DateTime" />
-          </FunctionImport>
           <FunctionImport Name="M_ContainUserStepCase" ReturnType="Collection(MasterModel.M_ContainUserStepCase_Result)">
           <Parameter Name="p_1" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -873,6 +849,7 @@
           <EntitySet Name="M_application" EntityType="MasterModel.M_application" />
           <EntitySet Name="M_deviceConfig" EntityType="MasterModel.M_deviceConfig" />
           <EntitySet Name="M_DevProMapping" EntityType="MasterModel.M_DevProMapping" />
+          <EntitySet Name="M_publicDevice" EntityType="MasterModel.M_publicDevice" />
           <EntitySet Name="M_publicTask" EntityType="MasterModel.M_publicTask" />
           <EntitySet Name="M_publicTaskResult" EntityType="MasterModel.M_publicTaskResult" />
           <EntitySet Name="M_publicTaskScript" EntityType="MasterModel.M_publicTaskScript" />
@@ -943,10 +920,6 @@
             <End Role="M_deviceConfig" EntitySet="M_deviceConfig" />
             <End Role="M_DevProMapping" EntitySet="M_DevProMapping" />
           </AssociationSet>
-          <AssociationSet Name="FK_M_publicTaskResult_deviceID" Association="MasterModel.FK_M_publicTaskResult_deviceID">
-            <End Role="M_deviceConfig" EntitySet="M_deviceConfig" />
-            <End Role="M_publicTaskResult" EntitySet="M_publicTaskResult" />
-          </AssociationSet>
           <AssociationSet Name="FK_M_runScene_M_deviceConfig" Association="MasterModel.FK_M_runScene_M_deviceConfig">
             <End Role="M_deviceConfig" EntitySet="M_deviceConfig" />
             <End Role="M_runScene" EntitySet="M_runScene" />
@@ -954,6 +927,10 @@
           <AssociationSet Name="FK_M_DevProMapping_project" Association="MasterModel.FK_M_DevProMapping_project">
             <End Role="project" EntitySet="project" />
             <End Role="M_DevProMapping" EntitySet="M_DevProMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_publicTaskResult_IMEI" Association="MasterModel.FK_M_publicTaskResult_IMEI">
+            <End Role="M_publicDevice" EntitySet="M_publicDevice" />
+            <End Role="M_publicTaskResult" EntitySet="M_publicTaskResult" />
           </AssociationSet>
           <AssociationSet Name="FK_M_publicTask_ID" Association="MasterModel.FK_M_publicTask_ID">
             <End Role="topic" EntitySet="topic" />
@@ -1095,7 +1072,6 @@
           <Property Name="Model" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Brand" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="M_DevProMapping" Relationship="MasterModel.FK_M_DevProMapping_M_deviceConfig" FromRole="M_deviceConfig" ToRole="M_DevProMapping" />
-          <NavigationProperty Name="M_publicTaskResult" Relationship="MasterModel.FK_M_publicTaskResult_deviceID" FromRole="M_deviceConfig" ToRole="M_publicTaskResult" />
           <NavigationProperty Name="M_runScene" Relationship="MasterModel.FK_M_runScene_M_deviceConfig" FromRole="M_deviceConfig" ToRole="M_runScene" />
         </EntityType>
         <EntityType Name="M_DevProMapping">
@@ -1108,6 +1084,16 @@
           <Property Name="usable" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="M_deviceConfig" Relationship="MasterModel.FK_M_DevProMapping_M_deviceConfig" FromRole="M_DevProMapping" ToRole="M_deviceConfig" />
           <NavigationProperty Name="project" Relationship="MasterModel.FK_M_DevProMapping_project" FromRole="M_DevProMapping" ToRole="project" />
+        </EntityType>
+        <EntityType Name="M_publicDevice">
+          <Key>
+            <PropertyRef Name="IMEI" />
+          </Key>
+          <Property Name="IMEI" Type="Int64" Nullable="false" />
+          <Property Name="system" Type="Int32" Nullable="false" />
+          <Property Name="version" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="state" Type="Int32" />
+          <NavigationProperty Name="M_publicTaskResult" Relationship="MasterModel.FK_M_publicTaskResult_IMEI" FromRole="M_publicDevice" ToRole="M_publicTaskResult" />
         </EntityType>
         <EntityType Name="M_publicTask">
           <Key>
@@ -1126,12 +1112,12 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="deviceID" Type="Int32" Nullable="false" />
-          <Property Name="result" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IMEI" Type="Int64" Nullable="false" />
+          <Property Name="result" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="state" Type="Int32" />
           <Property Name="scriptID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="M_deviceConfig" Relationship="MasterModel.FK_M_publicTaskResult_deviceID" FromRole="M_publicTaskResult" ToRole="M_deviceConfig" />
+          <NavigationProperty Name="M_publicDevice" Relationship="MasterModel.FK_M_publicTaskResult_IMEI" FromRole="M_publicTaskResult" ToRole="M_publicDevice" />
           <NavigationProperty Name="M_publicTaskScript" Relationship="MasterModel.FK_M_publicTaskResult_scriptID" FromRole="M_publicTaskResult" ToRole="M_publicTaskScript" />
         </EntityType>
         <EntityType Name="M_publicTaskScript">
@@ -1472,18 +1458,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_M_publicTaskResult_deviceID">
-          <End Type="MasterModel.M_deviceConfig" Role="M_deviceConfig" Multiplicity="1" />
-          <End Type="MasterModel.M_publicTaskResult" Role="M_publicTaskResult" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="M_deviceConfig">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="M_publicTaskResult">
-              <PropertyRef Name="deviceID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_M_runScene_M_deviceConfig">
           <End Type="MasterModel.M_deviceConfig" Role="M_deviceConfig" Multiplicity="0..1" />
           <End Type="MasterModel.M_runScene" Role="M_runScene" Multiplicity="*" />
@@ -1507,6 +1481,18 @@
             </Principal>
             <Dependent Role="M_DevProMapping">
               <PropertyRef Name="PID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_publicTaskResult_IMEI">
+          <End Type="MasterModel.M_publicDevice" Role="M_publicDevice" Multiplicity="1" />
+          <End Type="MasterModel.M_publicTaskResult" Role="M_publicTaskResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_publicDevice">
+              <PropertyRef Name="IMEI" />
+            </Principal>
+            <Dependent Role="M_publicTaskResult">
+              <PropertyRef Name="IMEI" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1652,26 +1638,6 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="MasterModelStoreContainer" CdmEntityContainer="QCTESTEntities">
-          <FunctionImportMapping FunctionName="MasterModel.Store.MonthReport" FunctionImportName="MonthReport">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="MasterModel.MonthReport_Result">
-                <ScalarProperty Name="Months" ColumnName="Months" />
-                <ScalarProperty Name="Cnt" ColumnName="Cnt" />
-                <ScalarProperty Name="Pname" ColumnName="Pname" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionName="MasterModel.Store.ProjectReport" FunctionImportName="ProjectReport">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="MasterModel.ProjectReport_Result">
-                <ScalarProperty Name="PID" ColumnName="PID" />
-                <ScalarProperty Name="caseCnt" ColumnName="caseCnt" />
-                <ScalarProperty Name="testDemand" ColumnName="testDemand" />
-                <ScalarProperty Name="device" ColumnName="device" />
-                <ScalarProperty Name="Pname" ColumnName="Pname" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="M_ContainUserStepCase" FunctionName="MasterModel.Store.M_ContainUserStepCase">
             <ResultMapping>
               <ComplexTypeMapping TypeName="MasterModel.M_ContainUserStepCase_Result">
@@ -1780,6 +1746,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="M_publicDevice">
+            <EntityTypeMapping TypeName="MasterModel.M_publicDevice">
+              <MappingFragment StoreEntitySet="M_publicDevice">
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="system" ColumnName="system" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="M_publicTask">
             <EntityTypeMapping TypeName="MasterModel.M_publicTask">
               <MappingFragment StoreEntitySet="M_publicTask">
@@ -1797,7 +1773,7 @@
                 <ScalarProperty Name="state" ColumnName="state" />
                 <ScalarProperty Name="creatDate" ColumnName="creatDate" />
                 <ScalarProperty Name="result" ColumnName="result" />
-                <ScalarProperty Name="deviceID" ColumnName="deviceID" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

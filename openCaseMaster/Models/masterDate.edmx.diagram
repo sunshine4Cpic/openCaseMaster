@@ -5,26 +5,27 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="f7e83f2ce4fc422a9d8b7937589e7215" Name="Diagram1">
-        <EntityTypeShape EntityType="MasterModel.admin_log" Width="1.5" PointX="5.25" PointY="12" />
+        <EntityTypeShape EntityType="MasterModel.admin_log" Width="1.5" PointX="5.25" PointY="23.875" />
         <EntityTypeShape EntityType="MasterModel.admin_user" Width="1.5" PointX="3" PointY="16.875" />
-        <EntityTypeShape EntityType="MasterModel.caseFramework" Width="1.5" PointX="5.25" PointY="18.875" />
-        <EntityTypeShape EntityType="MasterModel.Framework4Project" Width="1.5" PointX="7.5" PointY="26.125" />
+        <EntityTypeShape EntityType="MasterModel.caseFramework" Width="1.5" PointX="5.25" PointY="27.125" />
+        <EntityTypeShape EntityType="MasterModel.Framework4Project" Width="1.5" PointX="7.5" PointY="25.75" />
         <EntityTypeShape EntityType="MasterModel.M_application" Width="1.5" PointX="5.25" PointY="8" />
-        <EntityTypeShape EntityType="MasterModel.M_deviceConfig" Width="1.5" PointX="9.75" PointY="8.875" />
-        <EntityTypeShape EntityType="MasterModel.M_DevProMapping" Width="1.5" PointX="10.5" PointY="32.125" />
-        <EntityTypeShape EntityType="MasterModel.M_publicTask" Width="1.5" PointX="7.5" PointY="15.25" />
-        <EntityTypeShape EntityType="MasterModel.M_publicTaskResult" Width="1.5" PointX="12" PointY="13.125" />
-        <EntityTypeShape EntityType="MasterModel.M_publicTaskScript" Width="1.5" PointX="9.75" PointY="13.375" />
-        <EntityTypeShape EntityType="MasterModel.M_runScene" Width="1.5" PointX="9.75" PointY="27.5" />
-        <EntityTypeShape EntityType="MasterModel.M_runTestCase" Width="1.5" PointX="12" PointY="35.625" />
-        <EntityTypeShape EntityType="MasterModel.M_testCase" Width="1.5" PointX="7.5" PointY="21.5" />
-        <EntityTypeShape EntityType="MasterModel.M_testCaseSteps" Width="1.5" PointX="10.5" PointY="22.625" />
-        <EntityTypeShape EntityType="MasterModel.M_testDemand" Width="1.5" PointX="7.5" PointY="31.625" />
-        <EntityTypeShape EntityType="MasterModel.project" Width="1.5" PointX="5.25" PointY="26.75" />
-        <EntityTypeShape EntityType="MasterModel.project_app" Width="1.5" PointX="12.5" PointY="27.125" />
+        <EntityTypeShape EntityType="MasterModel.M_deviceConfig" Width="1.5" PointX="8.25" PointY="2.875" />
+        <EntityTypeShape EntityType="MasterModel.M_DevProMapping" Width="1.5" PointX="10.5" PointY="16.375" />
+        <EntityTypeShape EntityType="MasterModel.M_publicDevice" Width="1.5" PointX="9.75" PointY="7.375" />
+        <EntityTypeShape EntityType="MasterModel.M_publicTask" Width="1.5" PointX="7.5" PointY="12.25" />
+        <EntityTypeShape EntityType="MasterModel.M_publicTaskResult" Width="1.5" PointX="12" PointY="10.125" />
+        <EntityTypeShape EntityType="MasterModel.M_publicTaskScript" Width="1.5" PointX="9.75" PointY="10.375" />
+        <EntityTypeShape EntityType="MasterModel.M_runScene" Width="1.5" PointX="9.75" PointY="19.125" />
+        <EntityTypeShape EntityType="MasterModel.M_runTestCase" Width="1.5" PointX="12" PointY="19.125" />
+        <EntityTypeShape EntityType="MasterModel.M_testCase" Width="1.5" PointX="7.5" PointY="33.75" />
+        <EntityTypeShape EntityType="MasterModel.M_testCaseSteps" Width="1.5" PointX="10.5" PointY="23.125" />
+        <EntityTypeShape EntityType="MasterModel.M_testDemand" Width="1.5" PointX="7.5" PointY="20.875" />
+        <EntityTypeShape EntityType="MasterModel.project" Width="1.5" PointX="5.25" PointY="15.875" />
+        <EntityTypeShape EntityType="MasterModel.project_app" Width="1.5" PointX="10.5" PointY="13.375" />
         <EntityTypeShape EntityType="MasterModel.tmp_TaskScript" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="MasterModel.topic" Width="1.5" PointX="5.25" PointY="15" />
-        <EntityTypeShape EntityType="MasterModel.topicReply" Width="1.5" PointX="10.5" PointY="16.75" />
+        <EntityTypeShape EntityType="MasterModel.topic" Width="1.5" PointX="5.25" PointY="12" />
+        <EntityTypeShape EntityType="MasterModel.topicReply" Width="1.5" PointX="7.5" PointY="15.25" />
         <EntityTypeShape EntityType="MasterModel.user_type" Width="1.5" PointX="0.75" PointY="18.125" />
         <AssociationConnector Association="MasterModel.FK_admin_log_admin_log" />
         <AssociationConnector Association="MasterModel.FK_admin_user_user_type" />
@@ -40,9 +41,9 @@
         <AssociationConnector Association="MasterModel.FK_M_publicTest_appID" />
         <AssociationConnector Association="MasterModel.FK_project_app_appID" />
         <AssociationConnector Association="MasterModel.FK_M_DevProMapping_M_deviceConfig" />
-        <AssociationConnector Association="MasterModel.FK_M_publicTaskResult_deviceID" />
         <AssociationConnector Association="MasterModel.FK_M_runScene_M_deviceConfig" />
         <AssociationConnector Association="MasterModel.FK_M_DevProMapping_project" />
+        <AssociationConnector Association="MasterModel.FK_M_publicTaskResult_IMEI" />
         <AssociationConnector Association="MasterModel.FK_M_publicTask_ID" />
         <AssociationConnector Association="MasterModel.FK_M_publicTaskScript_taskID" />
         <AssociationConnector Association="MasterModel.FK_M_publicTaskResult_scriptID" />
