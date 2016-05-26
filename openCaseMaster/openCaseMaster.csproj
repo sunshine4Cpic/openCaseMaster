@@ -238,9 +238,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>masterDate.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\MonthReport_Result.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\M_application.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
@@ -281,9 +278,6 @@
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\project.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ProjectReport_Result.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\project_app.cs">

@@ -21,7 +21,7 @@ namespace openCaseApi.Models
         public System.DateTime creatDate { get; set; }
         public Nullable<int> state { get; set; }
     
-        public virtual topic topic { get; set; }
         public virtual admin_user admin_user { get; set; }
+        public virtual topic topic { get; set; }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="QCTESTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MasterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="admin_user">
           <Key>
             <PropertyRef Name="ID" />
@@ -244,7 +244,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="QCTESTModelStoreContainer">
+        <EntityContainer Name="MasterModelStoreContainer">
           <EntitySet Name="admin_user" EntityType="Self.admin_user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_application" EntityType="Self.M_application" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_publicDevice" EntityType="Self.M_publicDevice" Schema="dbo" store:Type="Tables" />
@@ -303,270 +303,84 @@
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="QCTESTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="MasterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <ComplexType Name="MonthReport_Result">
+          <Property Name="Months" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Cnt" Type="Int32" />
+          <Property Name="Pname" Type="String" MaxLength="100" FixedLength="true" Unicode="false" />
+        </ComplexType>
+        <ComplexType Name="ProjectReport_Result">
+          <Property Name="PID" Type="Int32" />
+          <Property Name="caseCnt" Type="Int32" />
+          <Property Name="testDemand" Type="Int32" />
+          <Property Name="device" Type="Int32" />
+          <Property Name="Pname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </ComplexType>
         <EntityContainer Name="QCTESTEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="M_publicDevice" EntityType="QCTESTModel.M_publicDevice" />
-          <EntitySet Name="M_publicTask" EntityType="QCTESTModel.M_publicTask" />
-          <EntitySet Name="M_publicTaskResult" EntityType="QCTESTModel.M_publicTaskResult" />
-          <EntitySet Name="M_publicTaskScript" EntityType="QCTESTModel.M_publicTaskScript" />
-          <EntitySet Name="project" EntityType="QCTESTModel.project" />
-          <EntitySet Name="topic" EntityType="QCTESTModel.topic" />
-          <EntitySet Name="topicReply" EntityType="QCTESTModel.topicReply" />
-          <AssociationSet Name="FK_M_publicTaskResult_IMEI" Association="QCTESTModel.FK_M_publicTaskResult_IMEI">
+          <EntitySet Name="admin_user" EntityType="MasterModel.admin_user" />
+          <EntitySet Name="M_application" EntityType="MasterModel.M_application" />
+          <EntitySet Name="M_publicDevice" EntityType="MasterModel.M_publicDevice" />
+          <EntitySet Name="M_publicTask" EntityType="MasterModel.M_publicTask" />
+          <EntitySet Name="M_publicTaskResult" EntityType="MasterModel.M_publicTaskResult" />
+          <EntitySet Name="M_publicTaskScript" EntityType="MasterModel.M_publicTaskScript" />
+          <EntitySet Name="project" EntityType="MasterModel.project" />
+          <EntitySet Name="project_app" EntityType="MasterModel.project_app" />
+          <EntitySet Name="topic" EntityType="MasterModel.topic" />
+          <EntitySet Name="topicReply" EntityType="MasterModel.topicReply" />
+          <AssociationSet Name="FK_project_userID" Association="MasterModel.FK_project_userID">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="project" EntitySet="project" />
+          </AssociationSet>
+          <AssociationSet Name="FK_topic_userID" Association="MasterModel.FK_topic_userID">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="topic" EntitySet="topic" />
+          </AssociationSet>
+          <AssociationSet Name="FK_topicReply_userID" Association="MasterModel.FK_topicReply_userID">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="topicReply" EntitySet="topicReply" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_publicTest_appID" Association="MasterModel.FK_M_publicTest_appID">
+            <End Role="M_application" EntitySet="M_application" />
+            <End Role="M_publicTask" EntitySet="M_publicTask" />
+          </AssociationSet>
+          <AssociationSet Name="FK_project_app_appID" Association="MasterModel.FK_project_app_appID">
+            <End Role="M_application" EntitySet="M_application" />
+            <End Role="project_app" EntitySet="project_app" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_publicTaskResult_IMEI" Association="MasterModel.FK_M_publicTaskResult_IMEI">
             <End Role="M_publicDevice" EntitySet="M_publicDevice" />
             <End Role="M_publicTaskResult" EntitySet="M_publicTaskResult" />
           </AssociationSet>
-          <AssociationSet Name="FK_M_publicTask_ID" Association="QCTESTModel.FK_M_publicTask_ID">
+          <AssociationSet Name="FK_M_publicTask_ID" Association="MasterModel.FK_M_publicTask_ID">
             <End Role="topic" EntitySet="topic" />
             <End Role="M_publicTask" EntitySet="M_publicTask" />
           </AssociationSet>
-          <AssociationSet Name="FK_M_publicTaskScript_taskID" Association="QCTESTModel.FK_M_publicTaskScript_taskID">
+          <AssociationSet Name="FK_M_publicTaskScript_taskID" Association="MasterModel.FK_M_publicTaskScript_taskID">
             <End Role="M_publicTask" EntitySet="M_publicTask" />
             <End Role="M_publicTaskScript" EntitySet="M_publicTaskScript" />
           </AssociationSet>
-          <AssociationSet Name="FK_M_publicTaskResult_scriptID" Association="QCTESTModel.FK_M_publicTaskResult_scriptID">
+          <AssociationSet Name="FK_M_publicTaskResult_scriptID" Association="MasterModel.FK_M_publicTaskResult_scriptID">
             <End Role="M_publicTaskScript" EntitySet="M_publicTaskScript" />
             <End Role="M_publicTaskResult" EntitySet="M_publicTaskResult" />
           </AssociationSet>
-          <AssociationSet Name="FK_topicReply_topicID" Association="QCTESTModel.FK_topicReply_topicID">
-            <End Role="topic" EntitySet="topic" />
-            <End Role="topicReply" EntitySet="topicReply" />
-          </AssociationSet>
-          <EntitySet Name="M_application" EntityType="QCTESTModel.M_application" />
-          <EntitySet Name="project_app" EntityType="QCTESTModel.project_app" />
-          <AssociationSet Name="FK_M_publicTest_appID" Association="QCTESTModel.FK_M_publicTest_appID">
-            <End Role="M_application" EntitySet="M_application" />
-            <End Role="M_publicTask" EntitySet="M_publicTask" />
-          </AssociationSet>
-          <AssociationSet Name="FK_project_app_appID" Association="QCTESTModel.FK_project_app_appID">
-            <End Role="M_application" EntitySet="M_application" />
-            <End Role="project_app" EntitySet="project_app" />
-          </AssociationSet>
-          <AssociationSet Name="FK_project_app_PID" Association="QCTESTModel.FK_project_app_PID">
+          <AssociationSet Name="FK_project_app_PID" Association="MasterModel.FK_project_app_PID">
             <End Role="project" EntitySet="project" />
             <End Role="project_app" EntitySet="project_app" />
           </AssociationSet>
-          <EntitySet Name="admin_user" EntityType="QCTESTModel.admin_user" />
-          <AssociationSet Name="FK_project_userID" Association="QCTESTModel.FK_project_userID">
-            <End Role="admin_user" EntitySet="admin_user" />
-            <End Role="project" EntitySet="project" />
-          </AssociationSet>
-          <AssociationSet Name="FK_topic_userID" Association="QCTESTModel.FK_topic_userID">
-            <End Role="admin_user" EntitySet="admin_user" />
+          <AssociationSet Name="FK_topicReply_topicID" Association="MasterModel.FK_topicReply_topicID">
             <End Role="topic" EntitySet="topic" />
-          </AssociationSet>
-          <AssociationSet Name="FK_topicReply_userID" Association="QCTESTModel.FK_topicReply_userID">
-            <End Role="admin_user" EntitySet="admin_user" />
             <End Role="topicReply" EntitySet="topicReply" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="M_publicDevice">
-          <Key>
-            <PropertyRef Name="IMEI" />
-          </Key>
-          <Property Name="IMEI" Type="Int64" Nullable="false" />
-          <Property Name="system" Type="Int32" Nullable="false" />
-          <Property Name="version" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="state" Type="Int32" />
-          <NavigationProperty Name="M_publicTaskResult" Relationship="QCTESTModel.FK_M_publicTaskResult_IMEI" FromRole="M_publicDevice" ToRole="M_publicTaskResult" />
-        </EntityType>
-        <EntityType Name="M_publicTask">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="appID" Type="Int32" Nullable="false" />
-          <Property Name="startDate" Type="DateTime" Precision="3" />
-          <Property Name="endDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="topic" Relationship="QCTESTModel.FK_M_publicTask_ID" FromRole="M_publicTask" ToRole="topic" />
-          <NavigationProperty Name="M_publicTaskScript" Relationship="QCTESTModel.FK_M_publicTaskScript_taskID" FromRole="M_publicTask" ToRole="M_publicTaskScript" />
-          <NavigationProperty Name="M_application" Relationship="QCTESTModel.FK_M_publicTest_appID" FromRole="M_publicTask" ToRole="M_application" />
-        </EntityType>
-        <EntityType Name="M_publicTaskResult">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IMEI" Type="Int64" Nullable="false" />
-          <Property Name="result" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="state" Type="Int32" />
-          <Property Name="scriptID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="M_publicDevice" Relationship="QCTESTModel.FK_M_publicTaskResult_IMEI" FromRole="M_publicTaskResult" ToRole="M_publicDevice" />
-          <NavigationProperty Name="M_publicTaskScript" Relationship="QCTESTModel.FK_M_publicTaskResult_scriptID" FromRole="M_publicTaskResult" ToRole="M_publicTaskScript" />
-        </EntityType>
-        <EntityType Name="M_publicTaskScript">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="script" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="taskID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="M_publicTask" Relationship="QCTESTModel.FK_M_publicTaskScript_taskID" FromRole="M_publicTaskScript" ToRole="M_publicTask" />
-          <NavigationProperty Name="M_publicTaskResult" Relationship="QCTESTModel.FK_M_publicTaskResult_scriptID" FromRole="M_publicTaskScript" ToRole="M_publicTaskResult" />
-        </EntityType>
-        <EntityType Name="project">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Pname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="zidonghua" Type="Boolean" />
-          <Property Name="userID" Type="Int32" />
-          <NavigationProperty Name="project_app" Relationship="QCTESTModel.FK_project_app_PID" FromRole="project" ToRole="project_app" />
-          <NavigationProperty Name="admin_user" Relationship="QCTESTModel.FK_project_userID" FromRole="project" ToRole="admin_user" />
-        </EntityType>
-        <EntityType Name="topic">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="userID" Type="Int32" Nullable="false" />
-          <Property Name="node" Type="Int32" Nullable="false" />
-          <Property Name="state" Type="Int32" />
-          <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="M_publicTask" Relationship="QCTESTModel.FK_M_publicTask_ID" FromRole="topic" ToRole="M_publicTask" />
-          <NavigationProperty Name="topicReply" Relationship="QCTESTModel.FK_topicReply_topicID" FromRole="topic" ToRole="topicReply" />
-          <NavigationProperty Name="admin_user" Relationship="QCTESTModel.FK_topic_userID" FromRole="topic" ToRole="admin_user" />
-        </EntityType>
-        <EntityType Name="topicReply">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="topicID" Type="Int32" Nullable="false" />
-          <Property Name="body" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="userID" Type="Int32" Nullable="false" />
-          <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="state" Type="Int32" />
-          <NavigationProperty Name="topic" Relationship="QCTESTModel.FK_topicReply_topicID" FromRole="topicReply" ToRole="topic" />
-          <NavigationProperty Name="admin_user" Relationship="QCTESTModel.FK_topicReply_userID" FromRole="topicReply" ToRole="admin_user" />
-        </EntityType>
-        <Association Name="FK_M_publicTaskResult_IMEI">
-          <End Type="QCTESTModel.M_publicDevice" Role="M_publicDevice" Multiplicity="1" />
-          <End Type="QCTESTModel.M_publicTaskResult" Role="M_publicTaskResult" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="M_publicDevice">
-              <PropertyRef Name="IMEI" />
-            </Principal>
-            <Dependent Role="M_publicTaskResult">
-              <PropertyRef Name="IMEI" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_M_publicTask_ID">
-          <End Type="QCTESTModel.topic" Role="topic" Multiplicity="1" />
-          <End Type="QCTESTModel.M_publicTask" Role="M_publicTask" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="topic">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="M_publicTask">
-              <PropertyRef Name="ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_M_publicTaskScript_taskID">
-          <End Type="QCTESTModel.M_publicTask" Role="M_publicTask" Multiplicity="1" />
-          <End Type="QCTESTModel.M_publicTaskScript" Role="M_publicTaskScript" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="M_publicTask">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="M_publicTaskScript">
-              <PropertyRef Name="taskID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_M_publicTaskResult_scriptID">
-          <End Type="QCTESTModel.M_publicTaskScript" Role="M_publicTaskScript" Multiplicity="1" />
-          <End Type="QCTESTModel.M_publicTaskResult" Role="M_publicTaskResult" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="M_publicTaskScript">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="M_publicTaskResult">
-              <PropertyRef Name="scriptID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_topicReply_topicID">
-          <End Type="QCTESTModel.topic" Role="topic" Multiplicity="1" />
-          <End Type="QCTESTModel.topicReply" Role="topicReply" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="topic">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="topicReply">
-              <PropertyRef Name="topicID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="M_application">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="mark" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="runApkName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="package" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="mainActiviy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="package2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="isClear" Type="Boolean" />
-          <NavigationProperty Name="M_publicTask" Relationship="QCTESTModel.FK_M_publicTest_appID" FromRole="M_application" ToRole="M_publicTask" />
-          <NavigationProperty Name="project_app" Relationship="QCTESTModel.FK_project_app_appID" FromRole="M_application" ToRole="project_app" />
-        </EntityType>
-        <EntityType Name="project_app">
-          <Key>
-            <PropertyRef Name="appID" />
-            <PropertyRef Name="PID" />
-          </Key>
-          <Property Name="appID" Type="Int32" Nullable="false" />
-          <Property Name="PID" Type="Int32" Nullable="false" />
-          <Property Name="usable" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="M_application" Relationship="QCTESTModel.FK_project_app_appID" FromRole="project_app" ToRole="M_application" />
-          <NavigationProperty Name="project" Relationship="QCTESTModel.FK_project_app_PID" FromRole="project_app" ToRole="project" />
-        </EntityType>
-        <Association Name="FK_M_publicTest_appID">
-          <End Type="QCTESTModel.M_application" Role="M_application" Multiplicity="1" />
-          <End Type="QCTESTModel.M_publicTask" Role="M_publicTask" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="M_application">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="M_publicTask">
-              <PropertyRef Name="appID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_project_app_appID">
-          <End Type="QCTESTModel.M_application" Role="M_application" Multiplicity="1" />
-          <End Type="QCTESTModel.project_app" Role="project_app" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="M_application">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="project_app">
-              <PropertyRef Name="appID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_project_app_PID">
-          <End Type="QCTESTModel.project" Role="project" Multiplicity="1" />
-          <End Type="QCTESTModel.project_app" Role="project_app" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="project">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="project_app">
-              <PropertyRef Name="PID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <ComplexType Name="M_ContainUserStepCase_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="projectID" Nullable="true" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="mark" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="testXML" Nullable="true" MaxLength="Max" />
+          <Property Type="Int32" Name="type" Nullable="true" />
+          <Property Type="Int32" Name="baseID" Nullable="true" />
+        </ComplexType>
         <EntityType Name="admin_user">
           <Key>
             <PropertyRef Name="ID" />
@@ -581,13 +395,124 @@
           <Property Name="LastDate" Type="DateTime" Precision="3" />
           <Property Name="Type" Type="Int32" />
           <Property Name="Avatar" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="project" Relationship="QCTESTModel.FK_project_userID" FromRole="admin_user" ToRole="project" />
-          <NavigationProperty Name="topic" Relationship="QCTESTModel.FK_topic_userID" FromRole="admin_user" ToRole="topic" />
-          <NavigationProperty Name="topicReply" Relationship="QCTESTModel.FK_topicReply_userID" FromRole="admin_user" ToRole="topicReply" />
+          <NavigationProperty Name="project" Relationship="MasterModel.FK_project_userID" FromRole="admin_user" ToRole="project" />
+          <NavigationProperty Name="topic" Relationship="MasterModel.FK_topic_userID" FromRole="admin_user" ToRole="topic" />
+          <NavigationProperty Name="topicReply" Relationship="MasterModel.FK_topicReply_userID" FromRole="admin_user" ToRole="topicReply" />
+        </EntityType>
+        <EntityType Name="M_application">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="mark" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="runApkName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="package" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="mainActiviy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="package2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="isClear" Type="Boolean" />
+          <NavigationProperty Name="M_publicTask" Relationship="MasterModel.FK_M_publicTest_appID" FromRole="M_application" ToRole="M_publicTask" />
+          <NavigationProperty Name="project_app" Relationship="MasterModel.FK_project_app_appID" FromRole="M_application" ToRole="project_app" />
+        </EntityType>
+        <EntityType Name="M_publicDevice">
+          <Key>
+            <PropertyRef Name="IMEI" />
+          </Key>
+          <Property Name="IMEI" Type="Int64" Nullable="false" />
+          <Property Name="system" Type="Int32" Nullable="false" />
+          <Property Name="version" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="state" Type="Int32" />
+          <NavigationProperty Name="M_publicTaskResult" Relationship="MasterModel.FK_M_publicTaskResult_IMEI" FromRole="M_publicDevice" ToRole="M_publicTaskResult" />
+        </EntityType>
+        <EntityType Name="M_publicTask">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="appID" Type="Int32" Nullable="false" />
+          <Property Name="startDate" Type="DateTime" Precision="3" />
+          <Property Name="endDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="M_application" Relationship="MasterModel.FK_M_publicTest_appID" FromRole="M_publicTask" ToRole="M_application" />
+          <NavigationProperty Name="topic" Relationship="MasterModel.FK_M_publicTask_ID" FromRole="M_publicTask" ToRole="topic" />
+          <NavigationProperty Name="M_publicTaskScript" Relationship="MasterModel.FK_M_publicTaskScript_taskID" FromRole="M_publicTask" ToRole="M_publicTaskScript" />
+        </EntityType>
+        <EntityType Name="M_publicTaskResult">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IMEI" Type="Int64" Nullable="false" />
+          <Property Name="result" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="state" Type="Int32" />
+          <Property Name="scriptID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="M_publicDevice" Relationship="MasterModel.FK_M_publicTaskResult_IMEI" FromRole="M_publicTaskResult" ToRole="M_publicDevice" />
+          <NavigationProperty Name="M_publicTaskScript" Relationship="MasterModel.FK_M_publicTaskResult_scriptID" FromRole="M_publicTaskResult" ToRole="M_publicTaskScript" />
+        </EntityType>
+        <EntityType Name="M_publicTaskScript">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="script" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="taskID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="M_publicTask" Relationship="MasterModel.FK_M_publicTaskScript_taskID" FromRole="M_publicTaskScript" ToRole="M_publicTask" />
+          <NavigationProperty Name="M_publicTaskResult" Relationship="MasterModel.FK_M_publicTaskResult_scriptID" FromRole="M_publicTaskScript" ToRole="M_publicTaskResult" />
+        </EntityType>
+        <EntityType Name="project">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Pname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="zidonghua" Type="Boolean" />
+          <Property Name="userID" Type="Int32" />
+          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_project_userID" FromRole="project" ToRole="admin_user" />
+          <NavigationProperty Name="project_app" Relationship="MasterModel.FK_project_app_PID" FromRole="project" ToRole="project_app" />
+        </EntityType>
+        <EntityType Name="project_app">
+          <Key>
+            <PropertyRef Name="appID" />
+            <PropertyRef Name="PID" />
+          </Key>
+          <Property Name="appID" Type="Int32" Nullable="false" />
+          <Property Name="PID" Type="Int32" Nullable="false" />
+          <Property Name="usable" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="M_application" Relationship="MasterModel.FK_project_app_appID" FromRole="project_app" ToRole="M_application" />
+          <NavigationProperty Name="project" Relationship="MasterModel.FK_project_app_PID" FromRole="project_app" ToRole="project" />
+        </EntityType>
+        <EntityType Name="topic">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="userID" Type="Int32" Nullable="false" />
+          <Property Name="node" Type="Int32" Nullable="false" />
+          <Property Name="state" Type="Int32" />
+          <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_topic_userID" FromRole="topic" ToRole="admin_user" />
+          <NavigationProperty Name="M_publicTask" Relationship="MasterModel.FK_M_publicTask_ID" FromRole="topic" ToRole="M_publicTask" />
+          <NavigationProperty Name="topicReply" Relationship="MasterModel.FK_topicReply_topicID" FromRole="topic" ToRole="topicReply" />
+        </EntityType>
+        <EntityType Name="topicReply">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="topicID" Type="Int32" Nullable="false" />
+          <Property Name="body" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="userID" Type="Int32" Nullable="false" />
+          <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="state" Type="Int32" />
+          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_topicReply_userID" FromRole="topicReply" ToRole="admin_user" />
+          <NavigationProperty Name="topic" Relationship="MasterModel.FK_topicReply_topicID" FromRole="topicReply" ToRole="topic" />
         </EntityType>
         <Association Name="FK_project_userID">
-          <End Type="QCTESTModel.admin_user" Role="admin_user" Multiplicity="0..1" />
-          <End Type="QCTESTModel.project" Role="project" Multiplicity="*" />
+          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="0..1" />
+          <End Type="MasterModel.project" Role="project" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="admin_user">
               <PropertyRef Name="ID" />
@@ -598,8 +523,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_topic_userID">
-          <End Type="QCTESTModel.admin_user" Role="admin_user" Multiplicity="1" />
-          <End Type="QCTESTModel.topic" Role="topic" Multiplicity="*" />
+          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="1" />
+          <End Type="MasterModel.topic" Role="topic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="admin_user">
               <PropertyRef Name="ID" />
@@ -610,8 +535,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_topicReply_userID">
-          <End Type="QCTESTModel.admin_user" Role="admin_user" Multiplicity="1" />
-          <End Type="QCTESTModel.topicReply" Role="topicReply" Multiplicity="*" />
+          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="1" />
+          <End Type="MasterModel.topicReply" Role="topicReply" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="admin_user">
               <PropertyRef Name="ID" />
@@ -621,91 +546,126 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_M_publicTest_appID">
+          <End Type="MasterModel.M_application" Role="M_application" Multiplicity="1" />
+          <End Type="MasterModel.M_publicTask" Role="M_publicTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_application">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_publicTask">
+              <PropertyRef Name="appID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_project_app_appID">
+          <End Type="MasterModel.M_application" Role="M_application" Multiplicity="1" />
+          <End Type="MasterModel.project_app" Role="project_app" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_application">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="project_app">
+              <PropertyRef Name="appID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_publicTaskResult_IMEI">
+          <End Type="MasterModel.M_publicDevice" Role="M_publicDevice" Multiplicity="1" />
+          <End Type="MasterModel.M_publicTaskResult" Role="M_publicTaskResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_publicDevice">
+              <PropertyRef Name="IMEI" />
+            </Principal>
+            <Dependent Role="M_publicTaskResult">
+              <PropertyRef Name="IMEI" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_publicTask_ID">
+          <End Type="MasterModel.topic" Role="topic" Multiplicity="1" />
+          <End Type="MasterModel.M_publicTask" Role="M_publicTask" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="topic">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_publicTask">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_publicTaskScript_taskID">
+          <End Type="MasterModel.M_publicTask" Role="M_publicTask" Multiplicity="1" />
+          <End Type="MasterModel.M_publicTaskScript" Role="M_publicTaskScript" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_publicTask">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_publicTaskScript">
+              <PropertyRef Name="taskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_publicTaskResult_scriptID">
+          <End Type="MasterModel.M_publicTaskScript" Role="M_publicTaskScript" Multiplicity="1" />
+          <End Type="MasterModel.M_publicTaskResult" Role="M_publicTaskResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_publicTaskScript">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_publicTaskResult">
+              <PropertyRef Name="scriptID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_project_app_PID">
+          <End Type="MasterModel.project" Role="project" Multiplicity="1" />
+          <End Type="MasterModel.project_app" Role="project_app" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="project_app">
+              <PropertyRef Name="PID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_topicReply_topicID">
+          <End Type="MasterModel.topic" Role="topic" Multiplicity="1" />
+          <End Type="MasterModel.topicReply" Role="topicReply" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="topic">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="topicReply">
+              <PropertyRef Name="topicID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="QCTESTModelStoreContainer" CdmEntityContainer="QCTESTEntities">
-          <EntitySetMapping Name="M_publicDevice">
-            <EntityTypeMapping TypeName="QCTESTModel.M_publicDevice">
-              <MappingFragment StoreEntitySet="M_publicDevice">
-                <ScalarProperty Name="state" ColumnName="state" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="system" ColumnName="system" />
-                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="M_publicTask">
-            <EntityTypeMapping TypeName="QCTESTModel.M_publicTask">
-              <MappingFragment StoreEntitySet="M_publicTask">
-                <ScalarProperty Name="endDate" ColumnName="endDate" />
-                <ScalarProperty Name="startDate" ColumnName="startDate" />
-                <ScalarProperty Name="appID" ColumnName="appID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="M_publicTaskResult">
-            <EntityTypeMapping TypeName="QCTESTModel.M_publicTaskResult">
-              <MappingFragment StoreEntitySet="M_publicTaskResult">
-                <ScalarProperty Name="scriptID" ColumnName="scriptID" />
-                <ScalarProperty Name="state" ColumnName="state" />
-                <ScalarProperty Name="creatDate" ColumnName="creatDate" />
-                <ScalarProperty Name="result" ColumnName="result" />
-                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="M_publicTaskScript">
-            <EntityTypeMapping TypeName="QCTESTModel.M_publicTaskScript">
-              <MappingFragment StoreEntitySet="M_publicTaskScript">
-                <ScalarProperty Name="taskID" ColumnName="taskID" />
-                <ScalarProperty Name="script" ColumnName="script" />
-                <ScalarProperty Name="title" ColumnName="title" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="project">
-            <EntityTypeMapping TypeName="QCTESTModel.project">
-              <MappingFragment StoreEntitySet="project">
-                <ScalarProperty Name="userID" ColumnName="userID" />
-                <ScalarProperty Name="zidonghua" ColumnName="zidonghua" />
-                <ScalarProperty Name="Pname" ColumnName="Pname" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="topic">
-            <EntityTypeMapping TypeName="QCTESTModel.topic">
-              <MappingFragment StoreEntitySet="topic">
-                <ScalarProperty Name="creatDate" ColumnName="creatDate" />
-                <ScalarProperty Name="state" ColumnName="state" />
-                <ScalarProperty Name="node" ColumnName="node" />
-                <ScalarProperty Name="userID" ColumnName="userID" />
-                <ScalarProperty Name="body" ColumnName="body" />
-                <ScalarProperty Name="title" ColumnName="title" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="topicReply">
-            <EntityTypeMapping TypeName="QCTESTModel.topicReply">
-              <MappingFragment StoreEntitySet="topicReply">
-                <ScalarProperty Name="state" ColumnName="state" />
-                <ScalarProperty Name="creatDate" ColumnName="creatDate" />
-                <ScalarProperty Name="userID" ColumnName="userID" />
-                <ScalarProperty Name="body" ColumnName="body" />
-                <ScalarProperty Name="topicID" ColumnName="topicID" />
+        <EntityContainerMapping StorageEntityContainer="MasterModelStoreContainer" CdmEntityContainer="QCTESTEntities">
+          <EntitySetMapping Name="admin_user">
+            <EntityTypeMapping TypeName="MasterModel.admin_user">
+              <MappingFragment StoreEntitySet="admin_user">
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="LastDate" ColumnName="LastDate" />
+                <ScalarProperty Name="GreatDate" ColumnName="GreatDate" />
+                <ScalarProperty Name="Permission" ColumnName="Permission" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="M_application">
-            <EntityTypeMapping TypeName="QCTESTModel.M_application">
+            <EntityTypeMapping TypeName="MasterModel.M_application">
               <MappingFragment StoreEntitySet="M_application">
                 <ScalarProperty Name="isClear" ColumnName="isClear" />
                 <ScalarProperty Name="package2" ColumnName="package2" />
@@ -718,8 +678,60 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="M_publicDevice">
+            <EntityTypeMapping TypeName="MasterModel.M_publicDevice">
+              <MappingFragment StoreEntitySet="M_publicDevice">
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="system" ColumnName="system" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_publicTask">
+            <EntityTypeMapping TypeName="MasterModel.M_publicTask">
+              <MappingFragment StoreEntitySet="M_publicTask">
+                <ScalarProperty Name="endDate" ColumnName="endDate" />
+                <ScalarProperty Name="startDate" ColumnName="startDate" />
+                <ScalarProperty Name="appID" ColumnName="appID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_publicTaskResult">
+            <EntityTypeMapping TypeName="MasterModel.M_publicTaskResult">
+              <MappingFragment StoreEntitySet="M_publicTaskResult">
+                <ScalarProperty Name="scriptID" ColumnName="scriptID" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="creatDate" ColumnName="creatDate" />
+                <ScalarProperty Name="result" ColumnName="result" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_publicTaskScript">
+            <EntityTypeMapping TypeName="MasterModel.M_publicTaskScript">
+              <MappingFragment StoreEntitySet="M_publicTaskScript">
+                <ScalarProperty Name="taskID" ColumnName="taskID" />
+                <ScalarProperty Name="script" ColumnName="script" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="project">
+            <EntityTypeMapping TypeName="MasterModel.project">
+              <MappingFragment StoreEntitySet="project">
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="zidonghua" ColumnName="zidonghua" />
+                <ScalarProperty Name="Pname" ColumnName="Pname" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="project_app">
-            <EntityTypeMapping TypeName="QCTESTModel.project_app">
+            <EntityTypeMapping TypeName="MasterModel.project_app">
               <MappingFragment StoreEntitySet="project_app">
                 <ScalarProperty Name="usable" ColumnName="usable" />
                 <ScalarProperty Name="PID" ColumnName="PID" />
@@ -727,18 +739,27 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="admin_user">
-            <EntityTypeMapping TypeName="QCTESTModel.admin_user">
-              <MappingFragment StoreEntitySet="admin_user">
-                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="LastDate" ColumnName="LastDate" />
-                <ScalarProperty Name="GreatDate" ColumnName="GreatDate" />
-                <ScalarProperty Name="Permission" ColumnName="Permission" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
+          <EntitySetMapping Name="topic">
+            <EntityTypeMapping TypeName="MasterModel.topic">
+              <MappingFragment StoreEntitySet="topic">
+                <ScalarProperty Name="creatDate" ColumnName="creatDate" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="node" ColumnName="node" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="body" ColumnName="body" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="topicReply">
+            <EntityTypeMapping TypeName="MasterModel.topicReply">
+              <MappingFragment StoreEntitySet="topicReply">
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="creatDate" ColumnName="creatDate" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="body" ColumnName="body" />
+                <ScalarProperty Name="topicID" ColumnName="topicID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

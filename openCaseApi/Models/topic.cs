@@ -28,9 +28,9 @@ namespace openCaseApi.Models
         public Nullable<int> state { get; set; }
         public System.DateTime creatDate { get; set; }
     
+        public virtual admin_user admin_user { get; set; }
         public virtual M_publicTask M_publicTask { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<topicReply> topicReply { get; set; }
-        public virtual admin_user admin_user { get; set; }
     }
 }

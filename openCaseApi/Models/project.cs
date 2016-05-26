@@ -25,8 +25,8 @@ namespace openCaseApi.Models
         public Nullable<bool> zidonghua { get; set; }
         public Nullable<int> userID { get; set; }
     
+        public virtual admin_user admin_user { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<project_app> project_app { get; set; }
-        public virtual admin_user admin_user { get; set; }
     }
 }
