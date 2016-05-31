@@ -46,12 +46,9 @@ namespace openCaseMaster.ViewModels
         public string scripts { get; set; }
     }
 
-    public class topicModel_prev :topicUser
+    public class topicModel_prev 
     {
-
-        public string userName { get; set; }
-        public string userAvatar { get; set; }
-        public int userID { get; set; }
+        public topicUserModel User;
 
         public int ID { get; set; }
 
@@ -112,9 +109,11 @@ namespace openCaseMaster.ViewModels
 
                 this.nodeID = tic.node;
 
-                this.userName = tic.admin_user.Name;
-                this.userID = tic.userID;
-                this.userAvatar = tic.admin_user.Avatar;
+                this.User = new topicUserModel();
+
+                User.Name = tic.admin_user.Name;
+                User.ID = tic.userID;
+                User.Avatar = tic.admin_user.Avatar;
 
                 this.creatDate = tic.creatDate;
 
@@ -127,11 +126,9 @@ namespace openCaseMaster.ViewModels
                            {
                                ID = t.ID,
                                body = t.body,
-                               userName = t.admin_user.Name,
+                               User = new topicUserModel { ID = t.userID, Name = t.admin_user.Name, Avatar = t.admin_user.Avatar },
                                creatDate = t.creatDate,
-                               userID = t.userID,
                                state = t.state,
-                               userAvatar = t.admin_user.Avatar
                            }).ToList();
                 
             }
@@ -149,7 +146,7 @@ namespace openCaseMaster.ViewModels
         
     }
 
-    public class replyModel : topicUser
+    public class replyModel 
     {
         public int ID { get; set; }
 
@@ -174,15 +171,14 @@ namespace openCaseMaster.ViewModels
             }
         }
 
-        public string userName { get; set; }
-
-        public string userAvatar { get; set; }
        
         public string body { get; set; }
 
-        public int userID { get; set; }
 
         public int? state { get; set; }
+
+
+        public topicUserModel User;
     }
 
     public class taskModel
@@ -200,12 +196,14 @@ namespace openCaseMaster.ViewModels
     }
 
 
-    interface topicUser
+    public class topicUserModel
     {
-        int userID { get; set; }
-        string userName { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
 
-        string userAvatar { get; set; }
+        public string Avatar { get; set; }
     }
+
+
 
 }

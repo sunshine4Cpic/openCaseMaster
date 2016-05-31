@@ -100,14 +100,14 @@
                 <div class="info">
                     <a class="node" href="/PublicTask/node/@Model.nodeID">@Model.nodeText</a>
                     ·
-                    <a data-author="true" data-name="tongyx" href="#">@Model.userName</a>
+                    <a data-author="true" data-name="tongyx" href="#">@Model.User.Name</a>
                     ·
                     于 <abbr class="timeago" title="@Model.creatDate">@Model.timeago</abbr>发布
 
                 </div>
             </div>
             <div class="avatar media-right">
-                <a href="#"><img class="media-object avatar-48" src="~/Content/userAvatar/@Model.userAvatar"></a>
+                <a href="#"><img class="media-object avatar-48" src="~/Content/userAvatar/@Model.User.Avatar"></a>
             </div>
         </div>
 
@@ -116,7 +116,7 @@
             <textarea style="display:none;">@Model.body</textarea>
         </div>
     </div>
-    @if (Model.userID == userHelper.UserID)
+    @if (Model.User.ID == userHelper.UserID)
     {
         <div class="panel-footer clearfix">
             <div class="opts">
@@ -158,17 +158,17 @@
                 { i++; }
                 { if (m.state == 0) { continue; } }
                 <div class="reply" data-id="42155" id=@Html.Raw("reply" + i)>
-                    <div class="avatar"><a href="#"><img class="media-object avatar-48" src="~/Content/userAvatar/@m.userAvatar"></a></div>
+                    <div class="avatar"><a href="#"><img class="media-object avatar-48" src="~/Content/userAvatar/@m.User.Avatar"></a></div>
                     <div class="infos">
                         <div class="info">
                             <span class="name">
-                                <a href="#">@m.userName</a>
+                                <a href="#">@m.User.Name</a>
                             </span> ·
                             <span class="time">
                                 <a class="reply-floor" href=@Html.Raw("#reply" + i)>#@i</a> · <abbr class="timeago" title="@m.creatDate">@m.timeago</abbr>
                             </span>
                             <span class="opts pull-right">
-                                @if (m.userID == userHelper.UserID)
+                                @if (m.User.ID == userHelper.UserID)
                                 {
                                     <a class="edit fa fa-pencil" title="修改回帖" href="#"></a>
                                     <a data-id="@m.ID" class="fa fa-trash replyDelete" title="删除回复" href="/reply/Delete/@m.ID"></a>

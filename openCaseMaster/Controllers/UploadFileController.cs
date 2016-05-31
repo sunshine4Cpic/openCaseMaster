@@ -179,10 +179,8 @@ namespace openCaseMaster.Controllers
             }
             else
             {
-               
                 return false;
             }
-   
         }
 
         public string imgUpLoad()

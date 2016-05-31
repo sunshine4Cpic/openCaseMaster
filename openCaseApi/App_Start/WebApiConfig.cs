@@ -22,7 +22,7 @@ namespace openCaseApi
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "/{controller}/{id}",
+                routeTemplate: "{controller}/{id}/{action}",
                 defaults: new { id = RouteParameter.Optional }
             );
             //var jsonFormatter = config.Formatters.OfType<JsonMediaTypeFormatter>().First();
