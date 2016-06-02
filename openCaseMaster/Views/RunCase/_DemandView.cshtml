@@ -230,9 +230,6 @@
             editIndex = index;
             $(this).datagrid('editCell', {index:index,field:field});
         }
-
-        
-        
     }
 
     //不可编辑
@@ -253,8 +250,7 @@
         $.post("runDemand", { "id": id }, function (result) {
             $.messager.progress('close');
 
-            document.getElementById("mm2").disabled="none";
-
+    
             //节点图标改动
             var node = $('#runCaseTreeList').tree('find', id);
             if(node)
@@ -301,12 +297,6 @@
             {
                 $.messager.alert('Messager', result, "error");
             }
-            
-            
-            
-           
-            
-
         }).error(function() {$.messager.progress('close'); alert("error"); });
     }
 

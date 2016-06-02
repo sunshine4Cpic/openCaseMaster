@@ -1,0 +1,216 @@
+﻿@using openCaseMaster.ViewModels
+@using openCaseMaster.Models
+@model topicModel_view
+
+@section Scripts {
+    <link rel="stylesheet" href="/Content/editormd.preview.css" />
+
+    <script src="/Scripts/editormd/lib/marked.min.js"></script>
+    <script src="/Scripts/editormd/lib/prettify.min.js"></script>
+    <script src="/Scripts/editormd/lib/raphael.min.js"></script>
+    <script src="/Scripts/editormd/lib/underscore.min.js"></script>
+    <script src="/Scripts/editormd/lib/sequence-diagram.min.js"></script>
+    <script src="/Scripts/editormd/lib/flowchart.min.js"></script>
+    <script src="/Scripts/editormd/lib/jquery.flowchart.min.js"></script>
+
+    <script src="/Scripts/editormd.js"></script>
+    <link rel="stylesheet" href="/Content/editormd.css" />
+    <script type="text/javascript">
+        $(function () {
+
+
+            @if (ViewBag.clear == true)
+            {
+                @Html.Raw("localStorage.clear();");
+            }
+
+            $(".markdownView").each(function () {
+                editormd.markdownToHTML($(this), {
+                    htmlDecode: "style,script,iframe",  // you can filter tags decode
+                    emoji: true,
+                    taskList: true,
+                    tex: false,  // 默认不解析
+                    flowChart: false,  // 默认不解析
+                    sequenceDiagram: false,  // 默认不解析
+                });
+            })
+
+
+            $("a[method=post]").click(function () {
+                var cf = true;
+                if (this.getAttribute("confirm"))
+                    cf = confirm(this.getAttribute("confirm"));
+                if (cf) {
+                    var temp = document.createElement("form");
+                    temp.action = this.href;
+                    temp.method = "post";
+                    temp.style.display = "none";
+                    document.body.appendChild(temp);
+                    temp.submit();
+                }
+                return false;
+            });
+
+            $(".replyDelete").click(function () {
+
+                var cf = confirm("确认删除回复?");
+                if (cf) {
+                    var reply = $(this).parents(".reply");
+                    $.post(this.href, {},
+                      function (data) {
+                          if(data=="True")
+                              reply.remove();
+                      });
+                }
+                return false;
+            });
+
+
+
+
+            editormd("editormd", {
+                name: "body",
+                //theme: "dark",
+                //previewTheme: "dark",
+                //editorTheme: "pastel-on-dark",
+                imageUpload: true,
+                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                imageUploadURL: "/UploadFile/imgUpLoad",
+                toolbarIcons: function () {
+                    return ["preview", "|", "undo", "redo", "|", "link", "image", "emoji", "code-block"]
+                },
+                autoFocus: false,
+                lineNumbers: false,
+                watch: false,
+                height: 200,
+                path: '/Scripts/editormd/lib/',
+                emoji: true,
+            });
+
+        });
+    </script>
+
+}
+<div class="row">
+<div class="col-md-9">
+    <div class="topic-detail panel panel-default">
+        <div class="panel-heading media clearfix">
+            <div class="media-body">
+                <h1 class="media-heading">@Model.title</h1>
+                <div class="info">
+                    <a class="node" href="/PublicTask/node/@Model.nodeID">@Model.nodeText</a>
+                    ·
+                    <a data-author="true" data-name="tongyx" href="#">@Model.User.Name</a>
+                    ·
+                    于 <abbr class="timeago" title="@Model.creatDate">@Model.timeago</abbr>发布
+
+                </div>
+            </div>
+            <div class="avatar media-right">
+                <a href="#"><img class="media-object avatar-48" src="~/Content/userAvatar/@Model.User.Avatar"></a>
+            </div>
+        </div>
+
+        <div class="panel-body markdownView">
+
+            <textarea style="display:none;">@Model.body</textarea>
+        </div>
+    </div>
+    @if (Model.User.ID == userHelper.UserID)
+    {
+        <div class="panel-footer clearfix">
+            <div class="opts">
+
+
+                <a class="knot" href="#"><i class="fa fa-lock" style="color:#ff6a00"></i> 关闭任务</a>
+
+
+
+                <span class="pull-right opts">
+
+                    <a class="fa fa-pencil" title="修改本帖" href="edit/@Model.ID"></a>
+                    <a confirm="确定要删除吗？" class="fa fa-trash" title="删除本帖" method="post" href="Delete/@Model.ID"></a>
+
+                </span>
+            </div>
+        </div>
+    }
+
+
+    @if (Model.taskInfo != null)
+    {
+
+        <div style="border-top:1px dashed #ff6a00">
+
+            @Html.Partial("_taskScriptView", Model.taskInfo)
+
+        </div>
+    }
+
+    <div id="replies" class="panel panel-default">
+        <div class="total panel-heading">
+            共收到 <b>@Model.replies.Count(t=>t.state!=0)</b> 条回复
+        </div>
+        <div class="items panel-body">
+            @{int i = 0;}
+            @foreach (var m in Model.replies)
+            {
+                { i++; }
+                { if (m.state == 0) { continue; } }
+                <div class="reply" data-id="42155" id=@Html.Raw("reply" + i)>
+                    <div class="avatar"><a href="#"><img class="media-object avatar-48" src="~/Content/userAvatar/@m.User.Avatar"></a></div>
+                    <div class="infos">
+                        <div class="info">
+                            <span class="name">
+                                <a href="#">@m.User.Name</a>
+                            </span> ·
+                            <span class="time">
+                                <a class="reply-floor" href=@Html.Raw("#reply" + i)>#@i</a> · <abbr class="timeago" title="@m.creatDate">@m.timeago</abbr>
+                            </span>
+                            <span class="opts pull-right">
+                                @if (m.User.ID == userHelper.UserID)
+                                {
+                                    <a class="edit fa fa-pencil" title="修改回帖" href="#"></a>
+                                    <a data-id="@m.ID" class="fa fa-trash replyDelete" title="删除回复" href="/reply/Delete/@m.ID"></a>
+                                }
+                                <a title="回复此楼" class="btn-reply fa fa-mail-reply" href="#"></a>
+                            </span>
+                        </div>
+
+                        <div class="panel-body markdownView">
+
+                            <textarea id="append-test" style="display:none;">@m.body</textarea>
+                        </div>
+                    </div>
+
+                </div>
+                               
+            }
+
+
+
+        </div>
+    </div>
+
+
+    <div id="reply" class="panel panel-default">
+        <div class="panel-heading">回帖</div>
+        <div class="panel-body">
+
+            <form id="replyForm" action="/topic/reply/@Model.ID" method="post">
+                <div id="editormd"></div>
+                <div class="submit-buttons">
+                    <button type="submit" id="reply-button" class="btn btn-primary" tabindex="2" ,="" data-disable-with="提交回复">提交回复</button>
+
+
+
+                    <div class="pull-right"><a href="/Topic/markdown" target="_blank">排版说明</a></div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+</div>

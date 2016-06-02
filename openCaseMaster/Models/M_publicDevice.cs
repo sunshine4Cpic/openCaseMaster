@@ -7,31 +7,25 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace openCaseApi.Models
+namespace openCaseMaster.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class M_testCase
+    public partial class M_publicDevice
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public M_testCase()
+        public M_publicDevice()
         {
-            this.M_testCase1 = new HashSet<M_testCase>();
+            this.M_publicTaskResult = new HashSet<M_publicTaskResult>();
         }
     
-        public int ID { get; set; }
-        public Nullable<int> projectID { get; set; }
-        public string Name { get; set; }
-        public string mark { get; set; }
-        public string testXML { get; set; }
-        public Nullable<int> type { get; set; }
-        public Nullable<int> baseID { get; set; }
-        public Nullable<int> FID { get; set; }
+        public long IMEI { get; set; }
+        public int system { get; set; }
+        public string version { get; set; }
+        public Nullable<int> state { get; set; }
     
-        public virtual caseFramework caseFramework { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_testCase> M_testCase1 { get; set; }
-        public virtual M_testCase M_testCase2 { get; set; }
+        public virtual ICollection<M_publicTaskResult> M_publicTaskResult { get; set; }
     }
 }

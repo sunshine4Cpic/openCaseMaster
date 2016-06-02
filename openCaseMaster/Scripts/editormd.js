@@ -3488,7 +3488,7 @@
     editormd.firstUpperCase = editormd.ucfirst = firstUpperCase;
     
     editormd.urls = {
-        atLinkBase : "https://github.com/"
+        atLinkBase : "/user/"
     };
     
     editormd.regexs = {
@@ -3505,7 +3505,7 @@
 
     // Emoji graphics files url path
     editormd.emoji     = {
-        path  : "http://www.emoji-cheat-sheet.com/graphics/emojis/",
+        path  : "/Content/emojis/",
         ext   : ".png"
     };
 
@@ -4032,7 +4032,7 @@
      * @returns {Object}   div           返回jQuery对象元素
      */
     
-    editormd.markdownToHTML = function(id, options) {
+    editormd.markdownToHTML = function(div, options) {
         var defaults = {
             gfm                  : true,
             toc                  : true,
@@ -4058,7 +4058,7 @@
         
         editormd.$marked  = marked;
 
-        var div           = $("#" + id);
+        //var div           = $("#" + id);
         var settings      = div.settings = $.extend(true, defaults, options || {});
         var saveTo        = div.find("textarea");
         

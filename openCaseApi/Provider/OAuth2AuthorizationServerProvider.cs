@@ -84,6 +84,7 @@ namespace openCaseApi.Provider
             await base.GrantResourceOwnerCredentials(context);
         }
 
+        /*
         /// <summary>
         /// 客户端认证方式实现，并发放token
         /// </summary>
@@ -100,6 +101,7 @@ namespace openCaseApi.Provider
             var ticket = new AuthenticationTicket(oAuthIdentity, properties);
             context.Validated(ticket);
         }
+         */
 
         /// <summary>
         /// 验证持有 refresh token 的 clientId

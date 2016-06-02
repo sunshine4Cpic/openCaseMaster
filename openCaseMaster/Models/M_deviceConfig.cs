@@ -19,7 +19,6 @@ namespace openCaseMaster.Models
         {
             this.M_DevProMapping = new HashSet<M_DevProMapping>();
             this.M_runScene = new HashSet<M_runScene>();
-            this.M_publicTaskResult = new HashSet<M_publicTaskResult>();
         }
     
         public int ID { get; set; }
@@ -35,7 +34,5 @@ namespace openCaseMaster.Models
         public virtual ICollection<M_DevProMapping> M_DevProMapping { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_runScene> M_runScene { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_publicTaskResult> M_publicTaskResult { get; set; }
     }
 }

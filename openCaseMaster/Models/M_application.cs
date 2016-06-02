@@ -17,8 +17,8 @@ namespace openCaseMaster.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public M_application()
         {
-            this.project_app = new HashSet<project_app>();
             this.M_publicTask = new HashSet<M_publicTask>();
+            this.project_app = new HashSet<project_app>();
         }
     
         public int ID { get; set; }
@@ -31,8 +31,8 @@ namespace openCaseMaster.Models
         public Nullable<bool> isClear { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<project_app> project_app { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_publicTask> M_publicTask { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<project_app> project_app { get; set; }
     }
 }

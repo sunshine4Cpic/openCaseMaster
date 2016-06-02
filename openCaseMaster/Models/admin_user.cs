@@ -21,7 +21,8 @@ namespace openCaseMaster.Models
             this.caseFramework = new HashSet<caseFramework>();
             this.M_runScene = new HashSet<M_runScene>();
             this.project = new HashSet<project>();
-            this.M_publicTask = new HashSet<M_publicTask>();
+            this.topic = new HashSet<topic>();
+            this.topicReply = new HashSet<topicReply>();
         }
     
         public int ID { get; set; }
@@ -33,6 +34,7 @@ namespace openCaseMaster.Models
         public Nullable<System.DateTime> GreatDate { get; set; }
         public Nullable<System.DateTime> LastDate { get; set; }
         public Nullable<int> Type { get; set; }
+        public string Avatar { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<admin_log> admin_log { get; set; }
@@ -44,6 +46,8 @@ namespace openCaseMaster.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<project> project { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_publicTask> M_publicTask { get; set; }
+        public virtual ICollection<topic> topic { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<topicReply> topicReply { get; set; }
     }
 }

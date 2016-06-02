@@ -23,7 +23,7 @@ namespace openCaseMaster.Controllers
     //*****************************************
     //项目权限控制不足,后期修改
 
-    [Authorize(Roles = "user,guest")]
+    [Authorize(Roles = "user")]
     public class TestCaseController : Controller
     {
 
@@ -387,7 +387,7 @@ namespace openCaseMaster.Controllers
             M_testCaseSteps nmtc = new M_testCaseSteps();
             nmtc.PID = PID;
             nmtc.FID = FID;
-            nmtc.userID = userHelper.getUserID();
+            nmtc.userID = userHelper.UserID;
             nmtc.name = name;
             nmtc.stepXML = stepXML.ToString();
 

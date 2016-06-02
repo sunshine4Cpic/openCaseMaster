@@ -12,27 +12,20 @@ namespace openCaseApi.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class M_runScene
+    public partial class M_publicDevice
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public M_runScene()
+        public M_publicDevice()
         {
-            this.M_runTestCase = new HashSet<M_runTestCase>();
+            this.M_publicTaskResult = new HashSet<M_publicTaskResult>();
         }
     
-        public int ID { get; set; }
-        public string name { get; set; }
-        public string mark { get; set; }
-        public Nullable<int> creatUser { get; set; }
-        public Nullable<System.DateTime> creatDate { get; set; }
-        public Nullable<int> deviceID { get; set; }
-        public Nullable<int> DemandID { get; set; }
-        public string installResult { get; set; }
+        public long IMEI { get; set; }
+        public int system { get; set; }
+        public string version { get; set; }
+        public Nullable<int> state { get; set; }
     
-        public virtual admin_user admin_user { get; set; }
-        public virtual M_deviceConfig M_deviceConfig { get; set; }
-        public virtual M_testDemand M_testDemand { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_runTestCase> M_runTestCase { get; set; }
+        public virtual ICollection<M_publicTaskResult> M_publicTaskResult { get; set; }
     }
 }

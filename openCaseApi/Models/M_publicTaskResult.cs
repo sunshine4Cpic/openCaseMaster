@@ -12,13 +12,16 @@ namespace openCaseApi.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class M_DevProMapping
+    public partial class M_publicTaskResult
     {
-        public int PID { get; set; }
-        public int DeviceID { get; set; }
-        public bool usable { get; set; }
+        public int ID { get; set; }
+        public long IMEI { get; set; }
+        public string result { get; set; }
+        public System.DateTime creatDate { get; set; }
+        public Nullable<int> state { get; set; }
+        public int scriptID { get; set; }
     
-        public virtual M_deviceConfig M_deviceConfig { get; set; }
-        public virtual project project { get; set; }
+        public virtual M_publicDevice M_publicDevice { get; set; }
+        public virtual M_publicTaskScript M_publicTaskScript { get; set; }
     }
 }

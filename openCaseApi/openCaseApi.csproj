@@ -184,58 +184,42 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\projectController.cs" />
+    <Compile Include="Controllers\scriptController.cs" />
+    <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Models\admin_log.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\admin_user.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\caseFramework.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Framework4Project.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\masterDate.Context.cs">
+      <DependentUpon>masterDate.Context.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>masterDate.Context.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\masterDate.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\masterDate.Designer.cs">
+      <DependentUpon>masterDate.edmx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>masterDate.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\M_application.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\M_deviceConfig.cs">
+    <Compile Include="Models\M_publicDevice.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\M_DevProMapping.cs">
+    <Compile Include="Models\M_publicTask.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\M_runScene.cs">
+    <Compile Include="Models\M_publicTaskResult.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\M_runTestCase.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\M_testCase.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\M_testCaseSteps.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\M_testDemand.cs">
+    <Compile Include="Models\M_publicTaskScript.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\project.cs">
@@ -244,7 +228,11 @@
     <Compile Include="Models\project_app.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\user_type.cs">
+    <Compile Include="Models\topic.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\topicModel.cs" />
+    <Compile Include="Models\topicReply.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -256,23 +244,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <EntityDeploy Include="Models\masterDate.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>masterDate.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\masterDate.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>masterDate.edmx</DependentUpon>
-      <LastGenOutput>masterDate.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\masterDate.edmx.diagram">
-      <DependentUpon>masterDate.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\masterDate.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>masterDate.edmx</DependentUpon>
-      <LastGenOutput>masterDate.cs</LastGenOutput>
-    </Content>
     <Content Include="Areas\HelpPage\Views\Web.config" />
     <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\ResourceModel.cshtml" />
@@ -293,6 +264,24 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
+    <EntityDeploy Include="Models\masterDate.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>masterDate.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\masterDate.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>masterDate.edmx</DependentUpon>
+      <LastGenOutput>masterDate.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\masterDate.edmx.diagram">
+      <DependentUpon>masterDate.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\masterDate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>masterDate.edmx</DependentUpon>
+      <LastGenOutput>masterDate.cs</LastGenOutput>
+    </Content>
+    <None Include="Properties\PublishProfiles\api.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -302,7 +291,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="ViewModels\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

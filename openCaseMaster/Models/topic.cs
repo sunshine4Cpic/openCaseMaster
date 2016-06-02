@@ -7,32 +7,30 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace openCaseApi.Models
+namespace openCaseMaster.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class caseFramework
+    public partial class topic
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public caseFramework()
+        public topic()
         {
-            this.Framework4Project = new HashSet<Framework4Project>();
-            this.M_testCase = new HashSet<M_testCase>();
-            this.M_testCaseSteps = new HashSet<M_testCaseSteps>();
+            this.topicReply = new HashSet<topicReply>();
         }
     
         public int ID { get; set; }
-        public string workName { get; set; }
+        public string title { get; set; }
+        public string body { get; set; }
         public int userID { get; set; }
-        public string controlXML { get; set; }
+        public int node { get; set; }
+        public Nullable<int> state { get; set; }
+        public System.DateTime creatDate { get; set; }
     
         public virtual admin_user admin_user { get; set; }
+        public virtual M_publicTask M_publicTask { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Framework4Project> Framework4Project { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_testCase> M_testCase { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_testCaseSteps> M_testCaseSteps { get; set; }
+        public virtual ICollection<topicReply> topicReply { get; set; }
     }
 }

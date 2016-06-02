@@ -12,18 +12,21 @@ namespace openCaseApi.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class user_type
+    public partial class M_publicTaskScript
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public user_type()
+        public M_publicTaskScript()
         {
-            this.admin_user = new HashSet<admin_user>();
+            this.M_publicTaskResult = new HashSet<M_publicTaskResult>();
         }
     
         public int ID { get; set; }
-        public string Type { get; set; }
+        public string title { get; set; }
+        public string script { get; set; }
+        public int taskID { get; set; }
     
+        public virtual M_publicTask M_publicTask { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<admin_user> admin_user { get; set; }
+        public virtual ICollection<M_publicTaskResult> M_publicTaskResult { get; set; }
     }
 }

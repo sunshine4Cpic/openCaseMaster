@@ -1,27 +1,28 @@
-﻿function getSteps(nodes) {
-    var steps = [];
-
-    var n;
-    for (n in nodes) {
-        var node = nodes[n];
-        var step = getStep(node);
-        steps.push(step);
-    }
-
-    return steps
+﻿//将form转为AJAX提交
+function ajaxSubmit(frm, fn) {
+    var dataPara = getFormJson(frm);
+    $.ajax({
+        url: frm.action,
+        type: frm.method,
+        data: dataPara,
+        success: fn
+    });
 }
 
-function getStep(node) {
+//将form中的值转换为键值对。
+function getFormJson(frm) {
+    var o = {};
+    var a = $(frm).serializeArray();
+    $.each(a, function () {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
 
-    var step = {};
-    var p = {};
-    for (c in node.children) {
-        var child = node.children[c];
-        p[child.Key] = child.Value;
-    }
-    step["desc"] = node.desc;
-    step["ParamBinding"] = p;
-    step["name"] = node.name;
-    return step
+    return o;
 }
-

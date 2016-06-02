@@ -1,7 +1,9 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
-    background: #f6f6f6;
+    background: #E7EAEC;
+    color: #222527;
+    font-family: Helvetica,Arial,"PingFang SC","Hiragino Sans GB","Source Han Sans CN",Roboto,"Heiti SC","Microsoft Yahei",sans-serif;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -9,6 +11,80 @@
     padding-left: 15px;
     padding-right: 15px;
 }
+/*整体风格 蓝色*/
+.navbar.navbar-fixed-top {
+    background: #0767c8;
+    background: -webkit-linear-gradient(top,#086ed5,#055db5);
+    background: linear-gradient(to bottom,#086ed5,#055db5);
+    border-bottom: 1px solid #044e97;
+    box-shadow: 0 1px 2px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.15);
+}
+
+ .navbar-inverse .navbar-nav > li > a  {
+   color: #f2f4f5;
+}
+ .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    background: #075fb6;
+    background: -webkit-linear-gradient(top,#055fb8,#095fb3);
+    background: linear-gradient(to bottom,#055fb8,#095fb3);
+    box-shadow: inset 0 0 2px rgba(0,0,0,.12);
+}
+ .navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
+    background: #075fb6;
+    background: -webkit-linear-gradient(top,#055fb8,#095fb3);
+    background: linear-gradient(to bottom,#055fb8,#095fb3);
+    box-shadow: inset 0 0 2px rgba(0,0,0,.12);
+}
+@media (max-width: 767px) {
+    .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
+        color: #333;
+    }
+
+    .navbar-inverse .navbar-nav .open .dropdown-menu .divider {
+        background-color: #3F7FAB;
+    }
+
+    .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+        border-color: #044e97;
+    }
+
+    .navbar-nav .open .dropdown-menu {
+        background-color:  #fff;
+    }
+}
+
+.navbar-inverse .navbar-toggle {
+    border:none;
+}
+
+.navbar-inverse .navbar-brand
+{
+    color: #f2f4f5;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    color: #FFF;
+    background-color: #317DDA;
+}
+
+
+
+
+/**/
+.container.body-content
+{
+    margin-top:15px;
+}
+#left,#right
+{
+    padding:0px 10px;
+}
+
+#left,#right > .panel
+{
+    margin-bottom: 10px;
+}
+
 
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
@@ -112,6 +188,10 @@
         background-color: #f5f5f5;
     }
 
+    .topics .panel-body {
+    padding: 0 15px;
+}
+
 .topics .topic {
     min-height: 68px;
     border-bottom: 1px solid #F0F0F0;
@@ -140,7 +220,11 @@
 }
 
 .topics .filter a.popular {
-    color: #EB5424;
+    color: #E65C5C;
+}
+
+.topics .info a.state-false {
+    background: #E65C5C;
 }
 
 .topics .filter {
@@ -148,10 +232,81 @@
     font-size: 13px;
     color: #ccc;
 }
+.panel .panel-heading {
+    background: #f5f5f5;
+    border-bottom-color: #e9e9e9;
+    color: #777;
+}
+
+.topic-detail .panel-heading h1 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #333;
+    text-align: left;
+    line-height: 100%;
+    margin-bottom: 8px;
+}
+
+.topic-detail {
+    margin-bottom: 0px;
+}
+
+ .panel {
+    border-radius: 3px;
+    border: 0px;
+    box-shadow: 0 0px 1px rgba(0,0,0,0.09);
+}
+ .opts a:link, .opts a:visited {
+    color: #666;
+    text-decoration: none;
+}
+ .opts a {
+    margin-right: 5px;
+}
+ .pull-right.opts a {
+    margin-left: 5px;
+    margin-right: 0px;
+}
+ #replies{
+     margin-top:20px;
+ }
+
+ #replies .reply {
+    margin: 0 -15px;
+    padding: 10px 15px;
+    position: relative;
+    border-bottom: 1px solid #eee;
+    padding-left: 74px;
+}
+ #replies .reply .infos {
+    min-height: 48px;
+}
+
+ #replies .reply .avatar {
+    text-align: center;
+    position: absolute;
+    top: 10px;
+    left: 15px;
+}
+#replies .panel-body {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+#replies .info {
+    color: #aaa;
+    margin-bottom: 2px;
+}
+#replies .reply .info {
+    font-size: 12px;
+}
+
+.sidebar.col-md-3 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
 
 
-
-
+ 
 
 /*markdown 图标高亮*/
 i[name=preview], i[name=watch] {
@@ -161,7 +316,9 @@ i[name=preview], i[name=watch] {
 
 
 
-/*验证控件*/
+/*验证控件,显示样式*/
 input.input-validation-error {
     border: 1px dotted red;
 }
+
+

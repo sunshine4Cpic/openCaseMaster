@@ -4,42 +4,28 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1b5a8ee8ec3a4e3380e1fde5d1a47976" Name="Diagram1">
-        <EntityTypeShape EntityType="QCTESTModel.admin_log" Width="1.5" PointX="5.25" PointY="10.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="QCTESTModel.admin_user" Width="1.5" PointX="3" PointY="13.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="QCTESTModel.caseFramework" Width="1.5" PointX="5.25" PointY="13.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="QCTESTModel.Framework4Project" Width="1.5" PointX="7.5" PointY="20.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="QCTESTModel.M_application" Width="1.5" PointX="10.25" PointY="13.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="QCTESTModel.M_deviceConfig" Width="1.5" PointX="8.25" PointY="28.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="QCTESTModel.M_DevProMapping" Width="1.5" PointX="10.5" PointY="25.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="QCTESTModel.M_runScene" Width="1.5" PointX="9.75" PointY="21.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="QCTESTModel.M_runTestCase" Width="1.5" PointX="12" PointY="28.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="QCTESTModel.M_testCase" Width="1.5" PointX="7.5" PointY="16" IsExpanded="true" />
-        <EntityTypeShape EntityType="QCTESTModel.M_testCaseSteps" Width="1.5" PointX="10.5" PointY="17.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="QCTESTModel.M_testDemand" Width="1.5" PointX="7.5" PointY="23.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="QCTESTModel.project" Width="1.5" PointX="5.25" PointY="21.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="QCTESTModel.project_app" Width="1.5" PointX="12.5" PointY="21.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="QCTESTModel.user_type" Width="1.5" PointX="0.75" PointY="14.5" IsExpanded="true" />
-        <AssociationConnector Association="QCTESTModel.FK_admin_log_admin_log" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_admin_user_user_type" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_caseFramework_userID" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_M_runScene_admin_user" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_project_userID" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_Framework4Project_FID" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_M_testCase_FID" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_M_testCaseSteps_FID" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_Framework4Project_PID" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_project_app_appID" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_M_DevProMapping_M_deviceConfig" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_M_runScene_M_deviceConfig" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_M_DevProMapping_project" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_M_runScene_M_testDemand" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_M_runTestCase_M_runScene" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_M_testCase_baseID" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_M_testCaseSteps_project" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_M_testDemand_M_testDemand" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_M_testDemand_project" ManuallyRouted="false" />
-        <AssociationConnector Association="QCTESTModel.FK_project_app_PID" ManuallyRouted="false" />
+      <Diagram DiagramId="f7e83f2ce4fc422a9d8b7937589e7215" Name="Diagram1">
+        <EntityTypeShape EntityType="MasterModel.admin_user" Width="1.5" PointX="0.75" PointY="5.875" />
+        <EntityTypeShape EntityType="MasterModel.M_application" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="MasterModel.M_publicDevice" Width="1.5" PointX="7.5" PointY="2.25" />
+        <EntityTypeShape EntityType="MasterModel.M_publicTask" Width="1.5" PointX="5.25" PointY="5" />
+        <EntityTypeShape EntityType="MasterModel.M_publicTaskResult" Width="1.5" PointX="9.75" PointY="4.875" />
+        <EntityTypeShape EntityType="MasterModel.M_publicTaskScript" Width="1.5" PointX="7.5" PointY="5.125" />
+        <EntityTypeShape EntityType="MasterModel.project" Width="1.5" PointX="3" PointY="8.375" />
+        <EntityTypeShape EntityType="MasterModel.project_app" Width="1.5" PointX="8.25" PointY="8.375" />
+        <EntityTypeShape EntityType="MasterModel.topic" Width="1.5" PointX="3" PointY="4.75" />
+        <EntityTypeShape EntityType="MasterModel.topicReply" Width="1.5" PointX="5.25" PointY="8.75" />
+        <AssociationConnector Association="MasterModel.FK_project_userID" />
+        <AssociationConnector Association="MasterModel.FK_topic_userID" />
+        <AssociationConnector Association="MasterModel.FK_topicReply_userID" />
+        <AssociationConnector Association="MasterModel.FK_M_publicTest_appID" />
+        <AssociationConnector Association="MasterModel.FK_project_app_appID" />
+        <AssociationConnector Association="MasterModel.FK_M_publicTaskResult_IMEI" />
+        <AssociationConnector Association="MasterModel.FK_M_publicTask_ID" />
+        <AssociationConnector Association="MasterModel.FK_M_publicTaskScript_taskID" />
+        <AssociationConnector Association="MasterModel.FK_M_publicTaskResult_scriptID" />
+        <AssociationConnector Association="MasterModel.FK_project_app_PID" />
+        <AssociationConnector Association="MasterModel.FK_topicReply_topicID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

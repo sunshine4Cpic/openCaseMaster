@@ -12,14 +12,16 @@ namespace openCaseApi.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Framework4Project
+    public partial class topicReply
     {
         public int ID { get; set; }
-        public int PID { get; set; }
-        public int FID { get; set; }
-        public string controlXML { get; set; }
+        public int topicID { get; set; }
+        public string body { get; set; }
+        public int userID { get; set; }
+        public System.DateTime creatDate { get; set; }
+        public Nullable<int> state { get; set; }
     
-        public virtual caseFramework caseFramework { get; set; }
-        public virtual project project { get; set; }
+        public virtual admin_user admin_user { get; set; }
+        public virtual topic topic { get; set; }
     }
 }

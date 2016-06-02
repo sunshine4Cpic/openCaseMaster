@@ -248,7 +248,8 @@ $.extend( $.validator, {
 		errorContainer: $( [] ),
 		errorLabelContainer: $( [] ),
 		onsubmit: true,
-		ignore: ":hidden",
+	    //ignore: ":hidden",
+		ignore: ".ignore",//code by 孙建平 2016-05-16
 		ignoreTitle: false,
 		onfocusin: function( element ) {
 			this.lastActive = element;
@@ -373,8 +374,9 @@ $.extend( $.validator, {
 			});
 
 			function delegate( event ) {
-				var validator = $.data( this.form, "validator" ),
-					eventType = "on" + event.type.replace( /^validate/, "" ),
+			    var validator = $.data(this.form, "validator");
+			    if (!validator) return;//code by 孙建平 2016-05-14
+				var eventType = "on" + event.type.replace( /^validate/, "" ),
 					settings = validator.settings;
 				if ( settings[ eventType ] && !$( this ).is( settings.ignore ) ) {
 					settings[ eventType ].call( validator, this, event );

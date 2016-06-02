@@ -4,25 +4,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
+using System.Web.Mvc;
 using System.Web.Security;
 
 namespace openCaseMaster.Models
 {
     public class userHelper
     {
+        
+
+        
 
         /// <summary>
         /// 获得ID
         /// </summary>
         /// <returns></returns>
-        public static int getUserID()
+        public static int UserID
         {
+            get
+            {
+                if (HttpContext.Current.User != null)
+                {
+                    if (HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        FormsIdentity id = (FormsIdentity)HttpContext.Current.User.Identity;
+                        var userData = id.Ticket.UserData;//cookie
 
-            FormsIdentity id = (FormsIdentity)HttpContext.Current.User.Identity;
-            var userData = id.Ticket.UserData;//cookie
-            
-            JObject userJ = JObject.Parse(userData);
-            return Convert.ToInt32(userJ["ID"]);
+                        JObject userJ = JObject.Parse(userData);
+                        return Convert.ToInt32(userJ["ID"]);
+                    }
+                }
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// 获得用户名
+        /// </summary>
+        /// <returns></returns>
+        public static string UserName
+        {
+            get
+            {
+                if (HttpContext.Current.User != null)
+                {
+                    if (HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        return HttpContext.Current.User.Identity.Name;
+                       
+                    }
+                }
+                return "null";
+            }
         }
 
         /// <summary>
@@ -46,7 +79,7 @@ namespace openCaseMaster.Models
         /// </summary>
         public static IQueryable<project> getPermissionsProject()
         {
-            int userID = getUserID();
+            int userID = UserID;
             QCTESTEntities QC_DB = new QCTESTEntities();
 
            
@@ -63,9 +96,9 @@ namespace openCaseMaster.Models
             }
         }
 
-        public static bool isAdmin()
+        public static bool isAdmin
         {
-            return HttpContext.Current.User.IsInRole("admin");
+            get { return HttpContext.Current.User.IsInRole("admin"); }
         }
 
         /// <summary>
@@ -75,7 +108,7 @@ namespace openCaseMaster.Models
         public static List<caseFramework> getBaseFrameworks()
         {
 
-            int userID = getUserID();
+            int userID = UserID;
             List<caseFramework> cfs = frameworkHelp.getAutoFramework();
 
 
@@ -98,7 +131,7 @@ namespace openCaseMaster.Models
 
             IQueryable<M_application> apps;
 
-            if (userHelper.isAdmin())
+            if (userHelper.isAdmin)
             {
                 apps = QC_DB.M_application;
                 
@@ -119,6 +152,10 @@ namespace openCaseMaster.Models
 
             return apps;
         }
+
+        
+
+        
        
     }
 }

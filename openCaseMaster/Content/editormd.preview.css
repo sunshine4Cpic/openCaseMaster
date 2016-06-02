@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Editor.md
  *
  * @file        editormd.preview.css 
@@ -2620,14 +2620,14 @@
 
 .markdown-body ol ol,
 .markdown-body ul ol {
-  list-style-type: lower-roman;
+  list-style-type: lower-alpha ;
 }
 
 .markdown-body ul ul ol,
 .markdown-body ul ol ol,
 .markdown-body ol ul ol,
 .markdown-body ol ol ol {
-  list-style-type: lower-alpha;
+  list-style-type: lower-roman;
 }
 
 .markdown-body dd {
@@ -3120,12 +3120,22 @@
   background-color: #fff;
 }
 .editormd-preview-container blockquote, .editormd-html-preview blockquote {
-  color: #666;
-  border-left: 4px solid #ddd;
-  padding-left: 20px;
-  margin-left: 0;
-  font-size: 14px;
-  font-style: italic;
+    margin: 0 18px 15px 18px;
+    padding-left: 32px;
+    border: 0px;
+    quotes: "“" "”" "‘" "’";
+    position: relative;
+    line-height: 1.45;
+}
+.markdown blockquote:before, .markdown blockquote:after {
+    display: block;
+    content: "\201C";
+    font-size: 35px;
+    position: absolute;
+    font-family: serif;
+    left: 0px;
+    top: -10px;
+    color: #aaa;
 }
 .editormd-preview-container p code, .editormd-html-preview p code {
   margin-left: 5px;

@@ -1,5 +1,4 @@
-﻿using M_runClient;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using openCaseMaster.Models;
 using openCaseMaster.ViewModels;
 using System;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -129,7 +129,7 @@ namespace openCaseMaster.Controllers
                 string msg = null;
                 foreach (var url in urls)
                 {
-                    if (!Call_Client.startRun(url))
+                    if (!this.startRun(url))
                     {
                         msg += (url + ",");
 
@@ -337,10 +337,12 @@ namespace openCaseMaster.Controllers
             {
                 M_testDemand md = QC_DB.M_testDemand.First(t => t.ID == ID);
 
-                if (md.type == 0 && md.M_testDemand1.Count > 0)
+                
+                /*if (md.type == 0 && md.M_testDemand1.Count > 0)
                 {
                     return "无法直接删除文件夹,请连续管理员";
-                }else if (md.isRun==true)
+                }else */
+                if (md.isRun==true)
                 {
                     return "无法删除已执行的测试计划";
                 }else
@@ -354,6 +356,46 @@ namespace openCaseMaster.Controllers
 
                 }
             }
+        }
+
+        [NonAction]
+        private bool startRun(string url)
+        {
+            try
+            {
+                //创建连接
+                HttpWebRequest mHttpRequest = (HttpWebRequest)HttpWebRequest.Create("http://" + url + "/testM/?runType=Scene");
+                //超时间毫秒为单位
+                mHttpRequest.Timeout = 60000;
+                //发送请求的方式
+                mHttpRequest.Method = "GET";
+
+                //字节范围
+                //mHttpRequest.AddRange(100, 10000);
+                //是否和请求一起发送
+                //mHttpRequest.UseDefaultCredentials = true;
+                //写数据信息的流对象
+                //C:\Users\Admin\Desktop\test2.xml
+                //StreamWriter swMessages = new StreamWriter(mHttpRequest.GetRequestStream());
+                //写入的流以XMl格式写入
+                //swMessages.Write(msg);
+                //关闭写入流
+                //swMessages.Close();
+                //创建一个响应对象
+                HttpWebResponse mHttpResponse = (HttpWebResponse)mHttpRequest.GetResponse();
+                if (mHttpResponse.StatusDescription == "OK")
+                {
+                    mHttpResponse.Close();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+
         }
        
     }

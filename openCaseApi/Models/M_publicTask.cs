@@ -12,27 +12,22 @@ namespace openCaseApi.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class M_deviceConfig
+    public partial class M_publicTask
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public M_deviceConfig()
+        public M_publicTask()
         {
-            this.M_DevProMapping = new HashSet<M_DevProMapping>();
-            this.M_runScene = new HashSet<M_runScene>();
+            this.M_publicTaskScript = new HashSet<M_publicTaskScript>();
         }
     
         public int ID { get; set; }
-        public string IP { get; set; }
-        public Nullable<int> Port { get; set; }
-        public string device { get; set; }
-        public string mark { get; set; }
-        public string img { get; set; }
-        public string Model { get; set; }
-        public string Brand { get; set; }
+        public int appID { get; set; }
+        public Nullable<System.DateTime> startDate { get; set; }
+        public Nullable<System.DateTime> endDate { get; set; }
     
+        public virtual M_application M_application { get; set; }
+        public virtual topic topic { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_DevProMapping> M_DevProMapping { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<M_runScene> M_runScene { get; set; }
+        public virtual ICollection<M_publicTaskScript> M_publicTaskScript { get; set; }
     }
 }

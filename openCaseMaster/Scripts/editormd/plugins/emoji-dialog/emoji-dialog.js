@@ -140,13 +140,14 @@
 			}
 			
 			var category = ["Github emoji", "Twemoji", "Font awesome", "Editor.md logo"];
+			var tabI = 1;//code  by 孙建平
 			var tab      = dialog.find("." + classPrefix + "tab");
 
 			if (tab.html() === "") 
 			{
 				var head = "<ul class=\"" + classPrefix + "tab-head\">";
 
-				for (var i = 0; i<4; i++) {
+				for (var i = 0; i < tabI; i++) {
 					var active = (i === 0) ? " class=\"active\"" : "";
 					head += "<li" + active + "><a href=\"javascript:;\">" + category[i] + "</a></li>";
 				}
@@ -157,7 +158,7 @@
 
 				var container = "<div class=\"" + classPrefix + "tab-container\">";
 
-				for (var x = 0; x < 4; x++) 
+				for (var x = 0; x < tabI; x++)
                 {
 					var display = (x === 0) ? "" : "display:none;";
 					container += "<div class=\"" + classPrefix + "tab-box\" style=\"height: 260px;overflow: hidden;overflow-y: auto;" + display + "\"></div>";
