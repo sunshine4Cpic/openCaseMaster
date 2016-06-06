@@ -46,9 +46,10 @@ namespace openCaseMaster.Models
         public virtual DbSet<project> project { get; set; }
         public virtual DbSet<project_app> project_app { get; set; }
         public virtual DbSet<tmp_TaskScript> tmp_TaskScript { get; set; }
-        public virtual DbSet<topic> topic { get; set; }
         public virtual DbSet<topicReply> topicReply { get; set; }
         public virtual DbSet<user_type> user_type { get; set; }
+        public virtual DbSet<notification> notification { get; set; }
+        public virtual DbSet<topic> topic { get; set; }
     
         public virtual ObjectResult<M_ContainUserStepCase_Result> M_ContainUserStepCase(Nullable<int> p_1)
         {

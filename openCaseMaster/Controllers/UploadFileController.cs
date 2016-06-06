@@ -133,7 +133,7 @@ namespace openCaseMaster.Controllers
                 StreamReader sr = new StreamReader(stm);
                 XElement fm = XElement.Parse(sr.ReadToEnd());
 
-                int userID = userHelper.UserID;
+                int userID = HttpContext.Current.User.userID();
 
                 QCTESTEntities QC_DB = new QCTESTEntities();
 
@@ -166,12 +166,13 @@ namespace openCaseMaster.Controllers
 
             if (exts.Contains(ext))
             {
-                string fileName = userHelper.UserID + ext;
+                string fileName = User.userID() + ext;
                 string fileDir = Server.MapPath("~/Content/userAvatar/" + fileName);
 
                 file.SaveAs(fileDir);
                 QCTESTEntities QC_DB = new QCTESTEntities();
-                var user = QC_DB.admin_user.First(t => t.ID == userHelper.UserID);
+                int userID = User.userID();
+                var user = QC_DB.admin_user.First(t => t.ID == userID);
                 user.Avatar = fileName;
                 QC_DB.SaveChanges();
 

@@ -193,6 +193,17 @@
           <Property Name="visable" Type="bit" />
           <Property Name="apkName" Type="nvarchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="notification">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userID" Type="int" Nullable="false" />
+          <Property Name="state" Type="int" />
+          <Property Name="topicID" Type="int" />
+          <Property Name="replyID" Type="int" />
+          <Property Name="createDate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="project">
           <Key>
             <PropertyRef Name="ID" />
@@ -230,6 +241,7 @@
           <Property Name="node" Type="int" Nullable="false" />
           <Property Name="state" Type="int" />
           <Property Name="creatDate" Type="datetime" Nullable="false" />
+          <Property Name="replys" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="topicReply">
           <Key>
@@ -241,6 +253,7 @@
           <Property Name="userID" Type="int" Nullable="false" />
           <Property Name="creatDate" Type="datetime" Nullable="false" />
           <Property Name="state" Type="int" />
+          <Property Name="floor" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="user_type">
           <Key>
@@ -523,6 +536,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_notification_recipientID">
+          <End Role="admin_user" Type="Self.admin_user" Multiplicity="1" />
+          <End Role="notification" Type="Self.notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin_user">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="notification">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_notification_replyID">
+          <End Role="topicReply" Type="Self.topicReply" Multiplicity="0..1" />
+          <End Role="notification" Type="Self.notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="topicReply">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="notification">
+              <PropertyRef Name="replyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_notification_topicID">
+          <End Role="topic" Type="Self.topic" Multiplicity="0..1" />
+          <End Role="notification" Type="Self.notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="topic">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="notification">
+              <PropertyRef Name="topicID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_project_app_appID">
           <End Role="M_application" Type="Self.M_application" Multiplicity="1" />
           <End Role="project_app" Type="Self.project_app" Multiplicity="*" />
@@ -659,6 +708,7 @@
           <EntitySet Name="M_testCase" EntityType="Self.M_testCase" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_testCaseSteps" EntityType="Self.M_testCaseSteps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_testDemand" EntityType="Self.M_testDemand" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="notification" EntityType="Self.notification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project" EntityType="Self.project" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project_app" EntityType="Self.project_app" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tmp_TaskScript" EntityType="Self.tmp_TaskScript" Schema="dbo" store:Type="Tables" />
@@ -752,6 +802,18 @@
           <AssociationSet Name="FK_M_testDemand_project" Association="Self.FK_M_testDemand_project">
             <End Role="project" EntitySet="project" />
             <End Role="M_testDemand" EntitySet="M_testDemand" />
+          </AssociationSet>
+          <AssociationSet Name="FK_notification_recipientID" Association="Self.FK_notification_recipientID">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="notification" EntitySet="notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_notification_replyID" Association="Self.FK_notification_replyID">
+            <End Role="topicReply" EntitySet="topicReply" />
+            <End Role="notification" EntitySet="notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_notification_topicID" Association="Self.FK_notification_topicID">
+            <End Role="topic" EntitySet="topic" />
+            <End Role="notification" EntitySet="notification" />
           </AssociationSet>
           <AssociationSet Name="FK_project_app_appID" Association="Self.FK_project_app_appID">
             <End Role="M_application" EntitySet="M_application" />
@@ -861,7 +923,6 @@
           <EntitySet Name="project" EntityType="MasterModel.project" />
           <EntitySet Name="project_app" EntityType="MasterModel.project_app" />
           <EntitySet Name="tmp_TaskScript" EntityType="MasterModel.tmp_TaskScript" />
-          <EntitySet Name="topic" EntityType="MasterModel.topic" />
           <EntitySet Name="topicReply" EntityType="MasterModel.topicReply" />
           <EntitySet Name="user_type" EntityType="MasterModel.user_type" />
           <AssociationSet Name="FK_admin_log_admin_log" Association="MasterModel.FK_admin_log_admin_log">
@@ -883,10 +944,6 @@
           <AssociationSet Name="FK_project_userID" Association="MasterModel.FK_project_userID">
             <End Role="admin_user" EntitySet="admin_user" />
             <End Role="project" EntitySet="project" />
-          </AssociationSet>
-          <AssociationSet Name="FK_topic_userID" Association="MasterModel.FK_topic_userID">
-            <End Role="admin_user" EntitySet="admin_user" />
-            <End Role="topic" EntitySet="topic" />
           </AssociationSet>
           <AssociationSet Name="FK_topicReply_userID" Association="MasterModel.FK_topicReply_userID">
             <End Role="admin_user" EntitySet="admin_user" />
@@ -932,10 +989,6 @@
             <End Role="M_publicDevice" EntitySet="M_publicDevice" />
             <End Role="M_publicTaskResult" EntitySet="M_publicTaskResult" />
           </AssociationSet>
-          <AssociationSet Name="FK_M_publicTask_ID" Association="MasterModel.FK_M_publicTask_ID">
-            <End Role="topic" EntitySet="topic" />
-            <End Role="M_publicTask" EntitySet="M_publicTask" />
-          </AssociationSet>
           <AssociationSet Name="FK_M_publicTaskScript_taskID" Association="MasterModel.FK_M_publicTaskScript_taskID">
             <End Role="M_publicTask" EntitySet="M_publicTask" />
             <End Role="M_publicTaskScript" EntitySet="M_publicTaskScript" />
@@ -971,6 +1024,28 @@
           <AssociationSet Name="FK_project_app_PID" Association="MasterModel.FK_project_app_PID">
             <End Role="project" EntitySet="project" />
             <End Role="project_app" EntitySet="project_app" />
+          </AssociationSet>
+          <EntitySet Name="notification" EntityType="MasterModel.notification" />
+          <AssociationSet Name="FK_notification_recipientID" Association="MasterModel.FK_notification_recipientID">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="notification" EntitySet="notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_notification_replyID" Association="MasterModel.FK_notification_replyID">
+            <End Role="topicReply" EntitySet="topicReply" />
+            <End Role="notification" EntitySet="notification" />
+          </AssociationSet>
+          <EntitySet Name="topic" EntityType="MasterModel.topic" />
+          <AssociationSet Name="FK_topic_userID" Association="MasterModel.FK_topic_userID">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="topic" EntitySet="topic" />
+          </AssociationSet>
+          <AssociationSet Name="FK_M_publicTask_ID" Association="MasterModel.FK_M_publicTask_ID">
+            <End Role="topic" EntitySet="topic" />
+            <End Role="M_publicTask" EntitySet="M_publicTask" />
+          </AssociationSet>
+          <AssociationSet Name="FK_notification_topicID" Association="MasterModel.FK_notification_topicID">
+            <End Role="topic" EntitySet="topic" />
+            <End Role="notification" EntitySet="notification" />
           </AssociationSet>
           <AssociationSet Name="FK_topicReply_topicID" Association="MasterModel.FK_topicReply_topicID">
             <End Role="topic" EntitySet="topic" />
@@ -1017,8 +1092,9 @@
           <NavigationProperty Name="caseFramework" Relationship="MasterModel.FK_caseFramework_userID" FromRole="admin_user" ToRole="caseFramework" />
           <NavigationProperty Name="M_runScene" Relationship="MasterModel.FK_M_runScene_admin_user" FromRole="admin_user" ToRole="M_runScene" />
           <NavigationProperty Name="project" Relationship="MasterModel.FK_project_userID" FromRole="admin_user" ToRole="project" />
-          <NavigationProperty Name="topic" Relationship="MasterModel.FK_topic_userID" FromRole="admin_user" ToRole="topic" />
           <NavigationProperty Name="topicReply" Relationship="MasterModel.FK_topicReply_userID" FromRole="admin_user" ToRole="topicReply" />
+          <NavigationProperty Name="notification" Relationship="MasterModel.FK_notification_recipientID" FromRole="admin_user" ToRole="notification" />
+          <NavigationProperty Name="topic" Relationship="MasterModel.FK_topic_userID" FromRole="admin_user" ToRole="topic" />
         </EntityType>
         <EntityType Name="caseFramework">
           <Key>
@@ -1104,8 +1180,8 @@
           <Property Name="startDate" Type="DateTime" Precision="3" />
           <Property Name="endDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="M_application" Relationship="MasterModel.FK_M_publicTest_appID" FromRole="M_publicTask" ToRole="M_application" />
-          <NavigationProperty Name="topic" Relationship="MasterModel.FK_M_publicTask_ID" FromRole="M_publicTask" ToRole="topic" />
           <NavigationProperty Name="M_publicTaskScript" Relationship="MasterModel.FK_M_publicTaskScript_taskID" FromRole="M_publicTask" ToRole="M_publicTaskScript" />
+          <NavigationProperty Name="topic" Relationship="MasterModel.FK_M_publicTask_ID" FromRole="M_publicTask" ToRole="topic" />
         </EntityType>
         <EntityType Name="M_publicTaskResult">
           <Key>
@@ -1250,21 +1326,6 @@
           <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="script" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="topic">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="userID" Type="Int32" Nullable="false" />
-          <Property Name="node" Type="Int32" Nullable="false" />
-          <Property Name="state" Type="Int32" />
-          <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_topic_userID" FromRole="topic" ToRole="admin_user" />
-          <NavigationProperty Name="M_publicTask" Relationship="MasterModel.FK_M_publicTask_ID" FromRole="topic" ToRole="M_publicTask" />
-          <NavigationProperty Name="topicReply" Relationship="MasterModel.FK_topicReply_topicID" FromRole="topic" ToRole="topicReply" />
-        </EntityType>
         <EntityType Name="topicReply">
           <Key>
             <PropertyRef Name="ID" />
@@ -1276,6 +1337,8 @@
           <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="state" Type="Int32" />
           <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_topicReply_userID" FromRole="topicReply" ToRole="admin_user" />
+          <Property Name="floor" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="notification" Relationship="MasterModel.FK_notification_replyID" FromRole="topicReply" ToRole="notification" />
           <NavigationProperty Name="topic" Relationship="MasterModel.FK_topicReply_topicID" FromRole="topicReply" ToRole="topic" />
         </EntityType>
         <EntityType Name="user_type">
@@ -1344,18 +1407,6 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="project">
-              <PropertyRef Name="userID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_topic_userID">
-          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="1" />
-          <End Type="MasterModel.topic" Role="topic" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="admin_user">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="topic">
               <PropertyRef Name="userID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1496,18 +1547,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_M_publicTask_ID">
-          <End Type="MasterModel.topic" Role="topic" Multiplicity="1" />
-          <End Type="MasterModel.M_publicTask" Role="M_publicTask" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="topic">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="M_publicTask">
-              <PropertyRef Name="ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_M_publicTaskScript_taskID">
           <End Type="MasterModel.M_publicTask" Role="M_publicTask" Multiplicity="1" />
           <End Type="MasterModel.M_publicTaskScript" Role="M_publicTaskScript" Multiplicity="*" />
@@ -1617,6 +1656,97 @@
             </Principal>
             <Dependent Role="project_app">
               <PropertyRef Name="PID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="notification">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userID" Type="Int32" Nullable="false" />
+          <Property Name="state" Type="Int32" />
+          <Property Name="topicID" Type="Int32" />
+          <Property Name="replyID" Type="Int32" />
+          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_notification_recipientID" FromRole="notification" ToRole="admin_user" />
+          <NavigationProperty Name="topicReply" Relationship="MasterModel.FK_notification_replyID" FromRole="notification" ToRole="topicReply" />
+          <NavigationProperty Name="topic" Relationship="MasterModel.FK_notification_topicID" FromRole="notification" ToRole="topic" />
+          <Property Name="createDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <Association Name="FK_notification_recipientID">
+          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="1" />
+          <End Type="MasterModel.notification" Role="notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin_user">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="notification">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_notification_replyID">
+          <End Type="MasterModel.topicReply" Role="topicReply" Multiplicity="0..1" />
+          <End Type="MasterModel.notification" Role="notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="topicReply">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="notification">
+              <PropertyRef Name="replyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="topic">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="userID" Type="Int32" Nullable="false" />
+          <Property Name="node" Type="Int32" Nullable="false" />
+          <Property Name="state" Type="Int32" />
+          <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="replys" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_topic_userID" FromRole="topic" ToRole="admin_user" />
+          <NavigationProperty Name="M_publicTask" Relationship="MasterModel.FK_M_publicTask_ID" FromRole="topic" ToRole="M_publicTask" />
+          <NavigationProperty Name="notification" Relationship="MasterModel.FK_notification_topicID" FromRole="topic" ToRole="notification" />
+          <NavigationProperty Name="topicReply" Relationship="MasterModel.FK_topicReply_topicID" FromRole="topic" ToRole="topicReply" />
+        </EntityType>
+        <Association Name="FK_topic_userID">
+          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="1" />
+          <End Type="MasterModel.topic" Role="topic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin_user">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="topic">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_M_publicTask_ID">
+          <End Type="MasterModel.topic" Role="topic" Multiplicity="1" />
+          <End Type="MasterModel.M_publicTask" Role="M_publicTask" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="topic">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="M_publicTask">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_notification_topicID">
+          <End Type="MasterModel.topic" Role="topic" Multiplicity="0..1" />
+          <End Type="MasterModel.notification" Role="notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="topic">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="notification">
+              <PropertyRef Name="topicID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1892,22 +2022,10 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="topic">
-            <EntityTypeMapping TypeName="MasterModel.topic">
-              <MappingFragment StoreEntitySet="topic">
-                <ScalarProperty Name="creatDate" ColumnName="creatDate" />
-                <ScalarProperty Name="state" ColumnName="state" />
-                <ScalarProperty Name="node" ColumnName="node" />
-                <ScalarProperty Name="userID" ColumnName="userID" />
-                <ScalarProperty Name="body" ColumnName="body" />
-                <ScalarProperty Name="title" ColumnName="title" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="topicReply">
             <EntityTypeMapping TypeName="MasterModel.topicReply">
               <MappingFragment StoreEntitySet="topicReply">
+                <ScalarProperty Name="floor" ColumnName="floor" />
                 <ScalarProperty Name="state" ColumnName="state" />
                 <ScalarProperty Name="creatDate" ColumnName="creatDate" />
                 <ScalarProperty Name="userID" ColumnName="userID" />
@@ -1921,6 +2039,32 @@
             <EntityTypeMapping TypeName="MasterModel.user_type">
               <MappingFragment StoreEntitySet="user_type">
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="notification">
+            <EntityTypeMapping TypeName="MasterModel.notification">
+              <MappingFragment StoreEntitySet="notification">
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="replyID" ColumnName="replyID" />
+                <ScalarProperty Name="topicID" ColumnName="topicID" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="topic">
+            <EntityTypeMapping TypeName="MasterModel.topic">
+              <MappingFragment StoreEntitySet="topic">
+                <ScalarProperty Name="replys" ColumnName="replys" />
+                <ScalarProperty Name="creatDate" ColumnName="creatDate" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="node" ColumnName="node" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="body" ColumnName="body" />
+                <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

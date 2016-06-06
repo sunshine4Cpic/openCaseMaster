@@ -35,17 +35,16 @@
                 {
                     <div class="topic media">
                         <div class="avatar media-left">
-                            <a href="#"><img class="media-object avatar-48" src="~/Content/userAvatar/@tmv.User.Avatar"></a>
+                            <a href="#"><img class="media-object avatar-48" src="@tmv.User.AvatarUrl"></a>
                         </div>
                         <div class="infos media-body">
                             <div class="title media-heading">
                                 <a title="@tmv.title" href="/Topic/@tmv.ID">@tmv.title</a>
-
                             </div>
                             <div class="info">
                                 <a class="node" href="/Topic/node/@tmv.nodeID">@tmv.nodeText</a>
                                 •
-                                <a data-author="true" data-name="nana" href="#">@tmv.User.Name</a>
+                                <a data-author="true" data-name="nana" href="#">@tmv.User.userName</a>
                                 <span class="hidden-mobile">
                                     于 <abbr class="timeago" title="@tmv.creatDate">@tmv.timeago</abbr>发布
                                 </span>
@@ -66,7 +65,7 @@
                     </div>
                 }
             </div>
-            @Html.Pagination((int)ViewBag.page, 0)
+            @Html.Pagination((int)ViewBag.page, (int)ViewBag.total, (int)ViewBag.rows)
         </div>
 
 

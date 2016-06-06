@@ -12,25 +12,17 @@ namespace openCaseMaster.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class topicReply
+    public partial class notification
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public topicReply()
-        {
-            this.notification = new HashSet<notification>();
-        }
-    
         public int ID { get; set; }
-        public int topicID { get; set; }
-        public string body { get; set; }
         public int userID { get; set; }
-        public System.DateTime creatDate { get; set; }
         public Nullable<int> state { get; set; }
-        public int floor { get; set; }
+        public Nullable<int> topicID { get; set; }
+        public Nullable<int> replyID { get; set; }
+        public System.DateTime createDate { get; set; }
     
         public virtual admin_user admin_user { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<notification> notification { get; set; }
+        public virtual topicReply topicReply { get; set; }
         public virtual topic topic { get; set; }
     }
 }

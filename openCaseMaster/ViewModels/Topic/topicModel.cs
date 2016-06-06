@@ -110,7 +110,7 @@ namespace openCaseMaster.ViewModels
                 this.nodeID = tic.node;
 
                 this.User = new topicUserModel();
-
+                User.userName = tic.admin_user.Username;
                 User.Name = tic.admin_user.Name;
                 User.ID = tic.userID;
                 User.Avatar = tic.admin_user.Avatar;
@@ -126,9 +126,10 @@ namespace openCaseMaster.ViewModels
                            {
                                ID = t.ID,
                                body = t.body,
-                               User = new topicUserModel { ID = t.userID, Name = t.admin_user.Name, Avatar = t.admin_user.Avatar },
+                               User = new topicUserModel { ID = t.userID, userName = t.admin_user.Username, Name = t.admin_user.Name, Avatar = t.admin_user.Avatar },
                                creatDate = t.creatDate,
                                state = t.state,
+                               floor = t.floor
                            }).ToList();
                 
             }
@@ -179,6 +180,8 @@ namespace openCaseMaster.ViewModels
 
 
         public topicUserModel User;
+
+        public int floor { get; set; }
     }
 
     public class taskModel
@@ -200,8 +203,14 @@ namespace openCaseMaster.ViewModels
     {
         public int ID { get; set; }
         public string Name { get; set; }
+        public string userName { get; set; }
 
         public string Avatar { get; set; }
+
+        public string AvatarUrl { get { return "/Content/userAvatar/" + Avatar; } }
+
+
+        
     }
 
 

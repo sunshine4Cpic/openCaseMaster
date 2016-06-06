@@ -42,24 +42,25 @@ namespace openCaseMaster
                     {
                         FormsIdentity id = (FormsIdentity)HttpContext.Current.User.Identity;
                         FormsAuthenticationTicket ticket = id.Ticket;//cookie
-                        
+
                         string userData = ticket.UserData;
 
 
-                        try
-                        {
-                            JObject userJ = JObject.Parse(userData);
+                        JObject userJ = JObject.Parse(userData);
 
-                            string[] roles = userJ["Roles"].ToString().Split(',');
-                            //重建HttpContext.Current.User，加入用户拥有的角色数组 
-                            HttpContext.Current.User = new GenericPrincipal(id, roles);
-                          
-                        }
-                        catch 
-                        {
-                            //处理个毛线,以后重写,使用 MVC自带的权限控制
-                          
-                        } 
+                        string[] roles = userJ["Roles"].ToString().Split(',');
+
+                        int ID = Convert.ToInt32(userJ["ID"]);
+
+                        string userName = userJ["userName"].ToString();
+
+                        string Permission = userJ["Permission"].ToString();
+
+
+                        //重建HttpContext.Current.User，加入用户拥有的角色数组 
+                        HttpContext.Current.User = new FormUser(id, roles, ID, userName, Permission);
+
+
                     }
                 }
             }
@@ -68,5 +69,21 @@ namespace openCaseMaster
 
 
 
+    }
+
+
+    public class FormUser:GenericPrincipal
+    {
+        public FormUser(IIdentity identity, string[] roles, int ID, string userName, string Permission)
+            : base(identity, roles)
+        {
+            this.ID = ID;
+            this.userName = userName;
+            this.Permission = Permission;
+        }
+
+        public int ID { get; set; }
+        public string userName { get; set; }
+        public string Permission { get; set; }
     }
 }

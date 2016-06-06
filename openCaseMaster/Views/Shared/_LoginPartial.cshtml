@@ -1,10 +1,33 @@
-﻿
-@if (Request.IsAuthenticated)
+﻿@if (Request.IsAuthenticated)
 {
+    <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+        $(function () {
+            var chat = $.connection.UserHub;
+            chat.client.push = function (cnt) {
+                $(".notification-count .notice").css("display","block");
+                var baseCnt = parseInt($(".notification-count .notice").html());
+                $(".notification-count .notice").html(baseCnt + cnt);
+            }
+
+            $.connection.hub.start().done(function () {
+                chat.server.push();
+            });
+        });
+    </script>
+
+
+
     using (Html.BeginForm("LogOff", "User", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
         @Html.AntiForgeryToken()
         <ul class="nav navbar-nav navbar-right">
+            <li class="notification-count">
+                <a href="/User/notification">消息</a>
+                    <div class="notice">0</div>
+               
+            </li>
             <li>
                 @Html.ActionLink("你好，" + User.Identity.Name + "!", "userInfo", "User", routeValues: null, htmlAttributes: new { title = "Manage" })
             </li>

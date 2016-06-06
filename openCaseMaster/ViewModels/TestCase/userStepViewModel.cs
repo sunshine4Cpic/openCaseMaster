@@ -24,7 +24,7 @@ namespace openCaseMaster.ViewModels
             
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
-                int userID = userHelper.UserID;
+                int userID = HttpContext.Current.User.userID();
                 var us = QC_DB.M_testCaseSteps.FirstOrDefault(t => t.ID == id && t.userID == userID);
 
 

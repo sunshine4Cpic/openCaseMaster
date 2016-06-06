@@ -67,6 +67,7 @@ namespace openCaseMaster.Controllers
 
             JObject userJ = new JObject();
             userJ["ID"] = loginUser.ID;
+            userJ["userName"] = loginUser.Username;
             userJ["Roles"] = userRole;
             userJ["Permission"] = loginUser.Permission;
 
@@ -78,8 +79,8 @@ namespace openCaseMaster.Controllers
             FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1,
                                            loginUser.Name,
                                            DateTime.Now,
-                                           DateTime.Now.AddHours(2),
-                                           false,
+                                           DateTime.Now.AddHours(24),
+                                           true,
                                            userJ.ToString(),//用户组暂不处理
                                            //loginUser.Type.ToString(),//用户所属的角色字符串 
                                            FormsAuthentication.FormsCookiePath);
@@ -98,6 +99,11 @@ namespace openCaseMaster.Controllers
             Response.Cookies.Add(cookie);
             loginUser.LastDate = DateTime.Now;
             qc.SaveChanges();
+
+
+
+
+
             return RedirectToLocal(ReturnUrl);
 
 
@@ -356,7 +362,7 @@ namespace openCaseMaster.Controllers
             }
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-            int id = userHelper.UserID;
+            int id = User.userID();
 
             admin_user user = QC_DB.admin_user.First(t => t.ID == id);
 
@@ -372,6 +378,43 @@ namespace openCaseMaster.Controllers
 
             return true.ToString();
 
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult notification(int page = 1)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+
+            int userID = User.userID();
+
+            var query = from t in QC_DB.notification
+                        where t.userID == userID
+                        orderby t.state, t.createDate descending
+                        select new notificationModel
+                        {
+                            ID = t.ID,
+                            topicID = t.topicID == null ? t.topicReply.topic.ID : t.topicID.Value,
+                            User = new topicUserModel { ID = t.admin_user.ID, Avatar = t.admin_user.Avatar, Name = t.admin_user.Name, userName = t.admin_user.Username },
+                            title = t.topicID == null ? t.topicReply.topic.title : t.topic.title,
+                            body = t.topicID == null ? t.topicReply.body : t.topic.body,
+                            floor = t.topicID == null ? t.topicReply.floor : 0,
+                            creatDate = t.createDate,
+                            state = t.state
+                        };
+
+            var model = query.Skip(20 * (page - 1)).Take(20).ToList();
+
+            foreach(var m in model)
+            {
+                if (m.state == 0)
+                    QC_DB.notification.First(t => t.ID == m.ID).state = 1;
+            }
+            QC_DB.SaveChanges();
+
+            ViewBag.page = page;
+            return View(model);
         }
 
         
