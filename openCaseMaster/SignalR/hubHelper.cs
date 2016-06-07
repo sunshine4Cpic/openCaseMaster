@@ -18,7 +18,7 @@ namespace openCaseMaster.Models
 
         public static void Push(List<string> names)
         {
-            GlobalHost.ConnectionManager.GetHubContext<UserHub>().Clients.User("c_zhubo").push(1);
+            GlobalHost.ConnectionManager.GetHubContext<UserHub>().Clients.Users(names).push(1);
             //GlobalHost.ConnectionManager.GetHubContext<UserHub>().Clients.Users(names).push(1);
         }
        

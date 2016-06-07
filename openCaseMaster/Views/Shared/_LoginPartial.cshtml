@@ -5,14 +5,19 @@
     <script>
         $(function () {
             var chat = $.connection.UserHub;
-            chat.client.push = function (cnt) {
+            chat.client.init = function (cnt) {
                 $(".notification-count .notice").css("display","block");
+                $(".notification-count .notice").html(cnt);
+            }
+
+            chat.client.push = function (cnt) {
+                $(".notification-count .notice").css("display", "block");
                 var baseCnt = parseInt($(".notification-count .notice").html());
                 $(".notification-count .notice").html(baseCnt + cnt);
             }
 
             $.connection.hub.start().done(function () {
-                chat.server.push();
+                chat.server.init();
             });
         });
     </script>

@@ -28,7 +28,7 @@ namespace openCaseMaster.Controllers
 
             var date = QC_DB.topic.Where(t => t.state != 0);
             var lsv = from t in date
-                      orderby t.ID descending
+                      orderby t.power descending, t.ID descending 
                       select new topicModel_prev
                       {
                           ID = t.ID,
@@ -37,7 +37,8 @@ namespace openCaseMaster.Controllers
                           User = new topicUserModel { ID = t.userID, userName=t.admin_user.Username, Name = t.admin_user.Name, Avatar = t.admin_user.Avatar },
                           creatDate = t.creatDate,
                           scriptCount = t.M_publicTask.M_publicTaskScript.Count,
-                          replyCnt = t.topicReply.Count
+                          replyCnt = t.topicReply.Count,
+                          power = t.power.Value
                       };
 
 
@@ -63,7 +64,7 @@ namespace openCaseMaster.Controllers
             var date = QC_DB.topic.Where(t => t.node == id && t.state != 0);
 
             var lsv = from t in date
-                      orderby t.ID descending
+                      orderby t.power descending, t.ID descending 
                       select new topicModel_prev
                       {
                           ID = t.ID,
@@ -402,7 +403,20 @@ namespace openCaseMaster.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public void suggest(int id,int power)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
 
+            var ts = QC_DB.topic.First(t => t.ID == id);
+
+            ts.power = power;
+            QC_DB.SaveChanges();
+
+        }
+
+       
 
 
 

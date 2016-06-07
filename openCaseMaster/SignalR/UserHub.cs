@@ -32,14 +32,16 @@ namespace openCaseMaster.SignalR
             return base.OnDisconnected(stopCalled);
         }
 
-        public void Push()
+        
+
+        public void init()
         {
             int userID = HttpContext.Current.User.userID();
             QCTESTEntities db = new QCTESTEntities();
             int cnt = db.notification.Where(t => t.userID == userID).Where(t => t.state == 0).Count();
             if (cnt > 0)
-                Clients.User(HttpContext.Current.User.userName()).push(cnt);
-            
+                Clients.User(HttpContext.Current.User.userName()).init(cnt);
+
         }
 
       

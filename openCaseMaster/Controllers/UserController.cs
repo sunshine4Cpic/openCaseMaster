@@ -382,15 +382,16 @@ namespace openCaseMaster.Controllers
 
         [Authorize]
         [HttpGet]
-        public ActionResult notification(int page = 1)
+        public ActionResult notification(int page = 1,int rows=20)
         {
             QCTESTEntities QC_DB = new QCTESTEntities();
 
 
             int userID = User.userID();
 
-            var query = from t in QC_DB.notification
-                        where t.userID == userID
+            var date = QC_DB.notification.Where(t => t.userID == userID);
+
+            var query = from t in date
                         orderby t.state, t.createDate descending
                         select new notificationModel
                         {
@@ -414,6 +415,10 @@ namespace openCaseMaster.Controllers
             QC_DB.SaveChanges();
 
             ViewBag.page = page;
+
+            ViewBag.page = page;
+            ViewBag.rows = rows;
+            ViewBag.total = date.Count();
             return View(model);
         }
 

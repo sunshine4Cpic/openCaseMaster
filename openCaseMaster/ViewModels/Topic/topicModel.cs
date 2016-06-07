@@ -50,6 +50,8 @@ namespace openCaseMaster.ViewModels
     {
         public topicUserModel User;
 
+        public int power { get; set; }
+
         public int ID { get; set; }
 
         public int nodeID { get; set; }
@@ -108,6 +110,7 @@ namespace openCaseMaster.ViewModels
                 this.ID = tic.ID;
 
                 this.nodeID = tic.node;
+                this.power = tic.power.Value;
 
                 this.User = new topicUserModel();
                 User.userName = tic.admin_user.Username;

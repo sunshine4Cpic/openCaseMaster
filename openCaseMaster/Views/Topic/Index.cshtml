@@ -31,9 +31,15 @@
 
             <div class="panel-body">
 
+               
                 @foreach (var tmv in Model)
                 {
-                    <div class="topic media">
+                    string css = "topic media";
+                    if(tmv.power>0) 
+                    {
+                        css = "suggest_topic topic media";
+                    }
+                    <div class="@css">
                         <div class="avatar media-left">
                             <a href="#"><img class="media-object avatar-48" src="@tmv.User.AvatarUrl"></a>
                         </div>

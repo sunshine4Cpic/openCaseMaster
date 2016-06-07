@@ -3,13 +3,13 @@
 @model topicModel_view
 
 @section Scripts {
-   
-    
+
+
     @Scripts.Render("~/bundles/markdownView")
 
     @Styles.Render("~/Content/markdownView")
 
- 
+
 
 
 
@@ -56,14 +56,33 @@
                     var reply = $(this).parents(".reply");
                     $.post(this.href, {},
                       function (data) {
-                          if(data=="True")
-                              reply.remove();
+                          reply.remove();
                       });
                 }
                 return false;
             });
 
+            $(".suggest").click(function () {
+                var power = $(this).attr("power");
+                var i = $(this).find("i");
+                var s = $(this).find("span");
+                $.post(this.href, { power: power },
+                  function (data) {
+                      if (power == 0) {
+                          $(".suggest").attr("power", 100);
+                          i.removeClass();
+                          i.addClass("glyphicon glyphicon-star-empty");
+                          s.html("置顶");
+                      } else {
+                          $(".suggest").attr("power", 0);
+                          i.removeClass();
+                          i.addClass("glyphicon glyphicon-star");
+                          s.html("取消置顶");
+                      }
+                  });
+                return false;
 
+            });
 
 
             editormd("editormd", {
@@ -90,125 +109,133 @@
 
 }
 <div class="row">
-<div class="col-md-9">
-    <div class="topic-detail panel panel-default">
-        <div class="panel-heading media clearfix">
-            <div class="media-body">
-                <h1 class="media-heading">@Model.title</h1>
-                <div class="info">
-                    <a class="node" href="/PublicTask/node/@Model.nodeID">@Model.nodeText</a>
-                    ·
-                    <a data-author="true" data-name="tongyx" href="#">@Model.User.userName</a>
-                    ·
-                    于 <abbr class="timeago" title="@Model.creatDate">@Model.timeago</abbr>发布
+    <div class="col-md-9">
+        <div class="topic-detail panel panel-default">
+            <div class="panel-heading media clearfix">
+                <div class="media-body">
+                    <h1 class="media-heading">@Model.title</h1>
+                    <div class="info">
+                        <a class="node" href="/PublicTask/node/@Model.nodeID">@Model.nodeText</a>
+                        ·
+                        <a data-author="true" data-name="tongyx" href="#">@Model.User.userName</a>
+                        ·
+                        于 <abbr class="timeago" title="@Model.creatDate">@Model.timeago</abbr>发布
 
+                    </div>
+                </div>
+                <div class="avatar media-right">
+                    <a href="#"><img class="media-object avatar-48" src="~/Content/userAvatar/@Model.User.Avatar"></a>
                 </div>
             </div>
-            <div class="avatar media-right">
-                <a href="#"><img class="media-object avatar-48" src="~/Content/userAvatar/@Model.User.Avatar"></a>
+
+            <div class="panel-body markdownView">
+
+                <textarea style="display:none;">@Model.body</textarea>
             </div>
         </div>
-
-        <div class="panel-body markdownView">
-
-            <textarea style="display:none;">@Model.body</textarea>
-        </div>
-    </div>
-    @if (Model.User.ID == HttpContext.Current.User.userID())
-    {
         <div class="panel-footer clearfix">
             <div class="opts">
+                @if (User.IsInRole("admin"))
+                {
+                    if (Model.power == 0)
+                    {
+                        <a class="suggest" power="100" href="/topic/suggest/@Model.ID"><i class="glyphicon glyphicon-star-empty" style="color:#ff6a00"></i><span>置顶</span></a>
+                    }
+                    else
+                    {
+                        <a class="suggest" power="0" href="/topic/suggest/@Model.ID"><i class="glyphicon glyphicon-star" style="color:#ff6a00"></i><span>取消置顶</span></a>
+                    }
+                }
+                @if (Model.User.ID == HttpContext.Current.User.userID())
+                {
 
 
-                <a class="knot" href="#"><i class="fa fa-lock" style="color:#ff6a00"></i> 关闭任务</a>
+                    <span class="pull-right opts">
 
+                        <a class="fa fa-pencil" title="修改本帖" href="edit/@Model.ID"></a>
+                        <a confirm="确定要删除吗？" class="fa fa-trash" title="删除本帖" method="post" href="Delete/@Model.ID"></a>
 
+                    </span>
 
-                <span class="pull-right opts">
+                }
 
-                    <a class="fa fa-pencil" title="修改本帖" href="edit/@Model.ID"></a>
-                    <a confirm="确定要删除吗？" class="fa fa-trash" title="删除本帖" method="post" href="Delete/@Model.ID"></a>
-
-                </span>
             </div>
         </div>
-    }
 
+        @if (Model.taskInfo != null)
+        {
 
-    @if (Model.taskInfo != null)
-    {
+            <div style="border-top:1px dashed #ff6a00">
 
-        <div style="border-top:1px dashed #ff6a00">
+                @Html.Partial("_taskScriptView", Model.taskInfo)
 
-            @Html.Partial("_taskScriptView", Model.taskInfo)
+            </div>
+        }
 
-        </div>
-    }
+        <div id="replies" class="panel panel-default">
+            <div class="total panel-heading">
+                共收到 <b>@Model.replies.Count(t => t.state != 0)</b> 条回复
+            </div>
+            <div class="items panel-body">
+                @{int i = 0;}
+                @foreach (var m in Model.replies)
+                {
 
-    <div id="replies" class="panel panel-default">
-        <div class="total panel-heading">
-            共收到 <b>@Model.replies.Count(t=>t.state!=0)</b> 条回复
-        </div>
-        <div class="items panel-body">
-            @{int i = 0;}
-            @foreach (var m in Model.replies)
-            {
-                { i++; }
-                { if (m.state == 0) { continue; } }
-                <div class="reply" data-id="42155" id=@Html.Raw("reply" + i)>
-                    <div class="avatar"><a href="#"><img class="media-object avatar-48" src="~/Content/userAvatar/@m.User.Avatar"></a></div>
-                    <div class="infos">
-                        <div class="info">
-                            <span class="name">
-                                <a href="#">@m.User.userName</a>
-                            </span> ·
-                            <span class="time">
-                                <a class="reply-floor" href=@Html.Raw("#reply" + i)>#@i</a> · <abbr class="timeago" title="@m.creatDate">@m.timeago</abbr>
-                            </span>
-                            <span class="opts pull-right">
-                                @if (m.User.ID == HttpContext.Current.User.userID())
-                                {
-                                    <a class="edit fa fa-pencil" title="修改回帖" href="#"></a>
-                                    <a data-id="@m.ID" class="fa fa-trash replyDelete" title="删除回复" href="/reply/Delete/@m.ID"></a>
-                                }
-                                <a title="回复此楼" class="btn-reply fa fa-mail-reply" href="#"></a>
-                            </span>
+                    if (m.state == 0) { continue; }
+                    <div class="reply" data-id="42155" id="@Html.Raw("reply" + m.floor)">
+                        <div class="avatar"><a href="#"><img class="media-object avatar-48" src="~/Content/userAvatar/@m.User.Avatar"></a></div>
+                        <div class="infos">
+                            <div class="info">
+                                <span class="name">
+                                    <a href="#">@m.User.userName</a>
+                                </span> ·
+                                <span class="time">
+                                    <a class="reply-floor" href=@Html.Raw("#reply" + m.floor)>#@m.floor</a> · <abbr class="timeago" title="@m.creatDate">@m.timeago</abbr>
+                                </span>
+                                <span class="opts pull-right">
+                                    @if (m.User.ID == HttpContext.Current.User.userID())
+                                    {
+                                        <a class="edit fa fa-pencil" title="修改回帖" href="#"></a>
+                                        <a data-id="@m.ID" class="fa fa-trash replyDelete" title="删除回复" href="/reply/Delete/@m.ID"></a>
+                                    }
+                                    <a title="回复此楼" class="btn-reply fa fa-mail-reply" href="#"></a>
+                                </span>
+                            </div>
+
+                            <div class="panel-body markdownView">
+
+                                <textarea id="append-test" style="display:none;">@m.body</textarea>
+                            </div>
                         </div>
 
-                        <div class="panel-body markdownView">
-
-                            <textarea id="append-test" style="display:none;">@m.body</textarea>
-                        </div>
                     </div>
 
-                </div>
-                               
-            }
+                }
 
 
 
+            </div>
         </div>
-    </div>
 
 
-    <div id="reply" class="panel panel-default">
-        <div class="panel-heading">回帖</div>
-        <div class="panel-body">
+        <div id="reply" class="panel panel-default">
+            <div class="panel-heading">回帖</div>
+            <div class="panel-body">
 
-            <form id="replyForm" action="/topic/reply/@Model.ID" method="post">
-                <div id="editormd"></div>
-                <div class="submit-buttons">
-                    <button type="submit" id="reply-button" class="btn btn-primary" tabindex="2" ,="" data-disable-with="提交回复">提交回复</button>
+                <form id="replyForm" action="/topic/reply/@Model.ID" method="post">
+                    <div id="editormd"></div>
+                    <div class="submit-buttons">
+                        <button type="submit" id="reply-button" class="btn btn-primary" tabindex="2" ,="" data-disable-with="提交回复">提交回复</button>
 
 
 
-                    <div class="pull-right"><a href="/Topic/markdown" target="_blank">排版说明</a></div>
+                        <div class="pull-right"><a href="/Topic/markdown" target="_blank">排版说明</a></div>
 
-                </div>
-            </form>
+                    </div>
+                </form>
+            </div>
         </div>
+
+
     </div>
-
-
-</div>
 </div>

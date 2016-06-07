@@ -278,7 +278,6 @@
  }
 
  #replies .reply {
-    margin: 0 -15px;
     padding: 10px 15px;
     position: relative;
     border-bottom: 1px solid #eee;
@@ -295,8 +294,7 @@
     left: 15px;
 }
 #replies .panel-body {
-    padding-top: 0px;
-    padding-bottom: 0px;
+    padding: 0px;
 }
 #replies .info {
     color: #aaa;
@@ -368,14 +366,18 @@
     border-bottom: 1px solid #F0F0F0;
 }
 
-#notifications .notification:last-child {
-    margin-bottom: 0px;
-    border-bottom: 0px;
-    padding-bottom: 0px;
+#notifications .panel-footer {
+    border:none;
 }
+
 
 .reply-floor {
     color: #7AA87A;
+}
+
+.topics .suggest_topic {
+    border-color: #ddd;
+    border-left: 3px solid #EB5424;
 }
 
 

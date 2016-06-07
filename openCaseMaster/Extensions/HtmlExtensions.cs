@@ -63,17 +63,17 @@ namespace System.Web.Mvc
 
             int lastPage = total / rows + 1;
 
-            int prev = page > 1 ? page - 1 : 1;
+            int prev = page - 1;
             int next = page + 1;
-            if (next > lastPage) next = lastPage;
-
-
-
+          
+            
             StringBuilder sb = new StringBuilder();
 
             sb.Append("<div class=\"panel-footer clearfix\"><ul class=\"pagination\">");
-
-            sb.Append("<li class=\"prev previous_page\"><a rel=\"prev\" href=\"?page=" + prev + "\">← 上一页</a></li>");
+            if (prev<1)
+                sb.Append("<li class=\"prev previous_page disabled\"><a rel=\"prev\" href=\"#\">← 上一页</a></li>");
+            else
+                sb.Append("<li class=\"prev previous_page\"><a rel=\"prev\" href=\"?page=" + prev + "\">← 上一页</a></li>");
 
 
             for (int i = 1; i < 4; i++)
@@ -106,8 +106,11 @@ namespace System.Web.Mvc
                 sb.Append(PaginationLi(lastPage));
             }
 
+            if (next > lastPage)
+                sb.Append("<li class=\"next next_page disabled\"><a rel=\"next\" href=\"#\">下一页 →</a></li>");
+            else
+                sb.Append("<li class=\"next next_page\"><a rel=\"next\" href=\"?page=" + next + "\">下一页 →</a></li>");
 
-            sb.Append("<li class=\"next next_page\"><a rel=\"next\" href=\"?page=" + next + "\">下一页 →</a></li>");
 
             sb.Append(" </ul></div>");
 

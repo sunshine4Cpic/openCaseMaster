@@ -11,14 +11,14 @@ namespace openCaseMaster
     {
         public static string userName(this IPrincipal User)
         {
-            if (User!=null)
+            if (User.Identity.IsAuthenticated)
                 return (User as FormUser).userName;
             return "未知";
         }
 
         public static int userID(this IPrincipal User)
         {
-            if (User != null)
+            if (User.Identity.IsAuthenticated)
                 return (User as FormUser).ID;
             return -1;
         }

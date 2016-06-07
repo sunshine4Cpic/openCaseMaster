@@ -23,7 +23,7 @@ namespace openCaseMaster.Models
             List<string> names = new List<string>();
             foreach (Match match in matches)
             {
-                if (i++ > 10) break;
+                if (i++ > 20) break;
 
 
                 string userName = match.Value.Substring(1, match.Value.Count() - 1);
