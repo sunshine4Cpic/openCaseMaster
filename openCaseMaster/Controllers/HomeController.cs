@@ -11,6 +11,7 @@ namespace openCaseMaster.Controllers
     {
         public ActionResult Index()
         {
+            
             return View();
         }
 

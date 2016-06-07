@@ -35,6 +35,12 @@
     background: linear-gradient(to bottom,#055fb8,#095fb3);
     box-shadow: inset 0 0 2px rgba(0,0,0,.12);
 }
+
+ a {
+    color: #259;
+}
+
+
 @media (max-width: 767px) {
     .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
         color: #333;
@@ -220,7 +226,7 @@
 }
 
 .topics .filter a.popular {
-    color: #E65C5C;
+    color: #FF8302;
 }
 
 .topics .info a.state-false {
@@ -256,7 +262,7 @@
     border: 0px;
     box-shadow: 0 0px 1px rgba(0,0,0,0.09);
 }
- .opts a:link, .opts a:visited {
+ .opts a:link, .opts a:visited ,.counts span,.number span{
     color: #666;
     text-decoration: none;
 }
@@ -272,7 +278,6 @@
  }
 
  #replies .reply {
-    margin: 0 -15px;
     padding: 10px 15px;
     position: relative;
     border-bottom: 1px solid #eee;
@@ -289,8 +294,7 @@
     left: 15px;
 }
 #replies .panel-body {
-    padding-top: 0px;
-    padding-bottom: 0px;
+    padding: 0px;
 }
 #replies .info {
     color: #aaa;
@@ -305,8 +309,79 @@
     padding-right: 0px;
 }
 
+.notification-count{
+    margin-right:10px;
+}
+.notification-count .notice {
+    display:none;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 8px;
+    color: #fff;
+    text-align: center;
+    background-color: #FF8302;
+    border-radius: 50%;
+    position: absolute;
+    right: -5px;
+    top: 10px;
+}
 
+.sidebar .profile .item {
+    margin-bottom: 5px;
+}
  
+.avatar-120 {
+    width: 80px;
+    height: 80px;
+}
+
+.counts, .number {
+    color: #999;
+}
+
+#newTopics .topic{
+        margin:0px;
+        border-bottom:0px;
+}
+
+#notifications .markdownView {
+    padding:0px;
+}
+
+#notifications .notification .info {
+    color: #999;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+#notifications .panel-body{
+    padding:0px;
+    padding-top:5px;
+}
+#notifications .notification {
+    position: relative;
+    margin:0px;
+    padding: 15px;
+    border-bottom: 1px solid #F0F0F0;
+}
+
+#notifications .panel-footer {
+    border:none;
+}
+
+
+.reply-floor {
+    color: #7AA87A;
+}
+
+.topics .suggest_topic {
+    border-color: #ddd;
+    border-left: 3px solid #EB5424;
+}
+
+
+
 
 /*markdown 图标高亮*/
 i[name=preview], i[name=watch] {

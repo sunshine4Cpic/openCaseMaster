@@ -56,28 +56,52 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.0\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NPOI, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.dll</HintPath>
+    <Reference Include="NPOI, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NPOI.OOXML, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OOXML.dll</HintPath>
+    <Reference Include="NPOI.OOXML, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.OOXML.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NPOI.OpenXml4Net, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NPOI.OpenXmlFormats, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -200,7 +224,9 @@
     <Compile Include="Controllers\UploadFileController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\userStepControlController.cs" />
+    <Compile Include="Extensions\Extend_User.cs" />
     <Compile Include="Extensions\HtmlExtensions.cs" />
+    <Compile Include="Extensions\topicExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -214,11 +240,11 @@
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ExcelHelper.cs" />
-    <Compile Include="Models\Extend_caseFramework.cs" />
-    <Compile Include="Models\Extend_Framework4Project.cs" />
-    <Compile Include="Models\Extend_M_testCase.cs" />
-    <Compile Include="Models\Extend_M_testDemand.cs" />
-    <Compile Include="Models\Extend_M_testCaseSteps.cs" />
+    <Compile Include="Extensions\Extend_caseFramework.cs" />
+    <Compile Include="Extensions\Extend_Framework4Project.cs" />
+    <Compile Include="Extensions\Extend_M_testCase.cs" />
+    <Compile Include="Extensions\Extend_M_testDemand.cs" />
+    <Compile Include="Extensions\Extend_M_testCaseSteps.cs" />
     <Compile Include="Models\Framework4Project.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
@@ -237,6 +263,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>masterDate.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MonthReport_Result.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\M_application.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
@@ -277,7 +306,13 @@
     <Compile Include="Models\M_testDemand.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\notification.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\project.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProjectReport_Result.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\project_app.cs">
@@ -299,8 +334,11 @@
     <Compile Include="Models\user_type.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\XElementHelper.cs" />
+    <Compile Include="Extensions\XElementHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SignalR\hubHelper.cs" />
+    <Compile Include="SignalR\UserHub.cs" />
+    <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\checkListModel.cs" />
     <Compile Include="ViewModels\Device\DeviceViewModel.cs" />
     <Compile Include="ViewModels\Device\ProjectListModel.cs" />
@@ -321,6 +359,7 @@
     <Compile Include="ViewModels\userControl\controlViewModel.cs" />
     <Compile Include="ViewModels\userControl\frameTreeNode.cs" />
     <Compile Include="ViewModels\userControl\projectTreeNode.cs" />
+    <Compile Include="ViewModels\User\notificationModel.cs" />
     <Compile Include="ViewModels\User\RegisterModel.cs" />
     <Compile Include="ViewModels\User\userInfoModel.cs" />
     <Compile Include="ViewModels\User\UserListModel.cs" />
@@ -1716,6 +1755,13 @@
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\highlight\highlight.min.js" />
     <Content Include="Scripts\highlight\solarized_dark.min.css" />
+    <None Include="Scripts\jquery-2.2.3.intellisense.js" />
+    <Content Include="Scripts\jquery-2.2.3.js" />
+    <Content Include="Scripts\jquery-2.2.3.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.0.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\locale\bootstrap-datetimepicker.zh-CN.js" />
     <Content Include="Scripts\bootstrap-select.js" />
     <Content Include="Scripts\bootstrap-select.min.js" />
@@ -2146,22 +2192,17 @@
     <Content Include="Scripts\editormd\plugins\emoji-dialog\emoji.json" />
     <Content Include="Scripts\editormd\plugins\help-dialog\help.md" />
     <Content Include="Scripts\editormd\plugins\html-entities-dialog\html-entities.json" />
-    <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\bootstrap-treeview.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\docs.min.js" />
     <Content Include="Scripts\easyloader.js" />
-    <Content Include="Scripts\jquery-2.2.0.js" />
-    <Content Include="Scripts\jquery-2.2.0.min.js" />
-    <Content Include="Scripts\jquery-2.2.0.min.map" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-2.2.3.min.map" />
     <Content Include="Scripts\jquery.easyui-1.4.3.js" />
     <Content Include="Scripts\jquery.easyui-1.4.3.min.js" />
     <Content Include="Scripts\jquery.easyui.mobile-1.4.3.js" />
     <Content Include="Scripts\jquery.easyui.mobile-1.4.3.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\public.js" />
@@ -2332,6 +2373,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\User\userInfo.cshtml" />
     <Content Include="Views\Topic\markdown.cshtml" />
+    <Content Include="Views\User\notification.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

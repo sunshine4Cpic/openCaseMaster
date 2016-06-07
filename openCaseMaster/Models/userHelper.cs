@@ -13,77 +13,17 @@ namespace openCaseMaster.Models
     {
         
 
-        
-
-        /// <summary>
-        /// 获得ID
-        /// </summary>
-        /// <returns></returns>
-        public static int UserID
-        {
-            get
-            {
-                if (HttpContext.Current.User != null)
-                {
-                    if (HttpContext.Current.User.Identity.IsAuthenticated)
-                    {
-                        FormsIdentity id = (FormsIdentity)HttpContext.Current.User.Identity;
-                        var userData = id.Ticket.UserData;//cookie
-
-                        JObject userJ = JObject.Parse(userData);
-                        return Convert.ToInt32(userJ["ID"]);
-                    }
-                }
-                return -1;
-            }
-        }
-
-        /// <summary>
-        /// 获得用户名
-        /// </summary>
-        /// <returns></returns>
-        public static string UserName
-        {
-            get
-            {
-                if (HttpContext.Current.User != null)
-                {
-                    if (HttpContext.Current.User.Identity.IsAuthenticated)
-                    {
-                        return HttpContext.Current.User.Identity.Name;
-                       
-                    }
-                }
-                return "null";
-            }
-        }
-
-        /// <summary>
-        /// 获得项目权限
-        /// </summary>
-        private static int[] getUserPermission()
-        {
-            FormsIdentity id = (FormsIdentity)HttpContext.Current.User.Identity;
-            var userData = id.Ticket.UserData;//cookie
-
-            JObject userJ = JObject.Parse(userData);
-
-            string[] PP = userJ["Permission"].ToString().TrimEnd(',').Split(',');
-
-            return Array.ConvertAll<string, int>(PP, s => string.IsNullOrEmpty(s) ? 0 : int.Parse(s));
-        }
-
 
         /// <summary>
         /// 获得有权限的项目
         /// </summary>
         public static IQueryable<project> getPermissionsProject()
         {
-            int userID = UserID;
+            int userID = HttpContext.Current.User.userID();
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-           
-            var pp = getUserPermission();
+  
+            var pp =  HttpContext.Current.User.Permission();
 
 
             if (HttpContext.Current.User.IsInRole("admin"))
@@ -108,7 +48,7 @@ namespace openCaseMaster.Models
         public static List<caseFramework> getBaseFrameworks()
         {
 
-            int userID = UserID;
+            int userID = HttpContext.Current.User.userID();
             List<caseFramework> cfs = frameworkHelp.getAutoFramework();
 
 
@@ -139,7 +79,7 @@ namespace openCaseMaster.Models
             else
             {
 
-                int[] pjs = userHelper.getUserPermission();
+                int[] pjs = HttpContext.Current.User.Permission();
 
 
 

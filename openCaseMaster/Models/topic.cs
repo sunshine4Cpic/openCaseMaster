@@ -17,6 +17,7 @@ namespace openCaseMaster.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public topic()
         {
+            this.notification = new HashSet<notification>();
             this.topicReply = new HashSet<topicReply>();
         }
     
@@ -27,9 +28,13 @@ namespace openCaseMaster.Models
         public int node { get; set; }
         public Nullable<int> state { get; set; }
         public System.DateTime creatDate { get; set; }
+        public int replys { get; set; }
+        public Nullable<int> power { get; set; }
     
         public virtual admin_user admin_user { get; set; }
         public virtual M_publicTask M_publicTask { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<notification> notification { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<topicReply> topicReply { get; set; }
     }

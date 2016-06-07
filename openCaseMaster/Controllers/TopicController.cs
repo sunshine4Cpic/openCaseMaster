@@ -5,6 +5,7 @@ using openCaseMaster.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -20,29 +21,32 @@ namespace openCaseMaster.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Index(int page=1)
+        public ActionResult Index(int page=1,int rows =20)
         {
          
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-            var lsv = from t in QC_DB.topic
-                      where t.state != 0
-                      orderby t.ID descending
+            var date = QC_DB.topic.Where(t => t.state != 0);
+            var lsv = from t in date
+                      orderby t.power descending, t.ID descending 
                       select new topicModel_prev
                       {
                           ID = t.ID,
                           title = t.title,
                           nodeID = t.node,
-                          User = new topicUserModel { ID = t.userID, Name = t.admin_user.Name, Avatar = t.admin_user.Avatar },
+                          User = new topicUserModel { ID = t.userID, userName=t.admin_user.Username, Name = t.admin_user.Name, Avatar = t.admin_user.Avatar },
                           creatDate = t.creatDate,
                           scriptCount = t.M_publicTask.M_publicTaskScript.Count,
-                          replyCnt = t.topicReply.Count
+                          replyCnt = t.topicReply.Count,
+                          power = t.power.Value
                       };
 
 
             ViewBag.nodeID = 0;
             ViewBag.page = page;
-            int rows = 15;
+            ViewBag.rows = rows;
+            ViewBag.total = date.Count();
+
 
 
             var v = lsv.Skip(rows * (page - 1)).Take(rows).ToList();
@@ -52,20 +56,21 @@ namespace openCaseMaster.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult node(int id,int page=1)
+        public ActionResult node(int id,int page=1,int rows=20)
         {
 
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-            var lsv = from t in QC_DB.topic
-                      where t.node==id && t.state != 0 
-                      orderby t.ID descending
+            var date = QC_DB.topic.Where(t => t.node == id && t.state != 0);
+
+            var lsv = from t in date
+                      orderby t.power descending, t.ID descending 
                       select new topicModel_prev
                       {
                           ID = t.ID,
                           title = t.title,
                           nodeID = t.node,
-                          User = new topicUserModel { ID = t.userID, Name = t.admin_user.Name, Avatar = t.admin_user.Avatar },
+                          User = new topicUserModel { ID = t.userID, userName = t.admin_user.Username, Name = t.admin_user.Name, Avatar = t.admin_user.Avatar },
                           creatDate = t.creatDate,
                           scriptCount = t.M_publicTask.M_publicTaskScript.Count,
                           replyCnt = t.topicReply.Count
@@ -74,7 +79,8 @@ namespace openCaseMaster.Controllers
 
             ViewBag.nodeID = id;
             ViewBag.page = page;
-            int rows = 15;
+            ViewBag.rows = rows;
+            ViewBag.total = date.Count();
 
 
             var v = lsv.Skip(rows * (page - 1)).Take(rows).ToList();
@@ -108,9 +114,9 @@ namespace openCaseMaster.Controllers
 
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-
+            int userID = User.userID();
             var tic = QC_DB.topic.First(t =>
-                t.ID == id && t.state != 0 && t.userID == userHelper.UserID);
+                t.ID == id && t.state != 0 && t.userID == userID);
             
             
             string[] aa = new string[6];
@@ -172,8 +178,9 @@ namespace openCaseMaster.Controllers
 
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-            var tic = QC_DB.topic.First(t => 
-                t.ID == tm.ID && t.state != 0 && t.userID == userHelper.UserID);
+            int userID = User.userID();
+            var tic = QC_DB.topic.First(t =>
+                t.ID == tm.ID && t.state != 0 && t.userID == userID);
             tic.node = tm.node;
             tic.title = tm.title;
             tic.body = tm.body;
@@ -204,13 +211,22 @@ namespace openCaseMaster.Controllers
             var tic = QC_DB.topic.FirstOrDefault(t =>t.ID == id && t.state != 0 );
             if (tic == null) throw new HttpException(404, "page not found");
 
+            tic.replys += 1;
+           
+
             topicReply tr = new topicReply();
             tr.topicID = id;
             tr.body = body;
-            tr.userID = userHelper.UserID;
+            tr.userID = User.userID();
             tr.creatDate = DateTime.Now;
-            QC_DB.topicReply.Add(tr);
+            tr.floor = tic.replys;
+
+            var names = QC_DB.topicReply.Add(tr).addNotification(QC_DB);
+
+
             QC_DB.SaveChanges();
+
+            hubHelper.Push(names);
 
             return RedirectToAction(id.ToString());
 
@@ -223,8 +239,9 @@ namespace openCaseMaster.Controllers
         {
             QCTESTEntities QC_DB = new QCTESTEntities();
 
+            int userID = User.userID();
             //是否有效主题
-            var tr = QC_DB.topicReply.FirstOrDefault(t => t.ID == id && t.state != 0 && t.userID == userHelper.UserID);
+            var tr = QC_DB.topicReply.FirstOrDefault(t => t.ID == id && t.state != 0 && t.userID == userID);
             if (tr == null) return true;
             tr.state = 0;
             QC_DB.SaveChanges();
@@ -257,12 +274,14 @@ namespace openCaseMaster.Controllers
             pt.creatDate = DateTime.Now;
             pt.title = tm.title;
             pt.body = tm.body;
-            pt.userID = userHelper.UserID;
+            pt.userID = User.userID();
 
-            QC_DB.topic.Add(pt);
-
+            var names = QC_DB.topic.Add(pt).addNotification(QC_DB);
             
+           
             QC_DB.SaveChanges();
+
+            hubHelper.Push(names);
 
             TempData["event"] = "add";
 
@@ -274,6 +293,7 @@ namespace openCaseMaster.Controllers
         [HttpPost]
         public ActionResult adminAdd(topicTaskModel tm)
         {
+            if (tm.node <200) return add(tm);//普通节点
       
 
             if (!ModelState.IsValid)//验证模型
@@ -292,7 +312,7 @@ namespace openCaseMaster.Controllers
             tp.creatDate = DateTime.Now;
             tp.title = tm.title;
             tp.body = tm.body;
-            tp.userID = userHelper.UserID;
+            tp.userID = User.userID();
             tp.node = tm.node;
 
             QC_DB.topic.Add(tp);
@@ -376,14 +396,27 @@ namespace openCaseMaster.Controllers
             QCTESTEntities QC_DB = new QCTESTEntities();
 
             var ts = QC_DB.topic.First(t => t.ID == id);
-            if (ts.userID != userHelper.UserID)
+            if (ts.userID != User.userID())
                 return RedirectToAction("Index");
             ts.state = 0;
             QC_DB.SaveChanges();
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public void suggest(int id,int power)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
 
+            var ts = QC_DB.topic.First(t => t.ID == id);
+
+            ts.power = power;
+            QC_DB.SaveChanges();
+
+        }
+
+       
 
 
 

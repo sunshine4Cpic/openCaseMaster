@@ -24,7 +24,6 @@
         <EntityTypeShape EntityType="MasterModel.project" Width="1.5" PointX="5.25" PointY="15.875" />
         <EntityTypeShape EntityType="MasterModel.project_app" Width="1.5" PointX="10.5" PointY="13.375" />
         <EntityTypeShape EntityType="MasterModel.tmp_TaskScript" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="MasterModel.topic" Width="1.5" PointX="5.25" PointY="12" />
         <EntityTypeShape EntityType="MasterModel.topicReply" Width="1.5" PointX="7.5" PointY="15.25" />
         <EntityTypeShape EntityType="MasterModel.user_type" Width="1.5" PointX="0.75" PointY="18.125" />
         <AssociationConnector Association="MasterModel.FK_admin_log_admin_log" />
@@ -32,7 +31,6 @@
         <AssociationConnector Association="MasterModel.FK_caseFramework_userID" />
         <AssociationConnector Association="MasterModel.FK_M_runScene_admin_user" />
         <AssociationConnector Association="MasterModel.FK_project_userID" />
-        <AssociationConnector Association="MasterModel.FK_topic_userID" />
         <AssociationConnector Association="MasterModel.FK_topicReply_userID" />
         <AssociationConnector Association="MasterModel.FK_Framework4Project_FID" />
         <AssociationConnector Association="MasterModel.FK_M_testCase_FID" />
@@ -44,7 +42,6 @@
         <AssociationConnector Association="MasterModel.FK_M_runScene_M_deviceConfig" />
         <AssociationConnector Association="MasterModel.FK_M_DevProMapping_project" />
         <AssociationConnector Association="MasterModel.FK_M_publicTaskResult_IMEI" />
-        <AssociationConnector Association="MasterModel.FK_M_publicTask_ID" />
         <AssociationConnector Association="MasterModel.FK_M_publicTaskScript_taskID" />
         <AssociationConnector Association="MasterModel.FK_M_publicTaskResult_scriptID" />
         <AssociationConnector Association="MasterModel.FK_M_runScene_M_testDemand" />
@@ -54,6 +51,13 @@
         <AssociationConnector Association="MasterModel.FK_M_testDemand_M_testDemand" />
         <AssociationConnector Association="MasterModel.FK_M_testDemand_project" />
         <AssociationConnector Association="MasterModel.FK_project_app_PID" />
+        <EntityTypeShape EntityType="MasterModel.notification" Width="1.5" PointX="12.75" PointY="15.375" />
+        <AssociationConnector Association="MasterModel.FK_notification_recipientID" />
+        <AssociationConnector Association="MasterModel.FK_notification_replyID" />
+        <EntityTypeShape EntityType="MasterModel.topic" Width="1.5" PointX="5.25" PointY="30.375" />
+        <AssociationConnector Association="MasterModel.FK_topic_userID" />
+        <AssociationConnector Association="MasterModel.FK_M_publicTask_ID" />
+        <AssociationConnector Association="MasterModel.FK_notification_topicID" />
         <AssociationConnector Association="MasterModel.FK_topicReply_topicID" />
       </Diagram>
     </edmx:Diagrams>

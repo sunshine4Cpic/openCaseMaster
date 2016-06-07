@@ -108,9 +108,9 @@ namespace openCaseMaster.Controllers
             JObject ParamO = JObject.Parse(Param);
             XElement stepXML = testCaseHelper.json2StepList(steps);
 
-           
-         
-            //nmtc.userID = userHelper.UserID
+
+
+            //nmtc.userID = HttpContext.Current.User.userID();
             nmtc.name = name;
             nmtc.stepXML = stepXML.ToString();
 
@@ -143,7 +143,7 @@ namespace openCaseMaster.Controllers
             }
             var nmtc = QC_DB.M_testCaseSteps.First(t => t.ID == id);
 
-            var userID = userHelper.UserID;
+            var userID = User.userID();
             if (nmtc.userID == userID)
             {
                 nmtc.state = 0;
