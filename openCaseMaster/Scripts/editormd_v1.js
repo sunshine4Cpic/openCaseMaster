@@ -3488,7 +3488,7 @@
     editormd.firstUpperCase = editormd.ucfirst = firstUpperCase;
     
     editormd.urls = {
-        atLinkBase : "/user/"
+        atLinkBase: "/User/userInfo/"
     };
     
     editormd.regexs = {

@@ -242,7 +242,7 @@
           <Property Name="state" Type="int" />
           <Property Name="creatDate" Type="datetime" Nullable="false" />
           <Property Name="replys" Type="int" Nullable="false" />
-          <Property Name="power" Type="int" />
+          <Property Name="power" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="topicReply">
           <Key>
@@ -1714,7 +1714,7 @@
           <NavigationProperty Name="M_publicTask" Relationship="MasterModel.FK_M_publicTask_ID" FromRole="topic" ToRole="M_publicTask" />
           <NavigationProperty Name="notification" Relationship="MasterModel.FK_notification_topicID" FromRole="topic" ToRole="notification" />
           <NavigationProperty Name="topicReply" Relationship="MasterModel.FK_topicReply_topicID" FromRole="topic" ToRole="topicReply" />
-          <Property Name="power" Type="Int32" />
+          <Property Name="power" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK_topic_userID">
           <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="1" />

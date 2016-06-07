@@ -38,7 +38,7 @@ namespace openCaseMaster.Controllers
                           creatDate = t.creatDate,
                           scriptCount = t.M_publicTask.M_publicTaskScript.Count,
                           replyCnt = t.topicReply.Count,
-                          power = t.power.Value
+                          power = t.power
                       };
 
 
@@ -275,6 +275,7 @@ namespace openCaseMaster.Controllers
             pt.title = tm.title;
             pt.body = tm.body;
             pt.userID = User.userID();
+            
 
             var names = QC_DB.topic.Add(pt).addNotification(QC_DB);
             

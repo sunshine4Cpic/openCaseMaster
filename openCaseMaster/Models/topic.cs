@@ -29,7 +29,7 @@ namespace openCaseMaster.Models
         public Nullable<int> state { get; set; }
         public System.DateTime creatDate { get; set; }
         public int replys { get; set; }
-        public Nullable<int> power { get; set; }
+        public int power { get; set; }
     
         public virtual admin_user admin_user { get; set; }
         public virtual M_publicTask M_publicTask { get; set; }

@@ -110,7 +110,7 @@ namespace openCaseMaster.ViewModels
                 this.ID = tic.ID;
 
                 this.nodeID = tic.node;
-                this.power = tic.power.Value;
+                this.power = tic.power;
 
                 this.User = new topicUserModel();
                 User.userName = tic.admin_user.Username;

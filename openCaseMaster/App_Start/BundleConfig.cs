@@ -46,6 +46,7 @@ namespace openCaseMaster
 
 
             ScriptBundle uploader = new ScriptBundle("~/bundles/uploader");
+            
             uploader.Orderer = new AsIsBundleOrderer();
             uploader.Include(
                 "~/Scripts/plupload/jquery-ui.js",
@@ -72,12 +73,16 @@ namespace openCaseMaster
                        "~/Scripts/editormd/lib/sequence-diagram.min.js",
                        "~/Scripts/editormd/lib/flowchart.min.js",
                        "~/Scripts/editormd/lib/jquery.flowchart.min.js",
-                       "~/Scripts/editormd.js"));
+                       "~/Scripts/editormd_v1.js"));//暂时这么处理版本
 
             bundles.Add(new StyleBundle("~/Content/markdownView").Include(
                        "~/Content/editormd.preview.css",
                        "~/Content/editormd.css"));
 
+            bundles.Add(new ScriptBundle("~/bundles/markdown").Include(
+                      "~/Scripts/editormd_v1.js"));//暂时这么处理版本
+            bundles.Add(new StyleBundle("~/Content/markdown").Include(
+                      "~/Content/editormd.css"));
 
 
             BundleTable.EnableOptimizations = false;//不启用压缩

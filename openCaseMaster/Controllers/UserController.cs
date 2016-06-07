@@ -336,18 +336,22 @@ namespace openCaseMaster.Controllers
         }
 
 
-        
+
 
         [Authorize]
         [HttpGet]
-        public ActionResult userInfo()
+        public ActionResult userInfo(string id)
         {
-            userInfoModel ul = new userInfoModel();
+            userInfoModel ul;
+            if (id == null)
+                ul = new userInfoModel();
+            else
+                ul = new userInfoModel(id);
             return View(ul);
 
         }
 
-        
+       
        
 
 

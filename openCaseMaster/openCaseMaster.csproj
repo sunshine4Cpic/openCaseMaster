@@ -1704,6 +1704,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\editormd-logo.svg" />
     <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="game.html" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <EntityDeploy Include="Models\masterDate.edmx">
@@ -1765,7 +1766,7 @@
     <Content Include="Scripts\locale\bootstrap-datetimepicker.zh-CN.js" />
     <Content Include="Scripts\bootstrap-select.js" />
     <Content Include="Scripts\bootstrap-select.min.js" />
-    <Content Include="Scripts\editormd.js" />
+    <Content Include="Scripts\editormd_v1.js" />
     <Content Include="Scripts\editormd\lib\codemirror\addons.min.js" />
     <Content Include="Scripts\editormd\lib\codemirror\addon\comment\comment.js" />
     <Content Include="Scripts\editormd\lib\codemirror\addon\comment\continuecomment.js" />

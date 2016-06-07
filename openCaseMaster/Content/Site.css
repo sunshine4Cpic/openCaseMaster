@@ -380,6 +380,12 @@
     border-left: 3px solid #EB5424;
 }
 
+.topics .topic .count {
+    width: 100px;
+    text-align: right;
+    padding-top: 15px;
+}
+
 
 
 

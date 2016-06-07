@@ -25,17 +25,17 @@
                     <span class="l">查看:</span>
                     <a href="/Topic/Index" node-id="0">全部</a> /
                     <a href="/Topic/node/101" node-id="101"><i class="glyphicon glyphicon-star"></i> @topicHelper.nodes[101]</a> /
-                    <a href="/Topic/node/102" node-id="102"><i class="glyphicon glyphicon-star"></i> @topicHelper.nodes[102]</a> 
+                    <a href="/Topic/node/102" node-id="102"><i class="glyphicon glyphicon-star"></i> @topicHelper.nodes[102]</a>
                 </div>
             </div>
 
             <div class="panel-body">
 
-               
+
                 @foreach (var tmv in Model)
                 {
                     string css = "topic media";
-                    if(tmv.power>0) 
+                    if (tmv.power > 0)
                     {
                         css = "suggest_topic topic media";
                     }
@@ -50,12 +50,12 @@
                             <div class="info">
                                 <a class="node" href="/Topic/node/@tmv.nodeID">@tmv.nodeText</a>
                                 •
-                                <a data-author="true" data-name="nana" href="#">@tmv.User.userName</a>
+                                <a data-author="true" data-name="nana" href="/user/userInfo/@tmv.User.userName">@tmv.User.userName</a>
                                 <span class="hidden-mobile">
                                     于 <abbr class="timeago" title="@tmv.creatDate">@tmv.timeago</abbr>发布
                                 </span>
                                 •
-                                @if (@tmv.scriptCount >0)
+                                @if (@tmv.scriptCount > 0)
                                 {
                                     <a class="state-false" title="测试案例" href="/Topic/@tmv.ID">@tmv.scriptCount 个案例</a>
                                 }
@@ -75,36 +75,33 @@
         </div>
 
 
-        
-<nav class="navbar navbar-default" role="navigation">
-   <div class="navbar-header">
-      <span class="navbar-brand">节点分类导航</span>
-   </div>
-   <div>
-      <ul class="nav navbar-nav">
 
-          @foreach (var dic in topicHelper.Groups)
-          {
-            <li class="dropdown dropup">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    @dic.Key <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu ">
-                    @foreach (var li in topicHelper.nodesList.Where(t => t.Group.Name == dic.Key))
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <span class="navbar-brand">节点分类导航</span>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+
+                    @foreach (var dic in topicHelper.Groups)
                     {
-                        <li><a href="/Topic/node/@li.Key">@li.Value</a></li>
+                        <li class="dropdown dropup">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                @dic.Key <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu ">
+                                @foreach (var li in topicHelper.nodesList.Where(t => t.Group.Name == dic.Key))
+                                {
+                                    <li><a href="/Topic/node/@li.Key">@li.Value</a></li>
+                                }
+                            </ul>
+                        </li>
                     }
                 </ul>
-            </li>
-          }
-      </ul>
-   </div>
-</nav>
-
-
+            </div>
+        </nav>
     </div>
-
-    <div class="sidebar col-md-3">
+    <div class="col-md-3">
 
         <div class="panel panel-default clearfix">
             <div class="panel-body">
