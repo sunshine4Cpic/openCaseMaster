@@ -1,0 +1,156 @@
+﻿@using openCaseMaster.ViewModels
+@model topicTaskModel
+
+
+
+<div class="tab-pane" id="step">
+    <div class="form-control" style="display: block;border-radius: 4px;min-height:300px;height:auto">
+
+        <div class="row">
+            <label class="col-md-2 control-label">开始时间</label>
+            <div class="input-append date form_date col-md-4" style="display: table;">
+                @Html.TextBoxFor(m => m.startDate, new { @class = "form-control", @size = "16", @readOnly = "readOnly" })
+
+                <span class="add-on input-group-addon"><span class="icon-remove glyphicon glyphicon-remove"></span></span>
+                <span class="add-on input-group-addon"><span class="icon-calendar glyphicon glyphicon-calendar"></span></span>
+
+            </div>
+
+        </div>
+        <br />
+        <div class="row">
+            <label class="col-md-2 control-label">结束时间</label>
+            <div class="input-append date form_date col-md-4" style="display: table;">
+                @Html.TextBoxFor(m => m.endDate, new { @class = "form-control", @size = "16", @readOnly = "readOnly" })
+
+                <span class="add-on input-group-addon"><span class="icon-remove glyphicon glyphicon-remove"></span></span>
+                <span class="add-on input-group-addon"><span class="icon-calendar glyphicon glyphicon-calendar"></span></span>
+            </div>
+        </div>
+
+        <table class="table table-striped" id="stepTable">
+            <caption>
+                <div class="input-group">
+                    @Html.DropDownListFor(t => t.appID, ViewBag.apps as List<SelectListItem>, new { @class = "form-control", @data_width = "140px" })
+
+
+                    <button type="button" id="addStep" class="btn btn-info" onclick="addRow()"><span class="glyphicon glyphicon-plus">添加步骤</span></button>
+                </div>
+
+            </caption>
+            <thead>
+                <tr>
+                    <th style="width:15%;">步骤</th>
+                    <th>步骤描述</th>
+                    <th style="width:40%;">样例图</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+
+
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+
+    var buttonID = 0;
+    function addRow() {
+        buttonID += 1; // 唯一ID
+
+        var bid = $("#stepTable tbody tr").size();
+
+        var tr = document.createElement("tr");
+        var td1 = tr.insertCell();
+        td1.innerHTML = "<span class=\"sn\">" + (bid + 1) + "</span><a href=\"javascript:;\" onclick=\"deleteRow(this)\" title=\"删除\"><span class=\"glyphicon glyphicon-minus\"></span></a>";
+
+        var td2 = tr.insertCell();
+        td2.innerHTML = "<textarea  name=\"steps[" + bid + "].describe\"></textarea>";
+
+
+        var td3 = tr.insertCell();
+        td3.innerHTML = "<input type=\"hidden\" name=\"steps[" + bid + "].demoImg\" /> <img class=\"carousel-inner img-responsive img-rounded demoImg\" src=\"\" /><button type=\"button\" id=\"b" + buttonID + "\" class=\"btn btn-primary\">上传步骤图示</button>";
+
+
+
+
+        $("#stepTable tbody").append(tr);
+
+        $(tr).find("textarea").rules("add", { required: true, stringCheck: true, messages: { required: "必填" } });
+
+
+
+
+
+
+
+
+        //实例化一个plupload上传对象
+        var uploaderF = new plupload.Uploader({
+            browse_button: "b" + buttonID, //触发文件选择对话框的按钮，为那个元素id
+            runtimes: 'html5',
+            url: '/UploadFile/imgUpLoad', // 服务端上传路径
+            unique_names: false, // 上传的文件名是否唯一
+            max_file_size: '2mb', // 文件上传最大限制。
+            //// 是否生成缩略图（仅对图片文件有效）
+            //resize: { width: 320, height: 240, quality: 90 },
+            ////  这个数组是选择器，就是上传文件时限制的上传文件类型
+            filters: [{ title: "Image files", extensions: "jpg,png,jpeg" }
+            ],
+            multi_selection: false
+
+        });
+
+
+        //在实例对象上调用init()方法进行初始化
+        uploaderF.init();
+
+        //绑定各种事件，并在事件监听函数中做你想做的事
+        uploaderF.bind('FilesAdded', function (uploader, files) {
+            uploader.start();
+
+        });
+
+        uploaderF.bind('Error', function (uploader, errObject) {
+            alert("上传失败,请检查xls格式或联系管理员");
+        });
+
+        uploaderF.bind('FileUploaded', function (up, file, result) {
+
+            var obj = jQuery.parseJSON(result.response);
+
+
+            $(tr).find("img").attr('src', obj.url);
+
+            $(tr).find("input[type='hidden']").val(obj.url);
+        });
+
+
+    }
+
+
+    function deleteRow(obj) {
+
+        if (confirm('确实删除?')) {
+            $(obj).parents("tr").remove();
+
+            $("#stepTable tbody tr").each(function (index) {
+
+                $(this).find(".sn").text(index + 1);
+
+                $(this).find("textarea").attr('name', "steps[" + index + "].describe");
+                $(this).find("input").attr('name', "steps[" + index + "].demoImg");
+
+            });
+        }
+
+
+    }
+
+
+</script>

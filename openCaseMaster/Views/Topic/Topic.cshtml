@@ -171,13 +171,20 @@
 
             </div>
         }
+        else if (Model.openTaskInfo != null)
+        {
+            <div style="border-top:1px dashed #ff6a00">
+
+                @Html.Partial("_taskStepView", Model.openTaskInfo)
+
+            </div>
+        }
 
         <div id="replies" class="panel panel-default">
             <div class="total panel-heading">
                 共收到 <b>@Model.replies.Count(t => t.state != 0)</b> 条回复
             </div>
             <div class="items panel-body">
-                @{int i = 0;}
                 @foreach (var m in Model.replies)
                 {
 

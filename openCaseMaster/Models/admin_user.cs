@@ -20,10 +20,10 @@ namespace openCaseMaster.Models
             this.admin_log = new HashSet<admin_log>();
             this.caseFramework = new HashSet<caseFramework>();
             this.M_runScene = new HashSet<M_runScene>();
-            this.project = new HashSet<project>();
-            this.topicReply = new HashSet<topicReply>();
             this.notification = new HashSet<notification>();
+            this.project = new HashSet<project>();
             this.topic = new HashSet<topic>();
+            this.topicReply = new HashSet<topicReply>();
         }
     
         public int ID { get; set; }
@@ -45,12 +45,12 @@ namespace openCaseMaster.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_runScene> M_runScene { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<project> project { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<topicReply> topicReply { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<notification> notification { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<project> project { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<topic> topic { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<topicReply> topicReply { get; set; }
     }
 }

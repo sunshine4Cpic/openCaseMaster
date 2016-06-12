@@ -49,9 +49,9 @@ namespace openCaseMaster
             
             uploader.Orderer = new AsIsBundleOrderer();
             uploader.Include(
-                "~/Scripts/plupload/jquery-ui.js",
+                "~/Scripts/plupload/jquery-ui.min.js",
                     "~/Scripts/plupload/plupload.full.min.js",
-                    "~/Scripts/plupload/jquery.ui.plupload/jquery.ui.plupload.js",
+                    "~/Scripts/plupload/jquery.ui.plupload/jquery.ui.plupload.min.js",
                     "~/Scripts/plupload/i18n/zh_CN.js"
                 );
             bundles.Add(uploader);
@@ -68,11 +68,11 @@ namespace openCaseMaster
             bundles.Add(new ScriptBundle("~/bundles/markdownView").Include(
                        "~/Scripts/editormd/lib/marked.min.js",
                        "~/Scripts/editormd/lib/prettify.min.js",
-                       "~/Scripts/editormd/lib/raphael.min.js",
-                       "~/Scripts/editormd/lib/underscore.min.js",
-                       "~/Scripts/editormd/lib/sequence-diagram.min.js",
-                       "~/Scripts/editormd/lib/flowchart.min.js",
-                       "~/Scripts/editormd/lib/jquery.flowchart.min.js",
+                       //"~/Scripts/editormd/lib/raphael.min.js",
+                       //"~/Scripts/editormd/lib/underscore.min.js",
+                       //"~/Scripts/editormd/lib/sequence-diagram.min.js",
+                       //"~/Scripts/editormd/lib/flowchart.min.js",
+                       //"~/Scripts/editormd/lib/jquery.flowchart.min.js",
                        "~/Scripts/editormd_v1.js"));//暂时这么处理版本
 
             bundles.Add(new StyleBundle("~/Content/markdownView").Include(

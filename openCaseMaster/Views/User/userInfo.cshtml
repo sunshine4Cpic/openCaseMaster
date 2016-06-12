@@ -4,20 +4,11 @@
 @section Scripts {
 
 
-
-    <link rel="stylesheet" href="~/Scripts/loading/ladda-themeless.min.css">
-    <script src="~/Scripts/loading/spin.min.js"></script>
-    <script src="~/Scripts/loading/ladda.min.js"></script>
-
-    <script src="~/Scripts/plupload/plupload.full.min.js"></script>
+    <script src="/Scripts/plupload/plupload.full.min.js"></script>
     <script>
 
 
         $(function () {
-
-
-            var l = Ladda.create(document.getElementById("uploadF"));
-
             //实例化一个plupload上传对象
             var uploaderF = new plupload.Uploader({
                 browse_button: 'uploadF', //触发文件选择对话框的按钮，为那个元素id
@@ -38,20 +29,25 @@
 
 
             uploaderF.bind('FilesAdded', function (uploader, files) {
-                //$.messager.progress({ title: '请稍后', msg: '上传中...' });
+            
+                $('#uploadF').attr("disabled", true);
+                $('#uploadF img').show();
                 uploader.start();
-                l.start();
+                
             });
 
             uploaderF.bind('Error', function (uploader, errObject) {
-                l.stop();
+                $('#uploadF').removeAttr("disabled");
+                $('#uploadF img').hide();
                 alert("上传失败,请联系管理员");
             });
 
             //绑定各种事件，并在事件监听函数中做你想做的事
             uploaderF.bind('FileUploaded', function (up, file, result) {
                 //$("#userAvatar").attr("src","new_src");
-                l.stop();
+                $('#uploadF').removeAttr("disabled");
+                $('#uploadF img').hide();
+                alert("上传成功,稍后生效");
             });
         });
     </script>
@@ -84,11 +80,14 @@
                         </div>
                         <div class="item social">
 
-
-
+                           
+                            <div class="span">
+			<div class="help"></div>
+		</div>
+                            
                             @if (User.userID() == Model.ID)
                             { 
-                                <button type="button" class="btn btn-primary ladda-button" data-style="expand-left" id="uploadF">更换头像</button>
+                                <button type="button" class="btn btn-primary" id="uploadF" ><img style="width:20px;margin-right:10px;display:none;" src="~/Content/images/loading.gif" />更换头像</button>
                             }
                         </div>
                     </div>

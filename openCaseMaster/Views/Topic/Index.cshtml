@@ -107,28 +107,23 @@
             <div class="panel-body">
                 <div class="btn-group pull-left">
                     <a class="btn btn-primary" href="/Topic/add">发布新话题</a>
-                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                    </button>
-                    <!--
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="/topics/new?node=23">Appium</a>
-                        </li>
-                        <li>
-                            <a href="/topics/new?node=32">移动性能测试</a>
-                        </li>
-                        <li>
-                            <a href="/topics/new?node=33">移动测试基础</a>
-                        </li>
-                        <li>
-                            <a href="/topics/new?node=36">新手区</a>
-                        </li>
-                        <li>
-                            <a href="/topics/new?node=37">匿名吐槽</a>
-                        </li>
-                    </ul>
-                        -->
+
+                    @if (User.IsInRole("admin"))
+                    {
+                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/Topic/add">普通话题</a>
+                            </li>
+                            <li>
+                                <a href="/Topic/adminAdd">测试任务</a>
+                            </li>
+                        </ul>
+                    }
+
                 </div>
 
 
@@ -158,9 +153,6 @@
                 <li class="list-group-item">测试案例: 41543 条</li>
             </ul>
         </div>
-
-
-
     </div>
 
 </div>

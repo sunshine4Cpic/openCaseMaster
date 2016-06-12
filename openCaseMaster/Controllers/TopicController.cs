@@ -94,15 +94,147 @@ namespace openCaseMaster.Controllers
         [HttpGet]
         public ActionResult add()
         {
+            ViewBag.nodes = publicNodes();
 
-            ViewBag.nodes = this.NodesList();
-            if (userHelper.isAdmin)
+            return View("add");
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        public ActionResult adminAdd(int node=101)
+        {
+
+            appSelectItem();
+            ViewBag.nodes = taskNodes(node);
+
+            return View("adminAdd");
+
+        }
+
+        [HttpPost]
+        public ActionResult add(topicModel tm)
+        {
+
+
+            if (!ModelState.IsValid || tm.node < 200)//普通用户不能add任务
             {
-                appSelectItem();
-                return View("adminAdd");
+                ViewBag.nodes = this.publicNodes();
+                return View(tm);
             }
-            else
-                return View("add");
+
+
+
+            //开始操作
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            topic pt = new topic();
+
+            pt.node = tm.node;
+            pt.creatDate = DateTime.Now;
+            pt.title = tm.title;
+            pt.body = tm.body;
+            pt.userID = User.userID();
+
+
+            var names = QC_DB.topic.Add(pt).addNotification(QC_DB);
+
+
+            QC_DB.SaveChanges();
+
+            hubHelper.Push(names);
+
+            TempData["event"] = "add";
+
+            return RedirectToAction(pt.ID.ToString());
+
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public ActionResult adminAdd(topicTaskModel tm)
+        {
+
+            if (!ModelState.IsValid)//验证模型
+            {
+                ViewBag.nodes = taskNodes(tm.node);
+                appSelectItem();
+                return View(tm);
+            }
+
+            //开始操作
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            topic tp = new topic();
+
+            tp.creatDate = DateTime.Now;
+            tp.title = tm.title;
+            tp.body = tm.body;
+            tp.userID = User.userID();
+            tp.node = tm.node;
+
+            QC_DB.topic.Add(tp);
+
+            //解析json,添加script
+            if (tm.node == 101)
+            {
+                M_publicTask pt = new M_publicTask();
+                pt.ID = tp.ID;
+                pt.appID = tm.appID;
+                //pt.creatDate = DateTime.Now;
+                pt.startDate = tm.startDate;
+                pt.endDate = tm.endDate;
+
+                QC_DB.M_publicTask.Add(pt);
+
+                var ja = JArray.Parse(tm.scripts);
+                foreach (var j in ja.Children<JObject>())
+                {
+
+                    int ID = Convert.ToInt32(j["ID"].ToString());
+                    var tmp = QC_DB.tmp_TaskScript.FirstOrDefault(t => t.ID == ID);
+                    if (tmp == null) continue;
+
+                    M_publicTaskScript ts = new M_publicTaskScript();
+                    ts.taskID = pt.ID;
+                    ts.title = tmp.title;
+                    ts.script = tmp.script;
+
+                    QC_DB.M_publicTaskScript.Add(ts);
+                    QC_DB.tmp_TaskScript.Remove(tmp);
+                }
+            }
+            else if (tm.node == 102)
+            {
+                openTestTask ot = new openTestTask();
+
+                ot.ID = tp.ID;
+                ot.appID = tm.appID;
+                //pt.creatDate = DateTime.Now;
+                ot.startDate = tm.startDate;
+                ot.endDate = tm.endDate;
+
+                QC_DB.openTestTask.Add(ot);
+
+                int i = 1;
+                foreach(var m in tm.steps)
+                {
+                    openTestStep ots = new openTestStep();
+                    ots.demoImg = m.demoImg;
+                    ots.describe = m.describe;
+                    ots.stepSort = i;
+                    i++;
+                    QC_DB.openTestStep.Add(ots);
+                }
+            }
+
+            QC_DB.SaveChanges();
+
+            TempData["event"] = "add";
+
+            return RedirectToAction(tp.ID.ToString());
+
         }
 
         /// <summary>
@@ -172,7 +304,7 @@ namespace openCaseMaster.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.nodes = this.NodesList();
+                ViewBag.nodes = this.publicNodes();
                 return View(tm);
             }
 
@@ -251,110 +383,7 @@ namespace openCaseMaster.Controllers
         }
 
        
-        [HttpPost]
-        public ActionResult add(topicModel tm)
-        {
-
-
-            if (!ModelState.IsValid || tm.node < 200)//普通用户不能add任务
-            {
-                ViewBag.nodes = this.NodesList();
-                return View(tm);
-            }
-
-           
-
-            //开始操作
-
-            QCTESTEntities QC_DB = new QCTESTEntities();
-
-            topic pt = new topic();
-
-            pt.node = tm.node;
-            pt.creatDate = DateTime.Now;
-            pt.title = tm.title;
-            pt.body = tm.body;
-            pt.userID = User.userID();
-            
-
-            var names = QC_DB.topic.Add(pt).addNotification(QC_DB);
-            
-           
-            QC_DB.SaveChanges();
-
-            hubHelper.Push(names);
-
-            TempData["event"] = "add";
-
-            return RedirectToAction(pt.ID.ToString());
-            
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpPost]
-        public ActionResult adminAdd(topicTaskModel tm)
-        {
-            if (tm.node <200) return add(tm);//普通节点
-      
-
-            if (!ModelState.IsValid)//验证模型
-            {
-                appSelectItem();
-                ViewBag.nodes = this.NodesList();
-                return View(tm);
-            }
-
-            //开始操作
-
-            QCTESTEntities QC_DB = new QCTESTEntities();
-
-            topic tp = new topic();
-
-            tp.creatDate = DateTime.Now;
-            tp.title = tm.title;
-            tp.body = tm.body;
-            tp.userID = User.userID();
-            tp.node = tm.node;
-
-            QC_DB.topic.Add(tp);
-
-            //解析json,添加script
-            if (tm.node == 101)
-            {
-                M_publicTask pt = new M_publicTask();
-                pt.ID = tp.ID;
-                pt.appID = tm.appID;
-                //pt.creatDate = DateTime.Now;
-                pt.startDate = tm.startDate;
-                pt.endDate = tm.endDate;
-
-                QC_DB.M_publicTask.Add(pt);
-
-                var ja = JArray.Parse(tm.scripts);
-                foreach (var j in ja.Children<JObject>())
-                {
-
-                    int ID = Convert.ToInt32(j["ID"].ToString());
-                    var tmp = QC_DB.tmp_TaskScript.FirstOrDefault(t => t.ID == ID);
-                    if (tmp == null) continue;
-
-                    M_publicTaskScript ts = new M_publicTaskScript();
-                    ts.taskID = pt.ID;
-                    ts.title = tmp.title;
-                    ts.script = tmp.script;
-
-                    QC_DB.M_publicTaskScript.Add(ts);
-                    QC_DB.tmp_TaskScript.Remove(tmp);
-                }
-            }
-
-            QC_DB.SaveChanges();
-
-            TempData["event"] = "add";
-
-            return RedirectToAction(tp.ID.ToString());
-
-        }
+       
 
         /// <summary>
         /// 初始化 可选app
@@ -422,10 +451,38 @@ namespace openCaseMaster.Controllers
 
 
         /// <summary>
+        /// 任务节点
+        /// </summary>
+        [NonAction]
+        private List<SelectListItem> taskNodes(int id = 0)
+        {
+            List<SelectListItem> SLI = new List<SelectListItem>();
+            //SLI.Add(new SelectListItem { Text = "请选择节点", Value = "" });
+
+
+            SLI.AddRange(topicHelper.adminNodes());
+
+            if (id < 1) return SLI;
+
+            foreach (var s in SLI)
+            {
+                if (s.Value == id.ToString())
+                {
+                    s.Selected = true;
+                    break;
+                }
+            }
+
+            return SLI;
+
+        }
+
+
+        /// <summary>
         /// 用户可用节点
         /// </summary>
         [NonAction]
-        private List<SelectListItem> NodesList(int id = 0)
+        private List<SelectListItem> publicNodes(int id = 0)
         {
             List<SelectListItem> SLI = new List<SelectListItem>();
             SLI.Add(new SelectListItem { Text = "请选择节点", Value = "" });
@@ -434,9 +491,7 @@ namespace openCaseMaster.Controllers
             SLI.AddRange(topicHelper.PublicNodes());
 
 
-            if (userHelper.isAdmin)
-                SLI.AddRange(topicHelper.adminNodes());
-
+           
             if (id < 1) return SLI;
 
             foreach (var s in SLI)

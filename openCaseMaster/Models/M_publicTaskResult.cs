@@ -15,7 +15,7 @@ namespace openCaseMaster.Models
     public partial class M_publicTaskResult
     {
         public int ID { get; set; }
-        public long IMEI { get; set; }
+        public int deviceID { get; set; }
         public string result { get; set; }
         public System.DateTime creatDate { get; set; }
         public Nullable<int> state { get; set; }

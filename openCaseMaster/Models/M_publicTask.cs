@@ -26,8 +26,8 @@ namespace openCaseMaster.Models
         public Nullable<System.DateTime> endDate { get; set; }
     
         public virtual M_application M_application { get; set; }
+        public virtual topic topic { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_publicTaskScript> M_publicTaskScript { get; set; }
-        public virtual topic topic { get; set; }
     }
 }

@@ -1,9 +1,10 @@
 ﻿@using openCaseMaster.ViewModels
 @model topicTaskModel
 
-<div class="tab-pane fade" id="script">
+<div class="tab-pane" id="script">
     <div class="form-control" style="display: block;border-radius: 4px;min-height:300px;height:auto">
-        <input type="hidden" name="scripts" id="scripts" />
+        @Html.HiddenFor(h => h.scripts, new { @id = "scripts", @name = "scripts" })
+      
 
         <div class="row">
             <label class="col-md-2 control-label">开始时间</label>
@@ -31,10 +32,10 @@
         <table class="table table-striped" id="scriptTable">
             <caption>
                 <div class="input-group">
-                    <span class="node-select input-group-btn">
-                        @Html.DropDownListFor(t => t.appID, ViewBag.apps as List<SelectListItem>, new { @class = "selectpicker", @data_live_search = "true", @data_width = "140px", @disabled = "disabled" })
-                    </span>
-                    <button type="button" class="btn btn-info ladda-button" data-style="expand-left" id="uploadF" style="margin-left:20px">上传案例 »</button>
+                    
+                        @Html.DropDownListFor(t => t.appID, ViewBag.apps as List<SelectListItem>, new {@class="form-control", @data_width = "140px"})
+                  
+                    <button type="button" class="btn btn-info" name="uploadF" id="uploadF">上传案例 »</button>
                 </div>
             </caption>
             <thead>
@@ -52,24 +53,14 @@
     </div>
 </div>
 
-  @Styles.Render("~/Content/uploader")
-    @Scripts.Render("~/bundles/uploader")
-
-
-    <link rel="stylesheet" href="~/Scripts/loading/ladda-themeless.min.css">
-    <script src="~/Scripts/loading/spin.min.js"></script>
-    <script src="~/Scripts/loading/ladda.min.js"></script>
-
-    <script src="/Scripts/bootstrap-datetimepicker.js"></script>
-    <script src="~/Scripts/locale/bootstrap-datetimepicker.zh-CN.js"></script>
-    <link href="/Content/bootstrap-datetimepicker.css" rel="stylesheet">
+    
 
     <script type="text/javascript">
 
-
+       
         $(function () {
 
-            var l = Ladda.create(document.getElementById("uploadF"));
+
             //实例化一个plupload上传对象
             var uploaderF = new plupload.Uploader({
                 browse_button: 'uploadF', //触发文件选择对话框的按钮，为那个元素id
@@ -91,13 +82,13 @@
             //绑定各种事件，并在事件监听函数中做你想做的事
             uploaderF.bind('FilesAdded', function (uploader, files) {
                 //$.messager.progress({ title: '请稍后', msg: '上传中...' });
-                l.start();
+               
                 uploader.start();
 
             });
 
             uploaderF.bind('Error', function (uploader, errObject) {
-                l.stop();
+             
                 alert("上传失败,请检查xls格式或联系管理员");
             });
 
@@ -105,38 +96,35 @@
                 var data = result.response;
                 localStorage.setItem("addTaskscript", data);
 
-                initscript();
+                initscript();//刷新缓存案例列表
 
-
-
-                l.stop();
 
             });
 
+            initscript();//初始化
 
-         
-
-         
-
-
-
-            $('.form_date').datetimepicker({
-                format: "yyyy-mm-dd h:00",
-                language: 'zh-CN',
-                todayBtn: true,
-                todayHighlight: true,
-                startDate: new Date(),
-
-                autoclose: true,//选择日期后立即关闭
-                minView: 1,
-            });
 
 
         });
 
 
-        
+        function initscript() {
+            if (localStorage["addTaskscript"]) {
+                $("#scripts").val(localStorage["addTaskscript"]);
 
-
+                var data = $.parseJSON(localStorage["addTaskscript"]);
+                var i = 1;
+                $("#scriptTable tbody").empty();
+                for (var d in data) {
+                    var p = data[d];
+                    var tr = document.createElement("tr");
+                    var td1 = tr.insertCell();
+                    td1.innerHTML = i++;
+                    var td2 = tr.insertCell();
+                    td2.innerHTML = p.title;
+                    $("#scriptTable tbody").append(tr);
+                }
+            }
+        }
     </script>
 

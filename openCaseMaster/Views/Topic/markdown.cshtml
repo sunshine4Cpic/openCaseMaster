@@ -1,16 +1,9 @@
 ﻿
 @section Scripts {
-    <link rel="stylesheet" href="/Content/editormd.preview.css" />
 
-    <script src="/Scripts/editormd/lib/marked.min.js"></script>
-    <script src="/Scripts/editormd/lib/prettify.min.js"></script>
-    <script src="/Scripts/editormd/lib/raphael.min.js"></script>
-    <script src="/Scripts/editormd/lib/underscore.min.js"></script>
-    <script src="/Scripts/editormd/lib/sequence-diagram.min.js"></script>
-    <script src="/Scripts/editormd/lib/flowchart.min.js"></script>
-    <script src="/Scripts/editormd/lib/jquery.flowchart.min.js"></script>
-      <script src="/Scripts/editormd.js"></script>
-   
+      @Scripts.Render("~/bundles/markdownView")
+
+    @Styles.Render("~/Content/markdownView")
     <script type="text/javascript">
         $(function () {
 

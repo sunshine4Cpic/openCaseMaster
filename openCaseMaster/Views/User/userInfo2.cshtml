@@ -8,9 +8,7 @@
 <link rel="stylesheet" href="~/Scripts/highlight/solarized_dark.min.css">
 <script src="~/Scripts/highlight/highlight.min.js"></script>
 
-<link rel="stylesheet" href="~/Scripts/loading/ladda-themeless.min.css">
-<script src="~/Scripts/loading/spin.min.js"></script>
-<script src="~/Scripts/loading/ladda.min.js"></script>
+
 
 
 <script>
@@ -19,7 +17,7 @@
     $(function () {
         hljs.initHighlightingOnLoad();
 
-        var l = Ladda.create(document.getElementById("uploadF"));
+      
 
         //实例化一个plupload上传对象
         var uploaderF = new plupload.Uploader({
@@ -43,11 +41,11 @@
         uploaderF.bind('FilesAdded', function (uploader, files) {
             //$.messager.progress({ title: '请稍后', msg: '上传中...' });
             uploader.start();
-            l.start();
+          
         });
 
         uploaderF.bind('Error', function (uploader, errObject) {
-            l.stop();
+           
             alert("上传失败,请检查xml格式或联系管理员");
         });
 
@@ -55,7 +53,7 @@
         uploaderF.bind('FileUploaded', function (up, file, result) {
 
             $("#framework code").html(hljs.highlight("xml", result.response).value);
-            l.stop();
+          
         });
     });
 </script>

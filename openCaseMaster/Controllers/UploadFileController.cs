@@ -166,7 +166,9 @@ namespace openCaseMaster.Controllers
 
             if (exts.Contains(ext))
             {
-                string fileName = User.userID() + ext;
+                string guid = System.Guid.NewGuid().ToString("N");
+
+                string fileName = User.userID() + "_" + guid + ext;
                 string fileDir = Server.MapPath("~/Content/userAvatar/" + fileName);
 
                 file.SaveAs(fileDir);
@@ -184,7 +186,7 @@ namespace openCaseMaster.Controllers
             }
         }
 
-        public string imgUpLoad()
+        public JsonResult imgUpLoad()
         {
             HttpPostedFileBase file = Request.Files[0];
             
@@ -202,13 +204,14 @@ namespace openCaseMaster.Controllers
                 file.SaveAs(fileDir);
 
                 var rt = new { success = 1, message = "成功", url = "/img/" + fileName };
-                string json = JsonConvert.SerializeObject(rt);
-                return json;
+                //string json = JsonConvert.SerializeObject(rt);
+                return Json(rt);
             }else
             {
+                Response.StatusCode = 500;
                 var rt = new { success = 0, message = "非法的文件"};
-                string json = JsonConvert.SerializeObject(rt);
-                return json;
+                //string json = JsonConvert.SerializeObject(rt);
+                return Json(rt);
             }
           
 

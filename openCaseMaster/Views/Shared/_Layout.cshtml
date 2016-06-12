@@ -88,3 +88,28 @@
 
 </body>
 </html>
+
+@if (Request.IsAuthenticated)
+{
+    <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+        $(function () {
+            var chat = $.connection.UserHub;
+            chat.client.init = function (cnt) {
+                $(".notification-count .notice").css("display","block");
+                $(".notification-count .notice").html(cnt);
+            }
+
+            chat.client.push = function (cnt) {
+                $(".notification-count .notice").css("display", "block");
+                var baseCnt = parseInt($(".notification-count .notice").html());
+                $(".notification-count .notice").html(baseCnt + cnt);
+            }
+
+            $.connection.hub.start().done(function () {
+                chat.server.init();
+            });
+        });
+    </script>
+}

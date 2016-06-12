@@ -86,7 +86,7 @@ namespace openCaseMaster.Models
             topicHelper.nodes.Add(Key, Value);
             this.Key = Key;
             this.Value = Value;
-            ListItem = new SelectListItem { Text = Value, Value = Key.ToString(), Group = Group };
+            //ListItem = new SelectListItem { Text = Value, Value = Key.ToString(), Group = Group };
         }
 
         public topicNode(int Key, string Value, string GroupName, bool admin)
@@ -103,7 +103,7 @@ namespace openCaseMaster.Models
 
         public bool isAdminNode { get; set; }
 
-        public SelectListItem ListItem;
+        public SelectListItem ListItem { get { return new SelectListItem { Text = this.Value, Value = this.Key.ToString(), Group = this.Group }; } }
 
 
     }

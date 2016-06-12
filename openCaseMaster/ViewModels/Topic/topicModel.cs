@@ -43,7 +43,21 @@ namespace openCaseMaster.ViewModels
 
         public DateTime? endDate { get; set; }
 
+        /// <summary>
+        /// 自动化脚本列表
+        /// </summary>
         public string scripts { get; set; }
+
+
+        public List<TaskStep> steps { get; set; }
+
+    }
+
+
+    public class TaskStep
+    {
+        public string describe { get; set; }
+        public string demoImg { get; set; }
     }
 
     public class topicModel_prev 
@@ -106,6 +120,18 @@ namespace openCaseMaster.ViewModels
                     taskInfo.startDate = tk.startDate;
                     taskInfo.endDate = tk.endDate;
                 }
+                else if (tic.node == 102 && tic.openTestTask != null)
+                {
+                    var tk = tic.openTestTask;
+                    openTaskInfo = new openTaskModel();
+
+                    openTaskInfo.appName = tk.M_application.name;
+                    openTaskInfo.appID = tk.appID;
+                    openTaskInfo.steps = tk.openTestStep.OrderBy(t => t.stepSort).ToList();
+                                         
+                    openTaskInfo.startDate = tk.startDate;
+                    openTaskInfo.endDate = tk.endDate;
+                }
 
                 this.ID = tic.ID;
 
@@ -141,6 +167,8 @@ namespace openCaseMaster.ViewModels
 
 
         public taskModel taskInfo;
+
+        public openTaskModel openTaskInfo;
 
 
         public string body { get; set; }
@@ -187,6 +215,9 @@ namespace openCaseMaster.ViewModels
         public int floor { get; set; }
     }
 
+    /// <summary>
+    /// 自动化任务
+    /// </summary>
     public class taskModel
     {
         public int appID { get; set; }
@@ -199,6 +230,23 @@ namespace openCaseMaster.ViewModels
 
 
         public Dictionary<int, string> taskScripts;
+    }
+
+    /// <summary>
+    /// 众测任务
+    /// </summary>
+    public class openTaskModel
+    {
+        public int appID { get; set; }
+
+        public string appName { get; set; }
+
+        public DateTime? startDate { get; set; }
+
+        public DateTime? endDate { get; set; }
+
+
+        public List<openTestStep> steps;
     }
 
 

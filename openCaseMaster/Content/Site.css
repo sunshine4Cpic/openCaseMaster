@@ -398,8 +398,37 @@ i[name=preview], i[name=watch] {
 
 
 /*验证控件,显示样式*/
-input.input-validation-error {
+.input-validation-error {
     border: 1px dotted red;
 }
 
 
+#script select.form-control,#step select.form-control{
+    width:auto;
+}
+
+
+#script #uploadF,#step #addStep{
+        border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+
+#stepTable textarea{
+    width:100%;
+    height:100%;
+    min-height:150px
+}
+
+img.demoImg{
+    max-width:120px;
+    max-height:220px
+}
+
+#stepTable td .glyphicon-minus{
+    color:red;
+}
+
+#stepTable td span{
+    margin-right:10px;
+}
