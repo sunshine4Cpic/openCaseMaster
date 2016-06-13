@@ -151,8 +151,15 @@
 
 
                     <span class="pull-right opts">
+                        @if (Model.nodeID < 200)
+                        {
+                            <a class="fa fa-pencil" title="修改本帖" href="editTask/@Model.ID"></a>
+                        }
+                        else
+                        {
+                            <a class="fa fa-pencil" title="修改本帖" href="edit/@Model.ID"></a>
+                        }
 
-                        <a class="fa fa-pencil" title="修改本帖" href="edit/@Model.ID"></a>
                         <a confirm="确定要删除吗？" class="fa fa-trash" title="删除本帖" method="post" href="Delete/@Model.ID"></a>
 
                     </span>
@@ -164,20 +171,25 @@
 
         @if (Model.taskInfo != null)
         {
-
-            <div style="border-top:1px dashed #ff6a00">
-
-                @Html.Partial("_taskScriptView", Model.taskInfo)
+            <div id="reply" class="panel panel-default" style="border-top:1px dashed #ff6a00">
+                <div class="panel-heading"><b>测试app:</b><a href="#">@Model.taskInfo.appName</a></div>
+                <div class="panel-body">
+                    @Html.Partial("_taskScriptView", Model.taskInfo.taskScripts)
+                </div>
 
             </div>
+
         }
         else if (Model.openTaskInfo != null)
         {
-            <div style="border-top:1px dashed #ff6a00">
 
-                @Html.Partial("_taskStepView", Model.openTaskInfo)
-
+            <div id="reply" class="panel panel-default" style="border-top:1px dashed #ff6a00">
+                <div class="panel-heading"><b>测试app:</b><a href="#">@Model.openTaskInfo.appName</a></div>
+                <div class="panel-body">
+                    @Html.Partial("_taskStepView", Model.openTaskInfo.steps)
+                </div>
             </div>
+
         }
 
         <div id="replies" class="panel panel-default">

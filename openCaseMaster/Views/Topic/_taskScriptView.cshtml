@@ -1,8 +1,6 @@
-﻿@model openCaseMaster.ViewModels.taskModel
+﻿@model Dictionary<int, string>
 
-<div id="reply" class="panel panel-default">
-      <div class="panel-heading"><b>测试app:</b><a href="#">@Model.appName</a></div>
-      <div class="panel-body">
+
 
        <table class="table" style="table-layout:fixed">
         
@@ -14,7 +12,7 @@
         </thead>
         <tbody>
             @{int i = 1;}
-            @foreach (var d in Model.taskScripts)
+            @foreach (var d in Model)
             {
                 <tr>
                     <td>@i</td>
@@ -26,9 +24,7 @@
         </tbody>
     </table>
 
-          </div>
 
-    </div>
 
     
 

@@ -116,7 +116,7 @@ namespace openCaseMaster.Controllers
         {
 
 
-            if (!ModelState.IsValid || tm.node < 200)//普通用户不能add任务
+            if (!ModelState.IsValid)
             {
                 ViewBag.nodes = this.publicNodes();
                 return View(tm);
@@ -154,7 +154,7 @@ namespace openCaseMaster.Controllers
         [HttpPost]
         public ActionResult adminAdd(topicTaskModel tm)
         {
-
+          
             if (!ModelState.IsValid)//验证模型
             {
                 ViewBag.nodes = taskNodes(tm.node);
@@ -204,14 +204,12 @@ namespace openCaseMaster.Controllers
                     QC_DB.M_publicTaskScript.Add(ts);
                     QC_DB.tmp_TaskScript.Remove(tmp);
                 }
-            }
-            else if (tm.node == 102)
+            }else if (tm.node == 102)
             {
                 openTestTask ot = new openTestTask();
 
                 ot.ID = tp.ID;
                 ot.appID = tm.appID;
-                //pt.creatDate = DateTime.Now;
                 ot.startDate = tm.startDate;
                 ot.endDate = tm.endDate;
 
@@ -220,12 +218,9 @@ namespace openCaseMaster.Controllers
                 int i = 1;
                 foreach(var m in tm.steps)
                 {
-                    openTestStep ots = new openTestStep();
-                    ots.demoImg = m.demoImg;
-                    ots.describe = m.describe;
-                    ots.stepSort = i;
+                    m.stepSort = i;
+                    QC_DB.openTestStep.Add(m);
                     i++;
-                    QC_DB.openTestStep.Add(ots);
                 }
             }
 
@@ -244,57 +239,56 @@ namespace openCaseMaster.Controllers
         public ActionResult edit(int id)
         {
 
-            QCTESTEntities QC_DB = new QCTESTEntities();
 
-            int userID = User.userID();
-            var tic = QC_DB.topic.First(t =>
-                t.ID == id && t.state != 0 && t.userID == userID);
-            
-            
-            string[] aa = new string[6];
-            topicModel tm = new topicModel();
-            tm.node = tic.node;
-            tm.title = tic.title;
-            tm.body = tic.body;
+            ViewBag.action = "edit";
 
+            topicModel tm = new topicModel(id);
 
-            if (tic.node ==101)
+            var nodes = topicHelper.PublicNodes();
+
+            foreach (var n in nodes)
             {
-                var node = topicHelper.nodes.First(t => t.Key == tic.node);
-
-                List<SelectListItem> nodes = new List<SelectListItem>();
-                nodes.Add(new SelectListItem { Text = node.Value, Value = node.Key.ToString(), Selected = true });
-                ViewBag.nodes = nodes;
-
-                var tk = tic.M_publicTask;
-                taskModel taskInfo = new taskModel();
-                taskInfo.appName = tk.M_application.name;
-                taskInfo.appID = tk.appID;
-                taskInfo.taskScripts = tk.M_publicTaskScript.ToDictionary(k => k.ID, v => v.title);
-                taskInfo.startDate = tk.startDate;
-                taskInfo.endDate = tk.endDate;
-                ViewBag.taskInfo = taskInfo;
-
-                return View(tm);
-
-            }
-            else
-            {
-                var nodes = topicHelper.PublicNodes();
-
-                foreach (var n in nodes)
+                if (n.Value == tm.node.ToString())
                 {
-                    if (n.Value == tic.node.ToString())
-                    {
-                        n.Selected = true;
-                        break;
-                    }
+                    n.Selected = true;
+                    break;
                 }
-                ViewBag.nodes = nodes;
-
-                return View(tm);
             }
+            ViewBag.nodes = nodes;
+
+           
+            return View("add", tm);
+
         }
+
+
+        /// <summary>
+        /// 编辑任务
+        /// </summary>
+        [HttpGet]
+        public ActionResult editTask(int id)
+        {
+           
+
+            editTaskModel tm = new editTaskModel(id);
+
+        
+
+            return View(tm);
+
+        }
+
+        /// <summary>
+        /// 编辑任务
+        /// </summary>
+        [HttpPost]
+        public ActionResult editTask(editTaskModel tm)
+        {
+            return null;
+
+        }
+
+       
 
         /// <summary>
         /// 编辑

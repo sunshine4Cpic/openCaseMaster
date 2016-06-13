@@ -27,7 +27,7 @@ namespace openCaseMaster
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site-{version}.css"));
 
 
             bundles.Add(new ScriptBundle("~/bundles/easyui").Include(
@@ -46,6 +46,7 @@ namespace openCaseMaster
 
 
             ScriptBundle uploader = new ScriptBundle("~/bundles/uploader");
+ 
             
             uploader.Orderer = new AsIsBundleOrderer();
             uploader.Include(
@@ -73,14 +74,14 @@ namespace openCaseMaster
                        //"~/Scripts/editormd/lib/sequence-diagram.min.js",
                        //"~/Scripts/editormd/lib/flowchart.min.js",
                        //"~/Scripts/editormd/lib/jquery.flowchart.min.js",
-                       "~/Scripts/editormd_v1.js"));//暂时这么处理版本
+                       "~/Scripts/editormd-{version}.js"));//暂时这么处理版本
 
             bundles.Add(new StyleBundle("~/Content/markdownView").Include(
                        "~/Content/editormd.preview.css",
                        "~/Content/editormd.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/markdown").Include(
-                      "~/Scripts/editormd_v1.js"));//暂时这么处理版本
+                      "~/Scripts/editormd-{version}.js"));//暂时这么处理版本
             bundles.Add(new StyleBundle("~/Content/markdown").Include(
                       "~/Content/editormd.css"));
 

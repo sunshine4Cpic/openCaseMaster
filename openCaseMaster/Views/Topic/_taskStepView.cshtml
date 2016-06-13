@@ -1,8 +1,5 @@
-﻿@model openCaseMaster.ViewModels.openTaskModel
+﻿@model  List<openCaseMaster.Models.openTestStep>
 
-<div id="reply" class="panel panel-default">
-    <div class="panel-heading"><b>测试app:</b><a href="#">@Model.appName</a></div>
-    <div class="panel-body">
 
         <table class="table" style="table-layout:fixed">
 
@@ -15,7 +12,7 @@
             </thead>
             <tbody>
                 @{int i = 0;}
-                @foreach (var s in Model.steps)
+                @foreach (var s in Model)
                 {
                     i++;
                     <tr>
@@ -29,6 +26,4 @@
             </tbody>
         </table>
 
-    </div>
 
-</div>

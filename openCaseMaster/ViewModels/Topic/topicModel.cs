@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using openCaseMaster.Models;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,28 @@ namespace openCaseMaster.ViewModels
 
     public class topicModel
     {
+        public topicModel()
+        {
+
+        }
+
+        public topicModel(int ID)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            int userID = HttpContext.Current.User.userID();
+
+            var tic = QC_DB.topic.First(t =>
+                t.ID == ID && t.state != 0 && t.userID == userID);
+
+
+
+            this.ID = ID;
+            this.node = tic.node;
+            this.title = tic.title;
+            this.body = tic.body;
+        }
+
         public int ID { get; set; }
 
         [Required(ErrorMessage = "标题必须填写")]
@@ -27,13 +50,45 @@ namespace openCaseMaster.ViewModels
 
 
         [Required]
-        [Range(100, 599)]
+        [Range(200, 599)]
         public int node { get; set; }
     }
 
 
     public class topicTaskModel : topicModel
     {
+        [Required]
+        [Range(100, 200)]
+        public new int node { get; set; }
+
+        public topicTaskModel()
+        {
+
+        }
+
+        public topicTaskModel(int ID)
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            int userID = HttpContext.Current.User.userID();
+            var tic = QC_DB.topic.First(t =>
+                t.ID == ID && t.state != 0 && t.userID == userID);
+
+            this.ID = tic.ID;
+            this.title = tic.title;
+            this.body = tic.body;
+            this.node = tic.node;
+
+
+            if (tic.node == 102 && tic.openTestTask != null)
+            {
+                this.appID = tic.M_publicTask.appID;
+                this.startDate = tic.M_publicTask.startDate;
+                this.endDate = tic.M_publicTask.endDate;
+                this.steps = tic.openTestTask.openTestStep.OrderBy(t => t.stepSort).ToList();
+            }
+            
+        }
 
         [Required]
         public int appID { get; set; }
@@ -49,16 +104,12 @@ namespace openCaseMaster.ViewModels
         public string scripts { get; set; }
 
 
-        public List<TaskStep> steps { get; set; }
+        public List<openTestStep> steps { get; set; }
 
     }
 
 
-    public class TaskStep
-    {
-        public string describe { get; set; }
-        public string demoImg { get; set; }
-    }
+
 
     public class topicModel_prev 
     {

@@ -352,6 +352,7 @@
     <Compile Include="ViewModels\Device\DeviceViewModel.cs" />
     <Compile Include="ViewModels\Device\ProjectListModel.cs" />
     <Compile Include="ViewModels\Project\ProjectListModel.cs" />
+    <Compile Include="ViewModels\Topic\editTaskModel.cs" />
     <Compile Include="ViewModels\Topic\topicModel.cs" />
     <Compile Include="ViewModels\RunCase\caseRecordModel.cs" />
     <Compile Include="ViewModels\RunCase\SceneCaseDataModel.cs" />
@@ -1715,7 +1716,7 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="game.html" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\Site-1.0.1.css" />
     <EntityDeploy Include="Models\masterDate.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>masterDate.Designer.cs</LastGenOutput>
@@ -1848,7 +1849,7 @@
     <Content Include="Scripts\locale\bootstrap-datetimepicker.zh-CN.js" />
     <Content Include="Scripts\bootstrap-select.js" />
     <Content Include="Scripts\bootstrap-select.min.js" />
-    <Content Include="Scripts\editormd_v1.js" />
+    <Content Include="Scripts\editormd-1.0.1.js" />
     <Content Include="Scripts\editormd\lib\codemirror\addons.min.js" />
     <Content Include="Scripts\editormd\lib\codemirror\addon\comment\comment.js" />
     <Content Include="Scripts\editormd\lib\codemirror\addon\comment\continuecomment.js" />
@@ -2438,10 +2439,7 @@
     <Content Include="Views\Topic\add.cshtml" />
     <Content Include="Views\Topic\Topic.cshtml" />
     <Content Include="Views\Topic\adminAdd.cshtml" />
-    <Content Include="Views\Topic\_topicMarkdown.cshtml" />
     <Content Include="Views\Topic\_taskScriptAdd.cshtml" />
-    <Content Include="Views\Topic\edit.cshtml" />
-    <Content Include="Views\Topic\_topicMarkdownEdit.cshtml" />
     <Content Include="Views\Topic\editTask.cshtml" />
     <Content Include="Views\Topic\_taskScriptView.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
@@ -2449,7 +2447,6 @@
     <Content Include="Views\Topic\markdown.cshtml" />
     <Content Include="Views\User\notification.cshtml" />
     <Content Include="Views\Topic\_taskStepAdd.cshtml" />
-    <Content Include="Views\Topic\adminAdd - 复制.cshtml" />
     <Content Include="Views\Topic\_taskStepView.cshtml" />
   </ItemGroup>
   <ItemGroup />
