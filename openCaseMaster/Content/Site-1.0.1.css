@@ -432,3 +432,29 @@ img.demoImg{
 #stepTable td span{
     margin-right:10px;
 }
+.show-time-wrap {
+    vertical-align: middle;
+    text-align: center;
+    float: left;
+}
+.show-time-wrap .show-time-number {
+    color: #3c3c3c;
+    font-size: 23px;
+    font-family: Arial,sans-serif;
+    width: 26px;
+    background: url(/Content/images/daojishi.png) 3px no-repeat;
+    float: left;
+}
+
+.project-expiration-wrap ,.project-expiration-count-down {
+    line-height: 24px;
+}
+
+.project-expiration-wrap {
+    float: left; 
+}
+
+.project-expiration-wrap .glyphicon 
+{
+    line-height: 24px;
+}

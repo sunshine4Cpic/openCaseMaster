@@ -22,6 +22,7 @@
                 autoclose: true,//选择日期后立即关闭
                 todayBtn: true,
                 todayHighlight: true,
+                startDate: new Date(),
                 minView: 1
             });
 
@@ -83,7 +84,7 @@
                     <div class="row">
                         <label class="col-md-2 control-label">开始时间</label>
                         <div class="input-append date form_date col-md-4" style="display: table;">
-                            @Html.TextBoxFor(m => m.startDate, new { @Value = Model.startDate == null ? "" : Model.startDate.Value.ToString("yyyy-MM-dd hh:mm:ss"), @class = "form-control", @size = "16", @readOnly = "readOnly" })
+                            @Html.TextBoxFor(m => m.startDate, new { @Value = Model.startDate == null ? "" : Model.startDate.Value.ToString("yyyy-MM-dd h:00"), @class = "form-control", @size = "16", @readOnly = "readOnly" })
                             <span class="add-on input-group-addon"><span class="icon-remove glyphicon glyphicon-remove"></span></span>
                             <span class="add-on input-group-addon"><span class="icon-calendar glyphicon glyphicon-calendar"></span></span>
                         </div>
@@ -94,7 +95,7 @@
                     <div class="row">
                         <label class="col-md-2 control-label">结束时间</label>
                         <div class="input-append date form_date col-md-4" style="display: table;">
-                            @Html.TextBoxFor(m => m.endDate, new { @Value = Model.endDate == null ? "" : Model.endDate.Value.ToString("yyyy-MM-dd hh:mm:ss"), @class = "form-control", @size = "16", @readOnly = "readOnly" })
+                            @Html.TextBoxFor(m => m.endDate, new { @Value = Model.endDate == null ? "" : Model.endDate.Value.ToString("yyyy-MM-dd h:00"), @class = "form-control", @size = "16", @readOnly = "readOnly" })
 
                             <span class="add-on input-group-addon"><span class="icon-remove glyphicon glyphicon-remove"></span></span>
                             <span class="add-on input-group-addon"><span class="icon-calendar glyphicon glyphicon-calendar"></span></span>

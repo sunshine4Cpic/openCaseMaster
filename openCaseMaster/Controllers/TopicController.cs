@@ -284,7 +284,29 @@ namespace openCaseMaster.Controllers
         [HttpPost]
         public ActionResult editTask(editTaskModel tm)
         {
-            return null;
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            int userID = User.userID();
+            var tic = QC_DB.topic.First(t =>
+                t.ID == tm.ID && t.state != 0 && t.userID == userID);
+
+            tic.title = tm.title;
+            tic.body = tm.body;
+            
+            if(tic.node==101 && tic.M_publicTask!=null)
+            {
+                tic.M_publicTask.startDate = tm.startDate;
+                tic.M_publicTask.endDate = tm.endDate;
+            }
+            else if (tic.node == 102 && tic.openTestTask != null)
+            {
+                tic.openTestTask.startDate = tm.startDate;
+                tic.openTestTask.endDate = tm.endDate;
+            }
+
+            QC_DB.SaveChanges();
+
+            return RedirectToAction(tm.ID.ToString());
 
         }
 

@@ -171,8 +171,35 @@
 
         @if (Model.taskInfo != null)
         {
+
+
             <div id="reply" class="panel panel-default" style="border-top:1px dashed #ff6a00">
-                <div class="panel-heading"><b>测试app:</b><a href="#">@Model.taskInfo.appName</a></div>
+
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-3"><b>测试app:</b><a href="#">@Model.taskInfo.appName</a></div>
+
+
+                        <div class="col-md-8">
+                            <div class="project-expiration-wrap">
+                                <span class="glyphicon glyphicon-time"></span> <span> 任务时间仅剩：</span>
+                            </div>
+
+                            <div class="project-expiration-count-down clearfix">
+                                <div class="show-time-wrap">
+                                    <span class="show-time-number" id="left_day_ten">0</span>
+                                    <span class="show-time-number" id="left_day_one">3</span>
+                                    <span class="show-time-separate">天</span>
+                                </div>
+                                <div class="show-time-wrap">
+                                    <span class="show-time-number" id="left_hour_ten">1</span>
+                                    <span class="show-time-number" id="left_hour_one">3</span>
+                                    <span class="show-time-separate">小时</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="panel-body">
                     @Html.Partial("_taskScriptView", Model.taskInfo.taskScripts)
                 </div>
