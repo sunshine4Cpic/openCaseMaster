@@ -132,6 +132,78 @@ namespace System.Web.Mvc
                 return PaginationLi(pg, active);
             return "";
         }
+
+
+
+        public static HtmlString expirationDate(this HtmlHelper helper, DateTime? startDate, DateTime? endDate)
+        {
+            DateTime now = DateTime.Now;
+
+            StringBuilder sb = new StringBuilder();
+
+            if (now < startDate)
+            {
+                sb.Append("<div class=\"project-expiration-wrap\">");
+                sb.Append("<span class=\"glyphicon glyphicon-time\"></span> <span> 任务开始时间：" + startDate.Value.ToString("yyyy-MM-dd h:mm") + "</span>");
+                sb.Append("</div>");
+                return new HtmlString(sb.ToString());
+            }
+
+
+            if (endDate == null)//没有截至时间
+            {
+                 sb.Append("<div class=\"project-expiration-wrap\">");
+                sb.Append("<span class=\"glyphicon glyphicon-time\"></span> <span> 任务进行中</span>");
+                sb.Append("</div>");
+                return new HtmlString(sb.ToString());
+            }
+
+            if (endDate < now)
+            {
+                sb.Append("<div class=\"project-expiration-wrap\">");
+                sb.Append("<span class=\"glyphicon glyphicon-lock high\"></span> <span> 任务已关闭</span>");
+                sb.Append("</div>");
+                return new HtmlString(sb.ToString());
+            }
+
+            var ts =  endDate.Value.Subtract(now);
+
+            
+
+            sb.Append("<div class=\"project-expiration-wrap\">");
+            sb.Append("<span class=\"glyphicon glyphicon-time\"></span> <span> 任务时间仅剩：</span>");
+            sb.Append("</div>");
+            sb.Append("<div class=\"project-expiration-count-down clearfix\">");
+            sb.Append("<div class=\"show-time-wrap\">");
+
+            int day = ts.Days;
+
+            if (day < 10)//加0
+                sb.Append("<span class=\"show-time-number\" id=\"left_day_one\">0</span>");
+
+
+            foreach (var s in day.ToString())
+            {
+                sb.Append("<span class=\"show-time-number\" id=\"left_day_one\">" + s + "</span>");
+            }
+            
+          
+            sb.Append("<span class=\"show-time-separate\">天</span>");
+            sb.Append("</div>");
+            sb.Append("<div class=\"show-time-wrap\">");
+
+            var hour = ts.Hours;
+
+            sb.Append("<span class=\"show-time-number\" id=\"left_hour_ten\">" + hour / 10 + "</span>");
+            sb.Append("<span class=\"show-time-number\" id=\"left_hour_ten\">" + hour % 10 + "</span>");
+            sb.Append("<span class=\"show-time-separate\">小时</span>");
+            sb.Append("</div>");
+            sb.Append("</div>");
+
+           
+
+            return new HtmlString(sb.ToString());
+        }
         
     }
 

@@ -48,17 +48,25 @@
                                 <a title="@tmv.title" href="/Topic/@tmv.ID">@tmv.title</a>
                             </div>
                             <div class="info">
-                                <a class="node" href="/Topic/node/@tmv.nodeID">@tmv.nodeText</a>
+                                @if (tmv.nodeID == 101)
+                                {
+                                    <a class="node script" href="/Topic/node/@tmv.nodeID">@tmv.nodeText</a>
+                                }
+                                else if (tmv.nodeID == 102)
+                                {
+                                    <a class="node step" href="/Topic/node/@tmv.nodeID">@tmv.nodeText</a>
+                                }
+                                else
+                                {
+                                    <a class="node" href="/Topic/node/@tmv.nodeID">@tmv.nodeText</a>
+                                }
+
                                 •
-                                <a data-author="true" data-name="nana" href="/user/userInfo/@tmv.User.userName">@tmv.User.userName</a>
+                                <a href="/user/userInfo/@tmv.User.userName">@tmv.User.userName</a>
                                 <span class="hidden-mobile">
                                     于 <abbr class="timeago" title="@tmv.creatDate">@tmv.timeago</abbr>发布
                                 </span>
-                                •
-                                @if (@tmv.scriptCount > 0)
-                                {
-                                    <a class="state-false" title="测试案例" href="/Topic/@tmv.ID">@tmv.scriptCount 个案例</a>
-                                }
+
                             </div>
                         </div>
                         @if (tmv.replyCnt != 0)

@@ -187,12 +187,12 @@
     margin-top: 10px;
 }
 
-    .topics .topic .info .node {
+.node {
         padding: 1px 5px;
         color: #778087;
         text-decoration: none;
         background-color: #f5f5f5;
-    }
+}
 
     .topics .panel-body {
     padding: 0 15px;
@@ -251,6 +251,9 @@
     text-align: left;
     line-height: 100%;
     margin-bottom: 8px;
+}
+ .info a {
+    color: #666;
 }
 
 .topic-detail {
@@ -458,3 +461,17 @@ img.demoImg{
 {
     line-height: 24px;
 }
+
+.glyphicon.high
+{
+    color:#ff6a00;
+}
+/*
+.node.script{
+    color: #337ab7;
+}
+
+
+.node.step{
+    color: #FF8302;
+}*/

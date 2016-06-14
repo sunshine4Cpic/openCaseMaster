@@ -139,11 +139,11 @@
                 {
                     if (Model.power == 0)
                     {
-                        <a class="suggest" power="100" href="/topic/suggest/@Model.ID"><i class="glyphicon glyphicon-star-empty" style="color:#ff6a00"></i><span>置顶</span></a>
+                        <a class="suggest" power="100" href="/topic/suggest/@Model.ID"><i class="glyphicon glyphicon-star-empty high"></i><span>置顶</span></a>
                     }
                     else
                     {
-                        <a class="suggest" power="0" href="/topic/suggest/@Model.ID"><i class="glyphicon glyphicon-star" style="color:#ff6a00"></i><span>取消置顶</span></a>
+                        <a class="suggest" power="0" href="/topic/suggest/@Model.ID"><i class="glyphicon glyphicon-star high"></i><span>取消置顶</span></a>
                     }
                 }
                 @if (Model.User.ID == HttpContext.Current.User.userID())
@@ -181,22 +181,7 @@
 
 
                         <div class="col-md-8">
-                            <div class="project-expiration-wrap">
-                                <span class="glyphicon glyphicon-time"></span> <span> 任务时间仅剩：</span>
-                            </div>
-
-                            <div class="project-expiration-count-down clearfix">
-                                <div class="show-time-wrap">
-                                    <span class="show-time-number" id="left_day_ten">0</span>
-                                    <span class="show-time-number" id="left_day_one">3</span>
-                                    <span class="show-time-separate">天</span>
-                                </div>
-                                <div class="show-time-wrap">
-                                    <span class="show-time-number" id="left_hour_ten">1</span>
-                                    <span class="show-time-number" id="left_hour_one">3</span>
-                                    <span class="show-time-separate">小时</span>
-                                </div>
-                            </div>
+                            @Html.expirationDate(Model.taskInfo.startDate, Model.taskInfo.endDate)
                         </div>
                     </div>
                 </div>
@@ -211,7 +196,17 @@
         {
 
             <div id="reply" class="panel panel-default" style="border-top:1px dashed #ff6a00">
-                <div class="panel-heading"><b>测试app:</b><a href="#">@Model.openTaskInfo.appName</a></div>
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-3"><b>测试app:</b><a href="#">@Model.openTaskInfo.appName</a></div>
+
+
+                        <div class="col-md-8">
+                            @Html.expirationDate(Model.openTaskInfo.startDate, Model.openTaskInfo.endDate)
+                        </div>
+                    </div>
+
+                </div>
                 <div class="panel-body">
                     @Html.Partial("_taskStepView", Model.openTaskInfo.steps)
                 </div>

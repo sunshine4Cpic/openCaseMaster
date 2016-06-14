@@ -73,12 +73,12 @@ namespace openCaseApi.Controllers
 
 
 
-            var ss = from t in tps.M_publicTask.M_publicTaskScript
+            var ss = (from t in tps.M_publicTask.M_publicTaskScript
                      select new
                      {
                          ID = t.ID,
                          title = t.title
-                     };
+                     }).ToList();
 
             return Ok(ss);
 

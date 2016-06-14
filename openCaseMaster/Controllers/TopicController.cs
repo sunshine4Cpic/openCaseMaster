@@ -36,7 +36,8 @@ namespace openCaseMaster.Controllers
                           nodeID = t.node,
                           User = new topicUserModel { ID = t.userID, userName=t.admin_user.Username, Name = t.admin_user.Name, Avatar = t.admin_user.Avatar },
                           creatDate = t.creatDate,
-                          scriptCount = t.M_publicTask.M_publicTaskScript.Count,
+                          //scriptCount = t.M_publicTask.M_publicTaskScript.Count,
+                          //stepCount = t.openTestTask.openTestStep.Count,
                           replyCnt = t.topicReply.Count,
                           power = t.power
                       };
@@ -72,7 +73,7 @@ namespace openCaseMaster.Controllers
                           nodeID = t.node,
                           User = new topicUserModel { ID = t.userID, userName = t.admin_user.Username, Name = t.admin_user.Name, Avatar = t.admin_user.Avatar },
                           creatDate = t.creatDate,
-                          scriptCount = t.M_publicTask.M_publicTaskScript.Count,
+                          //scriptCount = t.M_publicTask.M_publicTaskScript.Count,
                           replyCnt = t.topicReply.Count
                       };
 

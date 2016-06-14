@@ -146,7 +146,9 @@ namespace openCaseMaster.ViewModels
         }
 
 
-        public int scriptCount { get; set; }
+        //public int scriptCount { get; set; }
+
+        //public int stepCount { get; set; }
 
         public string title { get; set; }
 
