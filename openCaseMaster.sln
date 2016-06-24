@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openCaseMaster", "openCaseM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openCaseApi", "openCaseApi\openCaseApi.csproj", "{156BF4A1-299C-4832-A263-77FA1BE3D5B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openCaseApiTest", "openCaseApiTest\openCaseApiTest.csproj", "{407B56B2-BF6B-4D65-95D3-0029557528C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{156BF4A1-299C-4832-A263-77FA1BE3D5B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{156BF4A1-299C-4832-A263-77FA1BE3D5B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{156BF4A1-299C-4832-A263-77FA1BE3D5B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{407B56B2-BF6B-4D65-95D3-0029557528C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{407B56B2-BF6B-4D65-95D3-0029557528C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{407B56B2-BF6B-4D65-95D3-0029557528C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{407B56B2-BF6B-4D65-95D3-0029557528C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

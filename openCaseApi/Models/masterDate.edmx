@@ -18,7 +18,7 @@
           <Property Name="GreatDate" Type="datetime" />
           <Property Name="LastDate" Type="datetime" />
           <Property Name="Type" Type="int" />
-          <Property Name="Avatar" Type="nvarchar" MaxLength="20" />
+          <Property Name="Avatar" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="M_application">
           <Key>
@@ -35,9 +35,10 @@
         </EntityType>
         <EntityType Name="M_publicDevice">
           <Key>
-            <PropertyRef Name="IMEI" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="IMEI" Type="bigint" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IMEI" Type="int" Nullable="false" />
           <Property Name="system" Type="int" Nullable="false" />
           <Property Name="version" Type="nvarchar" MaxLength="10" />
           <Property Name="state" Type="int" />
@@ -56,7 +57,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IMEI" Type="bigint" Nullable="false" />
+          <Property Name="deviceID" Type="int" Nullable="false" />
           <Property Name="result" Type="xml" Nullable="false" />
           <Property Name="creatDate" Type="datetime" Nullable="false" />
           <Property Name="state" Type="int" />
@@ -71,6 +72,35 @@
           <Property Name="script" Type="xml" />
           <Property Name="taskID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="openTestResult">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="stepID" Type="int" Nullable="false" />
+          <Property Name="deviceID" Type="int" Nullable="false" />
+          <Property Name="stepImg" Type="nchar" MaxLength="50" />
+          <Property Name="describe" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="openTestStep">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="taskID" Type="int" Nullable="false" />
+          <Property Name="stepSort" Type="int" Nullable="false" />
+          <Property Name="demoImg" Type="nchar" MaxLength="50" />
+          <Property Name="describe" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="openTestTask">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="startDate" Type="datetime" />
+          <Property Name="endDate" Type="datetime" />
+          <Property Name="appID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="project">
           <Key>
             <PropertyRef Name="ID" />
@@ -79,15 +109,6 @@
           <Property Name="Pname" Type="nvarchar" MaxLength="50" />
           <Property Name="zidonghua" Type="bit" />
           <Property Name="userID" Type="int" />
-        </EntityType>
-        <EntityType Name="project_app">
-          <Key>
-            <PropertyRef Name="appID" />
-            <PropertyRef Name="PID" />
-          </Key>
-          <Property Name="appID" Type="int" Nullable="false" />
-          <Property Name="PID" Type="int" Nullable="false" />
-          <Property Name="usable" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="topic">
           <Key>
@@ -100,6 +121,8 @@
           <Property Name="node" Type="int" Nullable="false" />
           <Property Name="state" Type="int" />
           <Property Name="creatDate" Type="datetime" Nullable="false" />
+          <Property Name="replys" Type="int" Nullable="false" />
+          <Property Name="power" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="topicReply">
           <Key>
@@ -111,6 +134,7 @@
           <Property Name="userID" Type="int" Nullable="false" />
           <Property Name="creatDate" Type="datetime" Nullable="false" />
           <Property Name="state" Type="int" />
+          <Property Name="floor" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_M_publicTask_ID">
           <End Role="topic" Type="Self.topic" Multiplicity="1" />
@@ -124,15 +148,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_M_publicTaskResult_IMEI">
+        <Association Name="FK_M_publicTaskResult_deviceID">
           <End Role="M_publicDevice" Type="Self.M_publicDevice" Multiplicity="1" />
           <End Role="M_publicTaskResult" Type="Self.M_publicTaskResult" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="M_publicDevice">
-              <PropertyRef Name="IMEI" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="M_publicTaskResult">
-              <PropertyRef Name="IMEI" />
+              <PropertyRef Name="deviceID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -172,27 +196,63 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_project_app_appID">
+        <Association Name="FK_openTestResult_deviceID">
+          <End Role="M_publicDevice" Type="Self.M_publicDevice" Multiplicity="1" />
+          <End Role="openTestResult" Type="Self.openTestResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_publicDevice">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="openTestResult">
+              <PropertyRef Name="deviceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_openTestResult_stepID">
+          <End Role="openTestStep" Type="Self.openTestStep" Multiplicity="1" />
+          <End Role="openTestResult" Type="Self.openTestResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="openTestStep">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="openTestResult">
+              <PropertyRef Name="stepID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_openTestScript_taskID">
+          <End Role="openTestTask" Type="Self.openTestTask" Multiplicity="1" />
+          <End Role="openTestStep" Type="Self.openTestStep" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="openTestTask">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="openTestStep">
+              <PropertyRef Name="taskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_openTestTask_appID">
           <End Role="M_application" Type="Self.M_application" Multiplicity="1" />
-          <End Role="project_app" Type="Self.project_app" Multiplicity="*" />
+          <End Role="openTestTask" Type="Self.openTestTask" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="M_application">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="project_app">
+            <Dependent Role="openTestTask">
               <PropertyRef Name="appID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_project_app_PID">
-          <End Role="project" Type="Self.project" Multiplicity="1" />
-          <End Role="project_app" Type="Self.project_app" Multiplicity="*" />
+        <Association Name="FK_openTestTask_ID">
+          <End Role="topic" Type="Self.topic" Multiplicity="1" />
+          <End Role="openTestTask" Type="Self.openTestTask" Multiplicity="0..1" />
           <ReferentialConstraint>
-            <Principal Role="project">
+            <Principal Role="topic">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="project_app">
-              <PropertyRef Name="PID" />
+            <Dependent Role="openTestTask">
+              <PropertyRef Name="ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -251,15 +311,17 @@
           <EntitySet Name="M_publicTask" EntityType="Self.M_publicTask" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_publicTaskResult" EntityType="Self.M_publicTaskResult" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_publicTaskScript" EntityType="Self.M_publicTaskScript" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="openTestResult" EntityType="Self.openTestResult" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="openTestStep" EntityType="Self.openTestStep" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="openTestTask" EntityType="Self.openTestTask" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project" EntityType="Self.project" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="project_app" EntityType="Self.project_app" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="topic" EntityType="Self.topic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="topicReply" EntityType="Self.topicReply" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_M_publicTask_ID" Association="Self.FK_M_publicTask_ID">
             <End Role="topic" EntitySet="topic" />
             <End Role="M_publicTask" EntitySet="M_publicTask" />
           </AssociationSet>
-          <AssociationSet Name="FK_M_publicTaskResult_IMEI" Association="Self.FK_M_publicTaskResult_IMEI">
+          <AssociationSet Name="FK_M_publicTaskResult_deviceID" Association="Self.FK_M_publicTaskResult_deviceID">
             <End Role="M_publicDevice" EntitySet="M_publicDevice" />
             <End Role="M_publicTaskResult" EntitySet="M_publicTaskResult" />
           </AssociationSet>
@@ -275,13 +337,25 @@
             <End Role="M_application" EntitySet="M_application" />
             <End Role="M_publicTask" EntitySet="M_publicTask" />
           </AssociationSet>
-          <AssociationSet Name="FK_project_app_appID" Association="Self.FK_project_app_appID">
-            <End Role="M_application" EntitySet="M_application" />
-            <End Role="project_app" EntitySet="project_app" />
+          <AssociationSet Name="FK_openTestResult_deviceID" Association="Self.FK_openTestResult_deviceID">
+            <End Role="M_publicDevice" EntitySet="M_publicDevice" />
+            <End Role="openTestResult" EntitySet="openTestResult" />
           </AssociationSet>
-          <AssociationSet Name="FK_project_app_PID" Association="Self.FK_project_app_PID">
-            <End Role="project" EntitySet="project" />
-            <End Role="project_app" EntitySet="project_app" />
+          <AssociationSet Name="FK_openTestResult_stepID" Association="Self.FK_openTestResult_stepID">
+            <End Role="openTestStep" EntitySet="openTestStep" />
+            <End Role="openTestResult" EntitySet="openTestResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_openTestScript_taskID" Association="Self.FK_openTestScript_taskID">
+            <End Role="openTestTask" EntitySet="openTestTask" />
+            <End Role="openTestStep" EntitySet="openTestStep" />
+          </AssociationSet>
+          <AssociationSet Name="FK_openTestTask_appID" Association="Self.FK_openTestTask_appID">
+            <End Role="M_application" EntitySet="M_application" />
+            <End Role="openTestTask" EntitySet="openTestTask" />
+          </AssociationSet>
+          <AssociationSet Name="FK_openTestTask_ID" Association="Self.FK_openTestTask_ID">
+            <End Role="topic" EntitySet="topic" />
+            <End Role="openTestTask" EntitySet="openTestTask" />
           </AssociationSet>
           <AssociationSet Name="FK_project_userID" Association="Self.FK_project_userID">
             <End Role="admin_user" EntitySet="admin_user" />
@@ -323,14 +397,11 @@
           <EntitySet Name="M_publicTask" EntityType="MasterModel.M_publicTask" />
           <EntitySet Name="M_publicTaskResult" EntityType="MasterModel.M_publicTaskResult" />
           <EntitySet Name="M_publicTaskScript" EntityType="MasterModel.M_publicTaskScript" />
-          <EntitySet Name="project" EntityType="MasterModel.project" />
-          <EntitySet Name="project_app" EntityType="MasterModel.project_app" />
+          <EntitySet Name="openTestResult" EntityType="MasterModel.openTestResult" />
+          <EntitySet Name="openTestStep" EntityType="MasterModel.openTestStep" />
+          <EntitySet Name="openTestTask" EntityType="MasterModel.openTestTask" />
           <EntitySet Name="topic" EntityType="MasterModel.topic" />
           <EntitySet Name="topicReply" EntityType="MasterModel.topicReply" />
-          <AssociationSet Name="FK_project_userID" Association="MasterModel.FK_project_userID">
-            <End Role="admin_user" EntitySet="admin_user" />
-            <End Role="project" EntitySet="project" />
-          </AssociationSet>
           <AssociationSet Name="FK_topic_userID" Association="MasterModel.FK_topic_userID">
             <End Role="admin_user" EntitySet="admin_user" />
             <End Role="topic" EntitySet="topic" />
@@ -343,13 +414,17 @@
             <End Role="M_application" EntitySet="M_application" />
             <End Role="M_publicTask" EntitySet="M_publicTask" />
           </AssociationSet>
-          <AssociationSet Name="FK_project_app_appID" Association="MasterModel.FK_project_app_appID">
+          <AssociationSet Name="FK_openTestTask_appID" Association="MasterModel.FK_openTestTask_appID">
             <End Role="M_application" EntitySet="M_application" />
-            <End Role="project_app" EntitySet="project_app" />
+            <End Role="openTestTask" EntitySet="openTestTask" />
           </AssociationSet>
-          <AssociationSet Name="FK_M_publicTaskResult_IMEI" Association="MasterModel.FK_M_publicTaskResult_IMEI">
+          <AssociationSet Name="FK_M_publicTaskResult_deviceID" Association="MasterModel.FK_M_publicTaskResult_deviceID">
             <End Role="M_publicDevice" EntitySet="M_publicDevice" />
             <End Role="M_publicTaskResult" EntitySet="M_publicTaskResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_openTestResult_deviceID" Association="MasterModel.FK_openTestResult_deviceID">
+            <End Role="M_publicDevice" EntitySet="M_publicDevice" />
+            <End Role="openTestResult" EntitySet="openTestResult" />
           </AssociationSet>
           <AssociationSet Name="FK_M_publicTask_ID" Association="MasterModel.FK_M_publicTask_ID">
             <End Role="topic" EntitySet="topic" />
@@ -363,13 +438,26 @@
             <End Role="M_publicTaskScript" EntitySet="M_publicTaskScript" />
             <End Role="M_publicTaskResult" EntitySet="M_publicTaskResult" />
           </AssociationSet>
-          <AssociationSet Name="FK_project_app_PID" Association="MasterModel.FK_project_app_PID">
-            <End Role="project" EntitySet="project" />
-            <End Role="project_app" EntitySet="project_app" />
+          <AssociationSet Name="FK_openTestResult_stepID" Association="MasterModel.FK_openTestResult_stepID">
+            <End Role="openTestStep" EntitySet="openTestStep" />
+            <End Role="openTestResult" EntitySet="openTestResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_openTestScript_taskID" Association="MasterModel.FK_openTestScript_taskID">
+            <End Role="openTestTask" EntitySet="openTestTask" />
+            <End Role="openTestStep" EntitySet="openTestStep" />
+          </AssociationSet>
+          <AssociationSet Name="FK_openTestTask_ID" Association="MasterModel.FK_openTestTask_ID">
+            <End Role="topic" EntitySet="topic" />
+            <End Role="openTestTask" EntitySet="openTestTask" />
           </AssociationSet>
           <AssociationSet Name="FK_topicReply_topicID" Association="MasterModel.FK_topicReply_topicID">
             <End Role="topic" EntitySet="topic" />
             <End Role="topicReply" EntitySet="topicReply" />
+          </AssociationSet>
+          <EntitySet Name="project" EntityType="MasterModel.project" />
+          <AssociationSet Name="FK_project_userID" Association="MasterModel.FK_project_userID">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="project" EntitySet="project" />
           </AssociationSet>
         </EntityContainer>
         <ComplexType Name="M_ContainUserStepCase_Result">
@@ -394,10 +482,10 @@
           <Property Name="GreatDate" Type="DateTime" Precision="3" />
           <Property Name="LastDate" Type="DateTime" Precision="3" />
           <Property Name="Type" Type="Int32" />
-          <Property Name="Avatar" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="project" Relationship="MasterModel.FK_project_userID" FromRole="admin_user" ToRole="project" />
+          <Property Name="Avatar" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="topic" Relationship="MasterModel.FK_topic_userID" FromRole="admin_user" ToRole="topic" />
           <NavigationProperty Name="topicReply" Relationship="MasterModel.FK_topicReply_userID" FromRole="admin_user" ToRole="topicReply" />
+          <NavigationProperty Name="project" Relationship="MasterModel.FK_project_userID" FromRole="admin_user" ToRole="project" />
         </EntityType>
         <EntityType Name="M_application">
           <Key>
@@ -412,17 +500,19 @@
           <Property Name="package2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="isClear" Type="Boolean" />
           <NavigationProperty Name="M_publicTask" Relationship="MasterModel.FK_M_publicTest_appID" FromRole="M_application" ToRole="M_publicTask" />
-          <NavigationProperty Name="project_app" Relationship="MasterModel.FK_project_app_appID" FromRole="M_application" ToRole="project_app" />
+          <NavigationProperty Name="openTestTask" Relationship="MasterModel.FK_openTestTask_appID" FromRole="M_application" ToRole="openTestTask" />
         </EntityType>
         <EntityType Name="M_publicDevice">
           <Key>
-            <PropertyRef Name="IMEI" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="IMEI" Type="Int64" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IMEI" Type="Int32" Nullable="false" />
           <Property Name="system" Type="Int32" Nullable="false" />
           <Property Name="version" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="state" Type="Int32" />
-          <NavigationProperty Name="M_publicTaskResult" Relationship="MasterModel.FK_M_publicTaskResult_IMEI" FromRole="M_publicDevice" ToRole="M_publicTaskResult" />
+          <NavigationProperty Name="M_publicTaskResult" Relationship="MasterModel.FK_M_publicTaskResult_deviceID" FromRole="M_publicDevice" ToRole="M_publicTaskResult" />
+          <NavigationProperty Name="openTestResult" Relationship="MasterModel.FK_openTestResult_deviceID" FromRole="M_publicDevice" ToRole="openTestResult" />
         </EntityType>
         <EntityType Name="M_publicTask">
           <Key>
@@ -441,12 +531,12 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IMEI" Type="Int64" Nullable="false" />
+          <Property Name="deviceID" Type="Int32" Nullable="false" />
           <Property Name="result" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="state" Type="Int32" />
           <Property Name="scriptID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="M_publicDevice" Relationship="MasterModel.FK_M_publicTaskResult_IMEI" FromRole="M_publicTaskResult" ToRole="M_publicDevice" />
+          <NavigationProperty Name="M_publicDevice" Relationship="MasterModel.FK_M_publicTaskResult_deviceID" FromRole="M_publicTaskResult" ToRole="M_publicDevice" />
           <NavigationProperty Name="M_publicTaskScript" Relationship="MasterModel.FK_M_publicTaskResult_scriptID" FromRole="M_publicTaskResult" ToRole="M_publicTaskScript" />
         </EntityType>
         <EntityType Name="M_publicTaskScript">
@@ -460,27 +550,41 @@
           <NavigationProperty Name="M_publicTask" Relationship="MasterModel.FK_M_publicTaskScript_taskID" FromRole="M_publicTaskScript" ToRole="M_publicTask" />
           <NavigationProperty Name="M_publicTaskResult" Relationship="MasterModel.FK_M_publicTaskResult_scriptID" FromRole="M_publicTaskScript" ToRole="M_publicTaskResult" />
         </EntityType>
-        <EntityType Name="project">
+        <EntityType Name="openTestResult">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Pname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="zidonghua" Type="Boolean" />
-          <Property Name="userID" Type="Int32" />
-          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_project_userID" FromRole="project" ToRole="admin_user" />
-          <NavigationProperty Name="project_app" Relationship="MasterModel.FK_project_app_PID" FromRole="project" ToRole="project_app" />
+          <Property Name="stepID" Type="Int32" Nullable="false" />
+          <Property Name="deviceID" Type="Int32" Nullable="false" />
+          <Property Name="stepImg" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="describe" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="M_publicDevice" Relationship="MasterModel.FK_openTestResult_deviceID" FromRole="openTestResult" ToRole="M_publicDevice" />
+          <NavigationProperty Name="openTestStep" Relationship="MasterModel.FK_openTestResult_stepID" FromRole="openTestResult" ToRole="openTestStep" />
         </EntityType>
-        <EntityType Name="project_app">
+        <EntityType Name="openTestStep">
           <Key>
-            <PropertyRef Name="appID" />
-            <PropertyRef Name="PID" />
+            <PropertyRef Name="ID" />
           </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="taskID" Type="Int32" Nullable="false" />
+          <Property Name="stepSort" Type="Int32" Nullable="false" />
+          <Property Name="demoImg" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="describe" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="openTestResult" Relationship="MasterModel.FK_openTestResult_stepID" FromRole="openTestStep" ToRole="openTestResult" />
+          <NavigationProperty Name="openTestTask" Relationship="MasterModel.FK_openTestScript_taskID" FromRole="openTestStep" ToRole="openTestTask" />
+        </EntityType>
+        <EntityType Name="openTestTask">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="startDate" Type="DateTime" Precision="3" />
+          <Property Name="endDate" Type="DateTime" Precision="3" />
           <Property Name="appID" Type="Int32" Nullable="false" />
-          <Property Name="PID" Type="Int32" Nullable="false" />
-          <Property Name="usable" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="M_application" Relationship="MasterModel.FK_project_app_appID" FromRole="project_app" ToRole="M_application" />
-          <NavigationProperty Name="project" Relationship="MasterModel.FK_project_app_PID" FromRole="project_app" ToRole="project" />
+          <NavigationProperty Name="M_application" Relationship="MasterModel.FK_openTestTask_appID" FromRole="openTestTask" ToRole="M_application" />
+          <NavigationProperty Name="openTestStep" Relationship="MasterModel.FK_openTestScript_taskID" FromRole="openTestTask" ToRole="openTestStep" />
+          <NavigationProperty Name="topic" Relationship="MasterModel.FK_openTestTask_ID" FromRole="openTestTask" ToRole="topic" />
         </EntityType>
         <EntityType Name="topic">
           <Key>
@@ -493,8 +597,11 @@
           <Property Name="node" Type="Int32" Nullable="false" />
           <Property Name="state" Type="Int32" />
           <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="replys" Type="Int32" Nullable="false" />
+          <Property Name="power" Type="Int32" Nullable="false" />
           <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_topic_userID" FromRole="topic" ToRole="admin_user" />
           <NavigationProperty Name="M_publicTask" Relationship="MasterModel.FK_M_publicTask_ID" FromRole="topic" ToRole="M_publicTask" />
+          <NavigationProperty Name="openTestTask" Relationship="MasterModel.FK_openTestTask_ID" FromRole="topic" ToRole="openTestTask" />
           <NavigationProperty Name="topicReply" Relationship="MasterModel.FK_topicReply_topicID" FromRole="topic" ToRole="topicReply" />
         </EntityType>
         <EntityType Name="topicReply">
@@ -507,21 +614,10 @@
           <Property Name="userID" Type="Int32" Nullable="false" />
           <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="state" Type="Int32" />
+          <Property Name="floor" Type="Int32" Nullable="false" />
           <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_topicReply_userID" FromRole="topicReply" ToRole="admin_user" />
           <NavigationProperty Name="topic" Relationship="MasterModel.FK_topicReply_topicID" FromRole="topicReply" ToRole="topic" />
         </EntityType>
-        <Association Name="FK_project_userID">
-          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="0..1" />
-          <End Type="MasterModel.project" Role="project" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="admin_user">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="project">
-              <PropertyRef Name="userID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_topic_userID">
           <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="1" />
           <End Type="MasterModel.topic" Role="topic" Multiplicity="*" />
@@ -558,27 +654,39 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_project_app_appID">
+        <Association Name="FK_openTestTask_appID">
           <End Type="MasterModel.M_application" Role="M_application" Multiplicity="1" />
-          <End Type="MasterModel.project_app" Role="project_app" Multiplicity="*" />
+          <End Type="MasterModel.openTestTask" Role="openTestTask" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="M_application">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="project_app">
+            <Dependent Role="openTestTask">
               <PropertyRef Name="appID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_M_publicTaskResult_IMEI">
+        <Association Name="FK_M_publicTaskResult_deviceID">
           <End Type="MasterModel.M_publicDevice" Role="M_publicDevice" Multiplicity="1" />
           <End Type="MasterModel.M_publicTaskResult" Role="M_publicTaskResult" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="M_publicDevice">
-              <PropertyRef Name="IMEI" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="M_publicTaskResult">
-              <PropertyRef Name="IMEI" />
+              <PropertyRef Name="deviceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_openTestResult_deviceID">
+          <End Type="MasterModel.M_publicDevice" Role="M_publicDevice" Multiplicity="1" />
+          <End Type="MasterModel.openTestResult" Role="openTestResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_publicDevice">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="openTestResult">
+              <PropertyRef Name="deviceID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -618,15 +726,39 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_project_app_PID">
-          <End Type="MasterModel.project" Role="project" Multiplicity="1" />
-          <End Type="MasterModel.project_app" Role="project_app" Multiplicity="*" />
+        <Association Name="FK_openTestResult_stepID">
+          <End Type="MasterModel.openTestStep" Role="openTestStep" Multiplicity="1" />
+          <End Type="MasterModel.openTestResult" Role="openTestResult" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="project">
+            <Principal Role="openTestStep">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="project_app">
-              <PropertyRef Name="PID" />
+            <Dependent Role="openTestResult">
+              <PropertyRef Name="stepID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_openTestScript_taskID">
+          <End Type="MasterModel.openTestTask" Role="openTestTask" Multiplicity="1" />
+          <End Type="MasterModel.openTestStep" Role="openTestStep" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="openTestTask">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="openTestStep">
+              <PropertyRef Name="taskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_openTestTask_ID">
+          <End Type="MasterModel.topic" Role="topic" Multiplicity="1" />
+          <End Type="MasterModel.openTestTask" Role="openTestTask" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="topic">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="openTestTask">
+              <PropertyRef Name="ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -639,6 +771,28 @@
             </Principal>
             <Dependent Role="topicReply">
               <PropertyRef Name="topicID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="project">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Pname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="zidonghua" Type="Boolean" />
+          <Property Name="userID" Type="Int32" />
+          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_project_userID" FromRole="project" ToRole="admin_user" />
+        </EntityType>
+        <Association Name="FK_project_userID">
+          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="0..1" />
+          <End Type="MasterModel.project" Role="project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin_user">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="project">
+              <PropertyRef Name="userID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -685,6 +839,7 @@
                 <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="system" ColumnName="system" />
                 <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -705,7 +860,7 @@
                 <ScalarProperty Name="state" ColumnName="state" />
                 <ScalarProperty Name="creatDate" ColumnName="creatDate" />
                 <ScalarProperty Name="result" ColumnName="result" />
-                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="deviceID" ColumnName="deviceID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -720,28 +875,43 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="project">
-            <EntityTypeMapping TypeName="MasterModel.project">
-              <MappingFragment StoreEntitySet="project">
-                <ScalarProperty Name="userID" ColumnName="userID" />
-                <ScalarProperty Name="zidonghua" ColumnName="zidonghua" />
-                <ScalarProperty Name="Pname" ColumnName="Pname" />
+          <EntitySetMapping Name="openTestResult">
+            <EntityTypeMapping TypeName="MasterModel.openTestResult">
+              <MappingFragment StoreEntitySet="openTestResult">
+                <ScalarProperty Name="describe" ColumnName="describe" />
+                <ScalarProperty Name="stepImg" ColumnName="stepImg" />
+                <ScalarProperty Name="deviceID" ColumnName="deviceID" />
+                <ScalarProperty Name="stepID" ColumnName="stepID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="project_app">
-            <EntityTypeMapping TypeName="MasterModel.project_app">
-              <MappingFragment StoreEntitySet="project_app">
-                <ScalarProperty Name="usable" ColumnName="usable" />
-                <ScalarProperty Name="PID" ColumnName="PID" />
+          <EntitySetMapping Name="openTestStep">
+            <EntityTypeMapping TypeName="MasterModel.openTestStep">
+              <MappingFragment StoreEntitySet="openTestStep">
+                <ScalarProperty Name="describe" ColumnName="describe" />
+                <ScalarProperty Name="demoImg" ColumnName="demoImg" />
+                <ScalarProperty Name="stepSort" ColumnName="stepSort" />
+                <ScalarProperty Name="taskID" ColumnName="taskID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="openTestTask">
+            <EntityTypeMapping TypeName="MasterModel.openTestTask">
+              <MappingFragment StoreEntitySet="openTestTask">
                 <ScalarProperty Name="appID" ColumnName="appID" />
+                <ScalarProperty Name="endDate" ColumnName="endDate" />
+                <ScalarProperty Name="startDate" ColumnName="startDate" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="topic">
             <EntityTypeMapping TypeName="MasterModel.topic">
               <MappingFragment StoreEntitySet="topic">
+                <ScalarProperty Name="power" ColumnName="power" />
+                <ScalarProperty Name="replys" ColumnName="replys" />
                 <ScalarProperty Name="creatDate" ColumnName="creatDate" />
                 <ScalarProperty Name="state" ColumnName="state" />
                 <ScalarProperty Name="node" ColumnName="node" />
@@ -755,11 +925,22 @@
           <EntitySetMapping Name="topicReply">
             <EntityTypeMapping TypeName="MasterModel.topicReply">
               <MappingFragment StoreEntitySet="topicReply">
+                <ScalarProperty Name="floor" ColumnName="floor" />
                 <ScalarProperty Name="state" ColumnName="state" />
                 <ScalarProperty Name="creatDate" ColumnName="creatDate" />
                 <ScalarProperty Name="userID" ColumnName="userID" />
                 <ScalarProperty Name="body" ColumnName="body" />
                 <ScalarProperty Name="topicID" ColumnName="topicID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="project">
+            <EntityTypeMapping TypeName="MasterModel.project">
+              <MappingFragment StoreEntitySet="project">
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="zidonghua" ColumnName="zidonghua" />
+                <ScalarProperty Name="Pname" ColumnName="Pname" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -10,15 +10,11 @@
 namespace openCaseApi.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class project
+    public partial class MonthReport_Result
     {
-        public int ID { get; set; }
+        public string Months { get; set; }
+        public Nullable<int> Cnt { get; set; }
         public string Pname { get; set; }
-        public Nullable<bool> zidonghua { get; set; }
-        public Nullable<int> userID { get; set; }
-    
-        public virtual admin_user admin_user { get; set; }
     }
 }

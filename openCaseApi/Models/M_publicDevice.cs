@@ -18,14 +18,18 @@ namespace openCaseApi.Models
         public M_publicDevice()
         {
             this.M_publicTaskResult = new HashSet<M_publicTaskResult>();
+            this.openTestResult = new HashSet<openTestResult>();
         }
     
-        public long IMEI { get; set; }
+        public int ID { get; set; }
+        public int IMEI { get; set; }
         public int system { get; set; }
         public string version { get; set; }
         public Nullable<int> state { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<M_publicTaskResult> M_publicTaskResult { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<openTestResult> openTestResult { get; set; }
     }
 }

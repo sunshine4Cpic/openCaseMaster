@@ -17,9 +17,9 @@ namespace openCaseApi.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public admin_user()
         {
-            this.project = new HashSet<project>();
             this.topic = new HashSet<topic>();
             this.topicReply = new HashSet<topicReply>();
+            this.project = new HashSet<project>();
         }
     
         public int ID { get; set; }
@@ -34,10 +34,10 @@ namespace openCaseApi.Models
         public string Avatar { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<project> project { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<topic> topic { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<topicReply> topicReply { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<project> project { get; set; }
     }
 }

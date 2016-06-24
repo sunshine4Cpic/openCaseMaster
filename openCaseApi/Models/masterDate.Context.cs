@@ -31,9 +31,11 @@ namespace openCaseApi.Models
         public virtual DbSet<M_publicTask> M_publicTask { get; set; }
         public virtual DbSet<M_publicTaskResult> M_publicTaskResult { get; set; }
         public virtual DbSet<M_publicTaskScript> M_publicTaskScript { get; set; }
-        public virtual DbSet<project> project { get; set; }
-        public virtual DbSet<project_app> project_app { get; set; }
+        public virtual DbSet<openTestResult> openTestResult { get; set; }
+        public virtual DbSet<openTestStep> openTestStep { get; set; }
+        public virtual DbSet<openTestTask> openTestTask { get; set; }
         public virtual DbSet<topic> topic { get; set; }
         public virtual DbSet<topicReply> topicReply { get; set; }
+        public virtual DbSet<project> project { get; set; }
     }
 }

@@ -25,7 +25,10 @@ namespace openCaseApi.Provider
             if (_refreshTokens == null)
                 _refreshTokens = new List<RefreshToken>();
             else
-                _refreshTokens.RemoveAll(t => t.ExpiresUtc < DateTime.Now);
+            {
+                _refreshTokens.RemoveAll(t => t.ExpiresUtc < DateTime.Now);//删除所有过期的token
+            }
+              
          
         }
 

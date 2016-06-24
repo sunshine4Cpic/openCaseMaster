@@ -38,8 +38,9 @@ namespace openCaseMaster.Controllers
         [HttpPost]
         public JsonResult uploadTaskScript()
         {
-
+            
             var stm = FileToStream();
+            
             if (stm != null)
             {
                 string originalName = Request["originalName"];
@@ -238,7 +239,7 @@ namespace openCaseMaster.Controllers
                 //文件没有分块
                 if (total <= 1)
                 {
-
+                   
                     if (uploadFile.ContentLength > 0)
                     {
                         stm = uploadFile.InputStream;

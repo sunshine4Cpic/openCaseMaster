@@ -57,7 +57,8 @@ namespace openCaseApi
             {
                 TokenEndpointPath = new PathString("/token"),  // 用于决定获取token的url   http://127.0.0.1/token
                 Provider = new OAuth2AuthorizationServerProvider(), // 生成和验证 access token
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),  // access token 过期时间
+                //AccessTokenExpireTimeSpan = TimeSpan.FromSeconds(10),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),//token过期时间
                 AllowInsecureHttp = true, // 是否允许不安全的链接，即用不用https
                 RefreshTokenProvider = new OAuth2RefreshTokenProvider(new RefreshTokenRepository())  // 生成和删除 refresh token
             };

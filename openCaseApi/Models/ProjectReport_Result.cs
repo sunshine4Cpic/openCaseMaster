@@ -10,15 +10,13 @@
 namespace openCaseApi.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class project_app
+    public partial class ProjectReport_Result
     {
-        public int appID { get; set; }
-        public int PID { get; set; }
-        public bool usable { get; set; }
-    
-        public virtual M_application M_application { get; set; }
-        public virtual project project { get; set; }
+        public Nullable<int> PID { get; set; }
+        public Nullable<int> caseCnt { get; set; }
+        public Nullable<int> testDemand { get; set; }
+        public Nullable<int> device { get; set; }
+        public string Pname { get; set; }
     }
 }

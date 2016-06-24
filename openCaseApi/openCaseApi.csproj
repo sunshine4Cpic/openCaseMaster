@@ -187,6 +187,7 @@
     <Compile Include="Controllers\scriptController.cs" />
     <Compile Include="Controllers\stepController.cs" />
     <Compile Include="Controllers\TopicController.cs" />
+    <Compile Include="Extensions\UserIdentity.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -208,7 +209,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Models\MonthReport_Result.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\M_application.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\M_ContainUserStepCase_Result.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\M_publicDevice.cs">
@@ -223,10 +230,19 @@
     <Compile Include="Models\M_publicTaskScript.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\openTestResult.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\openTestStep.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\openTestTask.cs">
+      <DependentUpon>masterDate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\project.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\project_app.cs">
+    <Compile Include="Models\ProjectReport_Result.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\topic.cs">
@@ -292,7 +308,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

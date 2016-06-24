@@ -22,11 +22,20 @@ namespace openCaseApi
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
+                //routeTemplate: "{controller}/{id}/{action}",
                 routeTemplate: "{controller}/{id}/{action}",
                 defaults: new { id = RouteParameter.Optional }
             );
             //var jsonFormatter = config.Formatters.OfType<JsonMediaTypeFormatter>().First();
             //jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+            //配置返回的时间类型数据格式  只针对json
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.Converters.Add(
+                new Newtonsoft.Json.Converters.IsoDateTimeConverter()
+                {
+                    DateTimeFormat = "yyyy-MM-dd hh:mm:ss"
+                }
+            );  
         }
     }
 }

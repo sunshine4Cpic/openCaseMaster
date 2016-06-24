@@ -33,12 +33,14 @@ namespace openCaseApi.Provider
             // 客户端认证没有用户登录，所以不需要 RefreshToken
             if (string.IsNullOrEmpty(context.Ticket.Identity.Name)) return;
 
-           
-            var clientId = context.OwinContext.Get<string>("as:client_id");
+
+            var clientId = context.OwinContext.Get<string>("client_id");
             if (string.IsNullOrWhiteSpace(clientId)) return;
 
-            var refreshTokenLifeTime = context.OwinContext.Get<string>("as:clientRefreshTokenLifeTime");
-            if (string.IsNullOrWhiteSpace(refreshTokenLifeTime)) return;
+            //var refreshTokenLifeTime = context.OwinContext.Get<string>("clientRefreshTokenLifeTime"); //过期时间
+            //if (string.IsNullOrWhiteSpace(refreshTokenLifeTime)) return;
+
+            var refreshTokenLifeTime = "0";
 
             #endregion
 
@@ -80,8 +82,8 @@ namespace openCaseApi.Provider
             if (refreshToken != null)
             {
                 // 不能过期
-                if (refreshToken.ExpiresUtc > DateTime.UtcNow)
-                    context.DeserializeTicket(refreshToken.ProtectedTicket);
+                //if (refreshToken.ExpiresUtc > DateTime.UtcNow)
+                context.DeserializeTicket(refreshToken.ProtectedTicket);
 
                 var result = await _refreshTokenRepository.Remove(context.Token);
             }

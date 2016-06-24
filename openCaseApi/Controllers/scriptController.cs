@@ -22,9 +22,10 @@ namespace openCaseApi.Controllers
             if (st == null)
                 return NotFound();
 
-            XElement xe = XElement.Parse(st.script);
+            //XElement xe = XElement.Parse(st.script);
 
-            return Ok(xe);
+
+            return Ok(st.script);
         }
 
 
