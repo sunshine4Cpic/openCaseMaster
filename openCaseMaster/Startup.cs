@@ -9,14 +9,18 @@ using Microsoft.AspNet.SignalR;
 
 namespace openCaseMaster
 {
-    public class Startup
+    public partial class Startup
     {
         public void Configuration(IAppBuilder app)
         {
+            //推送相关
             var userIdProvider = new MyUserFactory();
             GlobalHost.DependencyResolver.Register(typeof(IUserIdProvider), () => userIdProvider);
 
             app.MapSignalR();
+
+            //用户权限相关
+            ConfigureAuth(app);
         }
     }
 }

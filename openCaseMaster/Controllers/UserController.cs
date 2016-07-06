@@ -51,15 +51,26 @@ namespace openCaseMaster.Controllers
                 ModelState.AddModelError("", "用户名或密码错误。");
                 return View(model);
             }
-            string userRole = "user";
+
+
+            ClaimsIdentity _identity = new ClaimsIdentity("ApplicationCookie");
+            _identity.AddClaim(new Claim(ClaimTypes.Name, loginUser.Name));
+            _identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, loginUser.ID.ToString()));
+            _identity.AddClaim(new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ASP.NET Identity"));
+
+            _identity.AddClaim(new Claim("userName", loginUser.Username));
+            _identity.AddClaim(new Claim("Permission", loginUser.Permission));
+
+            _identity.AddClaim(new Claim(ClaimTypes.Role, "user"));
+            
             //设置权限组
             switch (loginUser.Type)
             {
                 case 1:
-                    userRole += ",admin";
+                    _identity.AddClaim(new Claim(ClaimTypes.Role, "admin"));
                     break;
                 case 5:
-                    userRole += ",tester";
+                    _identity.AddClaim(new Claim(ClaimTypes.Role, "tester"));
                     break;
                 case null:
                     //userRole = "guest";
@@ -69,42 +80,14 @@ namespace openCaseMaster.Controllers
             }
 
 
-            JObject userJ = new JObject();
-            userJ["ID"] = loginUser.ID;
-            userJ["userName"] = loginUser.Username;
-            userJ["Roles"] = userRole;
-            userJ["Permission"] = loginUser.Permission;
-
-
-
-
-
-            //创建身份验证票据 
-            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1,
-                                           loginUser.Name,
-                                           DateTime.Now,
-                                           DateTime.Now.AddHours(24),
-                                           true,
-                                           userJ.ToString(),//用户组暂不处理
-                //loginUser.Type.ToString(),//用户所属的角色字符串 
-                                           FormsAuthentication.FormsCookiePath);
-            //加密身份验证票据 
-            string hash = FormsAuthentication.Encrypt(ticket);
-
-
-            //创建要发送到客户端的cookie 
-            HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, hash);
-
-            if (ticket.IsPersistent)
-            {
-                cookie.Expires = ticket.Expiration;
-            }
-            //把准备好的cookie加入到响应流中 
-            Response.Cookies.Add(cookie);
             loginUser.LastDate = DateTime.Now;
             qc.SaveChanges();
 
+            
 
+            
+            HttpContext.GetOwinContext().Authentication.SignOut("ApplicationCookie");
+            HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties() { IsPersistent = true }, _identity);
 
             return RedirectToLocal(ReturnUrl);
 

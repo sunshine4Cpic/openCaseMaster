@@ -69,6 +69,7 @@ namespace openCaseApi.Provider
 
             var oAuthIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
             oAuthIdentity.AddClaim(new Claim(ClaimTypes.Name, Name));
+            
 
             if(loginUser.Type==1)
                 oAuthIdentity.AddClaim(new Claim(ClaimTypes.Role, "admin"));//管理员权限
