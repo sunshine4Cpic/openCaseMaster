@@ -86,4 +86,7 @@ namespace openCaseMaster
         public string userName { get; set; }
         public string Permission { get; set; }
     }
+
+
+
 }

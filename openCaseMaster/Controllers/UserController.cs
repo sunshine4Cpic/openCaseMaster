@@ -1,4 +1,5 @@
 ﻿using CaptchaMvc.Attributes;
+using Microsoft.Owin.Security;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using openCaseMaster.Models;
@@ -6,6 +7,8 @@ using openCaseMaster.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -34,6 +37,7 @@ namespace openCaseMaster.Controllers
         [ValidateAntiForgeryToken]//对应@Html.AntiForgeryToken()
         public ActionResult Login(LoginViewModel model, string ReturnUrl)
         {
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -63,7 +67,7 @@ namespace openCaseMaster.Controllers
                 default:
                     break;
             }
-            
+
 
             JObject userJ = new JObject();
             userJ["ID"] = loginUser.ID;
@@ -72,8 +76,8 @@ namespace openCaseMaster.Controllers
             userJ["Permission"] = loginUser.Permission;
 
 
-            
-    
+
+
 
             //创建身份验证票据 
             FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1,
@@ -82,12 +86,12 @@ namespace openCaseMaster.Controllers
                                            DateTime.Now.AddHours(24),
                                            true,
                                            userJ.ToString(),//用户组暂不处理
-                                           //loginUser.Type.ToString(),//用户所属的角色字符串 
+                //loginUser.Type.ToString(),//用户所属的角色字符串 
                                            FormsAuthentication.FormsCookiePath);
             //加密身份验证票据 
             string hash = FormsAuthentication.Encrypt(ticket);
 
-           
+
             //创建要发送到客户端的cookie 
             HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, hash);
 
@@ -102,11 +106,7 @@ namespace openCaseMaster.Controllers
 
 
 
-
-
             return RedirectToLocal(ReturnUrl);
-
-
 
         }
 

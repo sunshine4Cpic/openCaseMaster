@@ -121,7 +121,13 @@ namespace openCaseMaster.ViewModels
 
         public int nodeID { get; set; }
 
-        public string nodeText { get { return topicHelper.nodes[nodeID]; } }
+        public string nodeText { 
+            get { 
+                string outStr = "未知";  
+                topicHelper.nodes.TryGetValue(nodeID, out outStr);
+                return outStr;
+            } 
+        }
 
         
         public DateTime creatDate { get; set; }
