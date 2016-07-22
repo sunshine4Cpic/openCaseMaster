@@ -27,7 +27,6 @@ namespace openCaseMaster.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<admin_log> admin_log { get; set; }
         public virtual DbSet<admin_user> admin_user { get; set; }
         public virtual DbSet<caseFramework> caseFramework { get; set; }
         public virtual DbSet<Framework4Project> Framework4Project { get; set; }

@@ -12,9 +12,14 @@ namespace openCaseApi.Controllers
 {
     public class TopicController : ApiController
     {
+        /// <summary>
+        /// 获取topic列表
+        /// </summary>
+        /// <param name="node">节点ID</param>
+        /// <param name="page">分页</param>
         [HttpGet]
-        [Route("Topic")]
-        public IHttpActionResult Get(int node = 0, int page = 1)
+        [Route("api/Topic")]
+        public List<topicModel_prev> Get(int node = 0, int page = 1)
         {
 
             QCTESTEntities db = new QCTESTEntities();
@@ -44,13 +49,16 @@ namespace openCaseApi.Controllers
                 throw new HttpResponseException(HttpStatusCode.NoContent);
             
 
-            return Ok(v);
+            return v;
         }
 
-
-        [Route("Topic/{id:int}")]
+        /// <summary>
+        /// 获取topic 内容
+        /// </summary>
+        /// <param name="id">topicID</param>
+        [Route("api/Topic/{id:int}")]
         [HttpGet]
-        public IHttpActionResult Body(int id)
+        public topicModel Body(int id)
         {
             QCTESTEntities db = new QCTESTEntities();
 
@@ -68,15 +76,19 @@ namespace openCaseApi.Controllers
                        }).FirstOrDefault();
 
             if (tm == null)
-                return NotFound();
+                throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return Ok(tm);
+            return tm;
         }
 
+        /// <summary>
+        /// 发贴
+        /// </summary>
+        /// <param name="model"></param>
         [Authorize]
         [HttpPost]
-        [Route("Topic/Add")]
-        public IHttpActionResult Add([FromBody] topicAddModel model)
+        [Route("api/Topic/Add")]
+        public int Add([FromBody] topicAddModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -97,13 +109,19 @@ namespace openCaseApi.Controllers
             db.topic.Add(tc);
             db.SaveChanges();
 
-            return Ok(tc.ID);
+            return tc.ID;
         }
 
 
+
+        /// <summary>
+        /// 回复topic
+        /// </summary>
+        /// <param name="id">topicID</param>
+        /// <param name="model"></param>
         [Authorize]
         [HttpPost]
-        public IHttpActionResult Reply(int id, [FromBody]replyAddModel model)
+        public int Reply(int id, [FromBody]replyAddModel model)
         {
 
             if (!ModelState.IsValid)
@@ -139,41 +157,71 @@ namespace openCaseApi.Controllers
 
             //hubHelper.Push(names);
 
-            return Ok(tr.ID);
+            return tr.ID;
+        }
+
+        /// <summary>
+        /// 查询 topic 回复列表
+        /// </summary>
+        /// <param name="id">topicID</param>
+        [HttpGet]
+        public List<replyModel> Replys(int id)
+        {
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            var trs = from t in QC_DB.topicReply
+                      where t.topic.state != 0 && t.topicID == id && t.state != 0
+                      select new replyModel
+                      {
+                          ID = t.ID,
+                          floor = t.floor,
+                          body = t.body,
+                          creatDate = t.creatDate,
+                          User = new topicUserModel {ID=t.userID,userName=t.admin_user.Username,Avatar=t.admin_user.Avatar }
+                      };
+
+            return trs.ToList();
         }
 
 
 
-      
+      /// <summary>
+      /// 查询自动化任务相关案例
+      /// </summary>
+      /// <param name="id">topicID</param>
         [HttpGet]
-        public IHttpActionResult Scripts(int id)
+        public List<scriptListModel> Scripts(int id)
         {
             QCTESTEntities db = new QCTESTEntities();
-            var tps = db.topic.FirstOrDefault(t => t.ID == id && t.state != 0);
+            var tps = db.topic.FirstOrDefault(t => t.ID == id && t.state != 0 && t.node==101);
             if (tps == null)
-                return NotFound();
+                throw new HttpResponseException(HttpStatusCode.NotFound);
 
 
 
             var ss = (from t in tps.M_publicTask.M_publicTaskScript
-                     select new
+                      select new scriptListModel
                      {
                          ID = t.ID,
                          title = t.title
                      }).ToList();
 
-            return Ok(ss);
+            return ss;
         }
 
 
-
+        /// <summary>
+        /// 查询众测步骤
+        /// </summary>
+        /// <param name="id">topicID</param>
         [HttpGet]
-        public IHttpActionResult Steps(int id)
+        public List<stepModel> Steps(int id)
         {
             QCTESTEntities db = new QCTESTEntities();
             var tps = db.topic.FirstOrDefault(t => t.ID == id && t.state != 0);
             if (tps == null)
-                return NotFound();
+                throw new HttpResponseException(HttpStatusCode.NotFound);
 
 
 
@@ -187,7 +235,7 @@ namespace openCaseApi.Controllers
                           describe = t.describe
                       }).ToList();
 
-            return Ok(ss);
+            return ss;
 
 
         }

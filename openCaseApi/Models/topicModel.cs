@@ -28,6 +28,13 @@ namespace openCaseApi.Models
 
     }
 
+    public class scriptListModel 
+    {
+        public int ID { get; set; }
+
+        public string title { get; set; }
+
+    }
     public class topicUserModel
     {
         public int ID { get; set; }
@@ -71,6 +78,18 @@ namespace openCaseApi.Models
       
 
         [Required]
+        public string body { get; set; }
+    }
+
+    public class replyModel
+    {
+        public int ID { get; set; }
+
+        public topicUserModel User { get; set; }
+
+        public int floor { get; set; }
+
+        public DateTime creatDate { get; set; }
         public string body { get; set; }
     }
 

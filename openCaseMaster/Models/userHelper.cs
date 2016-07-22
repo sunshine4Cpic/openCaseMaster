@@ -6,6 +6,7 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Xml.Linq;
 
 namespace openCaseMaster.Models
 {
@@ -54,10 +55,17 @@ namespace openCaseMaster.Models
 
             QCTESTEntities QC_DB = new QCTESTEntities();
 
-            caseFramework cf = QC_DB.caseFramework.FirstOrDefault(t => t.userID == userID);
-            if (cf != null) cfs.Add(cf);
+            caseFramework cf = QC_DB.caseFramework.SingleOrDefault(t => t.userID == userID);
 
-            return cfs;
+            
+            var bf = new List<caseFramework>();
+            bf.AddRange(cfs);
+            if(cf!=null)
+                bf.Add(cf);
+
+
+
+            return bf;
         }
 
 
@@ -93,8 +101,20 @@ namespace openCaseMaster.Models
             return apps;
         }
 
-        
 
+        public static caseFramework initMyFramework(QCTESTEntities db, int userID)
+        {
+            
+
+            //私有框架
+            var newF = new caseFramework();
+            newF.workName = "你的框架";
+            newF.userID = userID;
+            newF.controlXML = new XElement("Steps").ToString();
+            db.caseFramework.Add(newF);
+
+            return newF;
+        }
         
        
     }

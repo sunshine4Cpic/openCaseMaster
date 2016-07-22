@@ -40,7 +40,7 @@ namespace openCaseApi.Provider
             //var refreshTokenLifeTime = context.OwinContext.Get<string>("clientRefreshTokenLifeTime"); //过期时间
             //if (string.IsNullOrWhiteSpace(refreshTokenLifeTime)) return;
 
-            var refreshTokenLifeTime = "0";
+            var refreshTokenLifeTime = "30";
 
             #endregion
 

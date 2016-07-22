@@ -11,8 +11,8 @@ namespace openCaseApi.Controllers
     public class stepController : ApiController
     {
         [HttpGet]
-        [Route("step")]
-        public IHttpActionResult Scripts(int id)
+        [Route("api/step")]
+        public IHttpActionResult step(int id)
         {
             QCTESTEntities db = new QCTESTEntities();
             var st = db.openTestStep.FirstOrDefault(t => t.ID == id);

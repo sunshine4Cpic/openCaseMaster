@@ -123,7 +123,7 @@ namespace openCaseMaster.Controllers
             return originalName;
         }
 
-        /*
+        
         [HttpPost]
         public string userFramework()
         {
@@ -134,11 +134,17 @@ namespace openCaseMaster.Controllers
                 StreamReader sr = new StreamReader(stm);
                 XElement fm = XElement.Parse(sr.ReadToEnd());
 
-                int userID = HttpContext.Current.User.userID();
+                int userID = User.userID();
 
                 QCTESTEntities QC_DB = new QCTESTEntities();
 
-                var cf = QC_DB.caseFramework.First(t => t.userID == userID);
+                //var cf = QC_DB.caseFramework.First(t => t.userID == userID);
+                var cf = QC_DB.caseFramework.SingleOrDefault(t => t.userID == userID);
+                if (cf == null)
+                {
+                    cf =  userHelper.initMyFramework(QC_DB, userID);
+                }
+                   
 
                 cf.controlXML = fm.ToString();
                 QC_DB.SaveChanges();
@@ -152,7 +158,7 @@ namespace openCaseMaster.Controllers
             }
            
         }
-        */
+        
 
         [HttpPost]
         public bool userAvatar()

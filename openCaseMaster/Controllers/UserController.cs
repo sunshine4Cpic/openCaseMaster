@@ -83,11 +83,11 @@ namespace openCaseMaster.Controllers
             loginUser.LastDate = DateTime.Now;
             qc.SaveChanges();
 
-            
 
+            var auth = new AuthenticationProperties() { IssuedUtc = DateTime.UtcNow, ExpiresUtc = DateTime.UtcNow.AddDays(30) };
             
             HttpContext.GetOwinContext().Authentication.SignOut("ApplicationCookie");
-            HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties() { IsPersistent = true }, _identity);
+            HttpContext.GetOwinContext().Authentication.SignIn(auth, _identity);
 
             return RedirectToLocal(ReturnUrl);
 
@@ -99,7 +99,7 @@ namespace openCaseMaster.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            System.Web.Security.FormsAuthentication.SignOut();
+            HttpContext.GetOwinContext().Authentication.SignOut("ApplicationCookie");
             return RedirectToAction("Index", "Home");
         }
 
@@ -143,19 +143,16 @@ namespace openCaseMaster.Controllers
 
                 QC_DB.admin_user.Add(tmp);
 
+
+                userHelper.initMyFramework(QC_DB, tmp.ID);
+
                 //私有项目
                 var newP = new project();
                 newP.Pname = "private project";
                 newP.userID = tmp.ID;
                 QC_DB.project.Add(newP);
 
-
-                //私有框架
-                var newF = new caseFramework();
-                newF.workName = "你的框架";
-                newF.userID = tmp.ID;
-                newF.controlXML = new XElement("Steps").ToString();
-                QC_DB.caseFramework.Add(newF);
+                
 
                 QC_DB.SaveChanges();
                 return RedirectToAction("Login", "User");
@@ -327,9 +324,18 @@ namespace openCaseMaster.Controllers
         {
             userInfoModel ul;
             if (id == null)
-                ul = new userInfoModel();
+                ul = new userInfoModel(User.userName());
             else
                 ul = new userInfoModel(id);
+            return View(ul);
+
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult userInfo2()
+        {
+            userInfoModel ul = new userInfoModel(User.userName());
             return View(ul);
 
         }

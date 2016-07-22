@@ -11,21 +11,25 @@ namespace openCaseApi.Controllers
 {
     public class scriptController : ApiController
     {
+        /// <summary>
+        /// 自动化案例
+        /// </summary>
+        /// <param name="id">案例ID</param>
         [HttpGet]
-        [Route("script/{id:int}")]
-        public IHttpActionResult Get(int id)
+        [Route("api/script/{id:int}")]
+        public string Get(int id)
         {
 
             QCTESTEntities db = new QCTESTEntities();
 
             var st = db.M_publicTaskScript.First(t => t.ID == id);
             if (st == null)
-                return NotFound();
+                throw new HttpResponseException(HttpStatusCode.NotFound);
 
             //XElement xe = XElement.Parse(st.script);
 
 
-            return Ok(st.script);
+            return st.script;
         }
 
 

@@ -13,14 +13,16 @@ namespace openCaseMaster
     {
         public void Configuration(IAppBuilder app)
         {
-            //推送相关
+           
+
+            //用户权限相关
+            ConfigureAuth(app);
+
+            //推送相关 必须放在权限处理后面 不然报错
             var userIdProvider = new MyUserFactory();
             GlobalHost.DependencyResolver.Register(typeof(IUserIdProvider), () => userIdProvider);
 
             app.MapSignalR();
-
-            //用户权限相关
-            ConfigureAuth(app);
         }
     }
 }

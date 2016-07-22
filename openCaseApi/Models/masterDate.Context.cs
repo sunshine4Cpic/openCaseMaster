@@ -25,7 +25,6 @@ namespace openCaseApi.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<admin_user> admin_user { get; set; }
         public virtual DbSet<M_application> M_application { get; set; }
         public virtual DbSet<M_publicDevice> M_publicDevice { get; set; }
         public virtual DbSet<M_publicTask> M_publicTask { get; set; }
@@ -37,5 +36,6 @@ namespace openCaseApi.Models
         public virtual DbSet<topic> topic { get; set; }
         public virtual DbSet<topicReply> topicReply { get; set; }
         public virtual DbSet<project> project { get; set; }
+        public virtual DbSet<admin_user> admin_user { get; set; }
     }
 }

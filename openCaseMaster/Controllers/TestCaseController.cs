@@ -20,8 +20,7 @@ using System.Xml.Linq;
 
 namespace openCaseMaster.Controllers
 {
-    //*****************************************
-    //项目权限控制不足,后期修改
+
 
     [Authorize(Roles = "user")]
     public class TestCaseController : Controller
@@ -176,7 +175,15 @@ namespace openCaseMaster.Controllers
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
                 M_testCase mtc = QC_DB.M_testCase.FirstOrDefault(t => t.ID == sub.ID);
-                mtc.Name = sub.Name;
+
+                if (mtc.Name != sub.Name)
+                {
+                    mtc.Name = sub.Name;
+                    var xe =  XElement.Parse(mtc.testXML);
+                    xe.Attribute("desc").Value = sub.Name;
+                    mtc.testXML = xe.ToString();
+                }
+                
                 mtc.mark = sub.mark;
                 mtc.FID = sub.FID;
                 QC_DB.SaveChanges();

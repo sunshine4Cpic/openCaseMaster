@@ -9,6 +9,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
 using openCaseApi.Provider;
+using Microsoft.Owin.Security;
 
 
 
@@ -20,6 +21,9 @@ namespace openCaseApi
     {
         public void Configuration(IAppBuilder app)
         {
+
+           
+
             /*
             var config = new HttpConfiguration();
 
@@ -55,12 +59,13 @@ namespace openCaseApi
 
             var oAuthOptions = new OAuthAuthorizationServerOptions
             {
+                //AccessTokenFormat = new CNBlogsSecureDataFormat(),
                 TokenEndpointPath = new PathString("/token"),  // 用于决定获取token的url   http://127.0.0.1/token
                 Provider = new OAuth2AuthorizationServerProvider(), // 生成和验证 access token
                 //AccessTokenExpireTimeSpan = TimeSpan.FromSeconds(10),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),//token过期时间
                 AllowInsecureHttp = true, // 是否允许不安全的链接，即用不用https
-                RefreshTokenProvider = new OAuth2RefreshTokenProvider(new RefreshTokenRepository())  // 生成和删除 refresh token
+                RefreshTokenProvider = new OAuth2RefreshTokenProvider(new RefreshTokenRepository())  // 生成refresh token
             };
             // 使应用程序可以使用不记名令牌来验证用户身份
             app.UseOAuthBearerTokens(oAuthOptions);
@@ -71,5 +76,23 @@ namespace openCaseApi
             // 这个要放在OWIN下面，OAUTH才生效
             //app.UseWebApi(config);
         }
+
+        
     }
+
+    ///// <summary>
+    /////自定义token,可以缩小token 长度
+    ///// </summary>
+    //public class CNBlogsSecureDataFormat : ISecureDataFormat<AuthenticationTicket>
+    //{
+    //    public string Protect(AuthenticationTicket data)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    public AuthenticationTicket Unprotect(string protectedText)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

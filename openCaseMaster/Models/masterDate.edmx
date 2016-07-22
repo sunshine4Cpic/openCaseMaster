@@ -5,17 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="MasterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="admin_log">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Weblog" Type="ntext" />
-          <Property Name="UserCode" Type="int" />
-          <Property Name="Ip" Type="nvarchar" MaxLength="50" />
-          <Property Name="Type" Type="int" />
-          <Property Name="tDate" Type="datetime" />
-        </EntityType>
         <EntityType Name="admin_user">
           <Key>
             <PropertyRef Name="ID" />
@@ -29,7 +18,7 @@
           <Property Name="GreatDate" Type="datetime" />
           <Property Name="LastDate" Type="datetime" />
           <Property Name="Type" Type="int" />
-          <Property Name="Avatar" Type="nchar" MaxLength="50" />
+          <Property Name="Avatar" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="caseFramework">
           <Key>
@@ -222,7 +211,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="taskID" Type="int" Nullable="false" />
           <Property Name="stepSort" Type="int" Nullable="false" />
-          <Property Name="demoImg" Type="nchar" MaxLength="50" />
+          <Property Name="demoImg" Type="nvarchar" MaxLength="50" />
           <Property Name="describe" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="openTestTask">
@@ -293,20 +282,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Type" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <Association Name="FK_admin_log_admin_log">
-          <End Role="admin_user" Type="Self.admin_user" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="admin_log" Type="Self.admin_log" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="admin_user">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="admin_log">
-              <PropertyRef Name="UserCode" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_admin_user_user_type">
           <End Role="user_type" Type="Self.user_type" Multiplicity="0..1" />
           <End Role="admin_user" Type="Self.admin_user" Multiplicity="*" />
@@ -783,7 +758,6 @@
           <Parameter Name="p_2" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="MasterModelStoreContainer">
-          <EntitySet Name="admin_log" EntityType="Self.admin_log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admin_user" EntityType="Self.admin_user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="caseFramework" EntityType="Self.caseFramework" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Framework4Project" EntityType="Self.Framework4Project" Schema="dbo" store:Type="Tables" />
@@ -809,10 +783,6 @@
           <EntitySet Name="topic" EntityType="Self.topic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="topicReply" EntityType="Self.topicReply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user_type" EntityType="Self.user_type" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_admin_log_admin_log" Association="Self.FK_admin_log_admin_log">
-            <End Role="admin_user" EntitySet="admin_user" />
-            <End Role="admin_log" EntitySet="admin_log" />
-          </AssociationSet>
           <AssociationSet Name="FK_admin_user_user_type" Association="Self.FK_admin_user_user_type">
             <End Role="user_type" EntitySet="user_type" />
             <End Role="admin_user" EntitySet="admin_user" />
@@ -1018,7 +988,6 @@
             <Parameter Name="p_1" Mode="In" Type="Int32" />
             <Parameter Name="Out1" Mode="InOut" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="admin_log" EntityType="MasterModel.admin_log" />
           <EntitySet Name="admin_user" EntityType="MasterModel.admin_user" />
           <EntitySet Name="caseFramework" EntityType="MasterModel.caseFramework" />
           <EntitySet Name="Framework4Project" EntityType="MasterModel.Framework4Project" />
@@ -1044,10 +1013,6 @@
           <EntitySet Name="topic" EntityType="MasterModel.topic" />
           <EntitySet Name="topicReply" EntityType="MasterModel.topicReply" />
           <EntitySet Name="user_type" EntityType="MasterModel.user_type" />
-          <AssociationSet Name="FK_admin_log_admin_log" Association="MasterModel.FK_admin_log_admin_log">
-            <End Role="admin_user" EntitySet="admin_user" />
-            <End Role="admin_log" EntitySet="admin_log" />
-          </AssociationSet>
           <AssociationSet Name="FK_admin_user_user_type" Association="MasterModel.FK_admin_user_user_type">
             <End Role="user_type" EntitySet="user_type" />
             <End Role="admin_user" EntitySet="admin_user" />
@@ -1198,18 +1163,6 @@
           <Property Type="Int32" Name="type" Nullable="true" />
           <Property Type="Int32" Name="baseID" Nullable="true" />
         </ComplexType>
-        <EntityType Name="admin_log">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Weblog" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UserCode" Type="Int32" />
-          <Property Name="Ip" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Type" Type="Int32" />
-          <Property Name="tDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_admin_log_admin_log" FromRole="admin_log" ToRole="admin_user" />
-        </EntityType>
         <EntityType Name="admin_user">
           <Key>
             <PropertyRef Name="ID" />
@@ -1223,8 +1176,7 @@
           <Property Name="GreatDate" Type="DateTime" Precision="3" />
           <Property Name="LastDate" Type="DateTime" Precision="3" />
           <Property Name="Type" Type="Int32" />
-          <Property Name="Avatar" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="admin_log" Relationship="MasterModel.FK_admin_log_admin_log" FromRole="admin_user" ToRole="admin_log" />
+          <Property Name="Avatar" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="user_type" Relationship="MasterModel.FK_admin_user_user_type" FromRole="admin_user" ToRole="user_type" />
           <NavigationProperty Name="caseFramework" Relationship="MasterModel.FK_caseFramework_userID" FromRole="admin_user" ToRole="caseFramework" />
           <NavigationProperty Name="M_runScene" Relationship="MasterModel.FK_M_runScene_admin_user" FromRole="admin_user" ToRole="M_runScene" />
@@ -1465,7 +1417,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="taskID" Type="Int32" Nullable="false" />
           <Property Name="stepSort" Type="Int32" Nullable="false" />
-          <Property Name="demoImg" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="demoImg" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="describe" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="openTestResult" Relationship="MasterModel.FK_openTestResult_stepID" FromRole="openTestStep" ToRole="openTestResult" />
           <NavigationProperty Name="openTestTask" Relationship="MasterModel.FK_openTestScript_taskID" FromRole="openTestStep" ToRole="openTestTask" />
@@ -1558,20 +1510,6 @@
           <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_admin_user_user_type" FromRole="user_type" ToRole="admin_user" />
         </EntityType>
-        <Association Name="FK_admin_log_admin_log">
-          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="MasterModel.admin_log" Role="admin_log" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="admin_user">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="admin_log">
-              <PropertyRef Name="UserCode" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_admin_user_user_type">
           <End Type="MasterModel.user_type" Role="user_type" Multiplicity="0..1" />
           <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="*" />
@@ -2029,18 +1967,6 @@
           <FunctionImportMapping FunctionImportName="M_testDemand_result" FunctionName="MasterModel.Store.M_testDemand_result" />
           <FunctionImportMapping FunctionImportName="M_testDemand_sort" FunctionName="MasterModel.Store.M_testDemand_sort" />
           <FunctionImportMapping FunctionImportName="M_testCase_getProject" FunctionName="MasterModel.Store.M_testCase_getProject" />
-          <EntitySetMapping Name="admin_log">
-            <EntityTypeMapping TypeName="MasterModel.admin_log">
-              <MappingFragment StoreEntitySet="admin_log">
-                <ScalarProperty Name="tDate" ColumnName="tDate" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Ip" ColumnName="Ip" />
-                <ScalarProperty Name="UserCode" ColumnName="UserCode" />
-                <ScalarProperty Name="Weblog" ColumnName="Weblog" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="admin_user">
             <EntityTypeMapping TypeName="MasterModel.admin_user">
               <MappingFragment StoreEntitySet="admin_user">

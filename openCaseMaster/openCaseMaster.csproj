@@ -247,9 +247,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\admin_log.cs">
-      <DependentUpon>masterDate.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\admin_user.cs">
       <DependentUpon>masterDate.tt</DependentUpon>
     </Compile>
@@ -1784,6 +1781,9 @@
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\highlight\highlight.min.js" />
     <Content Include="Scripts\highlight\solarized_dark.min.css" />
+    <Content Include="Content\userAvatar\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Scripts\jquery-2.2.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.3.js" />
     <Content Include="Scripts\jquery-2.2.3.min.js" />

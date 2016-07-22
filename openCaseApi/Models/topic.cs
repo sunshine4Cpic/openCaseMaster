@@ -30,10 +30,10 @@ namespace openCaseApi.Models
         public int replys { get; set; }
         public int power { get; set; }
     
-        public virtual admin_user admin_user { get; set; }
         public virtual M_publicTask M_publicTask { get; set; }
         public virtual openTestTask openTestTask { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<topicReply> topicReply { get; set; }
+        public virtual admin_user admin_user { get; set; }
     }
 }

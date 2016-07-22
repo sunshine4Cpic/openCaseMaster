@@ -64,11 +64,10 @@ namespace openCaseApi.Provider
                 return;
             }
 
-
-            string Name = loginUser.ID + " " + username;
-
             var oAuthIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
-            oAuthIdentity.AddClaim(new Claim(ClaimTypes.Name, Name));
+            oAuthIdentity.AddClaim(new Claim(ClaimTypes.Name, loginUser.Name));
+            oAuthIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, loginUser.ID.ToString()));
+            oAuthIdentity.AddClaim(new Claim("userName", username));
             
 
             if(loginUser.Type==1)

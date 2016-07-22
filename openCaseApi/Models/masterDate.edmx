@@ -89,7 +89,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="taskID" Type="int" Nullable="false" />
           <Property Name="stepSort" Type="int" Nullable="false" />
-          <Property Name="demoImg" Type="nchar" MaxLength="50" />
+          <Property Name="demoImg" Type="nvarchar" MaxLength="50" />
           <Property Name="describe" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="openTestTask">
@@ -391,7 +391,6 @@
           <Property Name="Pname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </ComplexType>
         <EntityContainer Name="QCTESTEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="admin_user" EntityType="MasterModel.admin_user" />
           <EntitySet Name="M_application" EntityType="MasterModel.M_application" />
           <EntitySet Name="M_publicDevice" EntityType="MasterModel.M_publicDevice" />
           <EntitySet Name="M_publicTask" EntityType="MasterModel.M_publicTask" />
@@ -402,14 +401,6 @@
           <EntitySet Name="openTestTask" EntityType="MasterModel.openTestTask" />
           <EntitySet Name="topic" EntityType="MasterModel.topic" />
           <EntitySet Name="topicReply" EntityType="MasterModel.topicReply" />
-          <AssociationSet Name="FK_topic_userID" Association="MasterModel.FK_topic_userID">
-            <End Role="admin_user" EntitySet="admin_user" />
-            <End Role="topic" EntitySet="topic" />
-          </AssociationSet>
-          <AssociationSet Name="FK_topicReply_userID" Association="MasterModel.FK_topicReply_userID">
-            <End Role="admin_user" EntitySet="admin_user" />
-            <End Role="topicReply" EntitySet="topicReply" />
-          </AssociationSet>
           <AssociationSet Name="FK_M_publicTest_appID" Association="MasterModel.FK_M_publicTest_appID">
             <End Role="M_application" EntitySet="M_application" />
             <End Role="M_publicTask" EntitySet="M_publicTask" />
@@ -455,9 +446,18 @@
             <End Role="topicReply" EntitySet="topicReply" />
           </AssociationSet>
           <EntitySet Name="project" EntityType="MasterModel.project" />
+          <EntitySet Name="admin_user" EntityType="MasterModel.admin_user" />
           <AssociationSet Name="FK_project_userID" Association="MasterModel.FK_project_userID">
             <End Role="admin_user" EntitySet="admin_user" />
             <End Role="project" EntitySet="project" />
+          </AssociationSet>
+          <AssociationSet Name="FK_topic_userID" Association="MasterModel.FK_topic_userID">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="topic" EntitySet="topic" />
+          </AssociationSet>
+          <AssociationSet Name="FK_topicReply_userID" Association="MasterModel.FK_topicReply_userID">
+            <End Role="admin_user" EntitySet="admin_user" />
+            <End Role="topicReply" EntitySet="topicReply" />
           </AssociationSet>
         </EntityContainer>
         <ComplexType Name="M_ContainUserStepCase_Result">
@@ -469,24 +469,6 @@
           <Property Type="Int32" Name="type" Nullable="true" />
           <Property Type="Int32" Name="baseID" Nullable="true" />
         </ComplexType>
-        <EntityType Name="admin_user">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Permission" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="GreatDate" Type="DateTime" Precision="3" />
-          <Property Name="LastDate" Type="DateTime" Precision="3" />
-          <Property Name="Type" Type="Int32" />
-          <Property Name="Avatar" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="topic" Relationship="MasterModel.FK_topic_userID" FromRole="admin_user" ToRole="topic" />
-          <NavigationProperty Name="topicReply" Relationship="MasterModel.FK_topicReply_userID" FromRole="admin_user" ToRole="topicReply" />
-          <NavigationProperty Name="project" Relationship="MasterModel.FK_project_userID" FromRole="admin_user" ToRole="project" />
-        </EntityType>
         <EntityType Name="M_application">
           <Key>
             <PropertyRef Name="ID" />
@@ -569,7 +551,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="taskID" Type="Int32" Nullable="false" />
           <Property Name="stepSort" Type="Int32" Nullable="false" />
-          <Property Name="demoImg" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="demoImg" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="describe" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="openTestResult" Relationship="MasterModel.FK_openTestResult_stepID" FromRole="openTestStep" ToRole="openTestResult" />
           <NavigationProperty Name="openTestTask" Relationship="MasterModel.FK_openTestScript_taskID" FromRole="openTestStep" ToRole="openTestTask" />
@@ -599,10 +581,10 @@
           <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="replys" Type="Int32" Nullable="false" />
           <Property Name="power" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_topic_userID" FromRole="topic" ToRole="admin_user" />
           <NavigationProperty Name="M_publicTask" Relationship="MasterModel.FK_M_publicTask_ID" FromRole="topic" ToRole="M_publicTask" />
           <NavigationProperty Name="openTestTask" Relationship="MasterModel.FK_openTestTask_ID" FromRole="topic" ToRole="openTestTask" />
           <NavigationProperty Name="topicReply" Relationship="MasterModel.FK_topicReply_topicID" FromRole="topic" ToRole="topicReply" />
+          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_topic_userID" FromRole="topic" ToRole="admin_user" />
         </EntityType>
         <EntityType Name="topicReply">
           <Key>
@@ -615,33 +597,9 @@
           <Property Name="creatDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="state" Type="Int32" />
           <Property Name="floor" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_topicReply_userID" FromRole="topicReply" ToRole="admin_user" />
           <NavigationProperty Name="topic" Relationship="MasterModel.FK_topicReply_topicID" FromRole="topicReply" ToRole="topic" />
+          <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_topicReply_userID" FromRole="topicReply" ToRole="admin_user" />
         </EntityType>
-        <Association Name="FK_topic_userID">
-          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="1" />
-          <End Type="MasterModel.topic" Role="topic" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="admin_user">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="topic">
-              <PropertyRef Name="userID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_topicReply_userID">
-          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="1" />
-          <End Type="MasterModel.topicReply" Role="topicReply" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="admin_user">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="topicReply">
-              <PropertyRef Name="userID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_M_publicTest_appID">
           <End Type="MasterModel.M_application" Role="M_application" Multiplicity="1" />
           <End Type="MasterModel.M_publicTask" Role="M_publicTask" Multiplicity="*" />
@@ -784,6 +742,24 @@
           <Property Name="userID" Type="Int32" />
           <NavigationProperty Name="admin_user" Relationship="MasterModel.FK_project_userID" FromRole="project" ToRole="admin_user" />
         </EntityType>
+        <EntityType Name="admin_user">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Permission" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="GreatDate" Type="DateTime" Precision="3" />
+          <Property Name="LastDate" Type="DateTime" Precision="3" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="Avatar" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="project" Relationship="MasterModel.FK_project_userID" FromRole="admin_user" ToRole="project" />
+          <NavigationProperty Name="topic" Relationship="MasterModel.FK_topic_userID" FromRole="admin_user" ToRole="topic" />
+          <NavigationProperty Name="topicReply" Relationship="MasterModel.FK_topicReply_userID" FromRole="admin_user" ToRole="topicReply" />
+        </EntityType>
         <Association Name="FK_project_userID">
           <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="0..1" />
           <End Type="MasterModel.project" Role="project" Multiplicity="*" />
@@ -796,28 +772,36 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_topic_userID">
+          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="1" />
+          <End Type="MasterModel.topic" Role="topic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin_user">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="topic">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_topicReply_userID">
+          <End Type="MasterModel.admin_user" Role="admin_user" Multiplicity="1" />
+          <End Type="MasterModel.topicReply" Role="topicReply" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="admin_user">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="topicReply">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="MasterModelStoreContainer" CdmEntityContainer="QCTESTEntities">
-          <EntitySetMapping Name="admin_user">
-            <EntityTypeMapping TypeName="MasterModel.admin_user">
-              <MappingFragment StoreEntitySet="admin_user">
-                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="LastDate" ColumnName="LastDate" />
-                <ScalarProperty Name="GreatDate" ColumnName="GreatDate" />
-                <ScalarProperty Name="Permission" ColumnName="Permission" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="M_application">
             <EntityTypeMapping TypeName="MasterModel.M_application">
               <MappingFragment StoreEntitySet="M_application">
@@ -941,6 +925,22 @@
                 <ScalarProperty Name="userID" ColumnName="userID" />
                 <ScalarProperty Name="zidonghua" ColumnName="zidonghua" />
                 <ScalarProperty Name="Pname" ColumnName="Pname" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admin_user">
+            <EntityTypeMapping TypeName="MasterModel.admin_user">
+              <MappingFragment StoreEntitySet="admin_user">
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="LastDate" ColumnName="LastDate" />
+                <ScalarProperty Name="GreatDate" ColumnName="GreatDate" />
+                <ScalarProperty Name="Permission" ColumnName="Permission" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -22,7 +22,7 @@ namespace openCaseApi.Models
         public Nullable<int> state { get; set; }
         public int floor { get; set; }
     
-        public virtual admin_user admin_user { get; set; }
         public virtual topic topic { get; set; }
+        public virtual admin_user admin_user { get; set; }
     }
 }
