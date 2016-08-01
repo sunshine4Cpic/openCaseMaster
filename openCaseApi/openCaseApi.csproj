@@ -187,6 +187,7 @@
     <Compile Include="Controllers\scriptController.cs" />
     <Compile Include="Controllers\stepController.cs" />
     <Compile Include="Controllers\TopicController.cs" />
+    <Compile Include="Controllers\userController.cs" />
     <Compile Include="Extensions\UserIdentity.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -306,7 +307,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\user\" />
+  </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>

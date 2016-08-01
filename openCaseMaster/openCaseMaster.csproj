@@ -1313,6 +1313,7 @@
     <Content Include="Content\images\loading%402x.gif" />
     <Content Include="Content\images\loading%403x.gif" />
     <Content Include="Content\images\loading.gif" />
+    <Content Include="Content\images\login_bg_2.jpg" />
     <Content Include="Content\images\logos\editormd-favicon-16x16.ico" />
     <Content Include="Content\images\logos\editormd-favicon-24x24.ico" />
     <Content Include="Content\images\logos\editormd-favicon-32x32.ico" />

@@ -40,6 +40,8 @@ namespace openCaseApi.Models
         public int ID { get; set; }
         public string userName { get; set; }
 
+        //public string Name { get; set; }
+
         public string Avatar { get; set; }
     }
 

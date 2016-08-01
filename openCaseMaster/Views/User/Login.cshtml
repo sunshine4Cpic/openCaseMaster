@@ -1,43 +1,47 @@
 ﻿@using openCaseMaster.ViewModels
+
+
+
+
 @model LoginViewModel
 @{
     ViewBag.Title = "登录";
 }
 @if (ViewBag.ReturnUrl == null)
 {
-    <h2>@ViewBag.Title。</h2>
+    @*<h2>@ViewBag.Title。</h2>*@
 }
 else
 {
     <h3 style="color:red">权限不足,请先登录</h3>
 }
 
-<div class="row">
-    <div class="col-md-8">
-        <section id="loginForm">
+<div class="row login center-block" style="height:600px;">
+    <div class="col-md-4 pull-right " style="top:30%;">
+        <section id="loginForm" >
             @using (Html.BeginForm("Login", "User", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
-                <h4>使用本地帐户登录。</h4>
-                <hr />
+               
+               
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="form-group">
-                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
+                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-3 control-label" })
+                    <div>
                         @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
+                    <div>
                         @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                     </div>
                 </div>
                
                 <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
+                    <div class="col-md-offset-3 col-md-9">
                         <input type="submit" value="登录" class="btn btn-default" />
                     </div>
                 </div>
@@ -52,4 +56,14 @@ else
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+<style>
+    body{
+    height:700px;
+        background:#014199 url(/Content/images/login_bg_2.jpg) no-repeat 50px 50px;
+        background-position: center;
+            color: #ffffff;
+
+    }
+    
+    </style>
 }

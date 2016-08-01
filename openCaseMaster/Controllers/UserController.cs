@@ -44,8 +44,8 @@ namespace openCaseMaster.Controllers
             }
 
             QCTESTEntities qc = new QCTESTEntities();
-            var loginUser = qc.admin_user.Where
-                (t => t.Username == model.UserName && t.Password == model.Password).FirstOrDefault();
+            var loginUser = qc.admin_user.SingleOrDefault
+                (t => t.Username == model.UserName && t.Password == model.Password);
             if (loginUser == null)
             {
                 ModelState.AddModelError("", "用户名或密码错误。");
