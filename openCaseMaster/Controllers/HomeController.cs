@@ -15,19 +15,6 @@ namespace openCaseMaster.Controllers
             return View();
         }
 
-        //[Authorize(Roles = "1")]
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Error404()
-        {
-
-            return View();
-        }
 
        
 

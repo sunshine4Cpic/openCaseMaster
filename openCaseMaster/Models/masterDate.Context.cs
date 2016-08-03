@@ -33,24 +33,13 @@ namespace openCaseMaster.Models
         public virtual DbSet<M_application> M_application { get; set; }
         public virtual DbSet<M_deviceConfig> M_deviceConfig { get; set; }
         public virtual DbSet<M_DevProMapping> M_DevProMapping { get; set; }
-        public virtual DbSet<M_publicDevice> M_publicDevice { get; set; }
-        public virtual DbSet<M_publicTask> M_publicTask { get; set; }
-        public virtual DbSet<M_publicTaskResult> M_publicTaskResult { get; set; }
-        public virtual DbSet<M_publicTaskScript> M_publicTaskScript { get; set; }
         public virtual DbSet<M_runScene> M_runScene { get; set; }
         public virtual DbSet<M_runTestCase> M_runTestCase { get; set; }
         public virtual DbSet<M_testCase> M_testCase { get; set; }
         public virtual DbSet<M_testCaseSteps> M_testCaseSteps { get; set; }
         public virtual DbSet<M_testDemand> M_testDemand { get; set; }
-        public virtual DbSet<notification> notification { get; set; }
-        public virtual DbSet<openTestResult> openTestResult { get; set; }
-        public virtual DbSet<openTestStep> openTestStep { get; set; }
-        public virtual DbSet<openTestTask> openTestTask { get; set; }
         public virtual DbSet<project> project { get; set; }
         public virtual DbSet<project_app> project_app { get; set; }
-        public virtual DbSet<tmp_TaskScript> tmp_TaskScript { get; set; }
-        public virtual DbSet<topic> topic { get; set; }
-        public virtual DbSet<topicReply> topicReply { get; set; }
         public virtual DbSet<user_type> user_type { get; set; }
     
         public virtual ObjectResult<M_ContainUserStepCase_Result> M_ContainUserStepCase(Nullable<int> p_1)

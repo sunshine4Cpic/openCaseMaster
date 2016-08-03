@@ -32,30 +32,7 @@ namespace openCaseMaster.Controllers
 
         }
 
-        /// <summary>
-        /// 上传public脚本
-        /// </summary>
-        [HttpPost]
-        public JsonResult uploadTaskScript()
-        {
-            
-            var stm = FileToStream();
-            
-            if (stm != null)
-            {
-                string originalName = Request["originalName"];
-                var result = from t in ExcelHelper.tmpTaskScript(stm)
-                             select new
-                             {
-                                 ID = t.ID,
-                                 title = t.title
-                             };
-                return Json(result); 
-
-            }
-            return null;
-
-        }
+       
 
         [HttpPost]
         public void uploadCase(int? baseID, int? PID)

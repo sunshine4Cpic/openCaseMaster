@@ -59,32 +59,6 @@ namespace openCaseMaster
 
 
 
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap-select").Include(
-                       "~/Scripts/bootstrap-select.js"));
-
-            bundles.Add(new StyleBundle("~/Content/bootstrap-select").Include(
-                       "~/Content/bootstrap-select.css"));
-
-
-            bundles.Add(new ScriptBundle("~/bundles/markdownView").Include(
-                       "~/Scripts/editormd/lib/marked.min.js",
-                       "~/Scripts/editormd/lib/prettify.min.js",
-                       //"~/Scripts/editormd/lib/raphael.min.js",
-                       //"~/Scripts/editormd/lib/underscore.min.js",
-                       //"~/Scripts/editormd/lib/sequence-diagram.min.js",
-                       //"~/Scripts/editormd/lib/flowchart.min.js",
-                       //"~/Scripts/editormd/lib/jquery.flowchart.min.js",
-                       "~/Scripts/editormd-{version}.js"));//暂时这么处理版本
-
-            bundles.Add(new StyleBundle("~/Content/markdownView").Include(
-                       "~/Content/editormd.preview.css",
-                       "~/Content/editormd.css"));
-
-            bundles.Add(new ScriptBundle("~/bundles/markdown").Include(
-                      "~/Scripts/editormd-{version}.js"));//暂时这么处理版本
-            bundles.Add(new StyleBundle("~/Content/markdown").Include(
-                      "~/Content/editormd.css"));
-
 
             BundleTable.EnableOptimizations = false;//不启用压缩
         }

@@ -1,69 +1,89 @@
 ﻿@using openCaseMaster.ViewModels
 
-
+@{
+    Layout = null;
+}
 
 
 @model LoginViewModel
-@{
-    ViewBag.Title = "登录";
-}
-@if (ViewBag.ReturnUrl == null)
-{
-    @*<h2>@ViewBag.Title。</h2>*@
-}
-else
-{
-    <h3 style="color:red">权限不足,请先登录</h3>
-}
 
-<div class="row login center-block" style="height:600px;">
-    <div class="col-md-4 pull-right " style="top:30%;">
-        <section id="loginForm" >
-            @using (Html.BeginForm("Login", "User", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-               
-               
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-3 control-label" })
-                    <div>
-                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
-                    <div>
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-               
-                <div class="form-group">
-                    <div class="col-md-offset-3 col-md-9">
-                        <input type="submit" value="登录" class="btn btn-default" />
-                    </div>
-                </div>
-                <p>
-                    @Html.ActionLink("注册为新用户", "Register")
-                </p>
-            }
-        </section>
-    </div>
-   
-</div>
 
-@section Scripts {
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta property="qc:admins" content="1325470571611661776747" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>太保移动自动化测试平台 - 登录</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/jqueryval")
-<style>
-    body{
-    height:700px;
-        background:#014199 url(/Content/images/login_bg_2.jpg) no-repeat 50px 50px;
-        background-position: center;
+   
+    <style>
+        body {
+            height: 700px;
+            background: #014199 url(/Content/images/login_bg_2.jpg) no-repeat 50px 50px;
+            background-position: center;
             color: #ffffff;
-
-    }
-    
+        }
     </style>
-}
+</head>
+<body>
+
+
+    <div class="container">
+    <div class="row login center-block" style="height:600px;">
+        <div class="col-md-4 pull-right " style="top:30%;">
+            <section id="loginForm">
+                @if (ViewBag.ReturnUrl != null)
+                {
+                    <h3 style="color:red;">权限不足,请先登录</h3>
+                }
+
+
+                @using (Html.BeginForm("Login", "User", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.UserName, new { @class = "col-md-3 control-label" })
+                        <div>
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
+                        <div>
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-9">
+                            <input type="submit" value="登录" class="btn btn-default" />
+                        </div>
+                    </div>
+                    
+                }
+            </section>
+        </div>
+
+    </div>
+        </div>
+
+
+
+
+     
+</body>
+</html>

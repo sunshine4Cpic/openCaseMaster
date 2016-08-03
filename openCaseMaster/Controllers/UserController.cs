@@ -1,5 +1,4 @@
-﻿using CaptchaMvc.Attributes;
-using Microsoft.Owin.Security;
+﻿using Microsoft.Owin.Security;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using openCaseMaster.Models;
@@ -100,7 +99,7 @@ namespace openCaseMaster.Controllers
         public ActionResult LogOff()
         {
             HttpContext.GetOwinContext().Authentication.SignOut("ApplicationCookie");
-            return RedirectToAction("Index", "Home");
+            return Redirect("/");
         }
 
         //
@@ -118,7 +117,6 @@ namespace openCaseMaster.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [CaptchaVerify("Captcha is not valid")]//验证码
         public ActionResult Register(RegisterModel model)
         {
             if (ModelState.IsValid)
@@ -179,7 +177,7 @@ namespace openCaseMaster.Controllers
             {
                 return Redirect(ReturnUrl);
             }
-            return Redirect("/");
+            return RedirectToAction("index", "testcase");
         }
 
 
@@ -318,28 +316,7 @@ namespace openCaseMaster.Controllers
 
 
 
-        [Authorize]
-        [HttpGet]
-        public ActionResult userInfo(string id)
-        {
-            userInfoModel ul;
-            if (id == null)
-                ul = new userInfoModel(User.userName());
-            else
-                ul = new userInfoModel(id);
-            return View(ul);
-
-        }
-
-        [Authorize]
-        [HttpGet]
-        public ActionResult userInfo2()
-        {
-            userInfoModel ul = new userInfoModel(User.userName());
-            return View(ul);
-
-        }
-
+    
        
        
 
@@ -373,47 +350,7 @@ namespace openCaseMaster.Controllers
 
         }
 
-        [Authorize]
-        [HttpGet]
-        public ActionResult notification(int page = 1,int rows=20)
-        {
-            QCTESTEntities QC_DB = new QCTESTEntities();
-
-
-            int userID = User.userID();
-
-            var date = QC_DB.notification.Where(t => t.userID == userID);
-
-            var query = from t in date
-                        orderby t.state, t.createDate descending
-                        select new notificationModel
-                        {
-                            ID = t.ID,
-                            topicID = t.topicID == null ? t.topicReply.topic.ID : t.topicID.Value,
-                            User = new topicUserModel { ID = t.admin_user.ID, Avatar = t.admin_user.Avatar, Name = t.admin_user.Name, userName = t.admin_user.Username },
-                            title = t.topicID == null ? t.topicReply.topic.title : t.topic.title,
-                            body = t.topicID == null ? t.topicReply.body : t.topic.body,
-                            floor = t.topicID == null ? t.topicReply.floor : 0,
-                            creatDate = t.createDate,
-                            state = t.state
-                        };
-
-            var model = query.Skip(20 * (page - 1)).Take(20).ToList();
-
-            foreach(var m in model)
-            {
-                if (m.state == 0)
-                    QC_DB.notification.First(t => t.ID == m.ID).state = 1;
-            }
-            QC_DB.SaveChanges();
-
-            ViewBag.page = page;
-
-            ViewBag.page = page;
-            ViewBag.rows = rows;
-            ViewBag.total = date.Count();
-            return View(model);
-        }
+        
 
         
     }

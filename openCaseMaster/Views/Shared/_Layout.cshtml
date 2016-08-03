@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - 自动化案例管理平台</title>
+    <title>@ViewBag.Title - 太保移动自动化测试平台</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
@@ -21,13 +21,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("案例管理平台", "About", "Home", new { area = "" }, new { @class = "navbar-brand" })
+              
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse navbar-right">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            自动化测试
+                            测试管理
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
@@ -35,7 +35,6 @@
                             <li><a href="/userStepControl/Index">自定义组件</a></li>
                             <li><a href="/RunCase/Index">调度执行</a></li>
                             <li class="divider"></li>
-                            <li><a href="/Home/Index">测试报告</a></li>
                             <li>@Html.ActionLink("设备状态", "DeviceView", "Device")</li>
                             <li class="divider"></li>
                             <li><a target="_blank" href="~/调试客户端.rar">下载调试客户端</a></li>
@@ -67,10 +66,7 @@
                         </ul>
                     </li>
 
-                    <li>
-                        @Html.ActionLink("测试社区", "Index", "Topic")
-                    <img src="~/Content/themes/icons/gnew.gif" style="position:absolute;z-index:1001;margin-left:75px;margin-top:-38px;">
-                    </li>
+                  
 
 
                 </ul>
@@ -85,32 +81,116 @@
         @RenderBody()
     </div>
 
+    
+    <!--Test -->
+	  <div id="testMenu" class="hidden-xs">
+	    
+<div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" 
+          href="#testCaseMenu">
+         用例管理
+        </a>
+      </h4>
+    </div>
+    <div id="testCaseMenu" class="panel-collapse collapse">
+      <div class="panel-body">
+         <a  href="/TestCase/Index?menu=testCaseMenu">用例管理 </a>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" 
+          href="#userStepMenu">
+          组件管理
+        </a>
+      </h4>
+    </div>
+    <div id="userStepMenu" class="panel-collapse collapse">
+      <div class="panel-body">
+        <a  href="/userStepControl/Index?menu=userStepMenu">组件管理 </a>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" 
+          href="#RunCaseMenu">
+          任务管理
+        </a>
+      </h4>
+    </div>
+    <div id="RunCaseMenu" class="panel-collapse collapse">
+      <div class="panel-body">
+        <a  href="/RunCase/Index?menu=RunCaseMenu">任务管理 </a>
+      </div>
+    </div>
+  </div>
 
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" 
+          href="#ResultMenu">
+          测试报告
+        </a>
+      </h4>
+    </div>
+    <div id="ResultMenu" class="panel-collapse collapse">
+      <div class="panel-body">
+       <a  href="/RunCase/Index?menu=ResultMenu">测试报告 </a> 
+      </div>
+    </div>
+  </div>
 
+     <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" 
+          href="#deviceViewMenu">
+          设备详情
+        </a>
+      </h4>
+    </div>
+    <div id="deviceViewMenu" class="panel-collapse collapse">
+      <div class="panel-body">
+       <a  href="/Device/deviceView?menu=deviceViewMenu">设备详情 </a> 
+      </div>
+    </div>
+  </div>
+
+     <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" 
+          href="#downloadMenu">
+          执行端管理
+        </a>
+      </h4>
+    </div>
+    <div id="downloadMenu" class="panel-collapse collapse">
+      <div class="panel-body">
+       <a  target="_blank" href="~/调试客户端.rar">下载客户端 </a> 
+      </div>
+    </div>
+  </div>
+</div>
+
+	  </div>
+	  <!--/Test -->
+     <script src="~/Scripts/BootSideMenu.js"></script>
+    <link rel="stylesheet" href="~/Content/BootSideMenu.css">
+    <script type="text/javascript">
+	  $(document).ready(function(){
+	      $('#testMenu').BootSideMenu({ side: "left", autoClose: false });
+	      var mu = "#"+getvl("menu");
+	      $(mu).addClass("in");
+	  });
+	</script>
 </body>
 </html>
-
-@if (Request.IsAuthenticated)
-{
-    <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
-    <script src="~/signalr/hubs"></script>
-    <script>
-        $(function () {
-            var chat = $.connection.UserHub;
-            chat.client.init = function (cnt) {
-                $(".notification-count .notice").css("display","block");
-                $(".notification-count .notice").html(cnt);
-            }
-
-            chat.client.push = function (cnt) {
-                $(".notification-count .notice").css("display", "block");
-                var baseCnt = parseInt($(".notification-count .notice").html());
-                $(".notification-count .notice").html(baseCnt + cnt);
-            }
-
-            $.connection.hub.start().done(function () {
-                chat.server.init();
-            });
-        });
-    </script>
-}

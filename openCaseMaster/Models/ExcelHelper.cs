@@ -166,51 +166,7 @@ namespace openCaseMaster.Models
         }
 
 
-        public static List<tmp_TaskScript> tmpTaskScript(Stream MS)
-        {
-
-            List<tmp_TaskScript> result = new List<tmp_TaskScript>();
-            
-            HSSFWorkbook hssfworkbook = new HSSFWorkbook(MS);
-
-
-            HSSFFormulaEvaluator eva = new HSSFFormulaEvaluator(hssfworkbook);
-            //eva.EvaluateInCell(cell);//取结果不取公式
-            eva.EvaluateAll();//取结果不取公式
-
-            ISheet sheet = hssfworkbook.GetSheetAt(0);
-
-            System.Collections.IEnumerator rows = sheet.GetRowEnumerator();
-            rows.MoveNext();
-
-
-
-            QCTESTEntities QC_DB = new QCTESTEntities();
-
-            while (rows.MoveNext())
-            {
-                IRow row = (IRow)rows.Current;
-                string sheetName = row.GetCell(1).ToString();
-                if (sheetName == null || sheetName.Trim() == "") break;
-
-                ISheet caseSheet = hssfworkbook.GetSheet(sheetName);
-
-                //找不到相关案例的话直接下一条
-                int ID = Convert.ToInt32(caseSheet.SheetName);
-                M_testCase mtc = QC_DB.M_testCase.Where(t => t.ID == ID).FirstOrDefault();
-                if (mtc == null) continue;
-
-                var rts = getRunScript<tmp_TaskScript>(mtc, caseSheet);
-                QC_DB.tmp_TaskScript.AddRange(rts);
-                result.AddRange(rts);
-
-            }
-
-            QC_DB.SaveChanges();
-
-            return result;
-
-        }
+      
 
         /// <summary>
         /// 创建执行案例
@@ -357,12 +313,6 @@ namespace openCaseMaster.Models
                     mrtc.sceneID = sceneID;
                     mrtc.testXML = cloneXML.ToString();
                     mrtc.name = caseName;
-                    result.Add(mrtc as T);
-                }else if(typeof(T)==typeof(tmp_TaskScript))
-                {
-                    tmp_TaskScript mrtc = new tmp_TaskScript();
-                    mrtc.title = caseName;
-                    mrtc.script = cloneXML.ToString();
                     result.Add(mrtc as T);
                 }
 

@@ -1,17 +1,10 @@
 ﻿@if (Request.IsAuthenticated)
 {
-
-
-
     using (Html.BeginForm("LogOff", "User", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
         @Html.AntiForgeryToken()
         <ul class="nav navbar-nav navbar-right">
-            <li class="notification-count">
-                <a href="/User/notification">消息</a>
-                    <div class="notice">0</div>
-               
-            </li>
+           
             <li>
                 <a href="/User/userInfo">你好，@User.Identity.Name!</a>
             </li>
@@ -22,7 +15,6 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("注册", "Register", "User", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
         <li>@Html.ActionLink("登录", "Login", "User", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
 }
