@@ -63,6 +63,8 @@ namespace openCaseMaster.Controllers
         [OutputCache(Duration = 60)]
         public ActionResult DeviceView()
         {
+
+
             QCTESTEntities QC_DB = new QCTESTEntities();
 
             var rtc = from t in QC_DB.M_runTestCase

@@ -31,7 +31,8 @@ namespace openCaseMaster.Controllers
 
         // GET: TestCase
         public ActionResult Index()
-        {   
+        {
+            ViewBag.Title = "用例管理";
             return View();
         }
 
@@ -62,7 +63,7 @@ namespace openCaseMaster.Controllers
 
 
                 var tcl = from t in QC_DB.M_testCase
-                          where t.baseID == ID
+                          where t.baseID == ID && t.type>=0
                           orderby t.type
                           select new testCaseTreeModel
                           {
@@ -90,7 +91,7 @@ namespace openCaseMaster.Controllers
 
 
                 var tcl = from t in QC_DB.M_testCase
-                          where t.projectID == ID
+                          where t.projectID == ID && t.type >= 0
                           && t.baseID == null
                           orderby t.type
                           select new testCaseTreeModel
@@ -198,10 +199,13 @@ namespace openCaseMaster.Controllers
             using (QCTESTEntities QC_DB = new QCTESTEntities())
             {
                 M_testCase mtc = QC_DB.M_testCase.First(t => t.ID == ID);
-                if (QC_DB.M_testCase_delete(ID) > 0)//为什么要用存储过程我也忘了,是不是可以不用?
-                    return true;
-                else
-                    return false;
+                mtc.type = -1;
+                QC_DB.SaveChanges();
+                return true;
+                //if (QC_DB.M_testCase_delete(ID) > 0)//为什么要用存储过程我也忘了,是不是可以不用?
+                //    return true;
+                //else
+                //    return false;
             }
         }
 
@@ -264,7 +268,7 @@ namespace openCaseMaster.Controllers
          
             scriptStepTreeModel xe = testCaseHelper.autoStepParam(name, FID, PID).getScriptStep();
 
-            xe.desc = "XXX new step XXX";
+            xe.desc += " new";
 
             var jSetting = new JsonSerializerSettings();
             jSetting.NullValueHandling = NullValueHandling.Ignore;

@@ -22,10 +22,11 @@ namespace openCaseMaster
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
-                       "~/Scripts/public.js",
+                       "~/Scripts/public-{version}.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
+                 "~/Content/font-awesome.css",
                       "~/Content/bootstrap.css",
                       "~/Content/site-{version}.css"));
 

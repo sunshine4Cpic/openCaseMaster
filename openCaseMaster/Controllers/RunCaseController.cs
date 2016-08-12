@@ -16,8 +16,12 @@ namespace openCaseMaster.Controllers
     public class RunCaseController : Controller
     {
         // GET: RunCase
-        public ActionResult Index()
+        public ActionResult Index(string menu)
         {
+            if (menu == "ResultMenu")
+                ViewBag.Title = "测试报告";
+            else
+                ViewBag.Title = "任务管理";
             return View();
         }
 

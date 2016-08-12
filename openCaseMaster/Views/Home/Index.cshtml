@@ -1,16 +1,74 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "";
+}
+@section Scripts {
+
+    <style>
+        i {
+            font-size: 100px !important;
+        }
+     
+        .menu {
+            padding: 20px 50px;
+        }
+
+            .menu a {
+                color: #4079c6;
+            }
+
+        .panel {
+            padding: 10px 20px;
+            max-width: 220px;
+            border-radius: 0 !important;
+            -webkit-box-shadow: 2px 2px 2px #d2d0d0;
+            -moz-box-shadow: 2px 2px 2px #d2d0d0;
+            box-shadow: 2px 2px 2px #d2d0d0;
+        }
+    </style>
+
 }
 
-<div class="jumbotron">
-    <h1>未开放</h1>
-    <p><a href="#" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+
+<div class="menu row">
+
+
+    <div class="col-md-4 col-sm-6">
+        <div class="panel">
+            <a href="#"><i class="fa fa-home"></i><div style="text-align:right">首页</div></a>
+        </div>
+
+    </div>
+
+    <div class="col-md-4 col-sm-6">
+        <div class="panel">
+            <a href="/TestCase/Index?menu=testCaseMenu"><i class="fa fa-folder-open"></i><div style="text-align:right">用例管理</div></a>
+        </div>
+
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="panel">
+            <a href="/userStepControl/Index?menu=userStepMenu"><i class="fa fa-cubes"></i><div style="text-align:right">组件管理</div></a>
+        </div>
+
+    </div>
+    
+    <div class="col-md-4 col-sm-6">
+        <div class="panel">
+            <a href="/RunCase/Index?menu=RunCaseMenu"><i class="fa fa-cogs"></i><div style="text-align:right">任务管理</div></a>
+        </div>
+
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="panel">
+            <a href="/RunCase/Index?menu=ResultMenu"><i class="fa fa-bar-chart"></i><div style="text-align:right">测试报告</div></a>
+        </div>
+
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="panel" style="padding-left:50px">
+            <a href="/Device/deviceView?menu=deviceViewMenu"><i class="fa fa-mobile"></i><div style="text-align:right">设备详情</div></a>
+        </div>
+
+    </div>
+
 </div>
-
-
-
-
-<address>
-    <strong>Support:</strong>   <a href="mailto:176560744@qq.com">176560744@qq.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:176560744@qq.com">176560744@qq.com</a>
-</address>

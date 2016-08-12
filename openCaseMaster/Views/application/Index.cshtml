@@ -1,0 +1,134 @@
+﻿@section Scripts {
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/bundles/easyui")
+}
+@{
+    ViewBag.Title = "app管理";
+}
+
+<table id="appsTable" class="easyui-datagrid" title="app管理"
+       data-options="rownumbers:true,singleSelect:true,toolbar:'#Tool',
+       pageSize: 10,pagination:true,method:'get',url:'apps',onDblClickRow:TableDblClick,
+       collapsible:true">
+
+    <thead>
+        <tr>
+            <th data-options="field:'name',width:140">app</th>
+            <th data-options="field:'runApkName',width:140">robotium脚本</th>
+            <th data-options="field:'package',width:200">安卓package</th>
+            <th data-options="field:'mainActiviy',width:300">安卓mainActiviy</th>
+            <th data-options="field:'package2',width:200">ios-package</th>
+            <th data-options="field:'isClear',width:140,align:'center'">清理缓存</th>
+        </tr>
+    </thead>
+
+</table>
+
+<div id="Tool" style="padding:5px;height:auto">
+
+    <a class="easyui-linkbutton" href="javascript:void(0);" title="新增" data-options="plain:true,iconCls:'icon-add'" data-toggle="modal" 
+   data-target="#addModal">新增</a>
+
+</div>
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" data-backdrop="static"
+     aria-labelledby="编辑" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    编辑app
+                </h4>
+            </div>
+            <div class="modal-body" style="padding:10px 50px;">
+                @Html.Partial("_edit", new openCaseMaster.ViewModels.applicationModel(), new ViewDataDictionary { { "id", "editForm" } })
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" data-backdrop="static"
+     aria-labelledby="编辑" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    新增app
+                </h4>
+            </div>
+            <div class="modal-body" style="padding:10px 50px;">
+                @Html.Partial("_add", new openCaseMaster.ViewModels.applicationModel(), new ViewDataDictionary { { "id", "addForm" } })
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script>
+
+
+    $("#editForm").submit(function () {
+        if (!$(this).valid()) return false;
+        jQuery.ajax({
+            url: $(this).attr("action"),
+            data: $(this).serialize(),
+            type: "POST",
+            success: function (responseText) {
+                $("#editModal").modal("hide");
+                $('#appsTable').datagrid('reload');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                alert("发生错误,请联系管理员");
+            },
+        });
+        return false;
+    })
+
+
+    function editDevice(id) {
+        $.messager.progress({ title: '请稍后', msg: '加载中...' });
+
+        $.get('edit/' + id, function (data) {
+            $("#editModal").fillData(data);
+            $("#editModal").modal("show");
+            $.messager.progress('close');
+        });
+
+        //$("#myModal .modal-content").load('edit/' + id, function () {
+        //    $.messager.progress('close');
+        //    $("#myModal").modal("show");
+        //});
+    }
+
+    function TableDblClick(rowIndex, rowData) {
+        editDevice(rowData.id)
+    }
+
+    function addDevice() {
+        alert("请联系管理员");
+
+    }
+
+    function deleteDevice() {
+        alert("请联系管理员");
+
+    }
+
+
+</script>
+

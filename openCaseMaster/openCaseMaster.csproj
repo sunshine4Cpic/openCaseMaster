@@ -218,6 +218,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\applicationController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
@@ -312,9 +313,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\application\applicationModel.cs" />
     <Compile Include="ViewModels\checkListModel.cs" />
     <Compile Include="ViewModels\Device\DeviceViewModel.cs" />
-    <Compile Include="ViewModels\Device\ProjectListModel.cs" />
+    <Compile Include="ViewModels\Device\DeviceListModel.cs" />
     <Compile Include="ViewModels\Project\ProjectListModel.cs" />
     <Compile Include="ViewModels\RunCase\caseRecordModel.cs" />
     <Compile Include="ViewModels\RunCase\SceneCaseDataModel.cs" />
@@ -352,6 +354,8 @@
     <Content Include="Content\docs.min.css" />
     <Content Include="Content\editormd.css" />
     <Content Include="Content\editormd.preview.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\help\buildUserStep.png" />
     <Content Include="Content\help\changeAndSaveStep.gif" />
     <Content Include="Content\help\creatDemand-1.gif" />
@@ -777,7 +781,7 @@
     <Content Include="fonts\editormd-logo.svg" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site-1.0.1.css" />
+    <Content Include="Content\Site-1.0.2.css" />
     <EntityDeploy Include="Models\masterDate.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>masterDate.Designer.cs</LastGenOutput>
@@ -1013,7 +1017,7 @@
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\public.js" />
+    <Content Include="Scripts\public-1.0.2.js" />
     <Content Include="Scripts\locale\easyui-lang-af.js" />
     <Content Include="Scripts\locale\easyui-lang-am.js" />
     <Content Include="Scripts\locale\easyui-lang-ar.js" />
@@ -1088,6 +1092,12 @@
     <Content Include="Views\User\_ChangePassword.cshtml" />
     <Content Include="Views\RunCase\_userCompleted.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_MenuPartial.cshtml" />
+    <Content Include="Views\User\_editMyInfo.cshtml" />
+    <Content Include="Views\User\_ChangeName.cshtml" />
+    <Content Include="Views\application\Index.cshtml" />
+    <Content Include="Views\application\_edit.cshtml" />
+    <Content Include="Views\application\_add.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

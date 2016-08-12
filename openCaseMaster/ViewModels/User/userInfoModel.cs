@@ -29,6 +29,13 @@ namespace openCaseMaster.ViewModels
         public string ConfirmPassword { get; set; }
     }
 
+    public class ChangeNameModel
+    {
+        [Required]
+        [StringLength(20, ErrorMessage = "{0} 必须至少包含 {2} 个字符。", MinimumLength = 2)]
+        [Display(Name = "姓名")]
+        public string name { get; set; }
 
+    }
     
 }

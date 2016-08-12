@@ -1,0 +1,66 @@
+﻿@using openCaseMaster.Models;
+@using openCaseMaster.ViewModels;
+@model  applicationModel
+
+
+
+@using (Html.BeginForm("edit", "application", FormMethod.Post, new { @class = "form-horizontal", id = ViewData["id"] }))
+{
+    @Html.HiddenFor(m => m.id)
+    <div class="form-group">
+        @Html.LabelFor(m => m.name, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            @Html.TextBoxFor(m => m.name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.runApkName, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            @Html.TextBoxFor(m => m.runApkName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.package, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            @Html.TextBoxFor(m => m.package, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.mainActiviy, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            @Html.TextBoxFor(m => m.mainActiviy, new { @class = "form-control" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.package2, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            @Html.TextBoxFor(m => m.package2, new { @class = "form-control" })
+        </div>
+    </div>
+
+    
+        List<SelectListItem> cmpyID = new List<SelectListItem>();
+        cmpyID.Add(new SelectListItem() { Text = "不清理", Value = "false",Selected = Model.isClear!=true });
+        cmpyID.Add(new SelectListItem() { Text = "清理", Value = "true", Selected = Model.isClear == true });
+        
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.isClear, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            @Html.DropDownListFor(m => m.isClear, cmpyID, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-4 col-md-8">
+            <input type="submit" value="修改" class="btn btn-default" />
+        </div>
+    </div>
+}
+
+

@@ -208,7 +208,7 @@
                         $(this).tree("reload", target);
                     } else
                     {
-                        alert("error");
+                        //alert("取消移动或服务器错误");
                     }
                     
                     return false;
@@ -234,6 +234,9 @@
 
         function sortCase(targetID, sourceID,type)
         {
+            if (!confirm("是否确认移动文件?")) {
+                return false;
+            }
             var ret = true;
             $.ajax({
                 url: 'sortCaseList',

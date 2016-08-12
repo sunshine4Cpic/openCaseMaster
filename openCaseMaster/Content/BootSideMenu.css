@@ -4,7 +4,7 @@
       top: -1px;
       bottom: -1px;
       padding:0px;
-      width: auto;
+      width: 250px !important;
       background-color: #fff;
       -webkit-background-clip: padding-box;
       background-clip: padding-box;

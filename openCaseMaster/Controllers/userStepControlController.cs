@@ -17,6 +17,7 @@ namespace openCaseMaster.Controllers
         // GET: userStepControl
         public ActionResult Index()
         {
+            ViewBag.Title = "组件管理";
             return View();
         }
 

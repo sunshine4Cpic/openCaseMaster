@@ -199,12 +199,9 @@ namespace System.Web.Mvc
             sb.Append("<span class=\"show-time-separate\">小时</span>");
             sb.Append("</div>");
             sb.Append("</div>");
-
-           
-
             return new HtmlString(sb.ToString());
         }
-        
+
     }
 
     

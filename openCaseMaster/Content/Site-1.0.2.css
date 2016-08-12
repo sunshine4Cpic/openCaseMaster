@@ -17,13 +17,24 @@
         border-bottom: 1px solid #0B7BCF;
     }
 
-@media (min-width: 1200px) {
+@media (min-width: 425px) {
     .navbar.navbar-fixed-top {
         background: #0B7BCF;
         border-bottom: 1px solid #0B7BCF;
         background: #0B7BCF url(/Content/images/top_bg.jpg) no-repeat left;
     }
 }
+
+#editMyInfo input
+{
+    max-width:240px !important;
+}
+#editMyInfo form
+{
+    max-width:400px !important;
+    margin: auto;
+}
+
 
 
  .navbar-inverse .navbar-nav > li > a  {

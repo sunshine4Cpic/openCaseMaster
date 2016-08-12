@@ -10,7 +10,57 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
     @RenderSection("scripts", required: false)
+    <script>
+        $(function () {
+            $('#editMyInfo').on('show.bs.modal', function () {
+                
+                $('#editMyInfo .modal-content').load("/user/editMyInfo", function () {
+                    $.validator.unobtrusive.parse($('#editMyInfo'));
+                    $('#ChangeNameForm').submit(function () {
+                        if (!$(this).valid()) return false;
+                        jQuery.ajax({
+                            url: $(this).attr("action"),
+                            data: $(this).serialize(),
+                            type: "POST",
+                            success: function (responseText) {
+                                $('#editMyInfo').modal('hide');
+                                alert(responseText);
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                if (textStatus = 404)
+                                    alert(XMLHttpRequest.responseText);
+                                else
+                                    alert("发生错误,请联系管理员");
+                            },
+                        });
+                        return false;
+                    });
+
+                    $('#ChangePasswordForm').submit(function () {
+                        if (!$(this).valid()) return false;
+                        jQuery.ajax({
+                            url: $(this).attr("action"),
+                            data: $(this).serialize(),
+                            type: "POST",
+                            success: function (responseText) {
+                                $('#editMyInfo').modal('hide');
+                                alert(responseText);
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                if (textStatus = 404)
+                                    alert(XMLHttpRequest.responseText);
+                                else
+                                    alert("发生错误,请联系管理员");
+                            },
+                        });
+                        return false;
+                    });
+                });
+            })
+        });
+    </script>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -21,13 +71,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-              
+
             </div>
             <div class="navbar-collapse collapse navbar-right">
                 <ul class="nav navbar-nav">
-                    <li class="dropdown">
+
+                      <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            测试管理
+                            自动化测试
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
@@ -35,12 +86,14 @@
                             <li><a href="/userStepControl/Index">自定义组件</a></li>
                             <li><a href="/RunCase/Index">调度执行</a></li>
                             <li class="divider"></li>
+                            <li><a href="/RunCase/Index">测试报告</a></li>
                             <li>@Html.ActionLink("设备状态", "DeviceView", "Device")</li>
                             <li class="divider"></li>
                             <li><a target="_blank" href="~/调试客户端.rar">下载调试客户端</a></li>
                         </ul>
                     </li>
-                    @if (User.IsInRole("admin"))
+
+                     @if (User.IsInRole("admin"))
                     {
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -51,6 +104,7 @@
                                 <li><a href="/Device/DeviceManage">设备管理</a></li>
                                 <li><a href="/Project/ProjectManage">项目管理</a></li>
                                 <li><a href="/User/UserManage">用户管理</a></li>
+                                <li><a href="/application/index">app管理</a></li>
                             </ul>
                         </li>
                     }
@@ -63,10 +117,12 @@
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("平台使用", "Index", "tutorial")</li>
                             <li>@Html.ActionLink("框架帮助", "framework", "tutorial")</li>
+                            <li class="divider"></li>
+                            <li><a target="_blank" href="~/调试客户端.rar">下载调试客户端</a></li>
                         </ul>
                     </li>
 
-                  
+
 
 
                 </ul>
@@ -78,119 +134,31 @@
 
     </div>
     <div class="container body-content">
+
+        <ol class="breadcrumb">
+            <li><a href="/home/index">首页</a></li>
+            <li><a href="#">@ViewBag.Title</a></li>
+        </ol>
         @RenderBody()
     </div>
 
-    
-    <!--Test -->
-	  <div id="testMenu" class="hidden-xs">
-	    
-<div class="panel-group" id="accordion">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" 
-          href="#testCaseMenu">
-         用例管理
-        </a>
-      </h4>
-    </div>
-    <div id="testCaseMenu" class="panel-collapse collapse">
-      <div class="panel-body">
-         <a  href="/TestCase/Index?menu=testCaseMenu">用例管理 </a>
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" 
-          href="#userStepMenu">
-          组件管理
-        </a>
-      </h4>
-    </div>
-    <div id="userStepMenu" class="panel-collapse collapse">
-      <div class="panel-body">
-        <a  href="/userStepControl/Index?menu=userStepMenu">组件管理 </a>
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" 
-          href="#RunCaseMenu">
-          任务管理
-        </a>
-      </h4>
-    </div>
-    <div id="RunCaseMenu" class="panel-collapse collapse">
-      <div class="panel-body">
-        <a  href="/RunCase/Index?menu=RunCaseMenu">任务管理 </a>
-      </div>
-    </div>
-  </div>
+    @if (ViewBag.menu != false)
+    {
+        @Html.Partial("_MenuPartial");
+    }
 
-    <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" 
-          href="#ResultMenu">
-          测试报告
-        </a>
-      </h4>
-    </div>
-    <div id="ResultMenu" class="panel-collapse collapse">
-      <div class="panel-body">
-       <a  href="/RunCase/Index?menu=ResultMenu">测试报告 </a> 
-      </div>
-    </div>
-  </div>
 
-     <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" 
-          href="#deviceViewMenu">
-          设备详情
-        </a>
-      </h4>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="editMyInfo" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                加载中......
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
     </div>
-    <div id="deviceViewMenu" class="panel-collapse collapse">
-      <div class="panel-body">
-       <a  href="/Device/deviceView?menu=deviceViewMenu">设备详情 </a> 
-      </div>
-    </div>
-  </div>
 
-     <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" 
-          href="#downloadMenu">
-          执行端管理
-        </a>
-      </h4>
-    </div>
-    <div id="downloadMenu" class="panel-collapse collapse">
-      <div class="panel-body">
-       <a  target="_blank" href="~/调试客户端.rar">下载客户端 </a> 
-      </div>
-    </div>
-  </div>
-</div>
 
-	  </div>
-	  <!--/Test -->
-     <script src="~/Scripts/BootSideMenu.js"></script>
-    <link rel="stylesheet" href="~/Content/BootSideMenu.css">
-    <script type="text/javascript">
-	  $(document).ready(function(){
-	      $('#testMenu').BootSideMenu({ side: "left", autoClose: false });
-	      var mu = "#"+getvl("menu");
-	      $(mu).addClass("in");
-	  });
-	</script>
+
 </body>
 </html>

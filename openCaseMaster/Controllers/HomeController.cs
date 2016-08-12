@@ -11,7 +11,7 @@ namespace openCaseMaster.Controllers
     {
         public ActionResult Index()
         {
-            
+            ViewBag.menu = false;
             return View();
         }
 

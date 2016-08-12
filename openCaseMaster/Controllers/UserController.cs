@@ -6,6 +6,7 @@ using openCaseMaster.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -50,8 +51,6 @@ namespace openCaseMaster.Controllers
                 ModelState.AddModelError("", "用户名或密码错误。");
                 return View(model);
             }
-
-
             ClaimsIdentity _identity = new ClaimsIdentity("ApplicationCookie");
             _identity.AddClaim(new Claim(ClaimTypes.Name, loginUser.Name));
             _identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, loginUser.ID.ToString()));
@@ -77,12 +76,8 @@ namespace openCaseMaster.Controllers
                 default:
                     break;
             }
-
-
             loginUser.LastDate = DateTime.Now;
             qc.SaveChanges();
-
-
             var auth = new AuthenticationProperties() { IssuedUtc = DateTime.UtcNow, ExpiresUtc = DateTime.UtcNow.AddDays(30) };
             
             HttpContext.GetOwinContext().Authentication.SignOut("ApplicationCookie");
@@ -177,7 +172,7 @@ namespace openCaseMaster.Controllers
             {
                 return Redirect(ReturnUrl);
             }
-            return RedirectToAction("index", "testcase");
+            return RedirectToAction("index", "home");
         }
 
 
@@ -313,12 +308,49 @@ namespace openCaseMaster.Controllers
             
         }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult editMyInfo()
+        {
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            int userID = User.userID();
+
+            var userModel = QC_DB.admin_user.First(t => t.ID == userID);
 
 
 
-    
-       
-       
+            return PartialView("_editMyInfo",userModel);
+            
+        }
+
+
+
+
+        [Authorize]
+        [HttpPost]
+        public string ChangeName(ChangeNameModel req)
+        {
+            if (!ModelState.IsValid)
+            {
+                throw new HttpException(500, "非法提交");
+            }
+
+            QCTESTEntities QC_DB = new QCTESTEntities();
+
+            int id = User.userID();
+
+            admin_user user = QC_DB.admin_user.First(t => t.ID == id);
+
+            
+
+            user.Name = req.name;
+
+            QC_DB.SaveChanges();
+
+            return "姓名修改成功,重新登录后生效!";
+
+        }
 
 
         [Authorize]
@@ -327,8 +359,7 @@ namespace openCaseMaster.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Response.Status = "400";
-                return "非法提交";
+                throw new HttpException(500, "异常提交");
             }
             QCTESTEntities QC_DB = new QCTESTEntities();
 
@@ -336,17 +367,17 @@ namespace openCaseMaster.Controllers
 
             admin_user user = QC_DB.admin_user.First(t => t.ID == id);
 
-            if (user.Password != req.Password)
+            if (user.Password != req.currentPassword)
             {
-                Response.Status = "400";
-                return "旧密码错误";
+                Response.StatusCode = 404;
+                return "旧密码错误,修改失败!";
             }
 
             user.Password = req.Password;
 
             QC_DB.SaveChanges();
 
-            return true.ToString();
+            return "密码修改成功,重新登录后生效!";
 
         }
 
