@@ -1,0 +1,145 @@
+﻿<!--Test -->
+<div id="testMenu" class="hidden-xs">
+
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#testCaseMenu">
+                        用例管理
+                    </a>
+                </h4>
+            </div>
+            <div id="testCaseMenu" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <a href="/TestCase/Index?menu=testCaseMenu">用例管理 </a>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#userStepMenu">
+                        组件管理
+                    </a>
+                </h4>
+            </div>
+            <div id="userStepMenu" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <a href="/userStepControl/Index?menu=userStepMenu">组件管理 </a>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#RunCaseMenu">
+                        任务管理
+                    </a>
+                </h4>
+            </div>
+            <div id="RunCaseMenu" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <a href="/RunCase/Index?menu=RunCaseMenu">任务管理 </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#ResultMenu">
+                        测试报告
+                    </a>
+                </h4>
+            </div>
+            <div id="ResultMenu" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <a href="/RunCase/Index?menu=ResultMenu">测试报告 </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#deviceViewMenu">
+                        设备详情
+                    </a>
+                </h4>
+            </div>
+            <div id="deviceViewMenu" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <a href="/Device/deviceView?menu=deviceViewMenu">设备详情 </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#downloadMenu">
+                        执行端管理
+                    </a>
+                </h4>
+            </div>
+            <div id="downloadMenu" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <a target="_blank" href="~/调试客户端.rar">下载客户端 </a>
+                </div>
+            </div>
+        </div>
+
+        @if (User.IsInRole("admin"))
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion"
+                           href="#sysEditMenu">
+                            系统设置
+                        </a>
+                    </h4>
+                </div>
+                <div id="sysEditMenu" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <a href="/Device/DeviceManage?menu=sysEditMenu">设备管理</a>
+                        <br />
+                        <a href="/Project/ProjectManage?menu=sysEditMenu">项目管理</a>
+                        <br />
+                        <a href="/User/UserManage?menu=sysEditMenu">用户管理</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+
+
+
+    </div>
+
+</div>
+<!--/Test -->
+<script src="~/Scripts/BootSideMenu.js"></script>
+<link rel="stylesheet" href="~/Content/BootSideMenu.css">
+<script type="text/javascript">
+    $(document).ready(function () {
+        var mu = "#" + getvl("menu");
+        $(mu).addClass("in");
+        $('#testMenu').BootSideMenu({ side: "left", autoClose: false });
+
+        setTimeout(function () {
+            var mu = $("#testMenu .toggler .glyphicon-chevron-left");
+            if(mu.css("display") != "none")
+                mu.click();
+        }, 1000);
+
+    });
+</script>
