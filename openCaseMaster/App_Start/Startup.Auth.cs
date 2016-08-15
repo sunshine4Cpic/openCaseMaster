@@ -2,6 +2,7 @@
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
+using System;
 
 namespace openCaseMaster
 {
@@ -13,6 +14,7 @@ namespace openCaseMaster
             // 使应用程序可以使用 Cookie 来存储已登录用户的信息
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
+               
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/User/Login")
             });

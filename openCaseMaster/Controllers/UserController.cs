@@ -83,8 +83,7 @@ namespace openCaseMaster.Controllers
             loginUser.LastDate = DateTime.Now;
             qc.SaveChanges();
 
-
-            var auth = new AuthenticationProperties() { IssuedUtc = DateTime.UtcNow, ExpiresUtc = DateTime.UtcNow.AddDays(30) };
+            var auth = new AuthenticationProperties() { IssuedUtc = DateTime.UtcNow, IsPersistent = true, ExpiresUtc = DateTime.UtcNow.AddDays(2) };
             
             HttpContext.GetOwinContext().Authentication.SignOut("ApplicationCookie");
             HttpContext.GetOwinContext().Authentication.SignIn(auth, _identity);
